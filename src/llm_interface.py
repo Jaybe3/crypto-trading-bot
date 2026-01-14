@@ -250,7 +250,8 @@ class LLMInterface:
         market_data: Dict[str, Any],
         account_state: Dict[str, Any],
         recent_learnings: Optional[List[str]] = None,
-        active_rules: Optional[List[str]] = None
+        active_rules: Optional[List[str]] = None,
+        coins_in_cooldown: Optional[List[str]] = None
     ) -> Optional[Dict[str, Any]]:
         """Get a trading decision from the LLM.
 
@@ -259,6 +260,7 @@ class LLMInterface:
             account_state: Current account balance and positions.
             recent_learnings: List of recent learning texts.
             active_rules: List of active trading rules.
+            coins_in_cooldown: List of coins recently traded (to avoid).
 
         Returns:
             Dict with 'action' (BUY/SELL/HOLD), 'coin', 'reason', 'confidence'.
@@ -267,6 +269,10 @@ class LLMInterface:
 Your goal is to TRADE FREQUENTLY to generate learning data. Bad trades = valuable learnings.
 DO NOT be overly cautious. Look for ANY opportunity to trade, even with small signals.
 Prefer action over inaction. HOLD should be rare - only when there's truly nothing happening.
+
+IMPORTANT: Trade DIFFERENT coins each time to generate diverse learnings.
+Avoid coins listed in "Coins in Cooldown" - they were traded recently.
+Pick coins NOT in cooldown to ensure portfolio diversity.
 
 Always respond with valid JSON in this exact format:
 {
@@ -291,7 +297,11 @@ Recent Learnings:
 Active Rules:
 {json.dumps(active_rules or [], indent=2)}
 
+Coins in Cooldown (AVOID THESE - recently traded):
+{json.dumps(coins_in_cooldown or [], indent=2)}
+
 Based on this data, what trading action should I take?
+Pick a coin NOT in cooldown for diversity.
 Respond with JSON only."""
 
         result = self.query_json(prompt, system_prompt)

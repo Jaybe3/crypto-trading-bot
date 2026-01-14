@@ -25,7 +25,8 @@
       "Bash(netstat:*)",
       "Bash(ss:*)",
       "Bash(kill:*)",
-      "Bash(supervisorctl:*)"
+      "Bash(supervisorctl:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

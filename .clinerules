@@ -499,6 +499,33 @@ if trade_size > account_balance * MAX_RISK_PER_TRADE:
     reject()
 ```
 
+### Prevent Repeated Trading of Same Coin
+```python
+# ❌ WRONG - Trading same coin repeatedly
+def execute_trade(coin):
+    # No diversity check
+    open_position(coin)
+
+# ✓ RIGHT - Enforce cooldown period
+COIN_COOLDOWN_SECONDS = 300  # 5 minutes
+
+def execute_trade(coin):
+    if coin in cooldowns and time.time() - cooldowns[coin] < COIN_COOLDOWN_SECONDS:
+        logger.info(f"Coin {coin} in cooldown, skipping")
+        return None
+
+    result = open_position(coin)
+    if result:
+        cooldowns[coin] = time.time()
+    return result
+```
+
+**Why:** Bot must trade across multiple coins for diverse learnings. Fixating on one coin:
+- Creates concentrated risk
+- Generates repetitive learnings
+- Misses opportunities in other coins
+- Doesn't represent real market diversity
+
 ---
 
 ## ✅ Code Review Checklist

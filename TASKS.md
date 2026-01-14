@@ -976,6 +976,52 @@ Visit http://localhost:8080/summaries
 
 ---
 
+### 🟢 TASK-018: Coin Diversity Enforcement
+
+**Status:** Complete
+**Assigned:** Claude Code
+**Completed:** January 14, 2026
+**Dependencies:** TASK-011 (Full Trading Loop)
+**Effort:** Medium (~2 hours)
+
+**Description:**
+Prevent the bot from repeatedly trading the same coin. Enforce cooldown periods and portfolio diversity to generate better learning data.
+
+**Requirements (from PRD.md 3.5):**
+- Cooldown period after trading a coin
+- Spread trades across multiple coins
+- No fixation on single coin
+- Generate diverse learnings
+
+**Acceptance Criteria:**
+- [x] Coin cooldown tracking (configurable period)
+- [x] Risk manager rejects trades on coins in cooldown
+- [x] LLM prompt updated to encourage diversity
+- [ ] Dashboard shows coin cooldown status (future enhancement)
+- [x] Trades distributed across multiple coins
+
+**Implementation:**
+- Add `coin_cooldowns` dict in risk_manager.py
+- Track last trade time per coin
+- Reject trades within cooldown period (default: 5 minutes)
+- Update LLM prompt to prefer diverse coins
+- Log cooldown rejections
+
+**Verification:**
+```bash
+# Watch bot for 30 minutes
+# Should see trades across different coins, not same coin repeatedly
+tail -f logs/trading_bot.log | grep -E "(Trade opened|cooldown)"
+```
+
+**Ready When:**
+- Bot trades multiple different coins
+- No repeated trades on same coin within cooldown
+- Cooldown rejections logged
+- Diverse learnings generated
+
+---
+
 ## 📦 Backlog (Future Tasks)
 
 ### Phase 1 Optimization

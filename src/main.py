@@ -302,12 +302,16 @@ class TradingBot:
             "trade_count_today": account['trade_count_today']
         }
 
+        # Get coins in cooldown for diversity enforcement
+        coins_in_cooldown = self.risk_manager.get_coins_in_cooldown()
+
         # Get decision from LLM
         decision = self.llm.get_trading_decision(
             market_data=market_data,
             account_state=account_state,
             recent_learnings=learnings,
-            active_rules=active_rules
+            active_rules=active_rules,
+            coins_in_cooldown=coins_in_cooldown
         )
 
         if decision is None:
@@ -364,6 +368,7 @@ class TradingBot:
 
             if result.success:
                 self.trades_opened += 1
+                self.risk_manager.record_trade(coin)  # Start cooldown for diversity
                 print(f"         💰 Trade opened: {coin.upper()} ${size_usd:.2f} ({reason[:30]}...)")
             else:
                 print(f"         ⚠ Trade rejected: {result.message}")

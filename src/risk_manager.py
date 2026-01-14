@@ -5,8 +5,10 @@ Rules are NON-NEGOTIABLE - they cannot be overridden by the LLM.
 """
 
 import logging
+import os
+import time
 from dataclasses import dataclass
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 
 from src.database import Database
 from src.coin_config import get_tier, get_tier_config, TIERS
@@ -25,6 +27,9 @@ MAX_EXPOSURE_PERCENT = 0.10   # 10% max total exposure
 MIN_BALANCE = 900.0           # Minimum balance to maintain
 STOP_LOSS_PERCENT = 0.10      # 10% stop loss
 TAKE_PROFIT_USD = 1.0         # $1 take profit per trade
+
+# Coin diversity - prevent fixation on single coin
+COIN_COOLDOWN_SECONDS = int(os.environ.get("COIN_COOLDOWN", 600))  # 10 min default
 
 
 @dataclass
@@ -56,12 +61,17 @@ class RiskManager:
         self.stop_loss_percent = STOP_LOSS_PERCENT
         self.take_profit_usd = TAKE_PROFIT_USD
 
+        # Coin diversity - track cooldowns to prevent fixation
+        self.coin_cooldowns: Dict[str, float] = {}
+        self.cooldown_seconds = COIN_COOLDOWN_SECONDS
+
         logger.info("RiskManager initialized with NON-NEGOTIABLE rules:")
         logger.info(f"  Max trade: {self.max_trade_percent*100}% of balance")
         logger.info(f"  Max exposure: {self.max_exposure_percent*100}% of balance")
         logger.info(f"  Min balance: ${self.min_balance}")
         logger.info(f"  Stop loss: {self.stop_loss_percent*100}%")
         logger.info(f"  Take profit: ${self.take_profit_usd}")
+        logger.info(f"  Coin cooldown: {self.cooldown_seconds}s")
 
     def get_risk_parameters(self) -> Dict[str, float]:
         """Get current risk parameters.
@@ -74,7 +84,77 @@ class RiskManager:
             'max_exposure_percent': self.max_exposure_percent,
             'min_balance': self.min_balance,
             'stop_loss_percent': self.stop_loss_percent,
-            'take_profit_usd': self.take_profit_usd
+            'take_profit_usd': self.take_profit_usd,
+            'coin_cooldown_seconds': self.cooldown_seconds
+        }
+
+    # =========================================================================
+    # Coin Diversity - Cooldown Management
+    # =========================================================================
+
+    def is_coin_in_cooldown(self, coin_name: str) -> bool:
+        """Check if coin is in cooldown period.
+
+        Args:
+            coin_name: Name of the coin to check.
+
+        Returns:
+            True if coin was traded recently and is in cooldown.
+        """
+        if coin_name not in self.coin_cooldowns:
+            return False
+
+        elapsed = time.time() - self.coin_cooldowns[coin_name]
+        return elapsed < self.cooldown_seconds
+
+    def get_cooldown_remaining(self, coin_name: str) -> int:
+        """Get seconds remaining in cooldown for a coin.
+
+        Args:
+            coin_name: Name of the coin to check.
+
+        Returns:
+            Seconds remaining, or 0 if not in cooldown.
+        """
+        if coin_name not in self.coin_cooldowns:
+            return 0
+
+        elapsed = time.time() - self.coin_cooldowns[coin_name]
+        remaining = self.cooldown_seconds - elapsed
+        return max(0, int(remaining))
+
+    def record_trade(self, coin_name: str):
+        """Record trade time for cooldown tracking.
+
+        Called after successfully opening a trade.
+
+        Args:
+            coin_name: Name of the coin that was traded.
+        """
+        self.coin_cooldowns[coin_name] = time.time()
+        logger.info(f"Cooldown started for {coin_name} ({self.cooldown_seconds}s)")
+
+    def get_coins_in_cooldown(self) -> List[str]:
+        """Get list of coins currently in cooldown.
+
+        Returns:
+            List of coin names that are in cooldown period.
+        """
+        return [
+            coin for coin in self.coin_cooldowns
+            if self.is_coin_in_cooldown(coin)
+        ]
+
+    def get_cooldown_status(self) -> Dict[str, int]:
+        """Get cooldown status for all tracked coins.
+
+        Returns:
+            Dict mapping coin name to seconds remaining in cooldown.
+        """
+        return {
+            coin: self.get_cooldown_remaining(coin)
+            for coin in self.coin_cooldowns
+            if self.is_coin_in_cooldown(coin)
         }
 
     def get_account_state(self) -> Dict[str, Any]:
@@ -148,6 +228,15 @@ class RiskManager:
         available_balance = state.get('available_balance', balance)
 
         max_allowed = self.calculate_max_trade_size()
+
+        # Rule 0: Check coin cooldown (diversity enforcement)
+        if action == "BUY" and self.is_coin_in_cooldown(coin):
+            remaining = self.get_cooldown_remaining(coin)
+            return TradeValidation(
+                valid=False,
+                reason=f"Coin {coin} in cooldown ({remaining}s remaining). Trade different coins for diversity.",
+                max_allowed_size=max_allowed
+            )
 
         # Rule 1: Check minimum balance would be maintained
         if action == "BUY":

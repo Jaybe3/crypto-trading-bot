@@ -134,6 +134,21 @@ These constraints are MANDATORY and enforced on EVERY trade:
 
 **NO BLACK BOXES.** User must be able to verify every component works.
 
+### 3.5 Coin Diversity
+
+**The bot must trade across multiple coins, not fixate on one.**
+
+- **Cooldown Period:** After trading a coin, wait before trading it again
+- **Portfolio Diversity:** Spread risk across different coins
+- **No Fixation:** Bot should not repeatedly trade the same coin
+- **Learning Diversity:** Generate learnings from different market conditions
+
+**Why this matters:**
+- Reduces concentration risk
+- Generates more diverse learning data
+- Prevents over-optimization on single coin patterns
+- Better represents real market conditions
+
 ---
 
 ## 4. TECHNICAL SPECIFICATIONS
