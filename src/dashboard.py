@@ -19,6 +19,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.database import Database
 from src.market_data import format_price
 from src.coin_config import get_tier
+from src.volatility import VolatilityCalculator
+from src.metrics import MetricsCollector
 
 # Configure logging
 logging.basicConfig(
@@ -260,7 +262,7 @@ DASHBOARD_TEMPLATE = """
         /* Market data grid for many coins */
         .market-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 8px;
             max-height: 400px;
             overflow-y: auto;
@@ -277,6 +279,53 @@ DASHBOARD_TEMPLATE = """
             display: flex;
             align-items: center;
         }
+        .market-item .stats {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        /* Volatility score badge */
+        .vol-badge {
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+        .vol-low { background: #00ff88; color: #000; }
+        .vol-normal { background: #ffc107; color: #000; }
+        .vol-high { background: #ff4757; color: #fff; }
+        /* Performance metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .metric-box {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+        }
+        .metric-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+        .metric-label {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 4px;
+        }
+        /* Alerts */
+        .alert-box {
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        .alert-critical { background: rgba(255, 71, 87, 0.2); border-left: 3px solid #ff4757; }
+        .alert-warning { background: rgba(255, 193, 7, 0.2); border-left: 3px solid #ffc107; }
+        .alert-info { background: rgba(0, 217, 255, 0.2); border-left: 3px solid #00d9ff; }
     </style>
 </head>
 <body>
@@ -303,9 +352,14 @@ DASHBOARD_TEMPLATE = """
                         <span class="coin-name">{{ coin[:8] }}</span>
                         <span class="tier-badge tier-{{ data.tier }}">T{{ data.tier }}</span>
                     </div>
-                    <span class="change {{ 'positive' if data.change_24h >= 0 else 'negative' }}">
-                        {{ "%.1f"|format(data.change_24h) }}%
-                    </span>
+                    <div class="stats">
+                        <span class="vol-badge vol-{{ 'low' if data.vol_score < 30 else 'high' if data.vol_score > 70 else 'normal' }}">
+                            V{{ data.vol_score }}
+                        </span>
+                        <span class="change {{ 'positive' if data.change_24h >= 0 else 'negative' }}">
+                            {{ "%.1f"|format(data.change_24h) }}%
+                        </span>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
@@ -345,6 +399,39 @@ DASHBOARD_TEMPLATE = """
                 <span class="stat-label">Trades Today</span>
                 <span class="stat-value">{{ account.trade_count_today }}</span>
             </div>
+        </div>
+
+        <!-- Performance Metrics Card -->
+        <div class="card">
+            <h2>Performance Metrics</h2>
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="metric-value {{ 'profit' if metrics.trading.win_rate >= 50 else 'loss' }}">{{ metrics.trading.win_rate }}%</div>
+                    <div class="metric-label">Win Rate</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">{{ metrics.trading.profit_factor }}x</div>
+                    <div class="metric-label">Profit Factor</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">{{ metrics.trading.total_trades }}</div>
+                    <div class="metric-label">Total Trades</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">{{ metrics.activity.trades_per_hour }}/hr</div>
+                    <div class="metric-label">Trade Rate</div>
+                </div>
+            </div>
+            {% if metrics.alerts %}
+            <div style="margin-top: 15px;">
+                <h3 style="font-size: 0.9em; color: #ff4757; margin-bottom: 8px;">Active Alerts</h3>
+                {% for alert in metrics.alerts %}
+                <div class="alert-box alert-{{ alert.level }}">
+                    {{ alert.message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
     </div>
 
@@ -506,7 +593,7 @@ class DashboardData:
         self.db = db or Database()
 
     def get_market_data(self) -> Dict[str, Dict[str, float]]:
-        """Get current market prices from database with tier info."""
+        """Get current market prices from database with tier and volatility info."""
         with self.db._get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("""
@@ -522,9 +609,22 @@ class DashboardData:
                     'price_usd': row[1],
                     'change_24h': row[2] or 0,
                     'last_updated': row[3],
-                    'tier': get_tier(coin_id)
+                    'tier': get_tier(coin_id),
+                    'vol_score': 50  # Default, will be updated below
                 }
-            return result
+
+        # Add volatility scores
+        try:
+            vc = VolatilityCalculator(db=self.db)
+            for coin_id in result.keys():
+                try:
+                    result[coin_id]['vol_score'] = vc.calculate_volatility_score(coin_id)
+                except Exception:
+                    pass  # Keep default of 50
+        except Exception as e:
+            logger.warning(f"Failed to get volatility scores: {e}")
+
+        return result
 
     def get_account_state(self) -> Dict[str, Any]:
         """Get current account state."""
@@ -652,6 +752,10 @@ dashboard_data = DashboardData()
 def index():
     """Main dashboard page."""
     try:
+        # Get performance metrics
+        mc = MetricsCollector(db=dashboard_data.db)
+        metrics = mc.get_all_metrics()
+
         data = {
             'market_data': dashboard_data.get_market_data(),
             'account': dashboard_data.get_account_state(),
@@ -659,6 +763,7 @@ def index():
             'closed_trades': dashboard_data.get_closed_trades(),
             'learnings': dashboard_data.get_learnings(),
             'rules': dashboard_data.get_trading_rules(),
+            'metrics': metrics,
             'last_update': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         }
         return render_template_string(DASHBOARD_TEMPLATE, **data)
@@ -681,6 +786,57 @@ def api_status():
         })
     except Exception as e:
         logger.error(f"API error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/metrics')
+def api_metrics():
+    """JSON API endpoint for performance metrics."""
+    try:
+        mc = MetricsCollector(db=dashboard_data.db)
+        return jsonify(mc.get_all_metrics())
+    except Exception as e:
+        logger.error(f"Metrics API error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/metrics')
+def prometheus_metrics():
+    """Prometheus-compatible metrics endpoint.
+
+    Returns metrics in Prometheus exposition format for external monitoring.
+    Can be scraped by Prometheus or other monitoring systems.
+    """
+    try:
+        mc = MetricsCollector(db=dashboard_data.db)
+        return mc.format_prometheus(), 200, {'Content-Type': 'text/plain; charset=utf-8'}
+    except Exception as e:
+        logger.error(f"Prometheus metrics error: {e}")
+        return f"# Error: {e}", 500, {'Content-Type': 'text/plain; charset=utf-8'}
+
+
+@app.route('/api/alerts')
+def api_alerts():
+    """JSON API endpoint for active alerts."""
+    try:
+        mc = MetricsCollector(db=dashboard_data.db)
+        alerts = mc.check_alerts()
+        return jsonify({
+            'alerts': [
+                {
+                    'level': a.level.value,
+                    'metric': a.metric,
+                    'message': a.message,
+                    'value': a.value,
+                    'threshold': a.threshold
+                }
+                for a in alerts
+            ],
+            'count': len(alerts),
+            'timestamp': datetime.now().isoformat()
+        })
+    except Exception as e:
+        logger.error(f"Alerts API error: {e}")
         return jsonify({'error': str(e)}), 500
 
 

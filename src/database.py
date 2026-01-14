@@ -169,6 +169,16 @@ class Database:
                 )
             """)
 
+            # 8. price_history table (for TASK-015 volatility)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS price_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    coin TEXT NOT NULL,
+                    price_usd REAL NOT NULL,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
             # Create indexes for performance
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_open_trades_coin

@@ -10,6 +10,7 @@ from typing import Dict, Any, Optional
 
 from src.database import Database
 from src.coin_config import get_tier, get_tier_config, TIERS
+from src.volatility import VolatilityCalculator
 
 # Configure logging
 logging.basicConfig(
@@ -514,6 +515,136 @@ class RiskManager:
             }
 
         return result
+
+    # =========================================================================
+    # VOLATILITY-BASED RISK ADJUSTMENT
+    # =========================================================================
+
+    def get_volatility_adjusted_limits(self, coin: str) -> Dict[str, Any]:
+        """Get position limits adjusted for current volatility.
+
+        Combines tier-based limits with volatility adjustments for
+        smarter risk management in turbulent markets.
+
+        Args:
+            coin: Coin ID.
+
+        Returns:
+            Dict with tier limits plus volatility adjustments:
+            - All tier_limits fields
+            - volatility_score: Current volatility score (0-100)
+            - volatility_multiplier: Position size multiplier
+            - adjusted_max_position: Volatility-adjusted max position
+            - position_reduction_pct: How much position is reduced
+        """
+        tier_limits = self.get_tier_limits(coin)
+        base_position = tier_limits['max_position_usd']
+
+        # Get volatility adjustment
+        try:
+            vc = VolatilityCalculator(db=self.db)
+            adjusted, vol_info = vc.get_adjusted_position_size(coin, base_position)
+
+            return {
+                **tier_limits,
+                'volatility_score': vol_info['volatility_score'],
+                'volatility_multiplier': vol_info['multiplier'],
+                'adjusted_max_position': adjusted,
+                'position_reduction_pct': vol_info['reduction_pct']
+            }
+        except Exception as e:
+            logger.warning(f"Volatility calculation failed for {coin}: {e}")
+            # Fall back to tier limits without adjustment
+            return {
+                **tier_limits,
+                'volatility_score': 50,  # Assume normal
+                'volatility_multiplier': 1.0,
+                'adjusted_max_position': base_position,
+                'position_reduction_pct': 0
+            }
+
+    def calculate_volatility_stop_loss(self, coin: str, entry_price: float) -> float:
+        """Calculate volatility-adjusted stop-loss price.
+
+        Uses ATR-based calculation scaled by tier for more responsive
+        stop-losses that adapt to market conditions.
+
+        Args:
+            coin: Coin ID.
+            entry_price: Entry price in USD.
+
+        Returns:
+            Stop-loss price in USD.
+        """
+        try:
+            vc = VolatilityCalculator(db=self.db)
+            stop_price, _ = vc.calculate_dynamic_stop_loss(coin, entry_price)
+            return stop_price
+        except Exception as e:
+            logger.warning(f"Volatility stop-loss calculation failed for {coin}: {e}")
+            # Fall back to tier-based stop-loss
+            return self.calculate_tier_stop_loss(coin, entry_price)
+
+    def should_exit_trade_with_volatility(
+        self, coin: str, entry_price: float, current_price: float, size_usd: float
+    ) -> Dict[str, Any]:
+        """Check if trade should exit using volatility-adjusted stop-loss.
+
+        Args:
+            coin: Coin ID.
+            entry_price: Entry price in USD.
+            current_price: Current price in USD.
+            size_usd: Trade size in USD.
+
+        Returns:
+            Dict with should_exit, reason, pnl_usd, pnl_pct, volatility_score.
+        """
+        config = get_tier_config(coin)
+
+        # Calculate P&L
+        price_change_pct = (current_price - entry_price) / entry_price
+        pnl_usd = size_usd * price_change_pct
+        pnl_pct = price_change_pct * 100
+
+        # Get volatility info
+        try:
+            vc = VolatilityCalculator(db=self.db)
+            vol_score = vc.calculate_volatility_score(coin)
+        except Exception:
+            vol_score = 50
+
+        # Check volatility-adjusted stop loss
+        stop_loss_price = self.calculate_volatility_stop_loss(coin, entry_price)
+        if current_price <= stop_loss_price:
+            return {
+                'should_exit': True,
+                'reason': 'stop_loss',
+                'pnl_usd': pnl_usd,
+                'pnl_pct': pnl_pct,
+                'tier': get_tier(coin),
+                'volatility_score': vol_score
+            }
+
+        # Check take profit ($1 - consistent across tiers)
+        take_profit_price = self.calculate_tier_take_profit(coin, entry_price, size_usd)
+        if current_price >= take_profit_price:
+            return {
+                'should_exit': True,
+                'reason': 'take_profit',
+                'pnl_usd': pnl_usd,
+                'pnl_pct': pnl_pct,
+                'tier': get_tier(coin),
+                'volatility_score': vol_score
+            }
+
+        return {
+            'should_exit': False,
+            'reason': 'none',
+            'pnl_usd': pnl_usd,
+            'pnl_pct': pnl_pct,
+            'tier': get_tier(coin),
+            'volatility_score': vol_score
+        }
 
 
 def get_risk_summary(db: Database = None) -> Dict[str, Any]:

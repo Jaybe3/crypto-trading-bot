@@ -5,12 +5,15 @@ An autonomous cryptocurrency paper trading bot that learns from every trade and 
 ## Features
 
 - **45-Coin Universe** across 3 risk tiers (Blue Chips, Established, High Volatility)
-- **LLM-Powered Decisions** using Claude for market analysis
+- **LLM-Powered Decisions** using local Ollama (qwen2.5-coder:7b) - no API key needed!
 - **Self-Learning System** - extracts lessons from every trade
 - **Rule Evolution** - high-confidence patterns become trading rules
 - **Real-Time Dashboard** with live market data
 - **Risk Management** - tier-specific position limits and stop-losses
+- **Volatility Adjustment** - dynamic position sizing based on market conditions
 - **Volume Filtering** - automatically skips illiquid coins
+- **24/7 Deployment** - supervisor-managed with auto-restart
+- **Performance Monitoring** - metrics, alerts, and Prometheus endpoint
 
 ## Architecture
 
@@ -29,7 +32,7 @@ An autonomous cryptocurrency paper trading bot that learns from every trade and 
 ### Prerequisites
 
 - Python 3.8+
-- Anthropic API key (Claude)
+- [Ollama](https://ollama.ai/) with qwen2.5-coder:7b model (runs locally, no API key needed)
 
 ### Installation
 
@@ -38,39 +41,52 @@ An autonomous cryptocurrency paper trading bot that learns from every trade and 
 git clone https://github.com/YOUR_USERNAME/crypto-trading-bot.git
 cd crypto-trading-bot
 
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate  # Linux/Mac
-# or: venv\Scripts\activate  # Windows
+# Run the install script (creates venv, installs dependencies)
+bash scripts/install.sh
 
-# Install dependencies
-pip install flask requests anthropic
-
-# Create required directories
+# Or manually:
+pip install flask requests supervisor
 mkdir -p data logs
 ```
 
-### Configuration
+### Setup Ollama (One-time)
 
 ```bash
-# Set your Anthropic API key
-export ANTHROPIC_API_KEY="your-api-key-here"
+# Install Ollama from https://ollama.ai/
+# Then pull the model:
+ollama pull qwen2.5-coder:7b
 
-# Optional: customize settings
-export LOOP_INTERVAL=30        # Trading cycle interval (seconds)
-export MIN_CONFIDENCE=0.6      # Minimum confidence for trades
+# Start Ollama server (keep running)
+ollama serve
 ```
 
 ### Running
 
 ```bash
-# Start the trading bot
-python3 src/main.py
-
-# In a separate terminal, start the dashboard
-python3 src/dashboard.py
+# Start everything (trading bot + dashboard)
+bash scripts/start.sh
 
 # Access dashboard at http://localhost:8080
+
+# Check status
+bash scripts/status.sh
+
+# View performance metrics
+bash scripts/performance.sh
+
+# Stop
+bash scripts/stop.sh
+```
+
+### Configuration (Optional)
+
+```bash
+# For WSL2: set Ollama host to Windows gateway IP
+export OLLAMA_HOST=$(ip route show default | awk '{print $3}')
+
+# Trading settings
+export LOOP_INTERVAL=30        # Trading cycle interval (seconds)
+export MIN_CONFIDENCE=0.6      # Minimum confidence for trades
 ```
 
 ## Project Structure
@@ -81,7 +97,7 @@ crypto-trading-bot/
 │   ├── main.py              # Main trading loop
 │   ├── database.py          # SQLite operations
 │   ├── market_data.py       # CoinGecko API integration
-│   ├── llm_interface.py     # Claude API integration
+│   ├── llm_interface.py     # Ollama LLM integration
 │   ├── risk_manager.py      # Position sizing & limits
 │   ├── trading_engine.py    # Trade execution
 │   ├── learning_system.py   # Learning & rule creation
@@ -154,18 +170,28 @@ python3 src/market_data.py
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `ANTHROPIC_API_KEY` | Claude API key | Required |
+| `OLLAMA_HOST` | Ollama server host (for WSL2) | 172.27.144.1 |
 | `LOOP_INTERVAL` | Cycle interval (seconds) | 30 |
 | `MIN_CONFIDENCE` | Min trade confidence | 0.6 |
+
+## API Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /` | Main dashboard |
+| `GET /api/status` | Account and trade status |
+| `GET /api/metrics` | Performance metrics (JSON) |
+| `GET /metrics` | Prometheus-compatible metrics |
+| `GET /api/alerts` | Active monitoring alerts |
 
 ## Development Status
 
 - **Phase 1**: Foundation ✅ Complete
-- **Phase 1.5**: Production Scaling 🔄 In Progress
+- **Phase 1.5**: Production Scaling ✅ Complete
   - [x] TASK-014: Multi-Tier Coin Universe (45 coins)
-  - [ ] TASK-015: Volatility-Based Risk Adjustment
-  - [ ] TASK-016: 24/7 Deployment Setup
-  - [ ] TASK-017: Performance Monitoring
+  - [x] TASK-015: Volatility-Based Risk Adjustment
+  - [x] TASK-016: 24/7 Deployment Setup
+  - [x] TASK-017: Performance Monitoring
 - **Phase 2**: Real Money Trading (Out of Scope)
 
 ## Disclaimer

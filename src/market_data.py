@@ -14,6 +14,7 @@ from requests.exceptions import RequestException, Timeout, HTTPError
 
 from src.database import Database
 from src.coin_config import get_coin_ids, get_tier, get_tier_config
+from src.volatility import VolatilityCalculator
 
 # Configure logging
 logging.basicConfig(
@@ -469,6 +470,20 @@ class MarketDataFetcher:
 
         if stats["skipped_coins"]:
             logger.info(f"Skipped coins: {', '.join(stats['skipped_coins'][:5])}...")
+
+        # Record prices for volatility calculation
+        prices_to_record = {
+            coin: data["price_usd"]
+            for coin, data in prices.items()
+            if coin not in stats["skipped_coins"] and data.get("price_usd", 0) > 0
+        }
+        if prices_to_record:
+            try:
+                vc = VolatilityCalculator(db=self.db)
+                recorded = vc.record_all_prices(prices_to_record)
+                logger.debug(f"Recorded {recorded} prices for volatility calculation")
+            except Exception as e:
+                logger.warning(f"Failed to record prices for volatility: {e}")
 
         return stats
 
