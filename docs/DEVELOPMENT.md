@@ -289,6 +289,77 @@ print(f"Created {len(learnings)} new learnings")
 
 ---
 
+## Debugging Rule Tracking
+
+Rule success rates MUST match actual trade outcomes. If they don't, use these steps to debug.
+
+### Verify LLM Returns rules_applied
+```python
+import sqlite3
+import json
+conn = sqlite3.connect('data/trading_bot.db')
+cursor = conn.cursor()
+
+# Check recent LLM decisions
+cursor.execute('''
+SELECT details, created_at
+FROM activity_log
+WHERE activity_type = "llm_decision"
+ORDER BY created_at DESC LIMIT 5
+''')
+for row in cursor.fetchall():
+    data = json.loads(row[0])
+    print(f'{row[1]}: rules_applied={data.get("rules_applied")}')
+```
+
+### Check Trades Have rule_ids
+```python
+# Trades should have rule_ids_used populated
+cursor.execute('''
+SELECT id, coin_name, pnl_usd, rule_ids_used
+FROM closed_trades
+ORDER BY id DESC LIMIT 10
+''')
+for row in cursor.fetchall():
+    print(f'Trade #{row[0]}: {row[1]} P&L=${row[2]:.2f} rules={row[3]}')
+```
+
+### Compare Rule Stats vs Actual Trades
+```python
+# Rule claims
+cursor.execute('SELECT id, success_count, failure_count FROM trading_rules')
+for row in cursor.fetchall():
+    total = row[1] + row[2]
+    rate = row[1] / total * 100 if total > 0 else 0
+    print(f'Rule #{row[0]}: {row[1]} wins, {row[2]} losses ({rate:.1f}%)')
+
+# Actual trades with this rule
+cursor.execute('''
+SELECT rule_ids_used,
+       SUM(CASE WHEN pnl_usd > 0 THEN 1 ELSE 0 END) as wins,
+       SUM(CASE WHEN pnl_usd <= 0 THEN 1 ELSE 0 END) as losses
+FROM closed_trades
+WHERE rule_ids_used IS NOT NULL
+GROUP BY rule_ids_used
+''')
+for row in cursor.fetchall():
+    print(f'Trades with rules {row[0]}: {row[1]} wins, {row[2]} losses')
+```
+
+### Reset Rule Counts (Fresh Start)
+```bash
+# If counts are corrupted, reset to zero
+python3 -c "
+import sqlite3
+conn = sqlite3.connect('data/trading_bot.db')
+conn.execute('UPDATE trading_rules SET success_count=0, failure_count=0, status=\"testing\"')
+conn.commit()
+print('Rule counts reset to zero')
+"
+```
+
+---
+
 ## Troubleshooting
 
 ### API Rate Limit Errors

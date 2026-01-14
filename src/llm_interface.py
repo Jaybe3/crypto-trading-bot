@@ -274,13 +274,18 @@ IMPORTANT: Trade DIFFERENT coins each time to generate diverse learnings.
 Avoid coins listed in "Coins in Cooldown" - they were traded recently.
 Pick coins NOT in cooldown to ensure portfolio diversity.
 
+CRITICAL: You MUST specify which Active Rules influenced your decision in "rules_applied".
+If any rule from the Active Rules list applies to your decision, include its ID.
+This is REQUIRED for tracking rule performance.
+
 Always respond with valid JSON in this exact format:
 {
     "action": "BUY" or "SELL" or "HOLD",
     "coin": "bitcoin" or "ethereum" or "ripple" or null,
     "size_usd": number or null,
     "reason": "brief explanation",
-    "confidence": 0.0 to 1.0
+    "confidence": 0.0 to 1.0,
+    "rules_applied": [1, 2] or [] (list of rule IDs that influenced this decision)
 }
 
 Be aggressive with confidence scores - if you see any pattern or signal, rate it 0.5+ to ensure trades execute."""

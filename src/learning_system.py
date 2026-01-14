@@ -572,9 +572,12 @@ class TradingRule:
         return self.success_count + self.failure_count
 
     def to_text(self) -> str:
-        """Convert to readable text for LLM context."""
+        """Convert to readable text for LLM context.
+
+        Includes rule ID so LLM can reference it in rules_applied.
+        """
         rate = self.success_rate()
-        return f"[{self.status.upper()}] {self.rule_text} (Success: {rate:.0%})"
+        return f"[Rule #{self.id}] [{self.status.upper()}] {self.rule_text} (Success: {rate:.0%})"
 
 
 class RuleManager:
@@ -952,14 +955,20 @@ Always respond with valid JSON."""
 
 
 def get_rules_as_text(db: Database = None) -> List[str]:
-    """Get active rules formatted as text for LLM context.
+    """Get active and testing rules formatted as text for LLM context.
+
+    Includes both active and testing rules so they can be evaluated.
+    Each rule includes its ID for the LLM to reference in rules_applied.
 
     Args:
         db: Database instance.
 
     Returns:
-        List of rule text strings.
+        List of rule text strings with IDs.
     """
     rm = RuleManager(db=db, llm=None)
-    rules = rm.get_active_rules()
-    return [r.to_text() for r in rules]
+    # Include both active and testing rules
+    active_rules = rm.get_active_rules()
+    testing_rules = rm.get_testing_rules()
+    all_rules = active_rules + testing_rules
+    return [r.to_text() for r in all_rules]

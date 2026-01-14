@@ -976,6 +976,50 @@ Visit http://localhost:8080/summaries
 
 ---
 
+### 🟢 TASK-019: Fix Rule Tracking Bug
+
+**Status:** Complete
+**Assigned:** Claude Code
+**Completed:** January 14, 2026
+**Dependencies:** TASK-018
+**Effort:** Small (~1 hour)
+
+**Description:**
+Fix bug where rule success rates don't match actual trade outcomes. Rule showed 73% success rate but actual win rate was 7.1%.
+
+**Root Cause:**
+1. LLM prompt doesn't request `rules_applied` field in response
+2. Trades never get tagged with rule IDs
+3. Rule outcomes never recorded from real trades
+4. Phantom counts from testing inflated rule stats
+5. Rule to_text() didn't include rule ID for LLM to reference
+6. Only active rules shown to LLM (testing rules excluded)
+
+**Fixes:**
+- [x] Update LLM prompt to REQUIRE `rules_applied` field
+- [x] Reset rule counts to zero (fresh start)
+- [x] Verify trading_engine records rule_ids properly
+- [x] Update TradingRule.to_text() to include rule ID
+- [x] Update get_rules_as_text() to include testing rules
+
+**Verification:**
+```bash
+# Check LLM returns rules_applied
+tail -f logs/trading_bot.log | grep "rules_applied"
+
+# Check trades have rule_ids
+python3 -c "
+import sqlite3
+conn = sqlite3.connect('data/trading_bot.db')
+cursor = conn.cursor()
+cursor.execute('SELECT id, coin_name, rule_ids_used FROM closed_trades ORDER BY id DESC LIMIT 5')
+for row in cursor.fetchall():
+    print(f'Trade #{row[0]}: {row[1]} rules={row[2]}')
+"
+```
+
+---
+
 ### 🟢 TASK-018: Coin Diversity Enforcement
 
 **Status:** Complete

@@ -268,9 +268,31 @@ CREATE TABLE trading_rules (
    - Account state
    - Past learnings
    - Active trading rules
-5. LLM responds with: BUY/SELL/HOLD + reasoning
+5. LLM responds with: BUY/SELL/HOLD + reasoning + **rules_applied**
 6. Execute decision (if valid per risk rules)
-7. Log everything
+7. **Tag trade with rule IDs** for outcome tracking
+8. Log everything
+
+### Rule Tracking (CRITICAL)
+
+**LLM must return which rules it applies to each decision.**
+
+Every LLM trading decision MUST include:
+```json
+{
+    "action": "BUY/SELL/HOLD",
+    "coin": "...",
+    "size_usd": ...,
+    "reason": "...",
+    "confidence": 0.0-1.0,
+    "rules_applied": [1, 2, ...]  // REQUIRED - list of rule IDs
+}
+```
+
+**Why this matters:**
+- Rule success rates must match actual trade outcomes
+- Without `rules_applied`, we can't track which rules work
+- This enables the self-learning loop to evaluate and improve rules
 
 ### Learning Analysis (After Each Closed Trade):
 1. Query LLM: "Analyze this trade"

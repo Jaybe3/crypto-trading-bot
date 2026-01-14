@@ -356,6 +356,8 @@ class TradingBot:
             if rules_applied:
                 try:
                     rule_ids = [int(r) for r in rules_applied if r]
+                    if rule_ids:
+                        logger.info(f"Trade applying rules: {rule_ids}")
                 except (ValueError, TypeError):
                     rule_ids = None
 
