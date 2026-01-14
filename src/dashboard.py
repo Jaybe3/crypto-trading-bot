@@ -351,13 +351,14 @@ DASHBOARD_TEMPLATE = """
                     <div class="coin-info">
                         <span class="coin-name">{{ coin[:8] }}</span>
                         <span class="tier-badge tier-{{ data.tier }}">T{{ data.tier }}</span>
-                    </div>
-                    <div class="stats">
                         <span class="vol-badge vol-{{ 'low' if data.vol_score < 30 else 'high' if data.vol_score > 70 else 'normal' }}">
                             V{{ data.vol_score }}
                         </span>
+                    </div>
+                    <div class="stats">
+                        <span class="price">${{ "%.2f"|format(data.price_usd) if data.price_usd < 1000 else "%.0f"|format(data.price_usd) }}</span>
                         <span class="change {{ 'positive' if data.change_24h >= 0 else 'negative' }}">
-                            {{ "%.1f"|format(data.change_24h) }}%
+                            {{ "%+.1f"|format(data.change_24h) }}%
                         </span>
                     </div>
                 </div>

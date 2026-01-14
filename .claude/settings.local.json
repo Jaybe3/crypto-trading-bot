@@ -13,7 +13,19 @@
       "Bash(pip3:*)",
       "Bash(pkill:*)",
       "Bash(git init:*)",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "Bash(chmod:*)",
+      "Bash(bash:*)",
+      "Bash(sudo apt install:*)",
+      "Bash(export PATH=\"$HOME/.local/bin:$PATH\")",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nPhase 1.5 Complete: Production-ready features\n\n- TASK-015: Volatility-based risk adjustment\n- TASK-016: 24/7 deployment scripts  \n- TASK-017: Performance monitoring with alerts\n\nAll 17 tasks complete. Ready for live 24-hour test.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Bash(lsof:*)",
+      "Bash(netstat:*)",
+      "Bash(ss:*)",
+      "Bash(kill:*)",
+      "Bash(supervisorctl:*)"
     ]
   }
 }

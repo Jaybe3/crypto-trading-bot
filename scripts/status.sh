@@ -25,8 +25,11 @@ echo "=========================================="
 echo "  Crypto Trading Bot - Status"
 echo "=========================================="
 
+PID_FILE="/tmp/cryptobot-supervisord.pid"
+SOCK_FILE="/tmp/cryptobot-supervisor.sock"
+
 # Check if supervisor is running
-if [ ! -f "$LOG_DIR/supervisord.pid" ]; then
+if [ ! -f "$PID_FILE" ]; then
     echo ""
     echo -e "Status: ${RED}NOT RUNNING${NC}"
     echo ""
@@ -34,13 +37,13 @@ if [ ! -f "$LOG_DIR/supervisord.pid" ]; then
     exit 1
 fi
 
-PID=$(cat "$LOG_DIR/supervisord.pid")
+PID=$(cat "$PID_FILE")
 if ! ps -p "$PID" > /dev/null 2>&1; then
     echo ""
     echo -e "Status: ${RED}NOT RUNNING${NC} (stale PID file)"
     echo ""
     echo "Start with: bash scripts/start.sh"
-    rm -f "$LOG_DIR/supervisord.pid" "$LOG_DIR/supervisor.sock"
+    rm -f "$PID_FILE" "$SOCK_FILE"
     exit 1
 fi
 

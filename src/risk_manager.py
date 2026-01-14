@@ -20,7 +20,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Risk parameters - NON-NEGOTIABLE
-MAX_TRADE_PERCENT = 0.02      # 2% max per trade
+MAX_TRADE_PERCENT = 0.10      # 10% max per trade (~$100 for faster learning)
 MAX_EXPOSURE_PERCENT = 0.10   # 10% max total exposure
 MIN_BALANCE = 900.0           # Minimum balance to maintain
 STOP_LOSS_PERCENT = 0.10      # 10% stop loss

@@ -263,8 +263,11 @@ class LLMInterface:
         Returns:
             Dict with 'action' (BUY/SELL/HOLD), 'coin', 'reason', 'confidence'.
         """
-        system_prompt = """You are a cryptocurrency trading bot assistant.
-Analyze the market data and account state to make a trading decision.
+        system_prompt = """You are an AGGRESSIVE cryptocurrency trading bot in PAPER TRADING mode.
+Your goal is to TRADE FREQUENTLY to generate learning data. Bad trades = valuable learnings.
+DO NOT be overly cautious. Look for ANY opportunity to trade, even with small signals.
+Prefer action over inaction. HOLD should be rare - only when there's truly nothing happening.
+
 Always respond with valid JSON in this exact format:
 {
     "action": "BUY" or "SELL" or "HOLD",
@@ -272,7 +275,9 @@ Always respond with valid JSON in this exact format:
     "size_usd": number or null,
     "reason": "brief explanation",
     "confidence": 0.0 to 1.0
-}"""
+}
+
+Be aggressive with confidence scores - if you see any pattern or signal, rate it 0.5+ to ensure trades execute."""
 
         prompt = f"""Current Market Data:
 {json.dumps(market_data, indent=2)}

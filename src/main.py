@@ -36,8 +36,8 @@ from src.coin_config import get_coin_ids, get_tier, get_tier_config
 # =============================================================================
 
 LOOP_INTERVAL = int(os.environ.get("LOOP_INTERVAL", 30))  # seconds
-MIN_CONFIDENCE = float(os.environ.get("MIN_CONFIDENCE", 0.6))  # 60% minimum
-MAX_TRADES_PER_CYCLE = 1  # Prevent rapid-fire trading
+MIN_CONFIDENCE = float(os.environ.get("MIN_CONFIDENCE", 0.3))  # 30% minimum for aggressive learning
+MAX_TRADES_PER_CYCLE = 5  # Allow multiple trades per cycle for faster learning
 # Coins are now loaded from coin_config (45 coins across 3 tiers)
 
 # Configure logging - summary to console, details to file

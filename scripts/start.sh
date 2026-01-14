@@ -32,8 +32,11 @@ if [ -d "$VENV_DIR" ] && [ -f "$VENV_DIR/bin/activate" ]; then
 fi
 
 # Check if already running
-if [ -f "$LOG_DIR/supervisord.pid" ]; then
-    PID=$(cat "$LOG_DIR/supervisord.pid")
+PID_FILE="/tmp/cryptobot-supervisord.pid"
+SOCK_FILE="/tmp/cryptobot-supervisor.sock"
+
+if [ -f "$PID_FILE" ]; then
+    PID=$(cat "$PID_FILE")
     if ps -p "$PID" > /dev/null 2>&1; then
         echo -e "${YELLOW}Bot is already running (PID: $PID)${NC}"
         echo ""
@@ -42,7 +45,7 @@ if [ -f "$LOG_DIR/supervisord.pid" ]; then
         exit 0
     else
         # Stale PID file
-        rm -f "$LOG_DIR/supervisord.pid" "$LOG_DIR/supervisor.sock"
+        rm -f "$PID_FILE" "$SOCK_FILE"
     fi
 fi
 
@@ -80,8 +83,8 @@ supervisord -c "$CONFIG_FILE"
 sleep 3
 
 # Check status
-if [ -f "$LOG_DIR/supervisord.pid" ]; then
-    PID=$(cat "$LOG_DIR/supervisord.pid")
+if [ -f "$PID_FILE" ]; then
+    PID=$(cat "$PID_FILE")
     if ps -p "$PID" > /dev/null 2>&1; then
         echo ""
         echo -e "${GREEN}=========================================="

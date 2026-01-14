@@ -24,15 +24,18 @@ echo "=========================================="
 echo "  Crypto Trading Bot - Stopping"
 echo "=========================================="
 
-if [ ! -f "$LOG_DIR/supervisord.pid" ]; then
+PID_FILE="/tmp/cryptobot-supervisord.pid"
+SOCK_FILE="/tmp/cryptobot-supervisor.sock"
+
+if [ ! -f "$PID_FILE" ]; then
     echo -e "${YELLOW}Bot is not running${NC}"
     exit 0
 fi
 
-PID=$(cat "$LOG_DIR/supervisord.pid")
+PID=$(cat "$PID_FILE")
 if ! ps -p "$PID" > /dev/null 2>&1; then
     echo -e "${YELLOW}Bot is not running (stale PID file)${NC}"
-    rm -f "$LOG_DIR/supervisord.pid" "$LOG_DIR/supervisor.sock"
+    rm -f "$PID_FILE" "$SOCK_FILE"
     exit 0
 fi
 
@@ -56,7 +59,7 @@ if ps -p "$PID" > /dev/null 2>&1; then
 fi
 
 # Cleanup
-rm -f "$LOG_DIR/supervisord.pid" "$LOG_DIR/supervisor.sock"
+rm -f "$PID_FILE" "$SOCK_FILE"
 
 echo ""
 echo -e "${GREEN}Bot stopped${NC}"
