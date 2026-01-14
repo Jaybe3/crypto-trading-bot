@@ -1,0 +1,555 @@
+# Coding Standards for Crypto Trading Bot
+
+**These rules are MANDATORY for all code in this project.**
+
+---
+
+## 🚨 Critical Rules
+
+1. **NEVER use fake/simulated data**
+   - All market data must come from real APIs
+   - All prices must be verifiable
+   - No random numbers, no hardcoded values
+
+2. **ALWAYS provide verification steps**
+   - Every component must be independently verifiable
+   - User must be able to run commands to verify
+   - Include exact commands in documentation
+
+3. **NO black boxes**
+   - All data stored in queryable database
+   - All decisions logged with reasoning
+   - All LLM prompts and responses recorded
+
+4. **ONE component at a time**
+   - Build and verify completely before moving on
+   - No jumping ahead
+   - No building multiple things simultaneously
+
+---
+
+## 📝 Code Style
+
+### Python Version
+- Python 3.10+
+- Use type hints
+- Use dataclasses where appropriate
+
+### Naming Conventions
+```python
+# Classes: PascalCase
+class MarketDataFetcher:
+    pass
+
+# Functions/methods: snake_case
+def fetch_price_data():
+    pass
+
+# Variables: snake_case
+current_price = 45000
+entry_reason = "Volume spike"
+
+# Constants: UPPER_CASE
+MAX_RISK_PER_TRADE = 0.02
+MAX_TOTAL_EXPOSURE = 0.10
+```
+
+### Imports
+```python
+# Standard library first
+import logging
+import sqlite3
+from datetime import datetime
+from typing import Dict, List, Optional
+
+# Third party second
+import requests
+from requests.exceptions import RequestException
+
+# Local imports last
+from src.database import Database
+from src.risk_manager import RiskManager
+```
+
+### Docstrings
+```python
+def fetch_prices(self, coins: List[str]) -> Dict[str, float]:
+    """Fetch current prices for specified coins from CoinGecko API.
+    
+    Args:
+        coins: List of coin IDs (e.g., ['bitcoin', 'ethereum'])
+        
+    Returns:
+        Dictionary mapping coin names to prices in USD
+        Example: {'bitcoin': 45230.0, 'ethereum': 2450.0}
+        
+    Raises:
+        RequestException: If API call fails
+        ValueError: If coins list is empty
+        
+    Example:
+        >>> fetcher = MarketDataFetcher()
+        >>> prices = fetcher.fetch_prices(['bitcoin'])
+        >>> print(prices['bitcoin'])
+        45230.0
+    """
+    pass
+```
+
+---
+
+## 🔐 Security Rules
+
+### Never Hardcode Secrets
+```python
+# ❌ WRONG
+API_KEY = "sk_live_1234567890"
+
+# ✓ RIGHT
+API_KEY = os.environ.get("API_KEY")
+if not API_KEY:
+    raise ValueError("API_KEY environment variable not set")
+```
+
+### Never Log Sensitive Data
+```python
+# ❌ WRONG
+logger.info(f"API key: {api_key}")
+
+# ✓ RIGHT
+logger.info("API key configured")
+```
+
+---
+
+## 💾 Database Rules
+
+### Always Use Parameterized Queries
+```python
+# ❌ WRONG (SQL injection risk)
+cursor.execute(f"SELECT * FROM trades WHERE coin='{coin}'")
+
+# ✓ RIGHT
+cursor.execute("SELECT * FROM trades WHERE coin=?", (coin,))
+```
+
+### Always Handle Database Errors
+```python
+# ✓ RIGHT
+try:
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO ...")
+    conn.commit()
+except sqlite3.Error as e:
+    logger.error(f"Database error: {e}")
+    raise
+finally:
+    conn.close()
+```
+
+### Use Context Managers
+```python
+# ✓ BETTER
+with sqlite3.connect(db_path) as conn:
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO ...")
+    conn.commit()
+```
+
+---
+
+## 🌐 API Rules
+
+### Always Use Real APIs
+```python
+# ❌ WRONG
+def fetch_price():
+    return random.randint(40000, 50000)
+
+# ✓ RIGHT
+def fetch_price(coin: str) -> float:
+    response = requests.get(f"{API_URL}?ids={coin}")
+    response.raise_for_status()
+    return response.json()[coin]['usd']
+```
+
+### Handle API Errors
+```python
+def fetch_price(coin: str) -> Optional[float]:
+    """Fetch price, return None if fails."""
+    try:
+        response = requests.get(
+            f"{API_URL}?ids={coin}",
+            timeout=10
+        )
+        response.raise_for_status()
+        data = response.json()
+        return data[coin]['usd']
+    except requests.RequestException as e:
+        logger.error(f"API error: {e}")
+        return None
+    except (KeyError, ValueError) as e:
+        logger.error(f"Invalid response format: {e}")
+        return None
+```
+
+### Respect Rate Limits
+```python
+import time
+from datetime import datetime, timedelta
+
+class RateLimiter:
+    def __init__(self, max_calls: int, period: timedelta):
+        self.max_calls = max_calls
+        self.period = period
+        self.calls = []
+    
+    def wait_if_needed(self):
+        """Wait if rate limit would be exceeded."""
+        now = datetime.now()
+        self.calls = [c for c in self.calls if now - c < self.period]
+        
+        if len(self.calls) >= self.max_calls:
+            sleep_time = (self.calls[0] + self.period - now).total_seconds()
+            time.sleep(sleep_time)
+        
+        self.calls.append(now)
+```
+
+---
+
+## 🤖 LLM Integration Rules
+
+### Always Structure Prompts
+```python
+def create_analysis_prompt(trade: Trade) -> str:
+    """Create structured prompt for trade analysis."""
+    return f"""Analyze this crypto trade:
+
+Trade Details:
+- Coin: {trade.coin}
+- Entry Price: ${trade.entry_price}
+- Exit Price: ${trade.exit_price}
+- P&L: ${trade.pnl} ({trade.pnl_pct}%)
+- Entry Reason: {trade.entry_reason}
+- Duration: {trade.duration}
+
+Market Conditions:
+- Entry: {trade.entry_market_conditions}
+- Exit: {trade.exit_market_conditions}
+
+Please provide:
+1. What happened in this trade?
+2. Why did it succeed/fail?
+3. What pattern do you observe?
+4. What lesson can be learned?
+5. Confidence (0.0 to 1.0)
+
+Format as JSON:
+{{
+    "what_happened": "...",
+    "why_outcome": "...",
+    "pattern": "...",
+    "lesson": "...",
+    "confidence": 0.85
+}}
+"""
+```
+
+### Always Log LLM Interactions
+```python
+def query_llm(prompt: str) -> str:
+    """Query LLM and log the interaction."""
+    logger.info(f"LLM prompt: {prompt[:100]}...")
+    
+    response = # ... call LLM ...
+    
+    logger.info(f"LLM response: {response[:100]}...")
+    
+    # Also store in database
+    log_activity('llm_query', {'prompt': prompt, 'response': response})
+    
+    return response
+```
+
+### Handle LLM Errors
+```python
+def query_llm(prompt: str) -> Optional[str]:
+    """Query LLM, return None if fails."""
+    try:
+        response = requests.post(
+            LLM_API_URL,
+            json={'model': MODEL_NAME, 'messages': [...]},
+            timeout=30
+        )
+        response.raise_for_status()
+        return response.json()['message']['content']
+    except Exception as e:
+        logger.error(f"LLM error: {e}")
+        return None
+```
+
+---
+
+## 📊 Logging Rules
+
+### Use Appropriate Log Levels
+```python
+# DEBUG: Detailed diagnostic info
+logger.debug(f"Fetching price for {coin}")
+
+# INFO: General information
+logger.info(f"Trade executed: {coin} at ${price}")
+
+# WARNING: Unexpected but handled
+logger.warning(f"API rate limit approaching")
+
+# ERROR: Error occurred
+logger.error(f"Failed to fetch price: {error}")
+
+# CRITICAL: System cannot continue
+logger.critical(f"Database connection lost")
+```
+
+### Include Context in Logs
+```python
+# ❌ WRONG
+logger.error("Failed")
+
+# ✓ RIGHT
+logger.error(f"Failed to execute trade: coin={coin}, reason={error}")
+```
+
+### Log All Important Events
+```python
+# Trade events
+logger.info(f"Trade opened: {trade_id}")
+logger.info(f"Trade closed: {trade_id}, P&L: ${pnl}")
+
+# Learning events
+logger.info(f"Learning created: {learning_id}")
+logger.info(f"Rule created: {rule_id}")
+
+# Risk events
+logger.warning(f"Trade rejected: {reason}")
+logger.error(f"Risk limit exceeded: {details}")
+```
+
+---
+
+## 🧪 Testing Rules
+
+### Write Tests for Everything
+```python
+# Every function should have tests
+def test_fetch_prices():
+    """Test that fetch_prices returns valid data."""
+    fetcher = MarketDataFetcher()
+    prices = fetcher.fetch_prices(['bitcoin'])
+    
+    assert 'bitcoin' in prices
+    assert isinstance(prices['bitcoin'], float)
+    assert prices['bitcoin'] > 0
+```
+
+### Test Edge Cases
+```python
+def test_fetch_prices_empty_list():
+    """Test fetch_prices with empty list."""
+    fetcher = MarketDataFetcher()
+    with pytest.raises(ValueError):
+        fetcher.fetch_prices([])
+
+def test_fetch_prices_invalid_coin():
+    """Test fetch_prices with invalid coin."""
+    fetcher = MarketDataFetcher()
+    prices = fetcher.fetch_prices(['invalid_coin_xyz'])
+    assert prices is None or len(prices) == 0
+```
+
+### Mock External Services
+```python
+def test_fetch_prices_mocked(mocker):
+    """Test fetch_prices with mocked API."""
+    mock_response = {'bitcoin': {'usd': 45000}}
+    mocker.patch('requests.get', return_value=mock_response)
+    
+    fetcher = MarketDataFetcher()
+    prices = fetcher.fetch_prices(['bitcoin'])
+    
+    assert prices['bitcoin'] == 45000
+```
+
+---
+
+## 🎯 Risk Management Rules
+
+### Always Validate Before Executing
+```python
+def execute_trade(coin: str, size: float):
+    """Execute trade with risk validation."""
+    # ALWAYS validate first
+    validation = risk_manager.validate_trade(
+        size_usd=size,
+        account_balance=account.balance,
+        open_positions_total=account.open_positions_value
+    )
+    
+    if not validation.valid:
+        logger.warning(f"Trade rejected: {validation.reason}")
+        return False
+    
+    # Only execute if validation passed
+    # ... execute trade ...
+    return True
+```
+
+### Never Bypass Risk Checks
+```python
+# ❌ NEVER DO THIS
+def execute_trade_unsafe(coin, size):
+    # Skip validation for "testing"
+    place_order(coin, size)
+
+# ✓ ALWAYS DO THIS
+def execute_trade(coin, size):
+    # Always validate, no exceptions
+    if not risk_manager.validate(size):
+        return False
+    place_order(coin, size)
+```
+
+---
+
+## 📁 File Organization
+
+### One Responsibility Per File
+```
+✓ market_data.py     # Only market data fetching
+✓ database.py        # Only database operations
+✓ llm_interface.py   # Only LLM communication
+✓ trading_engine.py  # Only trade execution
+```
+
+### Keep Files Focused
+```python
+# ❌ market_data.py - too many responsibilities
+class MarketDataFetcher:
+    def fetch_prices(self): pass
+    def execute_trade(self): pass      # ← Wrong file
+    def analyze_trade(self): pass       # ← Wrong file
+    def create_dashboard(self): pass    # ← Wrong file
+
+# ✓ market_data.py - focused
+class MarketDataFetcher:
+    def fetch_prices(self): pass
+    def update_cache(self): pass
+    def get_historical_data(self): pass
+```
+
+---
+
+## 🚫 Forbidden Patterns
+
+### Don't Use Global State
+```python
+# ❌ WRONG
+current_balance = 1000
+
+def execute_trade():
+    global current_balance
+    current_balance -= 20
+
+# ✓ RIGHT
+class Account:
+    def __init__(self):
+        self.balance = 1000
+    
+    def execute_trade(self, size):
+        self.balance -= size
+```
+
+### Don't Ignore Errors
+```python
+# ❌ WRONG
+try:
+    result = api_call()
+except:
+    pass  # Silent failure
+
+# ✓ RIGHT
+try:
+    result = api_call()
+except RequestException as e:
+    logger.error(f"API call failed: {e}")
+    return None
+```
+
+### Don't Use Magic Numbers
+```python
+# ❌ WRONG
+if trade_size > account_balance * 0.02:
+    reject()
+
+# ✓ RIGHT
+MAX_RISK_PER_TRADE = 0.02
+
+if trade_size > account_balance * MAX_RISK_PER_TRADE:
+    reject()
+```
+
+---
+
+## ✅ Code Review Checklist
+
+Before committing any code:
+
+```
+Functionality:
+[ ] Code works as intended
+[ ] All tests pass
+[ ] Verified with manual testing
+
+Code Quality:
+[ ] Follows naming conventions
+[ ] Has type hints
+[ ] Has docstrings
+[ ] No magic numbers
+[ ] No commented-out code
+
+Error Handling:
+[ ] All exceptions handled
+[ ] Errors logged with context
+[ ] Graceful degradation
+
+Security:
+[ ] No hardcoded secrets
+[ ] Parameterized SQL queries
+[ ] No sensitive data in logs
+
+Verification:
+[ ] User can verify it works
+[ ] Verification steps provided
+[ ] Data is real (not fake)
+
+Documentation:
+[ ] Docstrings updated
+[ ] README updated (if needed)
+[ ] TASKS.md updated
+```
+
+---
+
+## 🎯 Remember
+
+**This project failed before because it became a black box.**
+
+These coding standards ensure:
+- All data is real and verifiable
+- All decisions are logged
+- All errors are handled
+- All components are testable
+- No black boxes
+
+**Follow these standards strictly.**

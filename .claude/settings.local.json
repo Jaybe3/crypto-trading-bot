@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(python:*)",
+      "Bash(python3:*)",
+      "Bash(sqlite3:*)",
+      "Bash(curl:*)",
+      "Bash(sudo apt-get update:*)",
+      "Bash(sudo apt-get install:*)",
+      "Bash(__NEW_LINE_fea146e9eb284f7e__ echo \"\")",
+      "Bash(pip3 install:*)",
+      "Bash(pip3:*)",
+      "Bash(pkill:*)",
+      "Bash(git init:*)",
+      "Bash(git config:*)"
+    ]
+  }
+}
