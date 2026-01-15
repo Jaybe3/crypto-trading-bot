@@ -29,7 +29,7 @@ STOP_LOSS_PERCENT = 0.10      # 10% stop loss
 TAKE_PROFIT_USD = 1.0         # $1 take profit per trade
 
 # Coin diversity - prevent fixation on single coin
-COIN_COOLDOWN_SECONDS = int(os.environ.get("COIN_COOLDOWN", 600))  # 10 min default
+COIN_COOLDOWN_SECONDS = int(os.environ.get("COIN_COOLDOWN", 1800))  # 30 min default (TASK-020)
 
 
 @dataclass
@@ -65,6 +65,9 @@ class RiskManager:
         self.coin_cooldowns: Dict[str, float] = {}
         self.cooldown_seconds = COIN_COOLDOWN_SECONDS
 
+        # TASK-020: Load persistent cooldowns from database on startup
+        self._load_cooldowns_from_db()
+
         logger.info("RiskManager initialized with NON-NEGOTIABLE rules:")
         logger.info(f"  Max trade: {self.max_trade_percent*100}% of balance")
         logger.info(f"  Max exposure: {self.max_exposure_percent*100}% of balance")
@@ -89,8 +92,80 @@ class RiskManager:
         }
 
     # =========================================================================
-    # Coin Diversity - Cooldown Management
+    # Coin Diversity - Cooldown Management (TASK-020: Persistent Cooldowns)
     # =========================================================================
+
+    def _load_cooldowns_from_db(self):
+        """Load active cooldowns from database on startup.
+
+        TASK-020: Cooldowns persist across bot restarts.
+        """
+        try:
+            with self.db._get_connection() as conn:
+                cursor = conn.cursor()
+                # First, cleanup expired cooldowns
+                cursor.execute("""
+                    DELETE FROM coin_cooldowns
+                    WHERE expires_at <= datetime('now')
+                """)
+                conn.commit()
+
+                # Load active cooldowns
+                cursor.execute("""
+                    SELECT coin_name, expires_at FROM coin_cooldowns
+                    WHERE expires_at > datetime('now')
+                """)
+                loaded_count = 0
+                for row in cursor.fetchall():
+                    coin_name = row[0]
+                    expires_at_str = row[1]
+                    # Convert expires_at to timestamp (SQLite stores UTC)
+                    from datetime import datetime, timezone
+                    expires_at = datetime.strptime(expires_at_str, "%Y-%m-%d %H:%M:%S")
+                    expires_at = expires_at.replace(tzinfo=timezone.utc)
+                    # Store as start_time (expires_at - cooldown_seconds)
+                    start_time = expires_at.timestamp() - self.cooldown_seconds
+                    self.coin_cooldowns[coin_name] = start_time
+                    loaded_count += 1
+
+                if loaded_count > 0:
+                    logger.info(f"Loaded {loaded_count} cooldowns from database: {list(self.coin_cooldowns.keys())}")
+        except Exception as e:
+            logger.warning(f"Failed to load cooldowns from database: {e}")
+
+    def _persist_cooldown_to_db(self, coin_name: str):
+        """Persist a cooldown to the database.
+
+        Args:
+            coin_name: Name of the coin to persist cooldown for.
+        """
+        try:
+            with self.db._get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    INSERT OR REPLACE INTO coin_cooldowns (coin_name, expires_at)
+                    VALUES (?, datetime('now', '+' || ? || ' seconds'))
+                """, (coin_name, self.cooldown_seconds))
+                conn.commit()
+                logger.info(f"Cooldown persisted to database for {coin_name}")
+        except Exception as e:
+            logger.warning(f"Failed to persist cooldown to database: {e}")
+
+    def _cleanup_expired_cooldowns(self):
+        """Remove expired cooldowns from database."""
+        try:
+            with self.db._get_connection() as conn:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    DELETE FROM coin_cooldowns
+                    WHERE expires_at <= datetime('now')
+                """)
+                deleted = cursor.rowcount
+                conn.commit()
+                if deleted > 0:
+                    logger.info(f"Cleaned up {deleted} expired cooldowns from database")
+        except Exception as e:
+            logger.warning(f"Failed to cleanup expired cooldowns: {e}")
 
     def is_coin_in_cooldown(self, coin_name: str) -> bool:
         """Check if coin is in cooldown period.
@@ -127,12 +202,15 @@ class RiskManager:
         """Record trade time for cooldown tracking.
 
         Called after successfully opening a trade.
+        TASK-020: Persists cooldown to database for survival across restarts.
 
         Args:
             coin_name: Name of the coin that was traded.
         """
         self.coin_cooldowns[coin_name] = time.time()
-        logger.info(f"Cooldown started for {coin_name} ({self.cooldown_seconds}s)")
+        # TASK-020: Persist to database
+        self._persist_cooldown_to_db(coin_name)
+        logger.info(f"Cooldown started for {coin_name} ({self.cooldown_seconds}s = {self.cooldown_seconds//60} min)")
 
     def get_coins_in_cooldown(self) -> List[str]:
         """Get list of coins currently in cooldown.

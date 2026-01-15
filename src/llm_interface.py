@@ -270,9 +270,13 @@ Your goal is to TRADE FREQUENTLY to generate learning data. Bad trades = valuabl
 DO NOT be overly cautious. Look for ANY opportunity to trade, even with small signals.
 Prefer action over inaction. HOLD should be rare - only when there's truly nothing happening.
 
-IMPORTANT: Trade DIFFERENT coins each time to generate diverse learnings.
-Avoid coins listed in "Coins in Cooldown" - they were traded recently.
-Pick coins NOT in cooldown to ensure portfolio diversity.
+============ FORBIDDEN COINS - DO NOT TRADE ============
+The "Coins in Cooldown" list below contains FORBIDDEN coins.
+You MUST NOT select any coin from this list.
+These coins were recently traded and are BLOCKED for 30 minutes.
+Selecting a forbidden coin will cause your trade to be REJECTED.
+Choose a DIFFERENT coin that is NOT in the forbidden list.
+========================================================
 
 CRITICAL: You MUST specify which Active Rules influenced your decision in "rules_applied".
 If any rule from the Active Rules list applies to your decision, include its ID.
@@ -302,11 +306,11 @@ Recent Learnings:
 Active Rules:
 {json.dumps(active_rules or [], indent=2)}
 
-Coins in Cooldown (AVOID THESE - recently traded):
+FORBIDDEN COINS (DO NOT TRADE - in cooldown):
 {json.dumps(coins_in_cooldown or [], indent=2)}
 
 Based on this data, what trading action should I take?
-Pick a coin NOT in cooldown for diversity.
+REMEMBER: You MUST NOT select any coin from the FORBIDDEN list above.
 Respond with JSON only."""
 
         result = self.query_json(prompt, system_prompt)

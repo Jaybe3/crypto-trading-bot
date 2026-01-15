@@ -976,6 +976,47 @@ Visit http://localhost:8080/summaries
 
 ---
 
+### 🟢 TASK-020: Persistent Coin Cooldowns
+
+**Status:** Complete
+**Assigned:** Claude Code
+**Completed:** January 14, 2026
+**Dependencies:** TASK-018 (Coin Diversity)
+**Effort:** Medium (~2 hours)
+
+**Description:**
+Fix cooldown system to properly enforce coin diversity. Current issues:
+1. Cooldowns reset on bot restart (in-memory only)
+2. LLM ignores "avoid" suggestion
+3. 10-minute cooldown too short
+
+**Fixes:**
+- [x] Persist cooldowns to database (survives restarts)
+- [x] Load cooldowns on startup
+- [x] Change LLM instruction to FORBIDDEN (hard constraint)
+- [x] Extend cooldown to 30 minutes
+
+**Implementation:**
+- New `coin_cooldowns` table with coin_name, expires_at
+- RiskManager loads cooldowns on init with `_load_cooldowns_from_db()`
+- Cooldowns persisted via `_persist_cooldown_to_db()`
+- LLM prompt: "FORBIDDEN COINS - DO NOT TRADE"
+- COIN_COOLDOWN_SECONDS = 1800 (30 min)
+
+**Files Changed:**
+- `src/database.py` - Added coin_cooldowns table
+- `src/risk_manager.py` - DB persistence, 30-min default
+- `src/llm_interface.py` - FORBIDDEN prompt language
+
+**Verification:**
+```bash
+# 1. Trade a coin, restart bot, verify cooldown persists
+# 2. Check LLM decisions don't pick forbidden coins
+# 3. Watch for diverse coin selection over 30+ minutes
+```
+
+---
+
 ### 🟢 TASK-019: Fix Rule Tracking Bug
 
 **Status:** Complete

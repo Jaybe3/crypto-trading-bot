@@ -138,16 +138,24 @@ These constraints are MANDATORY and enforced on EVERY trade:
 
 **The bot must trade across multiple coins, not fixate on one.**
 
-- **Cooldown Period:** After trading a coin, wait before trading it again
+- **Cooldown Period:** 30 minutes after trading a coin before trading it again
+- **Persistent Cooldowns:** Cooldowns stored in database, survive bot restarts
+- **Hard Constraint:** LLM is FORBIDDEN from trading coins in cooldown
 - **Portfolio Diversity:** Spread risk across different coins
-- **No Fixation:** Bot should not repeatedly trade the same coin
 - **Learning Diversity:** Generate learnings from different market conditions
+
+**Cooldown Implementation:**
+- Cooldowns stored in `coin_cooldowns` database table
+- Loaded on bot startup (persist across restarts)
+- Risk manager rejects trades on coins in cooldown
+- LLM prompt explicitly forbids trading cooldown coins
 
 **Why this matters:**
 - Reduces concentration risk
 - Generates more diverse learning data
 - Prevents over-optimization on single coin patterns
 - Better represents real market conditions
+- Survives bot restarts (persistent state)
 
 ---
 

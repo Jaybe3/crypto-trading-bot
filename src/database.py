@@ -179,6 +179,14 @@ class Database:
                 )
             """)
 
+            # 9. coin_cooldowns table (for TASK-020 persistent cooldowns)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS coin_cooldowns (
+                    coin_name TEXT PRIMARY KEY,
+                    expires_at TIMESTAMP NOT NULL
+                )
+            """)
+
             # Create indexes for performance
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_open_trades_coin
