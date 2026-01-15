@@ -187,6 +187,23 @@ class Database:
                 )
             """)
 
+            # 10. monitoring_alerts table (for TASK-021 autonomous monitoring)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS monitoring_alerts (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    alert_type TEXT NOT NULL,
+                    severity TEXT NOT NULL,
+                    title TEXT NOT NULL,
+                    description TEXT NOT NULL,
+                    evidence TEXT,
+                    recommendation TEXT,
+                    status TEXT DEFAULT 'open',
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    acknowledged_at TIMESTAMP,
+                    fixed_at TIMESTAMP
+                )
+            """)
+
             # Create indexes for performance
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_open_trades_coin
@@ -219,6 +236,18 @@ class Database:
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_activity_log_type
                 ON activity_log(activity_type)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_alerts_severity
+                ON monitoring_alerts(severity)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_alerts_status
+                ON monitoring_alerts(status)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_alerts_created
+                ON monitoring_alerts(created_at)
             """)
 
             conn.commit()

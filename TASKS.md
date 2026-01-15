@@ -1107,6 +1107,56 @@ tail -f logs/trading_bot.log | grep -E "(Trade opened|cooldown)"
 
 ---
 
+### 🟢 TASK-021: Autonomous Monitoring Agent
+
+**Status:** Complete
+**Assigned:** Claude Code
+**Completed:** January 14, 2026
+**Dependencies:** TASK-011 (Full Trading Loop)
+**Effort:** Large (~4 hours)
+
+**Description:**
+Build a self-monitoring system that uses LLM to detect issues, bugs, and inefficiencies autonomously. The bot should be able to catch its own problems without human prompting.
+
+**Requirements:**
+1. Script: `scripts/autonomous_monitor.py`
+2. Runs hourly (configurable via cron or standalone)
+3. Collects ALL bot data for analysis
+4. Sends comprehensive report to LLM for critical analysis
+5. LLM returns findings with severity + evidence
+6. Store alerts in `monitoring_alerts` table
+7. Can be run manually or scheduled
+
+**Data Collection:**
+- Trade patterns (coin distribution, sizes, timing)
+- Rule usage and effectiveness
+- Win/loss patterns by tier, coin, time of day
+- Account health trends
+- System metrics (cycles, API calls, errors)
+- Cooldown effectiveness
+- Learning quality
+
+**LLM Prompt Focus:**
+- Unexpected patterns
+- Bugs or logic errors
+- Inefficiencies
+- Missing functionality
+- Performance issues
+- "Find problems I didn't tell you to look for"
+
+**Acceptance Criteria:**
+- [x] `scripts/autonomous_monitor.py` script created
+- [x] `monitoring_alerts` table in database
+- [x] Comprehensive data collection from all tables
+- [x] LLM analysis with critical eye
+- [x] Findings stored with severity levels
+- [x] Manual execution works
+- [x] Cron-compatible (exit codes, logging)
+
+**Spec Document:** `docs/TASK-021-autonomous-monitor.md`
+
+---
+
 ## 📦 Backlog (Future Tasks)
 
 ### Phase 1 Optimization
@@ -1147,8 +1197,8 @@ tail -f logs/trading_bot.log | grep -E "(Trade opened|cooldown)"
 
 ---
 
-**Current Sprint Focus:** Sprint 4 - Integration & Monitoring (TASK-011 Complete!)
+**Current Sprint Focus:** Sprint 4 - Integration & Monitoring
 
-**Next Task:** TASK-012 (Dashboard Enhancement) or TASK-013 (Daily Summary Analysis)
+**Current Task:** TASK-021 (Autonomous Monitoring Agent)
 
 **MILESTONE ACHIEVED:** The bot is now FULLY AUTONOMOUS and SELF-LEARNING! 🎉

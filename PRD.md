@@ -157,6 +157,36 @@ These constraints are MANDATORY and enforced on EVERY trade:
 - Better represents real market conditions
 - Survives bot restarts (persistent state)
 
+### 3.6 Autonomous Monitoring
+
+**The bot must monitor itself and detect its own issues.**
+
+- **Self-Auditing:** LLM analyzes bot's own performance data
+- **Bug Detection:** Identify logic errors, unexpected patterns
+- **Efficiency Analysis:** Find inefficiencies and missed opportunities
+- **Critical Eye:** "Find problems I didn't tell you to look for"
+- **Severity Levels:** Categorize findings by impact
+
+**Monitoring Data:**
+- Trade patterns (distribution, sizes, timing)
+- Rule usage and effectiveness
+- Win/loss patterns by tier, coin, time
+- Account health trends
+- System metrics (cycles, errors, API calls)
+
+**Implementation:**
+- Script: `scripts/autonomous_monitor.py`
+- Runs hourly (configurable)
+- Stores findings in `monitoring_alerts` table
+- Can be run manually or via cron
+
+**Why this matters:**
+- Catches bugs humans might miss
+- Continuous improvement without human review
+- Proactive issue detection
+- Documents system behavior over time
+- True autonomous operation
+
 ---
 
 ## 4. TECHNICAL SPECIFICATIONS

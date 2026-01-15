@@ -23,8 +23,8 @@ logger = logging.getLogger(__name__)
 
 # Risk parameters - NON-NEGOTIABLE
 MAX_TRADE_PERCENT = 0.10      # 10% max per trade (~$100 for faster learning)
-MAX_EXPOSURE_PERCENT = 0.10   # 10% max total exposure
-MIN_BALANCE = 900.0           # Minimum balance to maintain
+MAX_EXPOSURE_PERCENT = 0.20   # 20% max total exposure (~$200 for diversity)
+MIN_BALANCE = 750.0           # 25% max drawdown - room for learning failures
 STOP_LOSS_PERCENT = 0.10      # 10% stop loss
 TAKE_PROFIT_USD = 1.0         # $1 take profit per trade
 

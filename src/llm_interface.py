@@ -278,6 +278,14 @@ Selecting a forbidden coin will cause your trade to be REJECTED.
 Choose a DIFFERENT coin that is NOT in the forbidden list.
 ========================================================
 
+============ CRITICAL POSITION SIZE RULES ============
+- You MUST specify size_usd between $20 and $100
+- $100 is the ABSOLUTE MAXIMUM per trade
+- Trades above $100 will be REJECTED
+- Recommended: $50-$80 for most trades
+- NEVER request $200, $150, or any amount over $100
+======================================================
+
 CRITICAL: You MUST specify which Active Rules influenced your decision in "rules_applied".
 If any rule from the Active Rules list applies to your decision, include its ID.
 This is REQUIRED for tracking rule performance.
