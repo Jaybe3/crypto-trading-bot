@@ -15,6 +15,17 @@ An autonomous cryptocurrency paper trading bot that learns from every trade and 
 - **24/7 Deployment** - supervisor-managed with auto-restart
 - **Performance Monitoring** - metrics, alerts, and Prometheus endpoint
 
+## Documentation
+
+| Audience | Start Here |
+|----------|------------|
+| Investors/Advisors | [docs/business/EXECUTIVE-SUMMARY.md](docs/business/EXECUTIVE-SUMMARY.md) |
+| Technical Leaders | [docs/architecture/SYSTEM-OVERVIEW.md](docs/architecture/SYSTEM-OVERVIEW.md) |
+| Developers | [docs/development/WORKFLOW.md](docs/development/WORKFLOW.md) |
+| Operators | [docs/operations/RUNBOOK.md](docs/operations/RUNBOOK.md) |
+
+For Claude Code: Start with [.clinerules](.clinerules)
+
 ## Architecture
 
 ```
