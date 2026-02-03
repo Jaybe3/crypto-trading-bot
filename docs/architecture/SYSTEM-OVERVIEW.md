@@ -1,190 +1,256 @@
-# System Architecture Overview
+# System Overview - Autonomous Trading Bot v2
 
-## High-Level Architecture
+**Last Updated:** February 3, 2026
+**Phase:** 2 Complete
+
+---
+
+## Executive Summary
+
+The Autonomous Trading Bot is a self-learning cryptocurrency trading system that:
+- Monitors real-time market data via WebSocket
+- Uses an LLM (Strategist) to generate trading conditions
+- Executes trades with sub-millisecond latency (Sniper)
+- Learns from every trade outcome
+- Automatically adapts its behavior based on accumulated knowledge
+
+---
+
+## System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           TRADING BOT SYSTEM                                │
+│                           AUTONOMOUS TRADING LOOP                            │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                             │
-│   ┌─────────────┐     ┌─────────────┐     ┌─────────────────────────────┐  │
-│   │  CoinGecko  │────>│ Market Data │────>│                             │  │
-│   │    API      │     │  Fetcher    │     │                             │  │
-│   └─────────────┘     └─────────────┘     │                             │  │
-│                              │            │      LLM Interface          │  │
-│                              ▼            │      (Ollama)               │  │
-│   ┌─────────────┐     ┌─────────────┐     │                             │  │
-│   │   SQLite    │<───>│  Database   │<───>│  - Trading Decisions       │  │
-│   │  Database   │     │   Layer     │     │  - Trade Analysis          │  │
-│   └─────────────┘     └─────────────┘     │  - Learning Extraction     │  │
-│                              │            │                             │  │
-│                              ▼            └─────────────────────────────┘  │
-│                       ┌─────────────┐                   │                  │
-│                       │    Risk     │                   │                  │
-│                       │  Manager    │<──────────────────┘                  │
-│                       └─────────────┘                                      │
-│                              │                                             │
-│                              ▼                                             │
-│   ┌─────────────┐     ┌─────────────┐     ┌─────────────────────────────┐  │
-│   │  Learning   │<────│  Trading    │────>│      Flask Dashboard        │  │
-│   │   System    │     │   Engine    │     │      (Port 8080)            │  │
-│   └─────────────┘     └─────────────┘     └─────────────────────────────┘  │
-│          │                                                                 │
-│          ▼                                                                 │
-│   ┌─────────────┐                                                          │
-│   │    Rule     │                                                          │
-│   │  Manager    │                                                          │
-│   └─────────────┘                                                          │
-│                                                                             │
+│                                                                              │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐                   │
+│  │  MarketFeed  │───►│  Strategist  │───►│    Sniper    │                   │
+│  │  (WebSocket) │    │    (LLM)     │    │  (Executor)  │                   │
+│  └──────────────┘    └──────────────┘    └──────────────┘                   │
+│         │                   ▲                    │                           │
+│         │                   │                    ▼                           │
+│         │           ┌──────────────┐    ┌──────────────┐                    │
+│         │           │  Knowledge   │◄───│   Journal    │                    │
+│         │           │    Brain     │    │  (Records)   │                    │
+│         │           └──────────────┘    └──────────────┘                    │
+│         │                   ▲                    │                           │
+│         │                   │                    ▼                           │
+│         │           ┌──────────────┐    ┌──────────────┐                    │
+│         │           │  Adaptation  │◄───│ Quick Update │                    │
+│         │           │   Engine     │    │  (Instant)   │                    │
+│         │           └──────────────┘    └──────────────┘                    │
+│         │                   ▲                    │                           │
+│         │                   │                    ▼                           │
+│         │           ┌──────────────┐    ┌──────────────┐                    │
+│         └──────────►│  Reflection  │◄───│   Insights   │                    │
+│                     │   (Hourly)   │    │ (Generated)  │                    │
+│                     └──────────────┘    └──────────────┘                    │
+│                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
-
-External:
-┌─────────────┐     ┌─────────────┐
-│   Ollama    │     │ Supervisor  │
-│  (Windows)  │     │  (Process)  │
-└─────────────┘     └─────────────┘
 ```
 
-## Component Descriptions
+---
 
-### Core Components
+## Component Overview
 
-| Component | File | Responsibility |
-|-----------|------|----------------|
-| **Main Loop** | `src/main.py` | Orchestrates 30-second trading cycle |
-| **Market Data** | `src/market_data.py` | Fetches prices from CoinGecko API |
-| **LLM Interface** | `src/llm_interface.py` | Communicates with Ollama for decisions |
-| **Trading Engine** | `src/trading_engine.py` | Executes paper trades |
-| **Risk Manager** | `src/risk_manager.py` | Enforces position limits and stop-losses |
-| **Learning System** | `src/learning_system.py` | Analyzes trades, extracts learnings |
-| **Rule Manager** | `src/learning_system.py` | Promotes learnings to rules |
-| **Database** | `src/database.py` | SQLite operations |
-| **Dashboard** | `src/dashboard.py` | Flask web UI |
-| **Coin Config** | `src/coin_config.py` | 45-coin tier configuration |
+### Data Flow Components
 
-### Supporting Components
+| Component | File | Purpose | Latency |
+|-----------|------|---------|---------|
+| **MarketFeed** | `market_feed.py` | WebSocket connection to Binance, real-time price/kline data | <1ms |
+| **Strategist** | `strategist.py` | LLM-powered condition generation using market context | 2-10s |
+| **Sniper** | `sniper.py` | Monitors conditions, executes trades instantly | <0.01ms |
+| **Journal** | `journal.py` | Records all trades with full context | <5ms |
 
-| Component | File | Responsibility |
-|-----------|------|----------------|
-| **Daily Summary** | `src/daily_summary.py` | Generates daily performance reports |
-| **Metrics** | `src/metrics.py` | Performance metrics and Prometheus endpoint |
-| **Volatility** | `src/volatility.py` | Volatility calculations for position sizing |
-| **Autonomous Monitor** | `scripts/autonomous_monitor.py` | Self-diagnosing agent |
+### Learning Components
 
-## Data Flow
+| Component | File | Purpose | Frequency |
+|-----------|------|---------|-----------|
+| **QuickUpdate** | `quick_update.py` | Updates coin scores and pattern confidence | Every trade |
+| **CoinScorer** | `coin_scorer.py` | Tracks per-coin win rate, P&L, trends | Every trade |
+| **PatternLibrary** | `pattern_library.py` | Manages trading patterns and confidence | Every trade |
+| **ReflectionEngine** | `reflection.py` | Deep analysis, insight generation | Hourly |
+| **AdaptationEngine** | `adaptation.py` | Applies changes based on insights | After reflection |
 
-### Trading Cycle (Every 30 Seconds)
+### Knowledge Storage
 
+| Component | File | Purpose |
+|-----------|------|---------|
+| **KnowledgeBrain** | `knowledge.py` | Central knowledge repository |
+| **Database** | `database.py` | SQLite persistence layer |
+
+---
+
+## Data Flow Sequence
+
+### 1. Market Data Ingestion
 ```
-1. FETCH      Market Data Fetcher gets prices for 45 coins from CoinGecko
-                    │
-                    ▼
-2. UPDATE     Trading Engine checks open positions against current prices
-              - Triggers stop-loss if threshold breached
-              - Triggers take-profit if $1 gain reached
-                    │
-                    ▼
-3. ANALYZE    If trades closed, Learning System analyzes each:
-              - Sends trade details to LLM
-              - Extracts what happened, why, pattern, lesson
-              - Stores learning in database
-                    │
-                    ▼
-4. PROMOTE    Rule Manager checks high-confidence learnings
-              - Learnings ≥70% confidence become candidate rules
-              - Rules enter testing phase
-              - Validated rules become active
-                    │
-                    ▼
-5. DECIDE     LLM Interface builds context and queries LLM:
-              - Current market data (prices, 24h changes)
-              - Account state (balance, exposure)
-              - Recent learnings
-              - Active rules
-              - Coins in cooldown (forbidden)
-                    │
-                    ▼
-6. VALIDATE   Risk Manager validates proposed trade:
-              - Size within 2% of balance?
-              - Total exposure under 10%?
-              - Coin not in cooldown?
-              - Tier-specific limits respected?
-                    │
-                    ▼
-7. EXECUTE    Trading Engine executes if valid:
-              - Records trade in database
-              - Updates account state
-              - Starts cooldown timer for coin
+Binance WebSocket → MarketFeed → Price Cache → Strategist Context
+                                            → Sniper Monitoring
 ```
 
-### Learning Loop
-
+### 2. Condition Generation (Every 5 minutes)
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                       LEARNING LOOP                             │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│   Trade Closes ──> LLM Analysis ──> Learning Created            │
-│        │                                    │                   │
-│        │                                    ▼                   │
-│        │                           Confidence ≥ 70%?            │
-│        │                              │          │              │
-│        │                             Yes         No             │
-│        │                              │          │              │
-│        │                              ▼          ▼              │
-│        │                        Create Rule   Store Only        │
-│        │                              │                         │
-│        │                              ▼                         │
-│        │                        Testing Phase                   │
-│        │                        (10 trades)                     │
-│        │                              │                         │
-│        │                              ▼                         │
-│        │                      Success Rate OK?                  │
-│        │                        │          │                    │
-│        │                       Yes         No                   │
-│        │                        │          │                    │
-│        │                        ▼          ▼                    │
-│        │                   Promote to   Reject Rule             │
-│        │                   Active                               │
-│        │                        │                               │
-│        └────────────────────────┴───────────────────────────────│
-│                                 │                               │
-│                    Active Rules Inform Future Decisions         │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+MarketFeed.get_market_state()
+    → Strategist.generate_conditions(market_state, knowledge_context)
+    → TradeCondition[] (coin, direction, entry, stop_loss, take_profit)
+    → Sniper.set_conditions(conditions)
 ```
 
-## External Dependencies
+### 3. Trade Execution (Sub-millisecond)
+```
+MarketFeed.on_price_update(price)
+    → Sniper.check_conditions(price)
+    → If triggered: Sniper.execute_trade()
+    → Position opened → Monitor for exit
+    → Exit triggered → Trade closed
+    → Journal.record_trade(trade_result)
+```
 
-| Dependency | Purpose | Failure Mode |
-|------------|---------|--------------|
-| CoinGecko API | Market data | Bot skips cycle, retries next interval |
-| Ollama (Windows) | LLM inference | Bot defaults to HOLD |
-| Supervisor | Process management | Manual restart required |
-| SQLite | Data persistence | Bot cannot function |
+### 4. Instant Learning (Every trade close)
+```
+Journal.on_trade_close(trade)
+    → QuickUpdate.process_trade_close(trade_result)
+        → CoinScorer.process_trade_result() → Update coin score
+        → PatternLibrary.record_pattern_outcome() → Update confidence
+        → Check thresholds → Trigger adaptations if needed
+    → ReflectionEngine.add_trade() → Queue for hourly analysis
+```
+
+### 5. Deep Learning (Hourly)
+```
+ReflectionEngine.reflect()
+    → Analyze recent trades with LLM
+    → Generate insights (patterns, problems, opportunities)
+    → AdaptationEngine.apply_insights()
+        → Blacklist/favor coins
+        → Activate/deactivate patterns
+        → Create/modify rules
+    → KnowledgeBrain updated
+```
+
+### 6. Knowledge Usage (Next cycle)
+```
+Strategist.generate_conditions()
+    → KnowledgeBrain.get_knowledge_context()
+        → Coin scores and recommendations
+        → Active patterns with confidence
+        → Regime rules (time-based, volatility-based)
+        → Blacklisted coins to avoid
+    → LLM uses context to make better decisions
+```
+
+---
+
+## Key Design Decisions
+
+### 1. Two-Tier Learning
+- **Quick Update**: Pure math, no LLM, <10ms. Updates scores after every trade.
+- **Deep Reflection**: LLM-powered, hourly. Generates insights and complex adaptations.
+
+**Rationale**: Fast feedback loop for immediate adjustments, deep analysis for strategic changes.
+
+### 2. Condition-Based Execution
+- Strategist generates conditions (entry price, stop loss, take profit)
+- Sniper monitors and executes without LLM involvement
+
+**Rationale**: Sub-millisecond execution, no LLM latency during critical moments.
+
+### 3. Persistent Knowledge
+- All knowledge stored in SQLite database
+- Survives restarts, accumulates over time
+
+**Rationale**: Continuous learning across sessions.
+
+### 4. Observable Adaptations
+- Every adaptation logged with before/after metrics
+- Effectiveness tracked and measured
+
+**Rationale**: Verify learning is actually helping, roll back harmful changes.
+
+---
+
+## Component Dependencies
+
+```
+                    ┌─────────────┐
+                    │  Database   │
+                    └─────────────┘
+                          ▲
+          ┌───────────────┼───────────────┐
+          │               │               │
+    ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+    │  Knowledge  │ │   Journal   │ │ Adaptation  │
+    │    Brain    │ │             │ │   Engine    │
+    └─────────────┘ └─────────────┘ └─────────────┘
+          ▲               ▲               ▲
+          │               │               │
+    ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+    │ CoinScorer  │ │ QuickUpdate │ │ Reflection  │
+    │ PatternLib  │ │             │ │   Engine    │
+    └─────────────┘ └─────────────┘ └─────────────┘
+          ▲               ▲               ▲
+          │               │               │
+          └───────────────┼───────────────┘
+                          │
+                    ┌─────────────┐
+                    │   Sniper    │
+                    └─────────────┘
+                          ▲
+                          │
+          ┌───────────────┼───────────────┐
+          │               │               │
+    ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+    │ MarketFeed  │ │ Strategist  │ │    LLM      │
+    │             │ │             │ │  Interface  │
+    └─────────────┘ └─────────────┘ └─────────────┘
+```
+
+---
+
+## Performance Characteristics
+
+| Metric | Target | Achieved |
+|--------|--------|----------|
+| Price update latency | <10ms | <1ms |
+| Condition check latency | <1ms | 0.0015ms |
+| Trade execution | <100ms | <50ms |
+| Quick update processing | <10ms | <5ms |
+| Reflection cycle | <5min | ~2min |
+| Dashboard update | <1s | 100ms |
+
+---
+
+## Entry Points
+
+| Script | Purpose | Usage |
+|--------|---------|-------|
+| `main_v2.py` | Full autonomous system | `python src/main_v2.py --dashboard` |
+| `dashboard_v2.py` | Dashboard only | `python src/dashboard_v2.py` |
+| `market_feed.py` | Market data only | Testing/debugging |
+
+---
 
 ## Configuration
 
 ### Environment Variables
+- `BINANCE_API_KEY`, `BINANCE_API_SECRET`: Exchange credentials
+- `OLLAMA_HOST`: LLM server (default: localhost:11434)
 
-| Variable | Default | Purpose |
-|----------|---------|---------|
-| `OLLAMA_HOST` | `172.27.144.1` | Ollama server address (WSL2 gateway) |
-| `LOOP_INTERVAL` | `30` | Seconds between trading cycles |
-| `MIN_CONFIDENCE` | `0.3` | Minimum confidence for trade execution |
-
-### Hardcoded Limits (Non-Configurable)
-
-| Limit | Value | Rationale |
-|-------|-------|-----------|
-| Max per trade | 2% | Prevent single-trade blowup |
-| Max exposure | 10% | Preserve capital |
-| Take profit | $1 | Consistent, conservative target |
-| Tier 1 stop-loss | 3% | Tight stops for blue chips |
-| Tier 2 stop-loss | 5% | Medium stops for established coins |
-| Tier 3 stop-loss | 7% | Wider stops for volatile coins |
-| Coin cooldown | 30 min | Enforce diversity |
+### Command Line Arguments
+```bash
+python src/main_v2.py \
+  --mode paper \
+  --dashboard \
+  --port 8080 \
+  --db data/trading_bot.db
+```
 
 ---
 
-*Last Updated: February 2026*
+## Related Documentation
+
+- [LEARNING-SYSTEM.md](./LEARNING-SYSTEM.md) - Deep dive into learning mechanics
+- [DATA-MODEL.md](./DATA-MODEL.md) - Database schema and relationships
+- [COMPONENT-REFERENCE.md](./COMPONENT-REFERENCE.md) - Detailed component documentation
+- [../operations/PAPER-TRADING-GUIDE.md](../operations/PAPER-TRADING-GUIDE.md) - Running the system

@@ -1,5 +1,8 @@
 # Operations Runbook
 
+**Last Updated:** February 3, 2026
+**Phase:** 2 Complete
+
 Day-to-day operations guide for running the crypto trading bot.
 
 ---
@@ -8,29 +11,22 @@ Day-to-day operations guide for running the crypto trading bot.
 
 ### Start Everything
 ```bash
-cd ~/crypto-trading-bot
-bash scripts/start.sh
+python src/main_v2.py --mode paper --dashboard --port 8080
 ```
 
 ### Stop Everything
 ```bash
-bash scripts/stop.sh
+pkill -f "main_v2.py"
 ```
 
 ### Check Status
 ```bash
-bash scripts/status.sh
+curl -s http://localhost:8080/api/status | jq .
 ```
 
 ### View Logs
 ```bash
 tail -f logs/bot.log
-```
-
-### Emergency Stop
-```bash
-pkill -f "python.*main.py"
-pkill -f "python.*dashboard.py"
 ```
 
 ---
@@ -41,9 +37,9 @@ pkill -f "python.*dashboard.py"
 
 1. **Verify bot is running:**
    ```bash
-   bash scripts/status.sh
+   pgrep -f "main_v2.py"
+   curl -s http://localhost:8080/api/status
    ```
-   Should show both bot and dashboard running.
 
 2. **Check overnight performance:**
    ```bash
@@ -51,17 +47,36 @@ pkill -f "python.*dashboard.py"
    SELECT COUNT(*) as trades,
           SUM(pnl_usd) as total_pnl,
           SUM(CASE WHEN pnl_usd > 0 THEN 1 ELSE 0 END) as wins
-   FROM closed_trades
-   WHERE closed_at > datetime('now', '-24 hours');
+   FROM trade_journal
+   WHERE exit_time > datetime('now', '-24 hours');
    "
    ```
 
 3. **Review dashboard:**
    Open http://localhost:8080 and check:
-   - Current balance
+   - WebSocket connected (green indicator)
    - Open positions
    - Recent trades
-   - Any alerts
+   - Any adaptations applied
+
+4. **Check for errors:**
+   ```bash
+   grep -i error logs/bot.log | tail -10
+   ```
+
+### Evening Check
+
+1. **Daily summary:**
+   ```bash
+   python scripts/daily_checkpoint.py
+   ```
+
+2. **Verify learning is active:**
+   ```bash
+   sqlite3 data/trading_bot.db "
+   SELECT COUNT(*) FROM adaptations WHERE applied_at > datetime('now', '-24 hours');
+   "
+   ```
 
 ### Weekly Tasks
 
@@ -70,26 +85,39 @@ pkill -f "python.*dashboard.py"
    cp data/trading_bot.db data/backups/trading_bot_$(date +%Y%m%d).db
    ```
 
-2. **Review rule performance:**
+2. **Review coin performance:**
    ```bash
    sqlite3 data/trading_bot.db "
-   SELECT id, rule_text, success_count, failure_count,
-          ROUND(success_count * 100.0 / (success_count + failure_count), 1) as rate
-   FROM trading_rules
-   WHERE status = 'active'
-   ORDER BY rate DESC;
+   SELECT coin, total_trades, win_rate, total_pnl, status
+   FROM coin_scores
+   WHERE total_trades > 0
+   ORDER BY total_pnl DESC;
    "
    ```
 
-3. **Check disk space:**
+3. **Review pattern performance:**
+   ```bash
+   sqlite3 data/trading_bot.db "
+   SELECT pattern_id, times_used, win_rate, confidence, is_active
+   FROM trading_patterns
+   WHERE times_used > 0
+   ORDER BY win_rate DESC;
+   "
+   ```
+
+4. **Check disk space:**
    ```bash
    du -sh data/ logs/
    ```
 
-4. **Rotate logs if needed:**
+5. **Rotate logs if needed:**
    ```bash
-   # Keep last 7 days
    find logs/ -name "*.log" -mtime +7 -delete
+   ```
+
+6. **Generate weekly report:**
+   ```bash
+   python scripts/analyze_performance.py --days 7
    ```
 
 ---
@@ -98,36 +126,41 @@ pkill -f "python.*dashboard.py"
 
 ### Normal Start
 ```bash
-bash scripts/start.sh
+# Ensure Ollama is running first
+ollama serve &
+
+# Start trading system
+python src/main_v2.py --mode paper --dashboard --port 8080
 ```
 
 This starts:
-- Trading bot (main.py)
-- Dashboard (dashboard.py)
-- Supervisor manages both
+- MarketFeed (WebSocket connection)
+- Strategist (LLM condition generation)
+- Sniper (Trade execution)
+- QuickUpdate (Instant learning)
+- ReflectionEngine (Hourly analysis)
+- Dashboard (Web interface)
 
 ### Normal Stop
 ```bash
-bash scripts/stop.sh
+# Ctrl+C in terminal, or:
+pkill -f "main_v2.py"
 ```
 
-Gracefully stops both processes.
+The system gracefully:
+- Closes WebSocket connection
+- Saves all state to database
+- Records any open positions
 
-### Restart
+### Background Mode
 ```bash
-bash scripts/restart.sh
+nohup python src/main_v2.py --mode paper --dashboard > logs/bot.log 2>&1 &
 ```
 
-### Start Individual Components
-
-**Bot only:**
+Check it's running:
 ```bash
-python src/main.py
-```
-
-**Dashboard only:**
-```bash
-python src/dashboard.py
+pgrep -f "main_v2.py"
+tail -f logs/bot.log
 ```
 
 ---
@@ -141,16 +174,31 @@ tail -f logs/bot.log
 
 ### Dashboard
 - URL: http://localhost:8080
-- Shows: balance, positions, trades, learnings, rules
+- Pages: Overview, Knowledge, Adaptations, Profitability
 
-### Prometheus Metrics
-- URL: http://localhost:8080/metrics
-- For external monitoring systems
-
-### Health Check
+### API Health Check
 ```bash
-bash scripts/health.sh
+curl -s http://localhost:8080/api/status | jq .
 ```
+
+Expected response:
+```json
+{
+  "status": "running",
+  "websocket_connected": true,
+  "llm_available": true,
+  "uptime_seconds": 3600
+}
+```
+
+### Key Metrics to Watch
+
+| Metric | Check Command | Concern If |
+|--------|--------------|------------|
+| Win Rate | `curl /api/profitability` | < 45% |
+| WebSocket | `curl /api/status` | disconnected |
+| Trade Count | DB query | 0 in 6 hours |
+| Adaptations | DB query | 0 in 24 hours |
 
 ---
 
@@ -158,48 +206,58 @@ bash scripts/health.sh
 
 ### Check Current Positions
 ```bash
-sqlite3 data/trading_bot.db "SELECT * FROM open_trades;"
+curl -s http://localhost:8080/api/positions | jq .
+```
+Or:
+```bash
+sqlite3 data/trading_bot.db "SELECT * FROM open_positions;"
 ```
 
 ### Check Recent Trades
 ```bash
+curl -s "http://localhost:8080/api/trades?limit=10" | jq .
+```
+Or:
+```bash
 sqlite3 data/trading_bot.db "
-SELECT coin_name, pnl_usd, exit_reason, closed_at
-FROM closed_trades
-ORDER BY closed_at DESC
+SELECT coin, direction, pnl_usd, exit_reason, exit_time
+FROM trade_journal
+ORDER BY exit_time DESC
 LIMIT 10;
 "
 ```
 
-### Check Active Rules
+### Check Coin Scores
+```bash
+curl -s http://localhost:8080/api/knowledge/coins | jq .
+```
+
+### Check Active Patterns
 ```bash
 sqlite3 data/trading_bot.db "
-SELECT id, status, success_count, failure_count
-FROM trading_rules
-WHERE status IN ('active', 'testing');
+SELECT pattern_id, description, confidence, is_active
+FROM trading_patterns
+WHERE is_active = 1
+ORDER BY confidence DESC;
 "
 ```
 
-### Check Cooldowns
+### Force Blacklist a Coin
+Via dashboard `/overrides` page, or:
 ```bash
 sqlite3 data/trading_bot.db "
-SELECT coin_name, expires_at
-FROM coin_cooldowns
-WHERE expires_at > datetime('now');
+UPDATE coin_scores
+SET is_blacklisted = 1, blacklist_reason = 'Manual blacklist', status = 'blacklisted'
+WHERE coin = 'DOGE';
 "
 ```
 
-### Manually Clear a Cooldown
+### Unblacklist a Coin
 ```bash
 sqlite3 data/trading_bot.db "
-DELETE FROM coin_cooldowns WHERE coin_name = 'bitcoin';
-"
-```
-
-### Reset Daily P&L Counter
-```bash
-sqlite3 data/trading_bot.db "
-UPDATE account_state SET daily_pnl = 0, trade_count_today = 0;
+UPDATE coin_scores
+SET is_blacklisted = 0, blacklist_reason = NULL, status = 'normal'
+WHERE coin = 'DOGE';
 "
 ```
 
@@ -215,9 +273,9 @@ cp data/trading_bot.db data/backups/trading_bot_$(date +%Y%m%d_%H%M%S).db
 ### Restore from Backup
 ```bash
 # Stop bot first!
-bash scripts/stop.sh
+pkill -f "main_v2.py"
 cp data/backups/trading_bot_YYYYMMDD.db data/trading_bot.db
-bash scripts/start.sh
+python src/main_v2.py --mode paper --dashboard
 ```
 
 ### Query with SQLite
@@ -231,6 +289,16 @@ Useful commands:
 - `.mode column` - Pretty print
 - `.headers on` - Show column names
 
+### Clean Old Data
+```bash
+# Keep insights/reflections for 30 days
+sqlite3 data/trading_bot.db "
+DELETE FROM insights WHERE created_at < datetime('now', '-30 days');
+DELETE FROM reflections WHERE completed_at < datetime('now', '-30 days');
+VACUUM;
+"
+```
+
 ---
 
 ## Configuration
@@ -239,42 +307,79 @@ Useful commands:
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
-| OLLAMA_HOST | 172.27.144.1 | Ollama server address |
-| LOOP_INTERVAL | 30 | Seconds between cycles |
-| MIN_CONFIDENCE | 0.3 | Minimum trade confidence |
+| OLLAMA_HOST | localhost | Ollama server address |
+| OLLAMA_MODEL | qwen2.5:14b | LLM model to use |
+| DB_PATH | data/trading_bot.db | Database location |
 
-### Changing Configuration
+### Command Line Arguments
 
-Edit environment in start script or export before running:
 ```bash
-export LOOP_INTERVAL=60
-python src/main.py
+python src/main_v2.py \
+  --mode paper \           # paper or live
+  --dashboard \            # Enable dashboard
+  --port 8080 \           # Dashboard port
+  --db data/trading_bot.db # Database path
 ```
 
 ---
 
-## Supervisor Management
+## Emergency Procedures
 
-### Check Status
+### Emergency Stop
 ```bash
-supervisorctl status
+pkill -f "main_v2.py"
 ```
 
-### Restart Bot
+### If Bot Won't Stop
 ```bash
-supervisorctl restart trading_bot
+pkill -9 -f "main_v2.py"
 ```
 
-### Restart Dashboard
+### If Database Corrupted
 ```bash
-supervisorctl restart dashboard
+# Check integrity
+sqlite3 data/trading_bot.db "PRAGMA integrity_check;"
+
+# If failed, restore backup
+pkill -f "main_v2.py"
+cp data/backups/trading_bot_latest.db data/trading_bot.db
 ```
 
-### View Supervisor Logs
+### If LLM Down
+Bot continues with existing conditions but won't generate new ones.
+- Fix LLM issue
+- Bot auto-reconnects
+
+### If WebSocket Down
+Bot auto-reconnects. If persistent:
+- Check internet connectivity
+- Check Binance status
+- Restart bot
+
+---
+
+## Performance Analysis
+
+### Quick Stats
 ```bash
-tail -f /var/log/supervisor/supervisord.log
+python scripts/analyze_performance.py --days 1
+```
+
+### Weekly Report
+```bash
+python scripts/analyze_performance.py --days 7
+```
+
+### Export Data
+```bash
+python scripts/export_trades.py --output trades.csv
 ```
 
 ---
 
-*Last Updated: February 2026*
+## Related Documentation
+
+- [PAPER-TRADING-GUIDE.md](./PAPER-TRADING-GUIDE.md) - Paper trading setup
+- [DASHBOARD-GUIDE.md](./DASHBOARD-GUIDE.md) - Dashboard usage
+- [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Problem solving
+- [../architecture/SYSTEM-OVERVIEW.md](../architecture/SYSTEM-OVERVIEW.md) - Architecture

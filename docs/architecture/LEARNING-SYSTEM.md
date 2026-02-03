@@ -1,230 +1,371 @@
 # Learning System Architecture
 
-The learning system is the core intellectual property of this trading bot. It transforms raw trade outcomes into actionable knowledge.
+**Last Updated:** February 3, 2026
+**Phase:** 2 Complete
 
 ---
 
 ## Overview
 
-```
-Trade Outcome ──> LLM Analysis ──> Structured Learning ──> Rule Candidate ──> Active Rule
-```
-
-Unlike traditional trading systems with static rules, this system:
-1. Learns from every trade (wins AND losses)
-2. Extracts patterns autonomously
-3. Creates and validates its own rules
-4. Continuously improves decision quality
+The learning system enables the trading bot to improve its performance over time by:
+1. Tracking outcomes of every trade
+2. Updating knowledge immediately after each trade (Quick Update)
+3. Performing deep analysis periodically (Reflection)
+4. Applying changes based on accumulated evidence (Adaptation)
 
 ---
 
-## Learning Extraction
+## Learning Loop
 
-### Input: Closed Trade
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      LEARNING LOOP                               │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│   Trade Closes                                                   │
+│        │                                                         │
+│        ▼                                                         │
+│   ┌─────────────────┐                                           │
+│   │   QUICK UPDATE  │  ← Instant (< 10ms)                       │
+│   │   - Coin score  │                                           │
+│   │   - Pattern     │                                           │
+│   │     confidence  │                                           │
+│   │   - Threshold   │                                           │
+│   │     checks      │                                           │
+│   └────────┬────────┘                                           │
+│            │                                                     │
+│            ▼                                                     │
+│   ┌─────────────────┐                                           │
+│   │ DEEP REFLECTION │  ← Hourly (LLM-powered)                   │
+│   │   - Trade       │                                           │
+│   │     analysis    │                                           │
+│   │   - Pattern     │                                           │
+│   │     detection   │                                           │
+│   │   - Insight     │                                           │
+│   │     generation  │                                           │
+│   └────────┬────────┘                                           │
+│            │                                                     │
+│            ▼                                                     │
+│   ┌─────────────────┐                                           │
+│   │   ADAPTATION    │  ← Apply changes                          │
+│   │   - Blacklist   │                                           │
+│   │   - Favor       │                                           │
+│   │   - Rules       │                                           │
+│   │   - Patterns    │                                           │
+│   └────────┬────────┘                                           │
+│            │                                                     │
+│            ▼                                                     │
+│   ┌─────────────────┐                                           │
+│   │ KNOWLEDGE BRAIN │  ← Updated knowledge                      │
+│   │   used by       │                                           │
+│   │   Strategist    │                                           │
+│   └─────────────────┘                                           │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-When a trade closes (stop-loss, take-profit, or manual), the system captures:
+---
+
+## Tier 1: Quick Update
+
+**File:** `src/quick_update.py`
+**Trigger:** Every trade close
+**Latency:** < 10ms (no LLM)
+
+### Purpose
+Provide immediate feedback to the knowledge system. Pure math calculations, no AI involved.
+
+### What It Updates
+
+#### 1. Coin Scores
+```python
+# After each trade:
+coin_score.total_trades += 1
+coin_score.wins += 1 if won else 0
+coin_score.losses += 1 if not won else 0
+coin_score.total_pnl += pnl_usd
+coin_score.win_rate = wins / total_trades
+coin_score.trend = calculate_trend(recent_results)
+```
+
+#### 2. Pattern Confidence
+```python
+# If trade used a pattern:
+pattern.times_used += 1
+pattern.wins += 1 if won else 0
+pattern.total_pnl += pnl_usd
+pattern.confidence = calculate_confidence(pattern)
+```
+
+#### 3. Threshold Checks
+```python
+# Automatic adaptations when thresholds crossed:
+if coin.win_rate < 0.30 and coin.total_pnl < 0:
+    trigger_adaptation("BLACKLIST", coin)
+elif coin.win_rate < 0.45:
+    trigger_adaptation("REDUCE", coin)
+elif coin.win_rate > 0.60 and coin.total_pnl > 0:
+    trigger_adaptation("FAVOR", coin)
+```
+
+### Coin Status Levels
+
+| Status | Win Rate | P&L | Position Modifier |
+|--------|----------|-----|-------------------|
+| BLACKLISTED | < 30% | < 0 | 0% (no trading) |
+| REDUCED | < 45% | any | 50% size |
+| NORMAL | 45-60% | any | 100% size |
+| FAVORED | > 60% | > 0 | 150% size |
+| UNKNOWN | < 5 trades | - | 100% size |
+
+---
+
+## Tier 2: Deep Reflection
+
+**File:** `src/reflection.py`
+**Trigger:** Hourly (or after N trades)
+**Latency:** 1-5 minutes (LLM analysis)
+
+### Purpose
+Use AI to identify patterns, problems, and opportunities that simple math can't detect.
+
+### Process
+
+```
+1. Gather Data
+   └── Recent trades (last hour/day)
+   └── Current coin scores
+   └── Pattern performance
+   └── Market context
+
+2. LLM Analysis
+   └── Prompt with trade data
+   └── Ask for patterns, problems, suggestions
+   └── Parse structured response
+
+3. Generate Insights
+   └── Coin insights (good/bad performers)
+   └── Pattern insights (what's working)
+   └── Time insights (bad hours)
+   └── Regime insights (market conditions)
+
+4. Queue Adaptations
+   └── Convert insights to actionable changes
+   └── Pass to AdaptationEngine
+```
+
+### Insight Types
+
+| Type | Example | Possible Action |
+|------|---------|-----------------|
+| `coin` | "DOGE has 25% win rate over 15 trades" | BLACKLIST |
+| `pattern` | "Breakout pattern failing in low volatility" | DEACTIVATE |
+| `time` | "Hour 3-4 UTC has 20% win rate" | CREATE_TIME_RULE |
+| `regime` | "BTC volatility < 1% correlates with losses" | CREATE_REGIME_RULE |
+| `exit` | "Stop losses too tight, getting stopped out" | ADJUST_PARAMETERS |
+
+### LLM Prompt Structure
+
+```
+You are analyzing trading performance. Here is the recent data:
+
+TRADES (last 24 hours):
+- BTC LONG: +$45 (win)
+- ETH SHORT: -$30 (loss)
+...
+
+COIN PERFORMANCE:
+- SOL: 70% win rate, +$120 total
+- DOGE: 25% win rate, -$80 total
+...
+
+PATTERNS:
+- breakout_001: 60% win rate, confidence 0.7
+- support_bounce: 35% win rate, confidence 0.4
+...
+
+Analyze this data and identify:
+1. Coins that should be blacklisted or favored
+2. Patterns that are working or failing
+3. Time-based patterns (specific hours performing poorly)
+4. Any other insights for improvement
+
+Respond in JSON format...
+```
+
+---
+
+## Tier 3: Adaptation Engine
+
+**File:** `src/adaptation.py`
+**Trigger:** After reflection, or threshold crossings
+**Purpose:** Apply changes to the knowledge system
+
+### Adaptation Types
+
+| Action | Target | Effect |
+|--------|--------|--------|
+| `BLACKLIST` | Coin | Prevent trading this coin |
+| `UNBLACKLIST` | Coin | Re-enable trading |
+| `FAVOR` | Coin | Increase position size |
+| `REDUCE` | Coin | Decrease position size |
+| `CREATE_RULE` | Regime | Add time/condition rule |
+| `DEACTIVATE_PATTERN` | Pattern | Stop using pattern |
+| `ACTIVATE_PATTERN` | Pattern | Resume using pattern |
+| `ADJUST_PARAMS` | Various | Modify thresholds |
+
+### Adaptation Record
+
+Every adaptation is logged with:
+```python
+AdaptationRecord(
+    adaptation_id="adapt_001",
+    action="BLACKLIST",
+    target="DOGE",
+    reason="25% win rate over 15 trades",
+    confidence=0.85,
+
+    # Before metrics (for measuring effectiveness)
+    win_rate_before=0.25,
+    pnl_before=-80.0,
+
+    # After metrics (filled in later)
+    win_rate_after=None,  # Measured after 10 trades
+    pnl_after=None,
+    effectiveness_rating=None,  # "effective", "neutral", "harmful"
+)
+```
+
+### Effectiveness Measurement
+
+After an adaptation is applied, we measure its impact:
+
+```python
+# 10 trades later:
+def measure_effectiveness(adaptation):
+    if adaptation.action == "BLACKLIST":
+        # Did we avoid losses?
+        hypothetical_loss = estimate_if_we_traded(coin)
+        return "effective" if hypothetical_loss < 0 else "neutral"
+
+    elif adaptation.action == "FAVOR":
+        # Did the coin continue performing well?
+        actual_pnl = get_pnl_since(adaptation)
+        return "effective" if actual_pnl > 0 else "harmful"
+```
+
+---
+
+## Knowledge Brain
+
+**File:** `src/knowledge.py`
+**Purpose:** Central repository for all learned knowledge
+
+### Data Structures
+
+```python
+KnowledgeBrain:
+    # Coin performance
+    coin_scores: Dict[str, CoinScore]
+
+    # Trading patterns
+    patterns: Dict[str, TradingPattern]
+
+    # Regime rules
+    rules: Dict[str, RegimeRule]
+
+    # Blacklist
+    blacklisted_coins: Set[str]
+
+    # Methods
+    get_knowledge_context() -> dict  # For Strategist
+    get_coin_score(coin) -> CoinScore
+    get_active_patterns() -> List[TradingPattern]
+    get_applicable_rules(market_state) -> List[RegimeRule]
+```
+
+### Knowledge Context (for Strategist)
 
 ```python
 {
-    "trade_id": 1234,
-    "coin_name": "bitcoin",
-    "entry_price": 45000.00,
-    "exit_price": 45500.00,
-    "size_usd": 20.00,
-    "pnl_usd": 1.00,
-    "pnl_pct": 1.11,
-    "entry_reason": "Momentum breakout with volume confirmation",
-    "exit_reason": "take_profit",
-    "duration_seconds": 180,
-    "opened_at": "2026-01-15 10:30:00",
-    "closed_at": "2026-01-15 10:33:00"
-}
-```
-
-### Process: LLM Analysis
-
-The trade is sent to the LLM with a structured prompt:
-
-```
-Analyze this cryptocurrency trade:
-
-TRADE DETAILS:
-- Coin: bitcoin (Tier 1 - Blue Chip)
-- Entry: $45,000.00 at 2026-01-15 10:30:00
-- Exit: $45,500.00 at 2026-01-15 10:33:00
-- Size: $20.00
-- P&L: +$1.00 (+1.11%)
-- Duration: 3 minutes
-- Entry Reason: Momentum breakout with volume confirmation
-- Exit Reason: take_profit
-
-MARKET CONTEXT:
-- 24h Change at Entry: +2.3%
-- Current Price: $45,520.00
-
-Please analyze and provide:
-1. what_happened: Brief factual summary
-2. why_outcome: Why did this trade succeed/fail?
-3. pattern: What recognizable pattern occurred?
-4. lesson: What should be learned for future trades?
-5. confidence: Your confidence in this lesson (0.0 to 1.0)
-
-Respond in JSON format.
-```
-
-### Output: Structured Learning
-
-```python
-{
-    "trade_id": 1234,
-    "what_happened": "BTC momentum trade captured quick profit during uptrend",
-    "why_outcome": "Entry caught continuation of existing trend, tight take-profit executed before reversal",
-    "pattern": "Trend continuation on blue chip during low volatility",
-    "lesson": "Blue chip momentum trades in established uptrends have high probability of quick small gains",
-    "confidence": 0.75,
-    "created_at": "2026-01-15 10:33:05"
+    "coin_summaries": {
+        "SOL": "70% win rate, trending up, FAVORED",
+        "DOGE": "BLACKLISTED - poor performance",
+        ...
+    },
+    "blacklist": ["DOGE", "SHIB"],
+    "good_coins": ["SOL", "BTC"],
+    "patterns": [
+        {"id": "breakout_001", "confidence": 0.8, "description": "..."},
+        ...
+    ],
+    "regime_rules": [
+        {"condition": "hour in [2,3,4]", "action": "REDUCE_SIZE"},
+        ...
+    ],
+    "recent_performance": {
+        "win_rate": 58.3,
+        "profit_factor": 1.45,
+        ...
+    }
 }
 ```
 
 ---
 
-## Rule Creation
+## Learning Metrics
 
-### Promotion Criteria
+### Tracked Metrics
 
-A learning becomes a rule candidate when:
-- Confidence ≥ 70%
-- Pattern is specific enough to be actionable
-- Not a duplicate of existing rule
+| Metric | Definition | Target |
+|--------|------------|--------|
+| Score Update Rate | Scores updated / Trades | 100% |
+| Insight Rate | Insights / Reflections | > 0.5 |
+| Adaptation Rate | Adaptations / Insights | > 0.3 |
+| Effectiveness Rate | Effective adaptations / Total | > 50% |
+| Harmful Rate | Harmful adaptations / Total | < 20% |
 
-### Rule Structure
+### Validation Approach
+
+1. **Coin Score Accuracy**: Do high scores correlate with high win rates?
+2. **Pattern Confidence**: Do high-confidence patterns win more?
+3. **Adaptation Effectiveness**: Do adaptations improve performance?
+4. **Improvement Over Time**: Is second half better than first half?
+
+---
+
+## Configuration
+
+### Thresholds (coin_scorer.py)
 
 ```python
-{
-    "id": 42,
-    "rule_text": "In established uptrends, blue chip momentum trades should use tight take-profits ($1) to capture quick gains before reversal",
-    "source_learning_id": 1234,
-    "status": "testing",  # testing → active → inactive
-    "success_count": 0,
-    "failure_count": 0,
-    "created_at": "2026-01-15 10:33:10"
-}
+MIN_TRADES_FOR_ADAPTATION = 5
+BLACKLIST_WIN_RATE = 0.30
+REDUCED_WIN_RATE = 0.45
+FAVORED_WIN_RATE = 0.60
+RECOVERY_WIN_RATE = 0.50
 ```
 
-### Testing Phase
-
-Rules enter testing status and are tracked for 10 trades:
-- Each trade where rule was applied is recorded
-- Win = success_count++
-- Loss = failure_count++
-- After 10 trades, success rate determines promotion
-
-### Promotion/Rejection
+### Reflection Settings
 
 ```python
-if success_count >= 6:  # 60% success rate
-    status = "active"
-else:
-    status = "rejected"
+REFLECTION_INTERVAL_HOURS = 1
+MIN_TRADES_FOR_REFLECTION = 5
+INSIGHT_CONFIDENCE_THRESHOLD = 0.6
 ```
 
----
-
-## Rule Application
-
-### Context Building
-
-When making a trade decision, active rules are included in the LLM prompt:
-
-```
-ACTIVE TRADING RULES:
-[Rule #42] In established uptrends, blue chip momentum trades should use tight take-profits ($1) to capture quick gains before reversal
-[Rule #38] Avoid Tier 3 coins when BTC is declining more than 2% in 24h
-[Rule #45] Volume spikes on Tier 2 coins often precede 2-3% moves
-
-Consider these rules when making your decision. If you apply a rule, include its ID in your response.
-```
-
-### Rule Tracking
-
-When a trade is executed, the LLM indicates which rules influenced the decision:
+### Adaptation Settings
 
 ```python
-{
-    "action": "BUY",
-    "coin": "ethereum",
-    "confidence": 0.72,
-    "reason": "Momentum breakout with volume confirmation",
-    "rules_applied": [42, 45]
-}
-```
-
-The trade is tagged with these rule IDs, enabling rule performance tracking.
-
----
-
-## Database Schema
-
-### learnings table
-```sql
-CREATE TABLE learnings (
-    id INTEGER PRIMARY KEY,
-    trade_id INTEGER NOT NULL,
-    what_happened TEXT NOT NULL,
-    why_outcome TEXT NOT NULL,
-    pattern TEXT NOT NULL,
-    lesson TEXT NOT NULL,
-    confidence REAL NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (trade_id) REFERENCES closed_trades(id)
-);
-```
-
-### trading_rules table
-```sql
-CREATE TABLE trading_rules (
-    id INTEGER PRIMARY KEY,
-    rule_text TEXT NOT NULL,
-    source_learning_id INTEGER,
-    status TEXT DEFAULT 'testing',
-    success_count INTEGER DEFAULT 0,
-    failure_count INTEGER DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (source_learning_id) REFERENCES learnings(id)
-);
+MIN_CONFIDENCE_TO_APPLY = 0.5
+TRADES_BEFORE_EFFECTIVENESS_CHECK = 10
+ROLLBACK_IF_HARMFUL = True
 ```
 
 ---
 
-## Quality Safeguards
+## Related Documentation
 
-### Preventing Bad Learning
-
-| Risk | Mitigation |
-|------|------------|
-| Learning from noise | Confidence threshold filters low-quality learnings |
-| Overfitting | Rules require validation across multiple trades |
-| Conflicting rules | LLM considers all rules together, weighs relevance |
-| Stale rules | Inactive rules excluded from context |
-
-### Monitoring Learning Quality
-
-Key metrics to track:
-- Learning creation rate (should correlate with trade volume)
-- Average confidence of learnings (trending up = good)
-- Rule promotion rate (too high = threshold too low)
-- Active rule performance (should beat baseline)
-
----
-
-## Future Enhancements
-
-Potential improvements for Phase 2+:
-- Rule expiration (demote rules unused for N days)
-- Rule versioning (evolve rules over time)
-- Rule clustering (identify related rules)
-- Meta-learning (learn what makes good rules)
-
----
-
-*Last Updated: February 2026*
+- [SYSTEM-OVERVIEW.md](./SYSTEM-OVERVIEW.md) - Overall architecture
+- [DATA-MODEL.md](./DATA-MODEL.md) - Database schema
+- [../development/COMPONENT-GUIDE.md](../development/COMPONENT-GUIDE.md) - Component details
