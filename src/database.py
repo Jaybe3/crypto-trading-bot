@@ -204,6 +204,64 @@ class Database:
                 )
             """)
 
+            # 11. trade_journal table (for TASK-102 comprehensive trade journaling)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS trade_journal (
+                    id TEXT PRIMARY KEY,
+                    position_id TEXT NOT NULL,
+
+                    -- Entry details
+                    entry_time TIMESTAMP NOT NULL,
+                    entry_price REAL NOT NULL,
+                    entry_reason TEXT,
+
+                    -- Trade parameters
+                    coin TEXT NOT NULL,
+                    direction TEXT NOT NULL,
+                    position_size_usd REAL NOT NULL,
+                    stop_loss_price REAL,
+                    take_profit_price REAL,
+
+                    -- Strategy context
+                    strategy_id TEXT,
+                    condition_id TEXT,
+                    pattern_id TEXT,
+
+                    -- Market context at entry
+                    market_regime TEXT,
+                    volatility REAL,
+                    funding_rate REAL,
+                    cvd REAL,
+                    btc_trend TEXT,
+                    btc_price REAL,
+
+                    -- Timing context
+                    hour_of_day INTEGER,
+                    day_of_week INTEGER,
+
+                    -- Exit details (filled when closed)
+                    exit_time TIMESTAMP,
+                    exit_price REAL,
+                    exit_reason TEXT,
+
+                    -- Outcome (filled when closed)
+                    pnl_usd REAL,
+                    pnl_pct REAL,
+                    duration_seconds INTEGER,
+
+                    -- Post-trade context (filled async after exit)
+                    price_1min_after REAL,
+                    price_5min_after REAL,
+                    price_15min_after REAL,
+                    missed_profit_usd REAL,
+
+                    -- Metadata
+                    status TEXT DEFAULT 'open',
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
             # Create indexes for performance
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_open_trades_coin
@@ -248,6 +306,40 @@ class Database:
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_alerts_created
                 ON monitoring_alerts(created_at)
+            """)
+
+            # Trade journal indexes
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_journal_coin
+                ON trade_journal(coin)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_journal_strategy
+                ON trade_journal(strategy_id)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_journal_status
+                ON trade_journal(status)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_journal_entry_time
+                ON trade_journal(entry_time)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_journal_exit_reason
+                ON trade_journal(exit_reason)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_journal_pnl
+                ON trade_journal(pnl_usd)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_journal_hour
+                ON trade_journal(hour_of_day)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_journal_day
+                ON trade_journal(day_of_week)
             """)
 
             conn.commit()
