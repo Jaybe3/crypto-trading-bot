@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}Real-Time View - Trading Dashboard{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Status Header -->
+    <div class="bg-slate-800 rounded-lg p-4 flex items-center justify-between">
+        <div class="flex items-center space-x-6">
+            <div id="feed-status" class="flex items-center">
+                <span class="w-3 h-3 rounded-full bg-gray-500 mr-2 status-dot"></span>
+                <span class="text-gray-400">Connecting...</span>
+            </div>
+            <div class="text-gray-400">
+                Uptime: <span id="uptime" class="text-white">--</span>
+            </div>
+            <div class="text-gray-400">
+                Ticks/s: <span id="ticks-per-sec" class="text-cyan-400 font-mono">0</span>
+            </div>
+        </div>
+        <div class="flex items-center space-x-4">
+            <div class="text-gray-400">
+                Conditions: <span id="conditions-count" class="text-white font-mono">0</span>
+            </div>
+            <div class="text-gray-400">
+                Positions: <span id="positions-count" class="text-white font-mono">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Active Conditions -->
+        <div class="bg-slate-800 rounded-lg p-6">
+            <h2 class="text-lg font-semibold text-cyan-400 mb-4 flex items-center justify-between">
+                <span>Active Conditions</span>
+                <span id="conditions-count-header" class="text-sm text-gray-400">(0)</span>
+            </h2>
+            <div id="conditions-list" class="space-y-3">
+                <div class="text-gray-500 text-center py-8">
+                    No active conditions. Waiting for Strategist...
+                </div>
+            </div>
+        </div>
+
+        <!-- Watched Prices -->
+        <div class="bg-slate-800 rounded-lg p-6">
+            <h2 class="text-lg font-semibold text-cyan-400 mb-4">Watched Prices</h2>
+            <div id="prices-grid" class="grid grid-cols-2 gap-3">
+                <div class="text-gray-500 text-center py-8 col-span-2">
+                    Waiting for price data...
+                </div>
+            </div>
+        </div>
+
+        <!-- Open Positions -->
+        <div class="bg-slate-800 rounded-lg p-6 lg:col-span-2">
+            <h2 class="text-lg font-semibold text-cyan-400 mb-4 flex items-center justify-between">
+                <span>Open Positions</span>
+                <span id="positions-count-header" class="text-sm text-gray-400">(0)</span>
+            </h2>
+            <div id="positions-list">
+                <div class="text-gray-500 text-center py-8">
+                    No open positions
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats Row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-slate-800 rounded-lg p-4 text-center card-hover">
+            <div class="text-2xl font-bold font-mono" id="stat-win-rate">--</div>
+            <div class="text-gray-400 text-sm">Win Rate</div>
+        </div>
+        <div class="bg-slate-800 rounded-lg p-4 text-center card-hover">
+            <div class="text-2xl font-bold font-mono" id="stat-profit-factor">--</div>
+            <div class="text-gray-400 text-sm">Profit Factor</div>
+        </div>
+        <div class="bg-slate-800 rounded-lg p-4 text-center card-hover">
+            <div class="text-2xl font-bold font-mono" id="stat-trades">--</div>
+            <div class="text-gray-400 text-sm">Total Trades</div>
+        </div>
+        <div class="bg-slate-800 rounded-lg p-4 text-center card-hover">
+            <div class="text-2xl font-bold font-mono" id="stat-drawdown">--</div>
+            <div class="text-gray-400 text-sm">Max Drawdown</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Real-time view specific functionality
+    const eventSource = new EventSource('/api/feed');
+
+    eventSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        updateRealtimeView(data);
+    };
+
+    eventSource.onerror = () => {
+        document.getElementById('feed-status').innerHTML = `
+            <span class="w-3 h-3 rounded-full bg-red-500 mr-2"></span>
+            <span class="text-red-400">Disconnected</span>
+        `;
+    };
+
+    function updateRealtimeView(data) {
+        // Update feed status
+        const statusEl = document.getElementById('feed-status');
+        if (data.healthy) {
+            statusEl.innerHTML = `
+                <span class="w-3 h-3 rounded-full bg-green-500 mr-2 status-dot"></span>
+                <span class="text-green-400">Feed OK</span>
+            `;
+        } else {
+            statusEl.innerHTML = `
+                <span class="w-3 h-3 rounded-full bg-yellow-500 mr-2 status-dot"></span>
+                <span class="text-yellow-400">Feed Stale</span>
+            `;
+        }
+
+        // Update ticks per second
+        if (data.ticks_per_second !== undefined) {
+            document.getElementById('ticks-per-sec').textContent = data.ticks_per_second.toFixed(1);
+        }
+
+        // Update counts
+        document.getElementById('conditions-count').textContent = data.conditions_count || 0;
+        document.getElementById('positions-count').textContent = data.positions_count || 0;
+        document.getElementById('conditions-count-header').textContent = `(${data.conditions_count || 0})`;
+        document.getElementById('positions-count-header').textContent = `(${data.positions_count || 0})`;
+
+        // Update prices grid
+        if (data.prices && Object.keys(data.prices).length > 0) {
+            updatePricesGrid(data.prices);
+        }
+    }
+
+    function updatePricesGrid(prices) {
+        const grid = document.getElementById('prices-grid');
+        let html = '';
+
+        for (const [coin, price] of Object.entries(prices)) {
+            html += `
+                <div class="bg-slate-700 rounded-lg p-3 flex justify-between items-center">
+                    <span class="font-semibold">${coin}</span>
+                    <span class="font-mono text-cyan-400">$${formatPrice(price)}</span>
+                </div>
+            `;
+        }
+
+        grid.innerHTML = html || '<div class="text-gray-500 text-center py-8 col-span-2">No prices available</div>';
+    }
+
+    function formatPrice(price) {
+        if (price >= 1000) return price.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+        if (price >= 1) return price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        return price.toLocaleString('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 6});
+    }
+
+    // Load conditions on page load
+    async function loadConditions() {
+        try {
+            const res = await fetch('/api/conditions');
+            const data = await res.json();
+            updateConditionsList(data.conditions);
+        } catch (e) {
+            console.error('Failed to load conditions:', e);
+        }
+    }
+
+    function updateConditionsList(conditions) {
+        const list = document.getElementById('conditions-list');
+
+        if (!conditions || conditions.length === 0) {
+            list.innerHTML = '<div class="text-gray-500 text-center py-8">No active conditions. Waiting for Strategist...</div>';
+            return;
+        }
+
+        let html = '';
+        for (const cond of conditions) {
+            const dirClass = cond.direction === 'long' ? 'text-green-400' : 'text-red-400';
+            const dirIcon = cond.direction === 'long' ? '&#x2191;' : '&#x2193;';
+            html += `
+                <div class="bg-slate-700 rounded-lg p-4">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <span class="${dirClass} font-bold">${dirIcon} ${cond.direction?.toUpperCase()}</span>
+                            <span class="font-semibold ml-2">${cond.coin}</span>
+                            <span class="text-gray-400 ml-2">@ $${formatPrice(cond.trigger_price || 0)}</span>
+                        </div>
+                        <span class="text-xs text-gray-500">${cond.trigger_condition || 'price >= trigger'}</span>
+                    </div>
+                    ${cond.strategy ? `<div class="text-sm text-gray-400 mb-1">Strategy: ${cond.strategy}</div>` : ''}
+                    ${cond.reasoning ? `<div class="text-sm text-gray-300 italic">"${cond.reasoning.substring(0, 100)}..."</div>` : ''}
+                </div>
+            `;
+        }
+        list.innerHTML = html;
+    }
+
+    // Load positions on page load
+    async function loadPositions() {
+        try {
+            const res = await fetch('/api/positions');
+            const data = await res.json();
+            updatePositionsList(data.positions);
+        } catch (e) {
+            console.error('Failed to load positions:', e);
+        }
+    }
+
+    function updatePositionsList(positions) {
+        const list = document.getElementById('positions-list');
+
+        if (!positions || positions.length === 0) {
+            list.innerHTML = '<div class="text-gray-500 text-center py-8">No open positions</div>';
+            return;
+        }
+
+        let html = '<div class="overflow-x-auto"><table class="w-full"><thead class="text-gray-400 text-sm"><tr><th class="text-left pb-2">Coin</th><th class="text-left pb-2">Direction</th><th class="text-right pb-2">Entry</th><th class="text-right pb-2">Current</th><th class="text-right pb-2">Size</th><th class="text-right pb-2">P&L</th><th class="text-right pb-2">SL</th><th class="text-right pb-2">TP</th></tr></thead><tbody>';
+
+        for (const pos of positions) {
+            const pnl = pos.unrealized_pnl || 0;
+            const pnlClass = pnl >= 0 ? 'text-green-400' : 'text-red-400';
+            const dirClass = pos.direction === 'long' ? 'text-green-400' : 'text-red-400';
+
+            html += `
+                <tr class="border-t border-slate-700">
+                    <td class="py-3 font-semibold">${pos.coin}</td>
+                    <td class="${dirClass}">${pos.direction?.toUpperCase()}</td>
+                    <td class="text-right font-mono">$${formatPrice(pos.entry_price || 0)}</td>
+                    <td class="text-right font-mono">$${formatPrice(pos.current_price || pos.entry_price || 0)}</td>
+                    <td class="text-right font-mono">${pos.size || 0}</td>
+                    <td class="text-right font-mono ${pnlClass}">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}</td>
+                    <td class="text-right font-mono text-gray-400">$${formatPrice(pos.stop_loss || 0)}</td>
+                    <td class="text-right font-mono text-gray-400">$${formatPrice(pos.take_profit || 0)}</td>
+                </tr>
+            `;
+        }
+
+        html += '</tbody></table></div>';
+        list.innerHTML = html;
+    }
+
+    // Load loop stats for quick stats
+    async function loadLoopStats() {
+        try {
+            const res = await fetch('/api/loop-stats');
+            const data = await res.json();
+
+            if (data.win_rate !== undefined) {
+                const wrEl = document.getElementById('stat-win-rate');
+                wrEl.textContent = data.win_rate.toFixed(1) + '%';
+                wrEl.className = 'text-2xl font-bold font-mono ' + (data.win_rate >= 50 ? 'text-green-400' : 'text-red-400');
+            }
+
+            if (data.profit_factor !== undefined) {
+                document.getElementById('stat-profit-factor').textContent = data.profit_factor.toFixed(2) + 'x';
+            }
+
+            if (data.total_trades !== undefined) {
+                document.getElementById('stat-trades').textContent = data.total_trades;
+            }
+
+            if (data.max_drawdown_pct !== undefined) {
+                const ddEl = document.getElementById('stat-drawdown');
+                ddEl.textContent = data.max_drawdown_pct.toFixed(1) + '%';
+                ddEl.className = 'text-2xl font-bold font-mono ' + (data.max_drawdown_pct <= 10 ? 'text-green-400' : 'text-yellow-400');
+            }
+
+            if (data.uptime_hours !== undefined) {
+                const hours = Math.floor(data.uptime_hours);
+                const mins = Math.floor((data.uptime_hours - hours) * 60);
+                document.getElementById('uptime').textContent = `${hours}h ${mins}m`;
+            }
+        } catch (e) {
+            console.error('Failed to load loop stats:', e);
+        }
+    }
+
+    // Initial load
+    loadConditions();
+    loadPositions();
+    loadLoopStats();
+
+    // Refresh data periodically
+    setInterval(loadConditions, 5000);
+    setInterval(loadPositions, 5000);
+    setInterval(loadLoopStats, 30000);
+</script>
+{% endblock %}

@@ -27,7 +27,11 @@
       "Bash(kill:*)",
       "Bash(supervisorctl:*)",
       "Bash(git commit:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(ls:*)",
+      "Bash(PYTHONPATH=. python3:*)",
+      "Bash(pip install:*)",
+      "Bash(source .venv/bin/activate)"
     ]
   }
 }

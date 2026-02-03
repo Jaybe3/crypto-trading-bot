@@ -110,7 +110,9 @@ class Sniper:
         self,
         journal: TradeJournal,
         initial_balance: float = 10000.0,
-        state_path: Optional[str] = None
+        state_path: Optional[str] = None,
+        coin_scorer=None,
+        quick_update=None,
     ):
         """
         Initialize the Sniper.
@@ -119,11 +121,15 @@ class Sniper:
             journal: TradeJournal for recording executions
             initial_balance: Starting paper trading balance in USD
             state_path: Path for state persistence (None = default)
+            coin_scorer: Optional CoinScorer for tracking coin performance (deprecated, use quick_update)
+            quick_update: Optional QuickUpdate for post-trade knowledge updates
         """
         self.journal = journal
         self.balance = initial_balance
         self.initial_balance = initial_balance
         self.state_path = Path(state_path) if state_path else Path(self.DEFAULT_STATE_PATH)
+        self.coin_scorer = coin_scorer  # Deprecated: use quick_update instead
+        self.quick_update = quick_update  # TASK-130: for post-trade updates
 
         # Core state
         self.active_conditions: dict[str, TradeCondition] = {}
@@ -540,6 +546,48 @@ class Sniper:
         # Log to journal
         self.journal.record_exit(position, price, timestamp, reason, pnl)
 
+        # TASK-130: Quick update for post-trade knowledge updates
+        if self.quick_update:
+            from src.models.quick_update import TradeResult
+
+            trade_result = TradeResult(
+                trade_id=position.id,
+                coin=position.coin,
+                direction=position.direction,
+                entry_price=position.entry_price,
+                exit_price=price,
+                position_size_usd=position.size_usd,
+                pnl_usd=pnl,
+                won=pnl > 0,
+                exit_reason=reason,
+                strategy_id=position.strategy_id,
+                condition_id=position.condition_id,
+                entry_timestamp=int(position.entry_time.timestamp() * 1000),
+                exit_timestamp=timestamp,
+            )
+
+            update_result = self.quick_update.process_trade_close(trade_result)
+
+            if update_result.coin_adaptation:
+                logger.info(
+                    f"ADAPTATION: {position.coin} -> {update_result.coin_adaptation} "
+                    f"({update_result.coin_adaptation_reason})"
+                )
+            if update_result.pattern_deactivated:
+                logger.info(f"PATTERN DEACTIVATED: {update_result.pattern_id}")
+
+        # Fallback: Update coin score directly (deprecated, for backward compatibility)
+        elif self.coin_scorer:
+            trade_data = {
+                "coin": position.coin,
+                "pnl_usd": pnl,
+                "direction": position.direction,
+                "exit_reason": reason,
+            }
+            adaptation = self.coin_scorer.process_trade_result(trade_data)
+            if adaptation:
+                logger.info(f"ADAPTATION: {adaptation.coin} -> {adaptation.new_status.value}")
+
         # Emit event
         self._emit_event(ExecutionEvent(
             event_type="exit",
@@ -656,6 +704,56 @@ class Sniper:
             "max_exposure_usd": max_exposure,
             "exposure_pct": (position_exposure / self.balance) * 100 if self.balance > 0 else 0,
             "available_usd": max_exposure - position_exposure,
+        }
+
+    def get_health(self) -> dict:
+        """Get component health status for monitoring.
+
+        Returns:
+            Dict with status (healthy/degraded/failed), last_activity, error_count, metrics.
+        """
+        now = time.time()
+
+        # Check if processing ticks
+        tick_age = now - self.last_tick_time if self.last_tick_time else None
+
+        # Determine health status
+        if tick_age is None:
+            status = "degraded"  # Never received a tick
+        elif tick_age > 10:
+            status = "degraded"  # Haven't processed ticks recently
+        else:
+            status = "healthy"
+
+        # Check for stuck positions (positions with extreme unrealized loss)
+        stuck_positions = [
+            p for p in self.open_positions.values()
+            if p.unrealized_pnl < -p.size_usd * 0.1  # >10% loss
+        ]
+        if stuck_positions:
+            status = "degraded"
+
+        avg_tick_time = (
+            self._total_tick_time / self._tick_count * 1000
+            if self._tick_count > 0 else 0
+        )
+
+        return {
+            "status": status,
+            "last_activity": datetime.fromtimestamp(
+                self.last_tick_time
+            ).isoformat() if self.last_tick_time else None,
+            "error_count": 0,  # No explicit error tracking yet
+            "metrics": {
+                "balance": self.balance,
+                "total_pnl": self.total_pnl,
+                "trades_executed": self.trades_executed,
+                "open_positions": len(self.open_positions),
+                "active_conditions": len(self.active_conditions),
+                "tick_count": self._tick_count,
+                "avg_tick_time_ms": round(avg_tick_time, 4),
+                "tick_age_seconds": round(tick_age, 2) if tick_age else None,
+            }
         }
 
     # =========================================================================

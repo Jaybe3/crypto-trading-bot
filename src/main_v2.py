@@ -31,6 +31,15 @@ from src.models.trade_condition import TradeCondition
 from src.strategist import Strategist
 from src.llm_interface import LLMInterface
 from src.database import Database
+from src.knowledge import KnowledgeBrain
+from src.coin_scorer import CoinScorer
+from src.quick_update import QuickUpdate
+from src.pattern_library import PatternLibrary
+from src.reflection import ReflectionEngine
+from src.adaptation import AdaptationEngine
+from src.profitability import ProfitabilityTracker, SnapshotScheduler, TimeFrame
+from src.effectiveness import EffectivenessMonitor, EffectivenessRating
+from src.dashboard_v2 import DashboardServer
 
 # Import settings
 try:
@@ -182,6 +191,16 @@ class TradingSystem:
         self.strategist: Optional[Strategist] = None
         self.llm: Optional[LLMInterface] = None
         self.db: Optional[Database] = None
+        self.knowledge: Optional[KnowledgeBrain] = None
+        self.coin_scorer: Optional[CoinScorer] = None
+        self.quick_update: Optional[QuickUpdate] = None
+        self.pattern_library: Optional[PatternLibrary] = None
+        self.reflection_engine: Optional[ReflectionEngine] = None
+        self.adaptation_engine: Optional[AdaptationEngine] = None
+        self.profitability_tracker: Optional[ProfitabilityTracker] = None
+        self.snapshot_scheduler: Optional[SnapshotScheduler] = None
+        self.effectiveness_monitor: Optional[EffectivenessMonitor] = None
+        self.dashboard: Optional[DashboardServer] = None
 
         # State
         self._running = False
@@ -206,6 +225,11 @@ class TradingSystem:
                 logger.info("Starting Strategist...")
                 await self.strategist.start()
 
+            # Start ReflectionEngine (TASK-131)
+            if self.reflection_engine:
+                logger.info("Starting ReflectionEngine...")
+                await self.reflection_engine.start()
+
         self._running = True
         logger.info("Trading system started - entering main loop")
 
@@ -228,12 +252,37 @@ class TradingSystem:
         logger.info("Initializing TradeJournal...")
         self.journal = TradeJournal(db_path=self._db_path, enable_async=True)
 
-        # Initialize Sniper
+        # Initialize Database (shared by multiple components)
+        logger.info("Initializing Database...")
+        self.db = Database()
+
+        # Initialize Knowledge Brain, Coin Scorer, and Pattern Library
+        logger.info("Initializing Knowledge Brain...")
+        self.knowledge = KnowledgeBrain(self.db)
+        self.coin_scorer = CoinScorer(self.knowledge, self.db)
+        self.pattern_library = PatternLibrary(self.knowledge)
+        kb_stats = self.knowledge.get_stats_summary()
+        pl_stats = self.pattern_library.get_stats_summary()
+        logger.info(f"Knowledge Brain: {kb_stats['coins']['total']} coins, "
+                   f"{kb_stats['coins']['blacklisted']} blacklisted")
+        logger.info(f"Pattern Library: {pl_stats['total_patterns']} patterns, "
+                   f"{pl_stats['high_confidence']} high-confidence")
+
+        # Initialize QuickUpdate (TASK-130: post-trade knowledge updates)
+        logger.info("Initializing QuickUpdate...")
+        self.quick_update = QuickUpdate(
+            coin_scorer=self.coin_scorer,
+            pattern_library=self.pattern_library,
+            db=self.db,
+        )
+
+        # Initialize Sniper (with quick_update for TASK-130)
         logger.info("Initializing Sniper...")
         self.sniper = Sniper(
             self.journal,
             initial_balance=self.initial_balance,
-            state_path=self._state_path
+            state_path=self._state_path,
+            quick_update=self.quick_update,
         )
 
         # Try to load persisted state
@@ -254,20 +303,69 @@ class TradingSystem:
         # Initialize Strategist (if enabled)
         if STRATEGIST_ENABLED:
             logger.info("Initializing Strategist...")
-            self.db = Database()
             self.llm = LLMInterface()
             self.strategist = Strategist(
                 llm=self.llm,
                 market_feed=self.market_feed,
+                knowledge=self.knowledge,
+                coin_scorer=self.coin_scorer,
+                pattern_library=self.pattern_library,
                 db=self.db,
                 interval_seconds=STRATEGIST_INTERVAL,
             )
             logger.info(f"Strategist ready (interval={STRATEGIST_INTERVAL}s)")
+
+            # Initialize AdaptationEngine (TASK-133: Adaptation Application)
+            logger.info("Initializing AdaptationEngine...")
+            self.adaptation_engine = AdaptationEngine(
+                knowledge=self.knowledge,
+                coin_scorer=self.coin_scorer,
+                pattern_library=self.pattern_library,
+                db=self.db,
+            )
+
+            # Initialize ReflectionEngine (TASK-131: Deep Reflection)
+            logger.info("Initializing ReflectionEngine...")
+            self.reflection_engine = ReflectionEngine(
+                journal=self.journal,
+                knowledge=self.knowledge,
+                llm=self.llm,
+                db=self.db,
+                adaptation_engine=self.adaptation_engine,
+            )
+            # Wire reflection engine to quick update
+            self.quick_update.set_reflection_engine(self.reflection_engine)
+            logger.info("ReflectionEngine ready (triggers: 1h or 10 trades, with adaptations)")
         else:
             logger.info("Strategist disabled")
 
+        # Initialize ProfitabilityTracker (TASK-141)
+        logger.info("Initializing ProfitabilityTracker...")
+        self.profitability_tracker = ProfitabilityTracker(
+            db=self.db,
+            journal=self.journal,
+            initial_balance=self.initial_balance,
+        )
+        self.snapshot_scheduler = SnapshotScheduler(self.profitability_tracker)
+        logger.info("ProfitabilityTracker ready")
+
+        # Initialize EffectivenessMonitor (TASK-142)
+        if self.adaptation_engine:
+            logger.info("Initializing EffectivenessMonitor...")
+            self.effectiveness_monitor = EffectivenessMonitor(
+                db=self.db,
+                journal=self.journal,
+                profitability=self.profitability_tracker,
+                adaptation_engine=self.adaptation_engine,
+                knowledge=self.knowledge,
+            )
+            logger.info("EffectivenessMonitor ready")
+
         # Wire callbacks
         self._wire_callbacks()
+
+        # Restore runtime state (TASK-140)
+        self._restore_runtime_state()
 
         logger.info("All components initialized")
 
@@ -350,14 +448,52 @@ class TradingSystem:
 
     async def _main_loop(self) -> None:
         """Main system loop - status logging and health checks."""
+        health_check_interval = 30  # Check health every 30 seconds
+        last_health_check = 0
+        last_snapshot_check = 0
+        snapshot_check_interval = 300  # Check for snapshots every 5 minutes
+        last_effectiveness_check = 0
+        effectiveness_check_interval = 3600  # Check effectiveness every hour
+
         while self._running:
             await asyncio.sleep(1)
 
-            # Periodic status log
             now = time.time()
+
+            # Periodic status log
             if now - self._last_status_log >= STATUS_LOG_INTERVAL:
                 self._log_status()
                 self._last_status_log = now
+
+            # Periodic health check (TASK-140)
+            if now - last_health_check >= health_check_interval:
+                health = self.health_check()
+                if health["overall"] != "healthy":
+                    logger.warning(f"System health degraded: {health['overall']}")
+                    for name, status in health["components"].items():
+                        if status.get("status") != "healthy":
+                            logger.warning(f"  {name}: {status.get('status')}")
+                last_health_check = now
+
+            # Periodic snapshot check (TASK-141)
+            if now - last_snapshot_check >= snapshot_check_interval:
+                if self.snapshot_scheduler:
+                    taken = self.snapshot_scheduler.check_and_take_snapshots()
+                    if taken:
+                        logger.info(f"Snapshots taken: {[t.value for t in taken]}")
+                last_snapshot_check = now
+
+            # Periodic effectiveness check (TASK-142)
+            if now - last_effectiveness_check >= effectiveness_check_interval:
+                if self.effectiveness_monitor:
+                    results = self.effectiveness_monitor.check_pending_adaptations()
+                    for r in results:
+                        if r.should_rollback:
+                            logger.warning(
+                                f"Adaptation {r.adaptation_id} flagged for rollback: "
+                                f"{r.rollback_reason}"
+                            )
+                last_effectiveness_check = now
 
     def _log_status(self) -> None:
         """Log current system status."""
@@ -392,6 +528,15 @@ class TradingSystem:
         if self.strategist:
             logger.info("Stopping Strategist...")
             await self.strategist.stop()
+
+        # Stop reflection engine (TASK-131)
+        if self.reflection_engine:
+            logger.info("Stopping ReflectionEngine...")
+            await self.reflection_engine.stop()
+
+        # Save runtime state (TASK-140)
+        logger.info("Saving runtime state...")
+        self._save_runtime_state()
 
         # Save sniper state
         if self.sniper:
@@ -504,6 +649,338 @@ class TradingSystem:
             return []
         return self.sniper.get_conditions()
 
+    # =========================================================================
+    # Health Monitoring (TASK-140)
+    # =========================================================================
+
+    def health_check(self) -> dict:
+        """Check health of all components.
+
+        Returns:
+            Dict with overall status and per-component health.
+        """
+        health = {
+            "timestamp": datetime.now().isoformat(),
+            "overall": "healthy",
+            "components": {},
+        }
+
+        # Check each component
+        components = [
+            ("market_feed", self.market_feed),
+            ("sniper", self.sniper),
+            ("strategist", self.strategist),
+            ("reflection_engine", self.reflection_engine),
+            ("adaptation_engine", self.adaptation_engine),
+            ("profitability_tracker", self.profitability_tracker),
+            ("effectiveness_monitor", self.effectiveness_monitor),
+        ]
+
+        for name, component in components:
+            if component is None:
+                health["components"][name] = {"status": "not_initialized"}
+                continue
+
+            try:
+                component_health = component.get_health()
+                health["components"][name] = component_health
+
+                # Aggregate overall status
+                status = component_health.get("status", "unknown")
+                if status == "failed":
+                    health["overall"] = "failed"
+                elif status == "degraded" and health["overall"] == "healthy":
+                    health["overall"] = "degraded"
+            except Exception as e:
+                health["components"][name] = {
+                    "status": "error",
+                    "error": str(e),
+                }
+                health["overall"] = "degraded"
+
+        return health
+
+    # =========================================================================
+    # Runtime State Persistence (TASK-140)
+    # =========================================================================
+
+    def _save_runtime_state(self) -> None:
+        """Save runtime state for restart recovery."""
+        if not self.db:
+            return
+
+        state = {
+            "shutdown_time": datetime.now().isoformat(),
+        }
+
+        # Save reflection state
+        if self.reflection_engine:
+            state["last_reflection_time"] = (
+                self.reflection_engine.last_reflection_time.isoformat()
+                if self.reflection_engine.last_reflection_time
+                else None
+            )
+            state["trades_since_reflection"] = self.reflection_engine.trades_since_reflection
+
+        # Save system stats
+        if self.health:
+            stats = self.health.get_stats()
+            state["uptime_seconds"] = stats.get("uptime_seconds", 0)
+            state["tick_count"] = stats.get("tick_count", 0)
+
+        try:
+            self.db.save_runtime_state(state)
+            logger.info("Runtime state saved")
+        except Exception as e:
+            logger.error(f"Failed to save runtime state: {e}")
+
+    def _restore_runtime_state(self) -> None:
+        """Restore runtime state after restart."""
+        if not self.db:
+            return
+
+        try:
+            state = self.db.get_runtime_state()
+            if not state:
+                logger.info("No runtime state to restore")
+                return
+
+            # Restore reflection state
+            if self.reflection_engine and state.get("last_reflection_time"):
+                try:
+                    self.reflection_engine.last_reflection_time = datetime.fromisoformat(
+                        state["last_reflection_time"]
+                    )
+                    self.reflection_engine.trades_since_reflection = state.get(
+                        "trades_since_reflection", 0
+                    )
+                    logger.info(
+                        f"Restored reflection state: last={state['last_reflection_time']}, "
+                        f"trades_since={state.get('trades_since_reflection', 0)}"
+                    )
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"Failed to restore reflection state: {e}")
+
+            logger.info(f"Runtime state restored (shutdown: {state.get('shutdown_time', 'unknown')})")
+        except Exception as e:
+            logger.error(f"Failed to restore runtime state: {e}")
+
+    # =========================================================================
+    # Operational Commands (TASK-140)
+    # =========================================================================
+
+    def get_loop_stats(self) -> dict:
+        """Get statistics about the learning loop.
+
+        Returns:
+            Dict with loop statistics.
+        """
+        stats = {
+            "uptime_hours": (
+                (datetime.now() - self._start_time).total_seconds() / 3600
+                if self._start_time else 0
+            ),
+        }
+
+        if self.sniper:
+            sniper_status = self.sniper.get_status()
+            stats["total_trades"] = sniper_status.get("trades_executed", 0)
+            stats["total_pnl"] = sniper_status.get("total_pnl", 0)
+
+        if self.reflection_engine:
+            ref_stats = self.reflection_engine.get_stats()
+            stats["total_reflections"] = ref_stats.get("reflections_completed", 0)
+            stats["total_insights"] = ref_stats.get("insights_generated", 0)
+
+        if self.adaptation_engine:
+            adapt_stats = self.adaptation_engine.get_stats()
+            stats["total_adaptations"] = adapt_stats.get("adaptations_applied", 0)
+
+        if self.knowledge:
+            kb_stats = self.knowledge.get_stats_summary()
+            stats["blacklisted_coins"] = kb_stats.get("coins", {}).get("blacklisted", 0)
+            stats["active_patterns"] = kb_stats.get("patterns", {}).get("active", 0)
+            stats["active_rules"] = kb_stats.get("rules", {}).get("active", 0)
+
+        if self.profitability_tracker:
+            try:
+                snapshot = self.profitability_tracker.get_current_snapshot()
+                stats["win_rate"] = snapshot.win_rate
+                stats["profit_factor"] = snapshot.profit_factor
+                stats["max_drawdown_pct"] = snapshot.max_drawdown_pct
+                stats["sharpe_ratio"] = snapshot.sharpe_ratio
+            except Exception:
+                pass
+
+        return stats
+
+    async def trigger_reflection(self) -> dict:
+        """Manually trigger a reflection cycle.
+
+        Returns:
+            Dict with reflection result summary.
+        """
+        if not self.reflection_engine:
+            return {"error": "ReflectionEngine not initialized"}
+
+        try:
+            result = await self.reflection_engine.reflect()
+            return {
+                "success": True,
+                "trades_analyzed": result.trades_analyzed,
+                "insights_count": len(result.insights),
+                "adaptations_count": len(result.adaptations),
+                "summary": result.summary,
+            }
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    def pause_trading(self, reason: str = "Manual pause") -> None:
+        """Pause all trading (conditions stop triggering).
+
+        Args:
+            reason: Reason for pausing.
+        """
+        if self.sniper:
+            # Clear all active conditions
+            self.sniper.set_conditions([])
+            logger.warning(f"Trading paused: {reason}")
+
+    def resume_trading(self) -> None:
+        """Resume trading by triggering new condition generation."""
+        if self.strategist:
+            # Force immediate condition generation
+            logger.info("Trading resumed - triggering condition generation")
+            # Note: Conditions will be generated on next Strategist cycle
+
+    # =========================================================================
+    # Profitability Tracking (TASK-141)
+    # =========================================================================
+
+    def get_profitability_snapshot(self, timeframe: str = "all_time") -> dict:
+        """Get current profitability snapshot.
+
+        Args:
+            timeframe: "hour", "day", "week", "month", or "all_time"
+
+        Returns:
+            Dict with profitability metrics.
+        """
+        if not self.profitability_tracker:
+            return {"error": "ProfitabilityTracker not initialized"}
+
+        try:
+            tf = TimeFrame(timeframe)
+            snapshot = self.profitability_tracker.get_current_snapshot(tf)
+            return snapshot.to_dict()
+        except Exception as e:
+            return {"error": str(e)}
+
+    def get_performance_by_dimension(self, dimension: str) -> list:
+        """Get performance breakdown by dimension.
+
+        Args:
+            dimension: "coin", "pattern", "hour_of_day", "day_of_week",
+                      "exit_reason", "position_size", "hold_duration"
+
+        Returns:
+            List of performance dicts sorted by P&L.
+        """
+        if not self.profitability_tracker:
+            return []
+
+        try:
+            results = self.profitability_tracker.get_performance_by_dimension(dimension)
+            return [r.to_dict() for r in results]
+        except Exception as e:
+            logger.error(f"Error getting dimension performance: {e}")
+            return []
+
+    def get_improvement_metrics(self, lookback_days: int = 7) -> dict:
+        """Get metrics showing if system is improving.
+
+        Args:
+            lookback_days: Days to compare against.
+
+        Returns:
+            Dict with improvement metrics.
+        """
+        if not self.profitability_tracker:
+            return {"error": "ProfitabilityTracker not initialized"}
+
+        return self.profitability_tracker.get_improvement_metrics(lookback_days)
+
+    def get_equity_curve(self) -> list:
+        """Get equity curve data for charting.
+
+        Returns:
+            List of {timestamp, balance, trade_id, pnl} dicts.
+        """
+        if not self.profitability_tracker:
+            return []
+
+        return self.profitability_tracker.get_equity_curve()
+
+    # =========================================================================
+    # Effectiveness Monitoring (TASK-142)
+    # =========================================================================
+
+    def get_adaptation_effectiveness(self) -> dict:
+        """Get effectiveness summary for all adaptations.
+
+        Returns:
+            Dict with effectiveness counts by rating.
+        """
+        if not self.effectiveness_monitor:
+            return {"error": "EffectivenessMonitor not initialized"}
+
+        return self.effectiveness_monitor.get_effectiveness_summary()
+
+    def get_harmful_adaptations(self, hours: int = 168) -> list:
+        """Get adaptations flagged as harmful.
+
+        Args:
+            hours: Hours to look back.
+
+        Returns:
+            List of harmful adaptation dicts.
+        """
+        if not self.effectiveness_monitor:
+            return []
+
+        return self.effectiveness_monitor.get_harmful_adaptations(hours)
+
+    def rollback_adaptation(self, adaptation_id: str) -> dict:
+        """Execute rollback of a harmful adaptation.
+
+        Args:
+            adaptation_id: ID of adaptation to rollback.
+
+        Returns:
+            Dict with rollback result.
+        """
+        if not self.effectiveness_monitor:
+            return {"error": "EffectivenessMonitor not initialized"}
+
+        # Get rollback suggestion first
+        suggestion = self.effectiveness_monitor.suggest_rollback(adaptation_id)
+        if not suggestion.get("can_rollback"):
+            return {
+                "success": False,
+                "error": suggestion.get("rollback_action", "Cannot rollback"),
+            }
+
+        # Execute rollback
+        success = self.effectiveness_monitor.execute_rollback(adaptation_id)
+
+        return {
+            "success": success,
+            "adaptation_id": adaptation_id,
+            "action": suggestion.get("action"),
+            "target": suggestion.get("target"),
+            "rollback_action": suggestion.get("rollback_action"),
+        }
+
 
 # =============================================================================
 # Main Entry Point
@@ -511,6 +988,23 @@ class TradingSystem:
 
 async def main():
     """Main entry point."""
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Trading System v2")
+    parser.add_argument(
+        "--dashboard", action="store_true",
+        help="Start the dashboard web server"
+    )
+    parser.add_argument(
+        "--port", type=int, default=8080,
+        help="Dashboard port (default: 8080)"
+    )
+    parser.add_argument(
+        "--host", type=str, default="0.0.0.0",
+        help="Dashboard host (default: 0.0.0.0)"
+    )
+    args = parser.parse_args()
+
     system = TradingSystem()
 
     # Handle shutdown signals
@@ -528,9 +1022,38 @@ async def main():
             pass
 
     try:
-        await system.start()
+        # Initialize components first
+        await system.start_components()
+
+        # Start dashboard if requested
+        if args.dashboard:
+            logger.info(f"Starting dashboard on http://{args.host}:{args.port}")
+            system.dashboard = DashboardServer(system)
+            # Run dashboard in background task
+            asyncio.create_task(system.dashboard.start(host=args.host, port=args.port))
+
+        if not system.test_mode:
+            await system._connect_feed()
+
+            # Start Strategist after feed is connected
+            if system.strategist:
+                logger.info("Starting Strategist...")
+                await system.strategist.start()
+
+            # Start ReflectionEngine (TASK-131)
+            if system.reflection_engine:
+                logger.info("Starting ReflectionEngine...")
+                await system.reflection_engine.start()
+
+        system._running = True
+        logger.info("Trading system started - entering main loop")
+
+        await system._main_loop()
+    except asyncio.CancelledError:
+        logger.info("Main loop cancelled")
     except KeyboardInterrupt:
         logger.info("Keyboard interrupt")
+    finally:
         await system.stop()
 
 

@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+
+{% block title %}Knowledge Brain - Trading Dashboard{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="bg-slate-800 rounded-lg p-4">
+        <h1 class="text-xl font-bold text-cyan-400">Knowledge Brain</h1>
+        <p class="text-gray-400 text-sm mt-1">Accumulated trading knowledge from experience</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex space-x-2 border-b border-slate-700 pb-2">
+        <button onclick="showTab('coins')" id="tab-coins" class="tab-btn px-4 py-2 rounded-t-lg bg-slate-700 text-cyan-400">
+            Coin Scores
+        </button>
+        <button onclick="showTab('patterns')" id="tab-patterns" class="tab-btn px-4 py-2 rounded-t-lg text-gray-400 hover:bg-slate-700">
+            Patterns
+        </button>
+        <button onclick="showTab('rules')" id="tab-rules" class="tab-btn px-4 py-2 rounded-t-lg text-gray-400 hover:bg-slate-700">
+            Regime Rules
+        </button>
+        <button onclick="showTab('blacklist')" id="tab-blacklist" class="tab-btn px-4 py-2 rounded-t-lg text-gray-400 hover:bg-slate-700">
+            Blacklist
+        </button>
+    </div>
+
+    <!-- Content Panels -->
+    <div id="panel-coins" class="panel">
+        <div class="bg-slate-800 rounded-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold">Coin Scores</h2>
+                <select id="coin-filter" onchange="filterCoins()" class="bg-slate-700 rounded px-3 py-1 text-sm">
+                    <option value="all">All Coins</option>
+                    <option value="favored">Favored</option>
+                    <option value="active">Active</option>
+                    <option value="reduced">Reduced</option>
+                    <option value="blacklisted">Blacklisted</option>
+                </select>
+            </div>
+            <div id="coins-table" class="overflow-x-auto">
+                <div class="text-gray-500 text-center py-8">Loading coins...</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="panel-patterns" class="panel hidden">
+        <div class="bg-slate-800 rounded-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold">Trading Patterns</h2>
+                <span id="patterns-count" class="text-gray-400 text-sm">0 patterns</span>
+            </div>
+            <div id="patterns-list" class="space-y-3">
+                <div class="text-gray-500 text-center py-8">Loading patterns...</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="panel-rules" class="panel hidden">
+        <div class="bg-slate-800 rounded-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold">Regime Rules</h2>
+                <span id="rules-count" class="text-gray-400 text-sm">0 rules</span>
+            </div>
+            <div id="rules-list" class="space-y-3">
+                <div class="text-gray-500 text-center py-8">Loading rules...</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="panel-blacklist" class="panel hidden">
+        <div class="bg-slate-800 rounded-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold">Blacklisted Coins</h2>
+                <span id="blacklist-count" class="text-gray-400 text-sm">0 coins</span>
+            </div>
+            <div id="blacklist-list" class="space-y-3">
+                <div class="text-gray-500 text-center py-8">Loading blacklist...</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    let allCoins = [];
+
+    function showTab(tabName) {
+        // Hide all panels
+        document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
+        // Show selected panel
+        document.getElementById('panel-' + tabName).classList.remove('hidden');
+
+        // Update tab styles
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('bg-slate-700', 'text-cyan-400');
+            btn.classList.add('text-gray-400');
+        });
+        document.getElementById('tab-' + tabName).classList.add('bg-slate-700', 'text-cyan-400');
+        document.getElementById('tab-' + tabName).classList.remove('text-gray-400');
+    }
+
+    async function loadCoins() {
+        try {
+            const res = await fetch('/api/knowledge/coins');
+            const data = await res.json();
+            allCoins = data.coins || [];
+            renderCoinsTable(allCoins);
+        } catch (e) {
+            document.getElementById('coins-table').innerHTML = '<div class="text-red-400 text-center py-8">Failed to load coins</div>';
+        }
+    }
+
+    function filterCoins() {
+        const filter = document.getElementById('coin-filter').value;
+        let filtered = allCoins;
+
+        if (filter !== 'all') {
+            filtered = allCoins.filter(c => {
+                const status = c.status || '';
+                if (filter === 'blacklisted') return c.is_blacklisted;
+                return status.toLowerCase().includes(filter);
+            });
+        }
+
+        renderCoinsTable(filtered);
+    }
+
+    function renderCoinsTable(coins) {
+        if (!coins || coins.length === 0) {
+            document.getElementById('coins-table').innerHTML = '<div class="text-gray-500 text-center py-8">No coins found</div>';
+            return;
+        }
+
+        let html = `
+            <table class="w-full">
+                <thead class="text-gray-400 text-sm">
+                    <tr>
+                        <th class="text-left pb-3">Coin</th>
+                        <th class="text-right pb-3">Trades</th>
+                        <th class="text-right pb-3">Win Rate</th>
+                        <th class="text-right pb-3">P&L</th>
+                        <th class="text-center pb-3">Trend</th>
+                        <th class="text-center pb-3">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        for (const coin of coins) {
+            const winRate = coin.win_rate || 0;
+            const pnl = coin.total_pnl || 0;
+            const trend = coin.trend || 'stable';
+            const status = coin.status || 'active';
+
+            const winRateClass = winRate >= 50 ? 'text-green-400' : 'text-red-400';
+            const pnlClass = pnl >= 0 ? 'text-green-400' : 'text-red-400';
+            const trendIcon = trend === 'up' ? '&#x2191;' : trend === 'down' ? '&#x2193;' : '&#x2192;';
+            const trendClass = trend === 'up' ? 'text-green-400' : trend === 'down' ? 'text-red-400' : 'text-gray-400';
+
+            let statusBadge = '';
+            if (coin.is_blacklisted) {
+                statusBadge = '<span class="px-2 py-1 rounded text-xs bg-red-900 text-red-300">Blacklisted</span>';
+            } else if (status === 'favored') {
+                statusBadge = '<span class="px-2 py-1 rounded text-xs bg-green-900 text-green-300">Favored</span>';
+            } else if (status === 'reduced') {
+                statusBadge = '<span class="px-2 py-1 rounded text-xs bg-yellow-900 text-yellow-300">Reduced</span>';
+            } else {
+                statusBadge = '<span class="px-2 py-1 rounded text-xs bg-slate-700 text-gray-300">Active</span>';
+            }
+
+            html += `
+                <tr class="border-t border-slate-700">
+                    <td class="py-3 font-semibold">${coin.coin || coin.symbol || 'Unknown'}</td>
+                    <td class="text-right font-mono">${coin.total_trades || 0}</td>
+                    <td class="text-right font-mono ${winRateClass}">${winRate.toFixed(1)}%</td>
+                    <td class="text-right font-mono ${pnlClass}">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}</td>
+                    <td class="text-center ${trendClass}">${trendIcon}</td>
+                    <td class="text-center">${statusBadge}</td>
+                </tr>
+            `;
+        }
+
+        html += '</tbody></table>';
+        document.getElementById('coins-table').innerHTML = html;
+    }
+
+    async function loadPatterns() {
+        try {
+            const res = await fetch('/api/knowledge/patterns');
+            const data = await res.json();
+            document.getElementById('patterns-count').textContent = `${data.count || 0} patterns`;
+            renderPatternsList(data.patterns || []);
+        } catch (e) {
+            document.getElementById('patterns-list').innerHTML = '<div class="text-red-400 text-center py-8">Failed to load patterns</div>';
+        }
+    }
+
+    function renderPatternsList(patterns) {
+        if (!patterns || patterns.length === 0) {
+            document.getElementById('patterns-list').innerHTML = '<div class="text-gray-500 text-center py-8">No patterns discovered yet</div>';
+            return;
+        }
+
+        let html = '';
+        for (const pattern of patterns) {
+            const conf = pattern.confidence || 0;
+            const winRate = pattern.win_rate || 0;
+            const confClass = conf >= 0.7 ? 'text-green-400' : conf >= 0.5 ? 'text-yellow-400' : 'text-red-400';
+            const activeClass = pattern.is_active !== false ? 'border-green-500' : 'border-gray-600';
+
+            html += `
+                <div class="bg-slate-700 rounded-lg p-4 border-l-4 ${activeClass}">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="font-semibold">${pattern.name || pattern.pattern_id || 'Unknown'}</span>
+                            ${pattern.is_active === false ? '<span class="ml-2 text-xs text-gray-500">(Inactive)</span>' : ''}
+                        </div>
+                        <span class="text-sm ${confClass}">Conf: ${(conf * 100).toFixed(0)}%</span>
+                    </div>
+                    <div class="text-sm text-gray-400 mt-2">
+                        Uses: ${pattern.usage_count || 0} | Win Rate: ${winRate.toFixed(1)}%
+                    </div>
+                    ${pattern.description ? `<div class="text-sm text-gray-300 mt-2 italic">"${pattern.description}"</div>` : ''}
+                </div>
+            `;
+        }
+
+        document.getElementById('patterns-list').innerHTML = html;
+    }
+
+    async function loadRules() {
+        try {
+            const res = await fetch('/api/knowledge/rules');
+            const data = await res.json();
+            document.getElementById('rules-count').textContent = `${data.count || 0} rules`;
+            renderRulesList(data.rules || []);
+        } catch (e) {
+            document.getElementById('rules-list').innerHTML = '<div class="text-red-400 text-center py-8">Failed to load rules</div>';
+        }
+    }
+
+    function renderRulesList(rules) {
+        if (!rules || rules.length === 0) {
+            document.getElementById('rules-list').innerHTML = '<div class="text-gray-500 text-center py-8">No regime rules created yet</div>';
+            return;
+        }
+
+        let html = '';
+        for (const rule of rules) {
+            const activeClass = rule.is_active !== false ? 'border-green-500' : 'border-gray-600';
+            const actionClass = rule.action === 'REDUCE_SIZE' ? 'text-yellow-400' : rule.action === 'SKIP' ? 'text-red-400' : 'text-gray-400';
+
+            html += `
+                <div class="bg-slate-700 rounded-lg p-4 border-l-4 ${activeClass}">
+                    <div class="flex justify-between items-start">
+                        <span class="font-semibold">${rule.rule_id || 'Unknown Rule'}</span>
+                        <span class="text-sm ${actionClass}">${rule.action || 'Unknown'}</span>
+                    </div>
+                    <div class="text-sm text-gray-300 mt-2">${rule.condition || 'No condition'}</div>
+                    <div class="text-sm text-gray-400 mt-2">
+                        Triggered: ${rule.trigger_count || 0} times
+                        ${rule.estimated_savings ? `| Estimated Savings: $${rule.estimated_savings.toFixed(2)}` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        document.getElementById('rules-list').innerHTML = html;
+    }
+
+    async function loadBlacklist() {
+        try {
+            const res = await fetch('/api/knowledge/blacklist');
+            const data = await res.json();
+            document.getElementById('blacklist-count').textContent = `${data.count || 0} coins`;
+            renderBlacklistList(data.coins || []);
+        } catch (e) {
+            document.getElementById('blacklist-list').innerHTML = '<div class="text-red-400 text-center py-8">Failed to load blacklist</div>';
+        }
+    }
+
+    function renderBlacklistList(coins) {
+        if (!coins || coins.length === 0) {
+            document.getElementById('blacklist-list').innerHTML = '<div class="text-gray-500 text-center py-8">No coins blacklisted</div>';
+            return;
+        }
+
+        let html = '';
+        for (const coin of coins) {
+            const coinName = typeof coin === 'string' ? coin : (coin.coin || coin.symbol || 'Unknown');
+            const reason = typeof coin === 'object' ? (coin.reason || 'No reason provided') : 'No reason provided';
+
+            html += `
+                <div class="bg-slate-700 rounded-lg p-4 border-l-4 border-red-500">
+                    <div class="flex justify-between items-start">
+                        <span class="font-semibold">${coinName}</span>
+                        <span class="text-xs text-red-400">Blacklisted</span>
+                    </div>
+                    <div class="text-sm text-gray-400 mt-2">${reason}</div>
+                </div>
+            `;
+        }
+
+        document.getElementById('blacklist-list').innerHTML = html;
+    }
+
+    // Initial load
+    loadCoins();
+    loadPatterns();
+    loadRules();
+    loadBlacklist();
+
+    // Refresh periodically
+    setInterval(loadCoins, 30000);
+    setInterval(loadPatterns, 30000);
+    setInterval(loadRules, 30000);
+    setInterval(loadBlacklist, 30000);
+</script>
+{% endblock %}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Trading Dashboard{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10/dist/ext/sse.js"></script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        /* Status indicators */
+        .status-dot { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Card hover effect */
+        .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    </style>
+    {% block extra_styles %}{% endblock %}
+</head>
+<body class="bg-slate-900 text-gray-100 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-4">
+                    <span class="text-xl font-bold text-cyan-400">Trading Bot</span>
+                    <span id="system-status" class="flex items-center text-sm">
+                        <span class="w-2 h-2 rounded-full bg-gray-500 mr-2 status-dot"></span>
+                        <span class="text-gray-400">Connecting...</span>
+                    </span>
+                </div>
+
+                <!-- Nav Links -->
+                <div class="flex space-x-1">
+                    <a href="/" class="px-4 py-2 rounded-lg text-sm font-medium {% if page == 'realtime' %}bg-slate-700 text-cyan-400{% else %}text-gray-300 hover:bg-slate-700{% endif %}">
+                        Real-Time
+                    </a>
+                    <a href="/knowledge" class="px-4 py-2 rounded-lg text-sm font-medium {% if page == 'knowledge' %}bg-slate-700 text-cyan-400{% else %}text-gray-300 hover:bg-slate-700{% endif %}">
+                        Knowledge
+                    </a>
+                    <a href="/adaptations" class="px-4 py-2 rounded-lg text-sm font-medium {% if page == 'adaptations' %}bg-slate-700 text-cyan-400{% else %}text-gray-300 hover:bg-slate-700{% endif %}">
+                        Adaptations
+                    </a>
+                    <a href="/profitability" class="px-4 py-2 rounded-lg text-sm font-medium {% if page == 'profitability' %}bg-slate-700 text-cyan-400{% else %}text-gray-300 hover:bg-slate-700{% endif %}">
+                        Profitability
+                    </a>
+                    <a href="/overrides" class="px-4 py-2 rounded-lg text-sm font-medium {% if page == 'overrides' %}bg-slate-700 text-cyan-400{% else %}text-gray-300 hover:bg-slate-700{% endif %}">
+                        Overrides
+                    </a>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="flex items-center space-x-4 text-sm">
+                    <div class="text-gray-400">
+                        Balance: <span id="nav-balance" class="text-white font-mono">$0.00</span>
+                    </div>
+                    <div class="text-gray-400">
+                        P&L: <span id="nav-pnl" class="font-mono">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-6">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-700 py-4 text-center text-gray-500 text-sm">
+        <p>Trading Dashboard v2 | Data updates every second via SSE</p>
+    </footer>
+
+    <!-- Base JavaScript -->
+    <script src="/static/js/dashboard.js"></script>
+    <script>
+        // Initialize SSE connection for nav updates
+        const navEventSource = new EventSource('/api/feed');
+        navEventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+
+            // Update status indicator
+            const statusEl = document.getElementById('system-status');
+            if (data.healthy) {
+                statusEl.innerHTML = `
+                    <span class="w-2 h-2 rounded-full bg-green-500 mr-2 status-dot"></span>
+                    <span class="text-green-400">Running</span>
+                `;
+            } else {
+                statusEl.innerHTML = `
+                    <span class="w-2 h-2 rounded-full bg-yellow-500 mr-2 status-dot"></span>
+                    <span class="text-yellow-400">Feed Stale</span>
+                `;
+            }
+
+            // Update balance and P&L
+            if (data.balance !== undefined) {
+                document.getElementById('nav-balance').textContent = '$' + data.balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            }
+            if (data.total_pnl !== undefined) {
+                const pnlEl = document.getElementById('nav-pnl');
+                const pnl = data.total_pnl;
+                pnlEl.textContent = (pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                pnlEl.className = 'font-mono ' + (pnl >= 0 ? 'text-green-400' : 'text-red-400');
+            }
+        };
+
+        navEventSource.onerror = () => {
+            document.getElementById('system-status').innerHTML = `
+                <span class="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
+                <span class="text-red-400">Disconnected</span>
+            `;
+        };
+    </script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

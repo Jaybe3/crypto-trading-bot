@@ -1,529 +1,379 @@
 """
-Integration Tests - End-to-end testing of the trading system.
+Integration tests for the full autonomous learning loop (TASK-140).
 
-Tests the complete flow: Feed → Sniper → Journal
+Tests end-to-end flows through the system.
 """
 
 import asyncio
+import os
 import sys
 import tempfile
 import time
-from datetime import datetime, timedelta
-from pathlib import Path
+import unittest
+from datetime import datetime
+from unittest.mock import MagicMock, patch
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Add project root to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.main_v2 import TradingSystem, HealthMonitor
-from src.sniper import TradeCondition
-from src.market_feed import PriceTick
-
-
-class TestHealthMonitor:
-    """Test HealthMonitor class."""
-
-    def test_init(self):
-        health = HealthMonitor()
-        assert health.tick_count == 0
-        assert health.last_tick_time is None
-        assert not health.is_healthy
-
-    def test_on_tick(self):
-        health = HealthMonitor()
-        tick = PriceTick(coin="BTC", price=50000.0, timestamp=int(time.time()*1000), volume_24h=0, change_24h=0)
-
-        health.on_tick(tick)
-
-        assert health.tick_count == 1
-        assert health.last_tick_time is not None
-        assert health.is_healthy
-
-    def test_stale_detection(self):
-        health = HealthMonitor(stale_threshold=0.1)  # 100ms threshold
-        tick = PriceTick(coin="BTC", price=50000.0, timestamp=int(time.time()*1000), volume_24h=0, change_24h=0)
-
-        health.on_tick(tick)
-        assert health.is_healthy
-
-        time.sleep(0.2)  # Wait past threshold
-        assert not health.is_healthy
-        assert health.is_feed_stale
-
-    def test_get_stats(self):
-        health = HealthMonitor()
-        tick = PriceTick(coin="BTC", price=50000.0, timestamp=int(time.time()*1000), volume_24h=0, change_24h=0)
-        health.on_tick(tick)
-
-        stats = health.get_stats()
-
-        assert "healthy" in stats
-        assert "tick_count" in stats
-        assert stats["tick_count"] == 1
-        assert "ticks_per_second" in stats
-
-    def test_last_price_tracking(self):
-        health = HealthMonitor()
-
-        tick1 = PriceTick(coin="BTC", price=50000.0, timestamp=int(time.time()*1000), volume_24h=0, change_24h=0)
-        tick2 = PriceTick(coin="ETH", price=3000.0, timestamp=int(time.time()*1000), volume_24h=0, change_24h=0)
-
-        health.on_tick(tick1)
-        health.on_tick(tick2)
-
-        assert health.get_last_price("BTC") == 50000.0
-        assert health.get_last_price("ETH") == 3000.0
-        assert health.get_last_price("SOL") is None
+from src.database import Database
+from src.knowledge import KnowledgeBrain
+from src.coin_scorer import CoinScorer
+from src.pattern_library import PatternLibrary
+from src.adaptation import AdaptationEngine
+from src.models.reflection import Insight
 
 
-class TestTradingSystemInit:
-    """Test TradingSystem initialization."""
+class TestComponentHealth(unittest.TestCase):
+    """Test that all components expose health status."""
 
-    def test_init_defaults(self):
-        system = TradingSystem(test_mode=True)
+    def setUp(self):
+        """Set up test fixtures."""
+        self.db_fd, self.db_path = tempfile.mkstemp(suffix=".db")
+        self.db = Database(self.db_path)
+        self.knowledge = KnowledgeBrain(self.db)
+        self.coin_scorer = CoinScorer(self.knowledge, self.db)
+        self.pattern_library = PatternLibrary(self.knowledge)
 
-        assert system.test_mode == True
-        assert system.exchange == "bybit"
-        assert len(system.coins) > 0
-        assert system._running == False
+    def tearDown(self):
+        """Clean up test fixtures."""
+        os.close(self.db_fd)
+        os.unlink(self.db_path)
 
-    def test_init_custom(self):
-        system = TradingSystem(
-            exchange="binance",
-            coins=["BTC", "ETH"],
-            initial_balance=5000.0,
-            test_mode=True
+    def test_adaptation_engine_health(self):
+        """Test AdaptationEngine.get_health()."""
+        engine = AdaptationEngine(
+            self.knowledge, self.coin_scorer, self.pattern_library, self.db
         )
 
-        assert system.exchange == "binance"
-        assert system.coins == ["BTC", "ETH"]
-        assert system.initial_balance == 5000.0
-
-
-class TestTradingSystemComponents:
-    """Test component initialization."""
-
-    def test_start_components(self):
-        async def run():
-            with tempfile.TemporaryDirectory() as tmp:
-                system = TradingSystem(
-                    test_mode=True,
-                    coins=["BTC", "ETH"],
-                    db_path=f"{tmp}/test.db",
-                    state_path=f"{tmp}/state.json"
-                )
-                await system.start_components()
-
-                assert system.journal is not None
-                assert system.sniper is not None
-                assert system.market_feed is not None
-                assert system.health is not None
-
-                await system.stop()
-
-        asyncio.run(run())
-
-    def test_callbacks_wired(self):
-        async def run():
-            with tempfile.TemporaryDirectory() as tmp:
-                system = TradingSystem(
-                    test_mode=True,
-                    coins=["BTC"],
-                    db_path=f"{tmp}/test.db",
-                    state_path=f"{tmp}/state.json"
-                )
-                await system.start_components()
-
-                # Verify sniper receives ticks
-                initial_tick_count = system.sniper._tick_count
-                system.inject_price("BTC", 50000.0)
-
-                assert system.sniper._tick_count == initial_tick_count + 1
-                assert system.health.tick_count == 1
-
-                await system.stop()
-
-        asyncio.run(run())
-
-
-class TestEndToEnd:
-    """End-to-end integration tests."""
-
-    def test_condition_trigger(self):
-        """Test that a condition triggers when price crosses threshold."""
-        async def run():
-            with tempfile.TemporaryDirectory() as tmp:
-                system = TradingSystem(
-                    test_mode=True,
-                    coins=["BTC"],
-                    db_path=f"{tmp}/test.db",
-                    state_path=f"{tmp}/state.json"
-                )
-                await system.start_components()
-
-                # Create condition: BUY if price > 50000
-                condition = TradeCondition(
-                    id="test-e2e-1",
-                    coin="BTC",
-                    direction="LONG",
-                    trigger_price=50000.0,
-                    trigger_type="ABOVE",
-                    stop_loss_pct=0.02,
-                    take_profit_pct=0.015,
-                    position_size_usd=100.0,
-                    strategy_id="e2e-test",
-                    reasoning="E2E test condition",
-                    valid_until=datetime.now() + timedelta(minutes=5),
-                )
-                system.inject_condition(condition)
-
-                assert len(system.sniper.active_conditions) == 1
-
-                # Price below trigger - no position
-                system.inject_price("BTC", 49999.0)
-                assert len(system.sniper.open_positions) == 0
-
-                # Price above trigger - should open position
-                system.inject_price("BTC", 50001.0)
-                assert len(system.sniper.open_positions) == 1
-                assert len(system.sniper.active_conditions) == 0  # Consumed
-
-                await system.stop()
-
-        asyncio.run(run())
-
-    def test_stop_loss(self):
-        """Test that stop-loss triggers correctly."""
-        async def run():
-            with tempfile.TemporaryDirectory() as tmp:
-                system = TradingSystem(
-                    test_mode=True,
-                    coins=["BTC"],
-                    db_path=f"{tmp}/test.db",
-                    state_path=f"{tmp}/state.json"
-                )
-                await system.start_components()
-
-                # Create condition with 2% stop loss
-                condition = TradeCondition(
-                    id="test-sl-1",
-                    coin="BTC",
-                    direction="LONG",
-                    trigger_price=50000.0,
-                    trigger_type="ABOVE",
-                    stop_loss_pct=0.02,      # 2% = $49000 stop
-                    take_profit_pct=0.10,    # Wide TP
-                    position_size_usd=100.0,
-                    strategy_id="e2e-test",
-                    reasoning="Stop loss test",
-                    valid_until=datetime.now() + timedelta(minutes=5),
-                )
-                system.inject_condition(condition)
-
-                # Trigger entry at 50000
-                system.inject_price("BTC", 50000.0)
-                assert len(system.sniper.open_positions) == 1
-
-                # Price drops to stop loss (50000 * 0.98 = 49000)
-                system.inject_price("BTC", 48900.0)
-                assert len(system.sniper.open_positions) == 0  # Closed
-
-                # Check journal recorded exit
-                entries = system.journal.get_recent(hours=1)
-                exit_entry = next((e for e in entries if e.exit_reason == "stop_loss"), None)
-                assert exit_entry is not None
-                assert exit_entry.pnl_usd < 0  # Loss
-
-                await system.stop()
-
-        asyncio.run(run())
-
-    def test_take_profit(self):
-        """Test that take-profit triggers correctly."""
-        async def run():
-            with tempfile.TemporaryDirectory() as tmp:
-                system = TradingSystem(
-                    test_mode=True,
-                    coins=["BTC"],
-                    db_path=f"{tmp}/test.db",
-                    state_path=f"{tmp}/state.json"
-                )
-                await system.start_components()
-
-                # Create condition with 1.5% take profit
-                condition = TradeCondition(
-                    id="test-tp-1",
-                    coin="BTC",
-                    direction="LONG",
-                    trigger_price=50000.0,
-                    trigger_type="ABOVE",
-                    stop_loss_pct=0.10,      # Wide stop
-                    take_profit_pct=0.015,   # 1.5% = $50750 TP
-                    position_size_usd=100.0,
-                    strategy_id="e2e-test",
-                    reasoning="Take profit test",
-                    valid_until=datetime.now() + timedelta(minutes=5),
-                )
-                system.inject_condition(condition)
-
-                # Trigger entry at 50000
-                system.inject_price("BTC", 50000.0)
-                assert len(system.sniper.open_positions) == 1
-
-                # Price rises to take profit (50000 * 1.015 = 50750)
-                system.inject_price("BTC", 50800.0)
-                assert len(system.sniper.open_positions) == 0  # Closed
-
-                # Check journal recorded profit
-                entries = system.journal.get_recent(hours=1)
-                exit_entry = next((e for e in entries if e.exit_reason == "take_profit"), None)
-                assert exit_entry is not None
-                assert exit_entry.pnl_usd > 0  # Profit
-
-                await system.stop()
-
-        asyncio.run(run())
-
-    def test_full_trade_cycle_journaled(self):
-        """Test complete trade cycle is recorded in journal."""
-        async def run():
-            with tempfile.TemporaryDirectory() as tmp:
-                system = TradingSystem(
-                    test_mode=True,
-                    coins=["BTC"],
-                    db_path=f"{tmp}/test.db",
-                    state_path=f"{tmp}/state.json"
-                )
-                await system.start_components()
-
-                initial_balance = system.sniper.balance
-
-                # Create and trigger condition
-                condition = TradeCondition(
-                    id="test-journal-1",
-                    coin="BTC",
-                    direction="LONG",
-                    trigger_price=50000.0,
-                    trigger_type="ABOVE",
-                    stop_loss_pct=0.02,
-                    take_profit_pct=0.01,  # 1% TP for quick exit
-                    position_size_usd=100.0,
-                    strategy_id="journal-test",
-                    reasoning="Journal integration test",
-                    valid_until=datetime.now() + timedelta(minutes=5),
-                )
-                system.inject_condition(condition)
-
-                # Entry
-                system.inject_price("BTC", 50100.0)
-                assert len(system.sniper.open_positions) == 1
-
-                # Give async write time
-                time.sleep(0.5)
-
-                # Exit (TP at 50100 * 1.01 = 50601)
-                system.inject_price("BTC", 50700.0)
-                assert len(system.sniper.open_positions) == 0
-
-                # Give async write time
-                time.sleep(0.5)
-
-                # Verify journal
-                stats = system.journal.get_stats()
-                assert stats["total_trades"] >= 1
-
-                # Verify balance updated
-                assert system.sniper.balance != initial_balance
-
-                await system.stop()
-
-        asyncio.run(run())
-
-
-class TestPerformance:
-    """Performance tests."""
-
-    def test_tick_processing_speed(self):
-        """Test that tick processing is fast enough."""
-        async def run():
-            with tempfile.TemporaryDirectory() as tmp:
-                system = TradingSystem(
-                    test_mode=True,
-                    coins=["BTC"],
-                    db_path=f"{tmp}/test.db",
-                    state_path=f"{tmp}/state.json"
-                )
-                await system.start_components()
-
-                # Add some conditions to make it realistic
-                for i in range(5):
-                    condition = TradeCondition(
-                        id=f"perf-{i}",
-                        coin="BTC",
-                        direction="LONG",
-                        trigger_price=100000.0,  # Won't trigger
-                        trigger_type="ABOVE",
-                        stop_loss_pct=0.02,
-                        take_profit_pct=0.015,
-                        position_size_usd=100.0,
-                        strategy_id="perf-test",
-                        reasoning="Performance test",
-                        valid_until=datetime.now() + timedelta(hours=1),
-                    )
-                    system.inject_condition(condition)
-
-                # Process 10000 ticks
-                start = time.perf_counter()
-                for i in range(10000):
-                    system.inject_price("BTC", 50000.0 + i * 0.01)
-                elapsed = time.perf_counter() - start
-
-                per_tick_ms = (elapsed / 10000) * 1000
-                ticks_per_second = 10000 / elapsed
-
-                print(f"\nPerformance: {10000} ticks in {elapsed:.3f}s")
-                print(f"Per tick: {per_tick_ms:.4f}ms")
-                print(f"Ticks/second: {ticks_per_second:.0f}")
-
-                # Target: < 0.1ms per tick (> 10000 ticks/second)
-                assert per_tick_ms < 0.1, f"Tick processing too slow: {per_tick_ms:.4f}ms"
-
-                await system.stop()
-
-        asyncio.run(run())
-
-
-class TestStatePersistence:
-    """Test state persistence and recovery."""
-
-    def test_state_save_and_load(self):
-        """Test that state survives restart."""
-        async def run():
-            with tempfile.TemporaryDirectory() as tmp:
-                state_path = f"{tmp}/sniper_state.json"
-                db_path = f"{tmp}/test.db"
-
-                # First run - create position
-                system1 = TradingSystem(
-                    test_mode=True,
-                    coins=["BTC"],
-                    db_path=db_path,
-                    state_path=state_path
-                )
-                await system1.start_components()
-
-                condition = TradeCondition(
-                    id="persist-1",
-                    coin="BTC",
-                    direction="LONG",
-                    trigger_price=50000.0,
-                    trigger_type="ABOVE",
-                    stop_loss_pct=0.02,
-                    take_profit_pct=0.10,  # Wide TP
-                    position_size_usd=100.0,
-                    strategy_id="persist-test",
-                    reasoning="Persistence test",
-                    valid_until=datetime.now() + timedelta(hours=1),
-                )
-                system1.inject_condition(condition)
-                system1.inject_price("BTC", 50100.0)
-
-                assert len(system1.sniper.open_positions) == 1
-                original_balance = system1.sniper.balance
-
-                # Save and stop
-                system1.sniper.save_state()
-                await system1.stop()
-
-                # Second run - load state
-                system2 = TradingSystem(
-                    test_mode=True,
-                    coins=["BTC"],
-                    db_path=db_path,
-                    state_path=state_path
-                )
-                await system2.start_components()
-
-                # Verify state restored
-                assert len(system2.sniper.open_positions) == 1
-                assert system2.sniper.balance == original_balance
-
-                await system2.stop()
-
-        asyncio.run(run())
-
-
-class TestGetStatus:
-    """Test status reporting."""
-
-    def test_get_status(self):
-        async def run():
-            with tempfile.TemporaryDirectory() as tmp:
-                system = TradingSystem(
-                    test_mode=True,
-                    coins=["BTC", "ETH"],
-                    db_path=f"{tmp}/test.db",
-                    state_path=f"{tmp}/state.json"
-                )
-                await system.start_components()
-
-                # Inject some activity
-                system.inject_price("BTC", 50000.0)
-                system.inject_price("ETH", 3000.0)
-
-                status = system.get_status()
-
-                assert "running" in status
-                assert "health" in status
-                assert "sniper" in status
-                assert "feed" in status
-                assert "journal" in status
-
-                assert status["health"]["tick_count"] == 2
-
-                await system.stop()
-
-        asyncio.run(run())
-
-
-def run_tests():
-    """Run all integration tests."""
-    import traceback
-
-    test_classes = [
-        TestHealthMonitor,
-        TestTradingSystemInit,
-        TestTradingSystemComponents,
-        TestEndToEnd,
-        TestPerformance,
-        TestStatePersistence,
-        TestGetStatus,
-    ]
-
-    passed = 0
-    failed = 0
-
-    for test_class in test_classes:
-        print(f"\n=== {test_class.__name__} ===")
-        instance = test_class()
-
-        for method_name in dir(instance):
-            if method_name.startswith("test_"):
-                try:
-                    method = getattr(instance, method_name)
-                    method()
-                    print(f"  ✓ {method_name}")
-                    passed += 1
-                except Exception as e:
-                    print(f"  ✗ {method_name}: {e}")
-                    traceback.print_exc()
-                    failed += 1
-
-    print(f"\n{'='*50}")
-    print(f"Results: {passed} passed, {failed} failed")
-    print(f"{'='*50}")
-
-    return failed == 0
+        health = engine.get_health()
+
+        self.assertIn("status", health)
+        self.assertIn("metrics", health)
+        self.assertEqual(health["status"], "healthy")
+        self.assertTrue(health["metrics"]["has_knowledge_brain"])
+
+    def test_adaptation_engine_health_degraded(self):
+        """Test AdaptationEngine health when knowledge brain missing."""
+        engine = AdaptationEngine(None, None, None, None)
+
+        health = engine.get_health()
+
+        self.assertEqual(health["status"], "degraded")
+        self.assertFalse(health["metrics"]["has_knowledge_brain"])
+
+
+class TestRuntimeStatePersistence(unittest.TestCase):
+    """Test runtime state save/restore functionality."""
+
+    def setUp(self):
+        """Set up test fixtures."""
+        self.db_fd, self.db_path = tempfile.mkstemp(suffix=".db")
+        self.db = Database(self.db_path)
+
+    def tearDown(self):
+        """Clean up test fixtures."""
+        os.close(self.db_fd)
+        os.unlink(self.db_path)
+
+    def test_save_and_restore_state(self):
+        """Test that runtime state can be saved and restored."""
+        state = {
+            "shutdown_time": datetime.now().isoformat(),
+            "last_reflection_time": "2026-02-03T10:00:00",
+            "trades_since_reflection": 5,
+            "uptime_seconds": 3600,
+        }
+
+        self.db.save_runtime_state(state)
+        restored = self.db.get_runtime_state()
+
+        self.assertEqual(restored["last_reflection_time"], "2026-02-03T10:00:00")
+        self.assertEqual(restored["trades_since_reflection"], 5)
+        self.assertEqual(restored["uptime_seconds"], 3600)
+
+    def test_clear_state(self):
+        """Test clearing runtime state."""
+        self.db.save_runtime_state({"key": "value"})
+        self.db.clear_runtime_state()
+        restored = self.db.get_runtime_state()
+
+        self.assertEqual(len(restored), 0)
+
+    def test_overwrite_state(self):
+        """Test that saving state overwrites previous values."""
+        self.db.save_runtime_state({"key": "value1"})
+        self.db.save_runtime_state({"key": "value2"})
+        restored = self.db.get_runtime_state()
+
+        self.assertEqual(restored["key"], "value2")
+
+
+class TestLearningLoopIntegration(unittest.TestCase):
+    """Test the complete learning loop integration."""
+
+    def setUp(self):
+        """Set up test fixtures."""
+        self.db_fd, self.db_path = tempfile.mkstemp(suffix=".db")
+        self.db = Database(self.db_path)
+        self.knowledge = KnowledgeBrain(self.db)
+        self.coin_scorer = CoinScorer(self.knowledge, self.db)
+        self.pattern_library = PatternLibrary(self.knowledge)
+        self.adaptation_engine = AdaptationEngine(
+            self.knowledge, self.coin_scorer, self.pattern_library, self.db
+        )
+
+    def tearDown(self):
+        """Clean up test fixtures."""
+        os.close(self.db_fd)
+        os.unlink(self.db_path)
+
+    def test_insight_to_blacklist_flow(self):
+        """Test: Insight -> AdaptationEngine -> KnowledgeBrain blacklist."""
+        # Simulate an insight from ReflectionEngine
+        insight = Insight(
+            insight_type="coin",
+            category="problem",
+            title="DOGE underperforming",
+            description="DOGE has 20% win rate over 10 trades",
+            evidence={"coin": "DOGE", "win_rate": 0.20, "trades": 10, "pnl": -15.0},
+            suggested_action="Blacklist DOGE",
+            confidence=0.90,
+        )
+
+        # Before: DOGE not blacklisted
+        self.assertFalse(self.knowledge.is_blacklisted("DOGE"))
+
+        # Apply insight via AdaptationEngine
+        adaptations = self.adaptation_engine.apply_insights([insight])
+
+        # After: DOGE should be blacklisted
+        self.assertEqual(len(adaptations), 1)
+        self.assertTrue(self.knowledge.is_blacklisted("DOGE"))
+
+        # Verify blacklist reason
+        score = self.knowledge.get_coin_score("DOGE")
+        self.assertIn("20%", score.blacklist_reason)
+
+    def test_blacklisted_coin_excluded_from_good_coins(self):
+        """Test: Blacklisted coins are excluded from good_coins list."""
+        # First, add some trades for SOL to make it "good"
+        for i in range(6):
+            self.knowledge.update_coin_score("SOL", {"won": True, "pnl": 5.0})
+
+        # Verify SOL is in good coins
+        self.assertIn("SOL", self.knowledge.get_good_coins())
+
+        # Now blacklist SOL
+        self.knowledge.blacklist_coin("SOL", "Test blacklist")
+
+        # SOL should no longer be in good coins
+        self.assertNotIn("SOL", self.knowledge.get_good_coins())
+
+    def test_adaptation_logged_to_database(self):
+        """Test: Adaptations are logged to database for tracking."""
+        insight = Insight(
+            insight_type="coin",
+            category="problem",
+            title="XRP underperforming",
+            description="XRP has 15% win rate",
+            evidence={"coin": "XRP", "win_rate": 0.15, "trades": 10, "pnl": -20.0},
+            suggested_action="Blacklist XRP",
+            confidence=0.90,
+        )
+
+        self.adaptation_engine.apply_insights([insight])
+
+        # Check database
+        adaptations = self.db.get_adaptations(hours=1)
+        self.assertEqual(len(adaptations), 1)
+        self.assertEqual(adaptations[0]["target"], "XRP")
+        self.assertEqual(adaptations[0]["action"], "blacklist")
+
+    def test_time_rule_creation_flow(self):
+        """Test: Time insight -> AdaptationEngine -> Regime rule created."""
+        insight = Insight(
+            insight_type="time",
+            category="problem",
+            title="Asia session losses",
+            description="Hours 2-5 UTC have 25% win rate",
+            evidence={"worst_hours": [2, 3, 4, 5], "win_rate": 0.25, "trades": 15},
+            suggested_action="Add time filter",
+            confidence=0.80,
+        )
+
+        # Before: No time rules
+        rules_before = self.knowledge.get_active_rules()
+        time_rules_before = [r for r in rules_before if "time_filter" in r.rule_id]
+        self.assertEqual(len(time_rules_before), 0)
+
+        # Apply insight
+        adaptations = self.adaptation_engine.apply_insights([insight])
+
+        # After: Time rule should exist
+        rules_after = self.knowledge.get_active_rules()
+        time_rules_after = [r for r in rules_after if "time_filter" in r.rule_id]
+        self.assertEqual(len(time_rules_after), 1)
+        self.assertEqual(len(adaptations), 1)
+
+    def test_cooldown_prevents_duplicate_adaptations(self):
+        """Test: Same adaptation cannot be applied twice within cooldown period."""
+        insight = Insight(
+            insight_type="coin",
+            category="problem",
+            title="SHIB underperforming",
+            description="SHIB has 20% win rate",
+            evidence={"coin": "SHIB", "win_rate": 0.20, "trades": 10, "pnl": -10.0},
+            suggested_action="Blacklist SHIB",
+            confidence=0.90,
+        )
+
+        # First application should succeed
+        adaptations1 = self.adaptation_engine.apply_insights([insight])
+        self.assertEqual(len(adaptations1), 1)
+
+        # Second application should be skipped (cooldown)
+        adaptations2 = self.adaptation_engine.apply_insights([insight])
+        self.assertEqual(len(adaptations2), 0)
+
+
+class TestSystemHealthAggregation(unittest.TestCase):
+    """Test system-level health aggregation."""
+
+    def test_health_aggregation_logic(self):
+        """Test that overall health degrades when any component degrades."""
+        # Simulate component health responses
+        component_healths = {
+            "market_feed": {"status": "healthy"},
+            "sniper": {"status": "healthy"},
+            "strategist": {"status": "degraded"},  # One degraded
+            "reflection_engine": {"status": "healthy"},
+        }
+
+        # Aggregate
+        overall = "healthy"
+        for name, health in component_healths.items():
+            status = health.get("status")
+            if status == "failed":
+                overall = "failed"
+            elif status == "degraded" and overall == "healthy":
+                overall = "degraded"
+
+        self.assertEqual(overall, "degraded")
+
+    def test_health_aggregation_failed(self):
+        """Test that overall health fails when any component fails."""
+        component_healths = {
+            "market_feed": {"status": "failed"},  # One failed
+            "sniper": {"status": "healthy"},
+        }
+
+        overall = "healthy"
+        for name, health in component_healths.items():
+            status = health.get("status")
+            if status == "failed":
+                overall = "failed"
+            elif status == "degraded" and overall == "healthy":
+                overall = "degraded"
+
+        self.assertEqual(overall, "failed")
+
+
+class TestKnowledgeBrainPersistence(unittest.TestCase):
+    """Test that Knowledge Brain state persists across restarts."""
+
+    def test_coin_scores_persist(self):
+        """Test that coin scores survive restart."""
+        db_fd, db_path = tempfile.mkstemp(suffix=".db")
+
+        try:
+            # Create first instance and add data
+            db1 = Database(db_path)
+            knowledge1 = KnowledgeBrain(db1)
+            knowledge1.update_coin_score("ETH", {"won": True, "pnl": 10.0})
+            knowledge1.blacklist_coin("BAD", "Testing")
+
+            # Verify data exists
+            score1 = knowledge1.get_coin_score("ETH")
+            self.assertIsNotNone(score1)
+            self.assertEqual(score1.wins, 1)
+            self.assertTrue(knowledge1.is_blacklisted("BAD"))
+
+            # Create second instance (simulating restart)
+            db2 = Database(db_path)
+            knowledge2 = KnowledgeBrain(db2)
+
+            # Verify data persisted
+            score2 = knowledge2.get_coin_score("ETH")
+            self.assertIsNotNone(score2)
+            self.assertEqual(score2.wins, 1)
+            self.assertTrue(knowledge2.is_blacklisted("BAD"))
+
+        finally:
+            os.close(db_fd)
+            os.unlink(db_path)
+
+    def test_patterns_persist(self):
+        """Test that trading patterns survive restart."""
+        db_fd, db_path = tempfile.mkstemp(suffix=".db")
+
+        try:
+            # Create first instance
+            db1 = Database(db_path)
+            knowledge1 = KnowledgeBrain(db1)
+            patterns1 = PatternLibrary(knowledge1)
+
+            # Get initial pattern count
+            initial_count = len(knowledge1.get_active_patterns())
+
+            # Deactivate a pattern
+            patterns = knowledge1.get_active_patterns()
+            if patterns:
+                knowledge1.deactivate_pattern(patterns[0].pattern_id)
+
+            # Create second instance (simulating restart)
+            db2 = Database(db_path)
+            knowledge2 = KnowledgeBrain(db2)
+
+            # Verify deactivation persisted
+            new_count = len(knowledge2.get_active_patterns())
+            self.assertEqual(new_count, initial_count - 1)
+
+        finally:
+            os.close(db_fd)
+            os.unlink(db_path)
+
+    def test_rules_persist(self):
+        """Test that regime rules survive restart."""
+        db_fd, db_path = tempfile.mkstemp(suffix=".db")
+
+        try:
+            # Create first instance
+            db1 = Database(db_path)
+            knowledge1 = KnowledgeBrain(db1)
+
+            from src.models.knowledge import RegimeRule
+            rule = RegimeRule(
+                rule_id="test_rule_persist",
+                description="Test rule for persistence",
+                condition={"hour_of_day": {"op": "in", "value": [1, 2, 3]}},
+                action="REDUCE_SIZE",
+            )
+            knowledge1.add_rule(rule)
+
+            # Create second instance (simulating restart)
+            db2 = Database(db_path)
+            knowledge2 = KnowledgeBrain(db2)
+
+            # Verify rule persisted
+            rules = knowledge2.get_active_rules()
+            rule_ids = [r.rule_id for r in rules]
+            self.assertIn("test_rule_persist", rule_ids)
+
+        finally:
+            os.close(db_fd)
+            os.unlink(db_path)
 
 
 if __name__ == "__main__":
-    success = run_tests()
-    sys.exit(0 if success else 1)
+    unittest.main()

@@ -377,6 +377,228 @@ class Database:
                 ON active_conditions(triggered)
             """)
 
+            # 13. coin_scores table (for TASK-120 Knowledge Brain)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS coin_scores (
+                    coin TEXT PRIMARY KEY,
+                    total_trades INTEGER DEFAULT 0,
+                    wins INTEGER DEFAULT 0,
+                    losses INTEGER DEFAULT 0,
+                    total_pnl REAL DEFAULT 0,
+                    avg_pnl REAL DEFAULT 0,
+                    win_rate REAL DEFAULT 0,
+                    avg_winner REAL DEFAULT 0,
+                    avg_loser REAL DEFAULT 0,
+                    is_blacklisted BOOLEAN DEFAULT FALSE,
+                    blacklist_reason TEXT,
+                    trend TEXT DEFAULT 'stable',
+                    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
+            # 14. trading_patterns table (for TASK-120 Knowledge Brain)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS trading_patterns (
+                    pattern_id TEXT PRIMARY KEY,
+                    description TEXT NOT NULL,
+                    entry_conditions TEXT NOT NULL,
+                    exit_conditions TEXT NOT NULL,
+                    times_used INTEGER DEFAULT 0,
+                    wins INTEGER DEFAULT 0,
+                    losses INTEGER DEFAULT 0,
+                    total_pnl REAL DEFAULT 0,
+                    confidence REAL DEFAULT 0.5,
+                    is_active BOOLEAN DEFAULT TRUE,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    last_used TIMESTAMP
+                )
+            """)
+
+            # 15. regime_rules table (for TASK-120 Knowledge Brain)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS regime_rules (
+                    rule_id TEXT PRIMARY KEY,
+                    description TEXT NOT NULL,
+                    condition TEXT NOT NULL,
+                    action TEXT NOT NULL,
+                    times_triggered INTEGER DEFAULT 0,
+                    estimated_saves REAL DEFAULT 0,
+                    is_active BOOLEAN DEFAULT TRUE,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
+            # 16. coin_adaptations table (for TASK-121 Coin Scoring)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS coin_adaptations (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    coin TEXT NOT NULL,
+                    timestamp TIMESTAMP NOT NULL,
+                    old_status TEXT NOT NULL,
+                    new_status TEXT NOT NULL,
+                    reason TEXT NOT NULL,
+                    trigger_stats TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
+            # 17. reflections table (for TASK-131 Deep Reflection)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS reflections (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    timestamp TIMESTAMP NOT NULL,
+                    trades_analyzed INTEGER NOT NULL,
+                    period_hours REAL,
+                    insights TEXT NOT NULL,
+                    summary TEXT,
+                    total_time_ms REAL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
+            # 18. adaptations table (for TASK-133 Adaptation Application)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS adaptations (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    adaptation_id TEXT NOT NULL UNIQUE,
+                    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    insight_type TEXT NOT NULL,
+                    action TEXT NOT NULL,
+                    target TEXT NOT NULL,
+                    description TEXT NOT NULL,
+                    pre_metrics TEXT,
+                    insight_confidence REAL,
+                    insight_evidence TEXT,
+                    post_metrics TEXT,
+                    effectiveness TEXT,
+                    effectiveness_measured_at TIMESTAMP,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
+            # 19. runtime_state table (for TASK-140 Full System Integration)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS runtime_state (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    key TEXT NOT NULL UNIQUE,
+                    value TEXT NOT NULL,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
+            # 20. profit_snapshots table (for TASK-141 Profitability Tracking)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS profit_snapshots (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    timestamp TIMESTAMP NOT NULL,
+                    timeframe TEXT NOT NULL,
+
+                    -- Core metrics
+                    total_pnl REAL NOT NULL,
+                    realized_pnl REAL NOT NULL,
+                    unrealized_pnl REAL DEFAULT 0,
+
+                    -- Trade counts
+                    total_trades INTEGER NOT NULL,
+                    winning_trades INTEGER NOT NULL,
+                    losing_trades INTEGER NOT NULL,
+
+                    -- Rates
+                    win_rate REAL NOT NULL,
+                    avg_win REAL,
+                    avg_loss REAL,
+                    profit_factor REAL,
+
+                    -- Risk metrics
+                    max_drawdown REAL,
+                    max_drawdown_pct REAL,
+                    sharpe_ratio REAL,
+
+                    -- Balance
+                    starting_balance REAL,
+                    ending_balance REAL,
+                    return_pct REAL,
+
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
+            # 21. equity_points table (for TASK-141 Profitability Tracking)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS equity_points (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    timestamp TIMESTAMP NOT NULL,
+                    balance REAL NOT NULL,
+                    trade_id TEXT,
+                    is_high_water_mark BOOLEAN DEFAULT FALSE,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
+            # Knowledge Brain indexes
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_coin_scores_blacklisted
+                ON coin_scores(is_blacklisted)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_coin_scores_win_rate
+                ON coin_scores(win_rate)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_patterns_active
+                ON trading_patterns(is_active)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_patterns_confidence
+                ON trading_patterns(confidence)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_rules_active
+                ON regime_rules(is_active)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_adaptations_coin
+                ON coin_adaptations(coin)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_adaptations_timestamp
+                ON coin_adaptations(timestamp)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_reflections_timestamp
+                ON reflections(timestamp)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_adaptations_timestamp
+                ON adaptations(timestamp)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_adaptations_target
+                ON adaptations(target)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_adaptations_action
+                ON adaptations(action)
+            """)
+
+            # Profitability tracking indexes (TASK-141)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_snapshots_timeframe
+                ON profit_snapshots(timeframe, timestamp)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_snapshots_timestamp
+                ON profit_snapshots(timestamp)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_equity_timestamp
+                ON equity_points(timestamp)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_equity_hwm
+                ON equity_points(is_high_water_mark)
+            """)
+
             conn.commit()
             logger.info("All tables and indexes created successfully")
 
@@ -465,6 +687,56 @@ class Database:
             cursor.execute("""
                 SELECT * FROM activity_log
                 ORDER BY created_at DESC
+                LIMIT ?
+            """, (limit,))
+            return [dict(row) for row in cursor.fetchall()]
+
+    # ========== Reflections (TASK-131 Deep Reflection) ==========
+
+    def log_reflection(
+        self,
+        trades_analyzed: int,
+        period_hours: float,
+        insights: str,
+        summary: str,
+        total_time_ms: float,
+    ) -> int:
+        """Log a reflection result to the database.
+
+        Args:
+            trades_analyzed: Number of trades analyzed.
+            period_hours: Time period covered in hours.
+            insights: JSON string of insights.
+            summary: LLM-generated summary.
+            total_time_ms: Total reflection time in milliseconds.
+
+        Returns:
+            The ID of the inserted reflection.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO reflections
+                (timestamp, trades_analyzed, period_hours, insights, summary, total_time_ms)
+                VALUES (CURRENT_TIMESTAMP, ?, ?, ?, ?, ?)
+            """, (trades_analyzed, period_hours, insights, summary, total_time_ms))
+            conn.commit()
+            return cursor.lastrowid
+
+    def get_recent_reflections(self, limit: int = 10) -> List[Dict[str, Any]]:
+        """Get recent reflection results.
+
+        Args:
+            limit: Maximum number of reflections to return.
+
+        Returns:
+            List of reflection records as dictionaries.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM reflections
+                ORDER BY timestamp DESC
                 LIMIT ?
             """, (limit,))
             return [dict(row) for row in cursor.fetchall()]
@@ -629,6 +901,838 @@ class Database:
                     cond["additional_filters"] = json.loads(cond["additional_filters"])
                 conditions.append(cond)
             return conditions
+
+    # ========== Coin Scores (TASK-120 Knowledge Brain) ==========
+
+    def save_coin_score(self, score_data: Dict[str, Any]) -> None:
+        """Save or update a coin score.
+
+        Args:
+            score_data: Dictionary from CoinScore.to_dict()
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO coin_scores
+                (coin, total_trades, wins, losses, total_pnl, avg_pnl, win_rate,
+                 avg_winner, avg_loser, is_blacklisted, blacklist_reason, trend, last_updated)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                score_data["coin"],
+                score_data["total_trades"],
+                score_data["wins"],
+                score_data["losses"],
+                score_data["total_pnl"],
+                score_data["avg_pnl"],
+                score_data["win_rate"],
+                score_data["avg_winner"],
+                score_data["avg_loser"],
+                score_data["is_blacklisted"],
+                score_data["blacklist_reason"],
+                score_data["trend"],
+                score_data["last_updated"],
+            ))
+            conn.commit()
+
+    def get_coin_score(self, coin: str) -> Optional[Dict[str, Any]]:
+        """Get score for a specific coin.
+
+        Args:
+            coin: Coin symbol.
+
+        Returns:
+            Coin score dictionary or None if not found.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM coin_scores WHERE coin = ?", (coin,))
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
+    def get_all_coin_scores(self) -> List[Dict[str, Any]]:
+        """Get all coin scores.
+
+        Returns:
+            List of all coin score dictionaries.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM coin_scores ORDER BY total_pnl DESC")
+            return [dict(row) for row in cursor.fetchall()]
+
+    def get_blacklisted_coins(self) -> List[str]:
+        """Get list of blacklisted coin symbols.
+
+        Returns:
+            List of blacklisted coin symbols.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT coin FROM coin_scores WHERE is_blacklisted = TRUE")
+            return [row[0] for row in cursor.fetchall()]
+
+    def update_coin_blacklist(self, coin: str, is_blacklisted: bool, reason: str = "") -> None:
+        """Update blacklist status for a coin.
+
+        Args:
+            coin: Coin symbol.
+            is_blacklisted: Whether to blacklist.
+            reason: Reason for blacklisting (if applicable).
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE coin_scores
+                SET is_blacklisted = ?, blacklist_reason = ?, last_updated = CURRENT_TIMESTAMP
+                WHERE coin = ?
+            """, (is_blacklisted, reason, coin))
+            conn.commit()
+
+    # ========== Trading Patterns (TASK-120 Knowledge Brain) ==========
+
+    def save_pattern(self, pattern_data: Dict[str, Any]) -> None:
+        """Save or update a trading pattern.
+
+        Args:
+            pattern_data: Dictionary from TradingPattern.to_dict()
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO trading_patterns
+                (pattern_id, description, entry_conditions, exit_conditions,
+                 times_used, wins, losses, total_pnl, confidence, is_active,
+                 created_at, last_used)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                pattern_data["pattern_id"],
+                pattern_data["description"],
+                pattern_data["entry_conditions"],
+                pattern_data["exit_conditions"],
+                pattern_data["times_used"],
+                pattern_data["wins"],
+                pattern_data["losses"],
+                pattern_data["total_pnl"],
+                pattern_data["confidence"],
+                pattern_data["is_active"],
+                pattern_data["created_at"],
+                pattern_data["last_used"],
+            ))
+            conn.commit()
+
+    def get_pattern(self, pattern_id: str) -> Optional[Dict[str, Any]]:
+        """Get a trading pattern by ID.
+
+        Args:
+            pattern_id: Pattern ID.
+
+        Returns:
+            Pattern dictionary or None if not found.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM trading_patterns WHERE pattern_id = ?", (pattern_id,))
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
+    def get_active_patterns(self) -> List[Dict[str, Any]]:
+        """Get all active trading patterns.
+
+        Returns:
+            List of active pattern dictionaries.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM trading_patterns
+                WHERE is_active = TRUE
+                ORDER BY confidence DESC
+            """)
+            return [dict(row) for row in cursor.fetchall()]
+
+    def update_pattern_stats(self, pattern_id: str, won: bool, pnl: float) -> None:
+        """Update pattern statistics after a trade.
+
+        Args:
+            pattern_id: Pattern ID.
+            won: Whether the trade was a winner.
+            pnl: P&L from the trade.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE trading_patterns
+                SET times_used = times_used + 1,
+                    wins = wins + ?,
+                    losses = losses + ?,
+                    total_pnl = total_pnl + ?,
+                    last_used = CURRENT_TIMESTAMP
+                WHERE pattern_id = ?
+            """, (1 if won else 0, 0 if won else 1, pnl, pattern_id))
+            conn.commit()
+
+    def deactivate_pattern(self, pattern_id: str) -> None:
+        """Deactivate a pattern.
+
+        Args:
+            pattern_id: Pattern ID.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE trading_patterns
+                SET is_active = FALSE
+                WHERE pattern_id = ?
+            """, (pattern_id,))
+            conn.commit()
+
+    # ========== Regime Rules (TASK-120 Knowledge Brain) ==========
+
+    def save_rule(self, rule_data: Dict[str, Any]) -> None:
+        """Save or update a regime rule.
+
+        Args:
+            rule_data: Dictionary from RegimeRule.to_dict()
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO regime_rules
+                (rule_id, description, condition, action, times_triggered,
+                 estimated_saves, is_active, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                rule_data["rule_id"],
+                rule_data["description"],
+                rule_data["condition"],
+                rule_data["action"],
+                rule_data["times_triggered"],
+                rule_data["estimated_saves"],
+                rule_data["is_active"],
+                rule_data["created_at"],
+            ))
+            conn.commit()
+
+    def get_rule(self, rule_id: str) -> Optional[Dict[str, Any]]:
+        """Get a regime rule by ID.
+
+        Args:
+            rule_id: Rule ID.
+
+        Returns:
+            Rule dictionary or None if not found.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM regime_rules WHERE rule_id = ?", (rule_id,))
+            row = cursor.fetchone()
+            return dict(row) if row else None
+
+    def get_active_rules(self) -> List[Dict[str, Any]]:
+        """Get all active regime rules.
+
+        Returns:
+            List of active rule dictionaries.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM regime_rules
+                WHERE is_active = TRUE
+                ORDER BY created_at ASC
+            """)
+            return [dict(row) for row in cursor.fetchall()]
+
+    def update_rule_stats(self, rule_id: str, estimated_save: float = 0.0) -> None:
+        """Update rule statistics after it triggered.
+
+        Args:
+            rule_id: Rule ID.
+            estimated_save: Estimated P&L saved by following this rule.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE regime_rules
+                SET times_triggered = times_triggered + 1,
+                    estimated_saves = estimated_saves + ?
+                WHERE rule_id = ?
+            """, (estimated_save, rule_id))
+            conn.commit()
+
+    def deactivate_rule(self, rule_id: str) -> None:
+        """Deactivate a regime rule.
+
+        Args:
+            rule_id: Rule ID.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE regime_rules
+                SET is_active = FALSE
+                WHERE rule_id = ?
+            """, (rule_id,))
+            conn.commit()
+
+    # ========== Coin Adaptations (TASK-121 Coin Scoring) ==========
+
+    def save_coin_adaptation(self, adaptation_data: Dict[str, Any]) -> int:
+        """Save a coin adaptation record.
+
+        Args:
+            adaptation_data: Dictionary from CoinAdaptation.to_dict()
+
+        Returns:
+            ID of the inserted record.
+        """
+        import json
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO coin_adaptations
+                (coin, timestamp, old_status, new_status, reason, trigger_stats)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (
+                adaptation_data["coin"],
+                adaptation_data["timestamp"],
+                adaptation_data["old_status"],
+                adaptation_data["new_status"],
+                adaptation_data["reason"],
+                json.dumps(adaptation_data.get("trigger_stats", {})),
+            ))
+            conn.commit()
+            return cursor.lastrowid
+
+    def get_coin_adaptations(self, coin: Optional[str] = None, limit: int = 50) -> List[Dict[str, Any]]:
+        """Get coin adaptation history.
+
+        Args:
+            coin: Optional coin to filter by.
+            limit: Maximum number of records.
+
+        Returns:
+            List of adaptation records.
+        """
+        import json
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            if coin:
+                cursor.execute("""
+                    SELECT * FROM coin_adaptations
+                    WHERE coin = ?
+                    ORDER BY timestamp DESC
+                    LIMIT ?
+                """, (coin, limit))
+            else:
+                cursor.execute("""
+                    SELECT * FROM coin_adaptations
+                    ORDER BY timestamp DESC
+                    LIMIT ?
+                """, (limit,))
+
+            results = []
+            for row in cursor.fetchall():
+                record = dict(row)
+                if record.get("trigger_stats"):
+                    record["trigger_stats"] = json.loads(record["trigger_stats"])
+                results.append(record)
+            return results
+
+    def get_recent_adaptations(self, hours: int = 24) -> List[Dict[str, Any]]:
+        """Get adaptations from the last N hours.
+
+        Args:
+            hours: Number of hours to look back.
+
+        Returns:
+            List of recent adaptation records.
+        """
+        import json
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM coin_adaptations
+                WHERE timestamp > datetime('now', ? || ' hours')
+                ORDER BY timestamp DESC
+            """, (f"-{hours}",))
+
+            results = []
+            for row in cursor.fetchall():
+                record = dict(row)
+                if record.get("trigger_stats"):
+                    record["trigger_stats"] = json.loads(record["trigger_stats"])
+                results.append(record)
+            return results
+
+
+    # ========== Adaptations (TASK-133 Adaptation Application) ==========
+
+    def log_adaptation(
+        self,
+        adaptation_id: str,
+        insight_type: str,
+        action: str,
+        target: str,
+        description: str,
+        pre_metrics: str = "{}",
+        insight_confidence: float = 0.0,
+        insight_evidence: str = "{}",
+    ) -> int:
+        """Log an adaptation applied from an insight.
+
+        Args:
+            adaptation_id: Unique ID for this adaptation.
+            insight_type: Type of insight (coin, pattern, time, regime).
+            action: Action taken (blacklist, favor, create_rule, etc.).
+            target: Target of the action (coin symbol, rule_id, etc.).
+            description: Human-readable description.
+            pre_metrics: JSON string of pre-adaptation metrics.
+            insight_confidence: Confidence level of the insight.
+            insight_evidence: JSON string of insight evidence.
+
+        Returns:
+            The ID of the inserted adaptation.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO adaptations
+                (adaptation_id, insight_type, action, target, description,
+                 pre_metrics, insight_confidence, insight_evidence)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                adaptation_id,
+                insight_type,
+                action,
+                target,
+                description,
+                pre_metrics,
+                insight_confidence,
+                insight_evidence,
+            ))
+            conn.commit()
+            logger.info(f"Logged adaptation: [{action}] {target}")
+            return cursor.lastrowid
+
+    def get_adaptations(self, hours: int = 24, limit: int = 50) -> List[Dict[str, Any]]:
+        """Get recent adaptations from the adaptations table.
+
+        Args:
+            hours: Number of hours to look back (default 24).
+            limit: Maximum number of records to return.
+
+        Returns:
+            List of adaptation records as dictionaries.
+        """
+        import json
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM adaptations
+                WHERE timestamp > datetime('now', ? || ' hours')
+                ORDER BY timestamp DESC
+                LIMIT ?
+            """, (f"-{hours}", limit))
+
+            results = []
+            for row in cursor.fetchall():
+                record = dict(row)
+                # Parse JSON fields
+                if record.get("pre_metrics"):
+                    try:
+                        record["pre_metrics"] = json.loads(record["pre_metrics"])
+                    except json.JSONDecodeError:
+                        pass
+                if record.get("insight_evidence"):
+                    try:
+                        record["insight_evidence"] = json.loads(record["insight_evidence"])
+                    except json.JSONDecodeError:
+                        pass
+                if record.get("post_metrics"):
+                    try:
+                        record["post_metrics"] = json.loads(record["post_metrics"])
+                    except json.JSONDecodeError:
+                        pass
+                results.append(record)
+            return results
+
+    def get_adaptations_for_target(self, target: str, hours: int = 24) -> List[Dict[str, Any]]:
+        """Get recent adaptations for a specific target.
+
+        Args:
+            target: The target (coin symbol, rule_id, etc.).
+            hours: Number of hours to look back.
+
+        Returns:
+            List of adaptation records for this target.
+        """
+        import json
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM adaptations
+                WHERE target = ?
+                AND timestamp > datetime('now', ? || ' hours')
+                ORDER BY timestamp DESC
+            """, (target, f"-{hours}"))
+
+            results = []
+            for row in cursor.fetchall():
+                record = dict(row)
+                if record.get("pre_metrics"):
+                    try:
+                        record["pre_metrics"] = json.loads(record["pre_metrics"])
+                    except json.JSONDecodeError:
+                        pass
+                results.append(record)
+            return results
+
+    def update_adaptation_effectiveness(
+        self,
+        adaptation_id: str,
+        post_metrics: str,
+        effectiveness: str,
+        effectiveness_measured_at: datetime,
+    ) -> None:
+        """Update adaptation with effectiveness measurement.
+
+        Args:
+            adaptation_id: ID of the adaptation.
+            post_metrics: JSON string of post-adaptation metrics.
+            effectiveness: Effectiveness rating.
+            effectiveness_measured_at: When effectiveness was measured.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE adaptations
+                SET post_metrics = ?,
+                    effectiveness = ?,
+                    effectiveness_measured_at = ?
+                WHERE adaptation_id = ?
+            """, (
+                post_metrics,
+                effectiveness,
+                effectiveness_measured_at.isoformat() if isinstance(effectiveness_measured_at, datetime) else effectiveness_measured_at,
+                adaptation_id,
+            ))
+            conn.commit()
+            logger.debug(f"Updated effectiveness for adaptation {adaptation_id}: {effectiveness}")
+
+    def get_adaptations_by_effectiveness(
+        self,
+        effectiveness: str,
+        hours: int = 168,
+    ) -> List[Dict[str, Any]]:
+        """Get adaptations by effectiveness rating.
+
+        Args:
+            effectiveness: Effectiveness rating to filter by.
+            hours: Number of hours to look back.
+
+        Returns:
+            List of adaptation records with this effectiveness.
+        """
+        import json
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM adaptations
+                WHERE effectiveness = ?
+                AND timestamp > datetime('now', ? || ' hours')
+                ORDER BY effectiveness_measured_at DESC
+            """, (effectiveness, f"-{hours}"))
+
+            results = []
+            for row in cursor.fetchall():
+                record = dict(row)
+                # Parse JSON fields
+                for field in ["pre_metrics", "post_metrics", "insight_evidence"]:
+                    if record.get(field):
+                        try:
+                            record[field] = json.loads(record[field])
+                        except json.JSONDecodeError:
+                            pass
+                results.append(record)
+            return results
+
+    def get_unmeasured_adaptations(self, min_hours: int = 24) -> List[Dict[str, Any]]:
+        """Get adaptations that haven't been measured yet.
+
+        Args:
+            min_hours: Minimum hours since adaptation.
+
+        Returns:
+            List of unmeasured adaptation records.
+        """
+        import json
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM adaptations
+                WHERE effectiveness IS NULL
+                AND timestamp < datetime('now', ? || ' hours')
+                ORDER BY timestamp ASC
+            """, (f"-{min_hours}",))
+
+            results = []
+            for row in cursor.fetchall():
+                record = dict(row)
+                if record.get("pre_metrics"):
+                    try:
+                        record["pre_metrics"] = json.loads(record["pre_metrics"])
+                    except json.JSONDecodeError:
+                        pass
+                results.append(record)
+            return results
+
+    # ========== Runtime State (TASK-140 Full System Integration) ==========
+
+    def save_runtime_state(self, state: Dict[str, Any]) -> None:
+        """Save runtime state for restart recovery.
+
+        Args:
+            state: Dictionary of state to persist.
+        """
+        import json
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            for key, value in state.items():
+                value_json = json.dumps(value) if not isinstance(value, str) else value
+                cursor.execute("""
+                    INSERT OR REPLACE INTO runtime_state (key, value, updated_at)
+                    VALUES (?, ?, CURRENT_TIMESTAMP)
+                """, (key, value_json))
+            conn.commit()
+            logger.debug(f"Saved runtime state: {len(state)} keys")
+
+    def get_runtime_state(self) -> Dict[str, Any]:
+        """Load runtime state after restart.
+
+        Returns:
+            Dictionary of saved state.
+        """
+        import json
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT key, value FROM runtime_state")
+            rows = cursor.fetchall()
+
+            state = {}
+            for row in rows:
+                key = row[0]
+                value = row[1]
+                # Try to parse as JSON
+                try:
+                    state[key] = json.loads(value)
+                except json.JSONDecodeError:
+                    state[key] = value
+            return state
+
+    def clear_runtime_state(self) -> None:
+        """Clear all runtime state."""
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM runtime_state")
+            conn.commit()
+            logger.debug("Cleared runtime state")
+
+    # ========== Profit Snapshots (TASK-141 Profitability Tracking) ==========
+
+    def save_profit_snapshot(self, snapshot: Dict[str, Any]) -> int:
+        """Save a profitability snapshot.
+
+        Args:
+            snapshot: Dictionary from ProfitSnapshot.to_dict()
+
+        Returns:
+            The ID of the inserted snapshot.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO profit_snapshots
+                (timestamp, timeframe, total_pnl, realized_pnl, unrealized_pnl,
+                 total_trades, winning_trades, losing_trades, win_rate,
+                 avg_win, avg_loss, profit_factor, max_drawdown, max_drawdown_pct,
+                 sharpe_ratio, starting_balance, ending_balance, return_pct)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                snapshot["timestamp"],
+                snapshot["timeframe"],
+                snapshot["total_pnl"],
+                snapshot["realized_pnl"],
+                snapshot.get("unrealized_pnl", 0),
+                snapshot["total_trades"],
+                snapshot["winning_trades"],
+                snapshot["losing_trades"],
+                snapshot["win_rate"],
+                snapshot.get("avg_win"),
+                snapshot.get("avg_loss"),
+                snapshot.get("profit_factor"),
+                snapshot.get("max_drawdown"),
+                snapshot.get("max_drawdown_pct"),
+                snapshot.get("sharpe_ratio"),
+                snapshot.get("starting_balance"),
+                snapshot.get("ending_balance"),
+                snapshot.get("return_pct"),
+            ))
+            conn.commit()
+            logger.debug(f"Saved profit snapshot ({snapshot['timeframe']})")
+            return cursor.lastrowid
+
+    def get_profit_snapshots(
+        self,
+        timeframe: Optional[str] = None,
+        start: Optional[datetime] = None,
+        end: Optional[datetime] = None,
+        limit: int = 100,
+    ) -> List[Dict[str, Any]]:
+        """Get profitability snapshots.
+
+        Args:
+            timeframe: Filter by timeframe (hour, day, week, month, all_time).
+            start: Start of date range.
+            end: End of date range.
+            limit: Maximum number of snapshots to return.
+
+        Returns:
+            List of snapshot dictionaries.
+        """
+        where_parts = ["1=1"]
+        params = []
+
+        if timeframe:
+            where_parts.append("timeframe = ?")
+            params.append(timeframe)
+
+        if start:
+            where_parts.append("timestamp >= ?")
+            params.append(start.isoformat() if isinstance(start, datetime) else start)
+
+        if end:
+            where_parts.append("timestamp <= ?")
+            params.append(end.isoformat() if isinstance(end, datetime) else end)
+
+        where = " AND ".join(where_parts)
+
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(f"""
+                SELECT * FROM profit_snapshots
+                WHERE {where}
+                ORDER BY timestamp DESC
+                LIMIT ?
+            """, params + [limit])
+            return [dict(row) for row in cursor.fetchall()]
+
+    def delete_old_snapshots(self, timeframe: str, cutoff: datetime) -> int:
+        """Delete snapshots older than cutoff.
+
+        Args:
+            timeframe: Timeframe to delete from.
+            cutoff: Delete snapshots before this time.
+
+        Returns:
+            Number of snapshots deleted.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                DELETE FROM profit_snapshots
+                WHERE timeframe = ?
+                AND timestamp < ?
+            """, (timeframe, cutoff.isoformat()))
+            deleted = cursor.rowcount
+            conn.commit()
+            if deleted > 0:
+                logger.debug(f"Deleted {deleted} old {timeframe} snapshots")
+            return deleted
+
+    # ========== Equity Points (TASK-141 Profitability Tracking) ==========
+
+    def save_equity_point(self, point: Dict[str, Any]) -> int:
+        """Save an equity point.
+
+        Args:
+            point: Dictionary with timestamp, balance, trade_id, is_high_water_mark.
+
+        Returns:
+            The ID of the inserted point.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO equity_points
+                (timestamp, balance, trade_id, is_high_water_mark)
+                VALUES (?, ?, ?, ?)
+            """, (
+                point["timestamp"],
+                point["balance"],
+                point.get("trade_id"),
+                point.get("is_high_water_mark", False),
+            ))
+            conn.commit()
+            return cursor.lastrowid
+
+    def get_equity_curve(
+        self,
+        start: Optional[datetime] = None,
+        end: Optional[datetime] = None,
+        limit: int = 1000,
+    ) -> List[Dict[str, Any]]:
+        """Get equity curve data.
+
+        Args:
+            start: Start of date range.
+            end: End of date range.
+            limit: Maximum number of points to return.
+
+        Returns:
+            List of equity point dictionaries.
+        """
+        where_parts = ["1=1"]
+        params = []
+
+        if start:
+            where_parts.append("timestamp >= ?")
+            params.append(start.isoformat() if isinstance(start, datetime) else start)
+
+        if end:
+            where_parts.append("timestamp <= ?")
+            params.append(end.isoformat() if isinstance(end, datetime) else end)
+
+        where = " AND ".join(where_parts)
+
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(f"""
+                SELECT * FROM equity_points
+                WHERE {where}
+                ORDER BY timestamp ASC
+                LIMIT ?
+            """, params + [limit])
+            return [dict(row) for row in cursor.fetchall()]
+
+    def get_high_water_marks(self, limit: int = 100) -> List[Dict[str, Any]]:
+        """Get all high water mark points.
+
+        Args:
+            limit: Maximum number of points to return.
+
+        Returns:
+            List of high water mark equity points.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM equity_points
+                WHERE is_high_water_mark = TRUE
+                ORDER BY timestamp DESC
+                LIMIT ?
+            """, (limit,))
+            return [dict(row) for row in cursor.fetchall()]
 
 
 # Allow running directly to initialize database

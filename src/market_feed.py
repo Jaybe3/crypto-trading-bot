@@ -624,6 +624,44 @@ class MarketFeed:
             )
         }
 
+    def get_health(self) -> dict:
+        """Get component health status for monitoring.
+
+        Returns:
+            Dict with status (healthy/degraded/failed), last_activity, error_count, metrics.
+        """
+        now = time.time()
+        last_msg_age = (
+            now - self.status.last_message_time
+            if self.status.last_message_time else None
+        )
+
+        # Determine health status
+        if not self.status.connected:
+            status = "failed"
+        elif last_msg_age is None or last_msg_age > 10:
+            status = "degraded"
+        elif last_msg_age > 5:
+            status = "degraded"
+        else:
+            status = "healthy"
+
+        return {
+            "status": status,
+            "last_activity": datetime.fromtimestamp(
+                self.status.last_message_time
+            ).isoformat() if self.status.last_message_time else None,
+            "error_count": self.status.errors,
+            "metrics": {
+                "connected": self.status.connected,
+                "exchange": self.status.exchange,
+                "messages_received": self.status.messages_received,
+                "reconnect_count": self.status.reconnect_count,
+                "last_message_age_seconds": round(last_msg_age, 2) if last_msg_age else None,
+                "coins_with_prices": len(self.current_prices),
+            }
+        }
+
 
 async def test_feed(coins: list[str] = ['BTC', 'ETH', 'SOL'], duration: int = 30, exchange: str = 'bybit'):
     """Test the market feed."""

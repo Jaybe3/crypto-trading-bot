@@ -1,0 +1,496 @@
+{% extends "base.html" %}
+
+{% block title %}Manual Overrides - Trading Dashboard{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="bg-slate-800 rounded-lg p-4">
+        <h1 class="text-xl font-bold text-cyan-400">Manual Overrides</h1>
+        <p class="text-gray-400 text-sm mt-1">Paper trading controls - override system decisions</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Coin Controls -->
+        <div class="bg-slate-800 rounded-lg p-6">
+            <h2 class="text-lg font-semibold mb-4">Coin Controls</h2>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="text-gray-400 text-sm">Coin Symbol</label>
+                    <input type="text" id="coin-input" placeholder="e.g., DOGE"
+                           class="w-full mt-1 bg-slate-700 rounded px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                </div>
+
+                <div>
+                    <label class="text-gray-400 text-sm">Reason (optional)</label>
+                    <input type="text" id="coin-reason" placeholder="Why are you making this change?"
+                           class="w-full mt-1 bg-slate-700 rounded px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                </div>
+
+                <div class="flex space-x-2">
+                    <button onclick="blacklistCoin()" class="flex-1 px-4 py-2 bg-red-800 hover:bg-red-700 rounded text-red-200">
+                        Blacklist
+                    </button>
+                    <button onclick="unblacklistCoin()" class="flex-1 px-4 py-2 bg-green-800 hover:bg-green-700 rounded text-green-200">
+                        Unblacklist
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-slate-700">
+                <h3 class="text-sm font-semibold text-gray-400 mb-2">Current Blacklist</h3>
+                <div id="blacklist-quick" class="flex flex-wrap gap-2">
+                    Loading...
+                </div>
+            </div>
+        </div>
+
+        <!-- Pattern Controls -->
+        <div class="bg-slate-800 rounded-lg p-6">
+            <h2 class="text-lg font-semibold mb-4">Pattern Controls</h2>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="text-gray-400 text-sm">Pattern ID</label>
+                    <select id="pattern-select" class="w-full mt-1 bg-slate-700 rounded px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                        <option value="">Select a pattern...</option>
+                    </select>
+                </div>
+
+                <div class="flex space-x-2">
+                    <button onclick="disablePattern()" class="flex-1 px-4 py-2 bg-yellow-800 hover:bg-yellow-700 rounded text-yellow-200">
+                        Disable Pattern
+                    </button>
+                    <button onclick="enablePattern()" class="flex-1 px-4 py-2 bg-green-800 hover:bg-green-700 rounded text-green-200">
+                        Enable Pattern
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rule Controls -->
+        <div class="bg-slate-800 rounded-lg p-6">
+            <h2 class="text-lg font-semibold mb-4">Rule Controls</h2>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="text-gray-400 text-sm">Rule ID</label>
+                    <select id="rule-select" class="w-full mt-1 bg-slate-700 rounded px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                        <option value="">Select a rule...</option>
+                    </select>
+                </div>
+
+                <button onclick="deactivateRule()" class="w-full px-4 py-2 bg-yellow-800 hover:bg-yellow-700 rounded text-yellow-200">
+                    Deactivate Rule
+                </button>
+            </div>
+        </div>
+
+        <!-- System Controls -->
+        <div class="bg-slate-800 rounded-lg p-6">
+            <h2 class="text-lg font-semibold mb-4">System Controls</h2>
+
+            <div class="space-y-4">
+                <div class="flex space-x-2">
+                    <button onclick="triggerReflection()" class="flex-1 px-4 py-2 bg-cyan-800 hover:bg-cyan-700 rounded text-cyan-200">
+                        Trigger Reflection
+                    </button>
+                </div>
+
+                <div class="flex space-x-2">
+                    <button onclick="pauseTrading()" class="flex-1 px-4 py-2 bg-red-800 hover:bg-red-700 rounded text-red-200">
+                        Pause Trading
+                    </button>
+                    <button onclick="resumeTrading()" class="flex-1 px-4 py-2 bg-green-800 hover:bg-green-700 rounded text-green-200">
+                        Resume Trading
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adaptation Rollback -->
+    <div class="bg-slate-800 rounded-lg p-6">
+        <h2 class="text-lg font-semibold mb-4">Adaptation Rollback</h2>
+        <p class="text-gray-400 text-sm mb-4">Harmful adaptations available for rollback:</p>
+
+        <div id="harmful-adaptations" class="space-y-3">
+            <div class="text-gray-500 text-center py-4">Loading harmful adaptations...</div>
+        </div>
+    </div>
+
+    <!-- Session Notes -->
+    <div class="bg-slate-800 rounded-lg p-6">
+        <h2 class="text-lg font-semibold mb-4">Session Notes</h2>
+
+        <div class="space-y-4">
+            <div>
+                <textarea id="note-input" rows="3" placeholder="Add a note about current session..."
+                          class="w-full bg-slate-700 rounded px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"></textarea>
+            </div>
+
+            <button onclick="addNote()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded text-white">
+                Save Note
+            </button>
+        </div>
+
+        <div class="mt-4 pt-4 border-t border-slate-700">
+            <h3 class="text-sm font-semibold text-gray-400 mb-2">Recent Notes</h3>
+            <div id="notes-list" class="space-y-2 max-h-48 overflow-y-auto">
+                <div class="text-gray-500 text-sm">No notes yet</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Log -->
+    <div class="bg-slate-800 rounded-lg p-6">
+        <h2 class="text-lg font-semibold mb-4">Action Log</h2>
+        <div id="action-log" class="space-y-2 max-h-48 overflow-y-auto font-mono text-sm">
+            <div class="text-gray-500">Actions will appear here...</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    let actionLog = [];
+
+    function logAction(action, result) {
+        const timestamp = new Date().toLocaleTimeString();
+        const status = result.success ? 'OK' : 'FAIL';
+        const statusClass = result.success ? 'text-green-400' : 'text-red-400';
+        const message = result.message || result.error || JSON.stringify(result);
+
+        actionLog.unshift({timestamp, action, status, statusClass, message});
+        if (actionLog.length > 20) actionLog.pop();
+
+        renderActionLog();
+    }
+
+    function renderActionLog() {
+        const html = actionLog.map(l => `
+            <div class="flex items-start space-x-2">
+                <span class="text-gray-500">[${l.timestamp}]</span>
+                <span class="${l.statusClass}">[${l.status}]</span>
+                <span class="text-gray-300">${l.action}: ${l.message}</span>
+            </div>
+        `).join('');
+
+        document.getElementById('action-log').innerHTML = html || '<div class="text-gray-500">Actions will appear here...</div>';
+    }
+
+    async function blacklistCoin() {
+        const coin = document.getElementById('coin-input').value.trim().toUpperCase();
+        const reason = document.getElementById('coin-reason').value.trim() || 'Manual override';
+
+        if (!coin) {
+            alert('Please enter a coin symbol');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/override/blacklist', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({coin, reason})
+            });
+            const data = await res.json();
+            logAction(`Blacklist ${coin}`, data);
+            if (data.success) {
+                document.getElementById('coin-input').value = '';
+                document.getElementById('coin-reason').value = '';
+                loadQuickBlacklist();
+            }
+        } catch (e) {
+            logAction(`Blacklist ${coin}`, {success: false, error: e.message});
+        }
+    }
+
+    async function unblacklistCoin() {
+        const coin = document.getElementById('coin-input').value.trim().toUpperCase();
+
+        if (!coin) {
+            alert('Please enter a coin symbol');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/override/unblacklist', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({coin})
+            });
+            const data = await res.json();
+            logAction(`Unblacklist ${coin}`, data);
+            if (data.success) {
+                document.getElementById('coin-input').value = '';
+                loadQuickBlacklist();
+            }
+        } catch (e) {
+            logAction(`Unblacklist ${coin}`, {success: false, error: e.message});
+        }
+    }
+
+    async function disablePattern() {
+        const patternId = document.getElementById('pattern-select').value;
+
+        if (!patternId) {
+            alert('Please select a pattern');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/override/disable-pattern', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({pattern_id: patternId})
+            });
+            const data = await res.json();
+            logAction(`Disable pattern ${patternId}`, data);
+            if (data.success) loadPatterns();
+        } catch (e) {
+            logAction(`Disable pattern ${patternId}`, {success: false, error: e.message});
+        }
+    }
+
+    async function enablePattern() {
+        const patternId = document.getElementById('pattern-select').value;
+
+        if (!patternId) {
+            alert('Please select a pattern');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/override/enable-pattern', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({pattern_id: patternId})
+            });
+            const data = await res.json();
+            logAction(`Enable pattern ${patternId}`, data);
+            if (data.success) loadPatterns();
+        } catch (e) {
+            logAction(`Enable pattern ${patternId}`, {success: false, error: e.message});
+        }
+    }
+
+    async function deactivateRule() {
+        const ruleId = document.getElementById('rule-select').value;
+
+        if (!ruleId) {
+            alert('Please select a rule');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/override/deactivate-rule', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({rule_id: ruleId})
+            });
+            const data = await res.json();
+            logAction(`Deactivate rule ${ruleId}`, data);
+            if (data.success) loadRules();
+        } catch (e) {
+            logAction(`Deactivate rule ${ruleId}`, {success: false, error: e.message});
+        }
+    }
+
+    async function triggerReflection() {
+        try {
+            const res = await fetch('/api/override/trigger-reflection', {method: 'POST'});
+            const data = await res.json();
+            logAction('Trigger reflection', data);
+        } catch (e) {
+            logAction('Trigger reflection', {success: false, error: e.message});
+        }
+    }
+
+    async function pauseTrading() {
+        if (!confirm('Are you sure you want to pause trading?')) return;
+
+        try {
+            const res = await fetch('/api/override/pause', {method: 'POST'});
+            const data = await res.json();
+            logAction('Pause trading', data);
+        } catch (e) {
+            logAction('Pause trading', {success: false, error: e.message});
+        }
+    }
+
+    async function resumeTrading() {
+        try {
+            const res = await fetch('/api/override/resume', {method: 'POST'});
+            const data = await res.json();
+            logAction('Resume trading', data);
+        } catch (e) {
+            logAction('Resume trading', {success: false, error: e.message});
+        }
+    }
+
+    async function rollbackAdaptation(adaptationId) {
+        if (!confirm('Are you sure you want to rollback this adaptation?')) return;
+
+        try {
+            const res = await fetch('/api/override/rollback', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({adaptation_id: adaptationId})
+            });
+            const data = await res.json();
+            logAction(`Rollback adaptation ${adaptationId}`, data);
+            if (data.success) loadHarmfulAdaptations();
+        } catch (e) {
+            logAction(`Rollback adaptation ${adaptationId}`, {success: false, error: e.message});
+        }
+    }
+
+    async function addNote() {
+        const content = document.getElementById('note-input').value.trim();
+
+        if (!content) {
+            alert('Please enter a note');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/notes', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({content})
+            });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('note-input').value = '';
+                loadNotes();
+            }
+        } catch (e) {
+            alert('Failed to save note: ' + e.message);
+        }
+    }
+
+    async function loadQuickBlacklist() {
+        try {
+            const res = await fetch('/api/knowledge/blacklist');
+            const data = await res.json();
+
+            if (!data.coins || data.coins.length === 0) {
+                document.getElementById('blacklist-quick').innerHTML = '<span class="text-gray-500">No coins blacklisted</span>';
+                return;
+            }
+
+            const html = data.coins.map(c => {
+                const coin = typeof c === 'string' ? c : (c.coin || c.symbol || 'Unknown');
+                return `<span class="px-2 py-1 bg-red-900 text-red-300 rounded text-sm">${coin}</span>`;
+            }).join('');
+
+            document.getElementById('blacklist-quick').innerHTML = html;
+        } catch (e) {
+            document.getElementById('blacklist-quick').innerHTML = '<span class="text-red-400">Failed to load</span>';
+        }
+    }
+
+    async function loadPatterns() {
+        try {
+            const res = await fetch('/api/knowledge/patterns');
+            const data = await res.json();
+
+            const select = document.getElementById('pattern-select');
+            select.innerHTML = '<option value="">Select a pattern...</option>';
+
+            for (const p of (data.patterns || [])) {
+                const id = p.pattern_id || p.name || 'unknown';
+                const status = p.is_active !== false ? '' : ' (inactive)';
+                select.innerHTML += `<option value="${id}">${id}${status}</option>`;
+            }
+        } catch (e) {
+            console.error('Failed to load patterns:', e);
+        }
+    }
+
+    async function loadRules() {
+        try {
+            const res = await fetch('/api/knowledge/rules');
+            const data = await res.json();
+
+            const select = document.getElementById('rule-select');
+            select.innerHTML = '<option value="">Select a rule...</option>';
+
+            for (const r of (data.rules || [])) {
+                const id = r.rule_id || 'unknown';
+                const status = r.is_active !== false ? '' : ' (inactive)';
+                select.innerHTML += `<option value="${id}">${id}${status}</option>`;
+            }
+        } catch (e) {
+            console.error('Failed to load rules:', e);
+        }
+    }
+
+    async function loadHarmfulAdaptations() {
+        try {
+            const res = await fetch('/api/adaptations?limit=20');
+            const data = await res.json();
+
+            const harmful = (data.adaptations || []).filter(a =>
+                (a.effectiveness_rating || '').toLowerCase() === 'harmful'
+            );
+
+            if (harmful.length === 0) {
+                document.getElementById('harmful-adaptations').innerHTML = '<div class="text-gray-500 text-center py-4">No harmful adaptations found</div>';
+                return;
+            }
+
+            const html = harmful.map(a => `
+                <div class="bg-slate-700 rounded-lg p-4 border-l-4 border-red-500 flex justify-between items-center">
+                    <div>
+                        <span class="font-semibold">${a.action || 'Unknown'}</span>
+                        <span class="text-gray-400 ml-2">${a.target || ''}</span>
+                        <div class="text-sm text-gray-400 mt-1">${a.relative_time || a.applied_at || 'Unknown time'}</div>
+                    </div>
+                    <button onclick="rollbackAdaptation('${a.adaptation_id || a.id}')"
+                            class="px-3 py-1 bg-red-800 hover:bg-red-700 rounded text-red-200 text-sm">
+                        Rollback
+                    </button>
+                </div>
+            `).join('');
+
+            document.getElementById('harmful-adaptations').innerHTML = html;
+        } catch (e) {
+            document.getElementById('harmful-adaptations').innerHTML = '<div class="text-red-400 text-center py-4">Failed to load</div>';
+        }
+    }
+
+    async function loadNotes() {
+        try {
+            const res = await fetch('/api/notes');
+            const data = await res.json();
+
+            if (!data.notes || data.notes.length === 0) {
+                document.getElementById('notes-list').innerHTML = '<div class="text-gray-500 text-sm">No notes yet</div>';
+                return;
+            }
+
+            const html = data.notes.map(n => `
+                <div class="bg-slate-700 rounded p-2">
+                    <div class="text-xs text-gray-500">${new Date(n.timestamp).toLocaleString()}</div>
+                    <div class="text-sm text-gray-300 mt-1">${n.content}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('notes-list').innerHTML = html;
+        } catch (e) {
+            console.error('Failed to load notes:', e);
+        }
+    }
+
+    // Initial load
+    loadQuickBlacklist();
+    loadPatterns();
+    loadRules();
+    loadHarmfulAdaptations();
+    loadNotes();
+</script>
+{% endblock %}

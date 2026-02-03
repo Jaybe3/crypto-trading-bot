@@ -59,6 +59,8 @@ class Strategist:
         llm: LLMInterface,
         market_feed: MarketFeed,
         knowledge: Optional[Any] = None,  # KnowledgeBrain when available
+        coin_scorer: Optional[Any] = None,  # CoinScorer for position modifiers
+        pattern_library: Optional[Any] = None,  # PatternLibrary for pattern context
         db: Optional[Database] = None,
         interval_seconds: int = DEFAULT_INTERVAL_SECONDS,
         condition_ttl_minutes: int = DEFAULT_CONDITION_TTL_MINUTES,
@@ -70,6 +72,8 @@ class Strategist:
             llm: LLM interface for querying the model.
             market_feed: MarketFeed instance for price data.
             knowledge: Optional KnowledgeBrain for learned rules/patterns.
+            coin_scorer: Optional CoinScorer for position modifiers and blacklist.
+            pattern_library: Optional PatternLibrary for pattern context.
             db: Optional Database instance (creates new if not provided).
             interval_seconds: Seconds between condition generation (default: 180).
             condition_ttl_minutes: Minutes until conditions expire (default: 5).
@@ -78,6 +82,8 @@ class Strategist:
         self.llm = llm
         self.market = market_feed
         self.knowledge = knowledge
+        self.coin_scorer = coin_scorer  # TASK-121: for position modifiers and blacklist
+        self.pattern_library = pattern_library  # TASK-122: for pattern context
         self.db = db or Database()
         self.interval = interval_seconds
         self.condition_ttl = condition_ttl_minutes
@@ -177,6 +183,17 @@ class Strategist:
         # Clean up expired conditions first
         self._remove_expired_conditions()
         self.db.delete_expired_conditions()
+
+        # TASK-123: Check regime rules first
+        self._active_rule_actions = self._check_regime_rules()
+        if "NO_TRADE" in self._active_rule_actions:
+            logger.info("NO_TRADE regime rule triggered - skipping generation")
+            self.db.log_activity(
+                activity_type="strategist",
+                description="Skipped generation due to NO_TRADE regime rule",
+                details=json.dumps({"triggered_actions": self._active_rule_actions})
+            )
+            return []
 
         # Build context for LLM
         context = self._build_context()
@@ -287,35 +304,176 @@ class Strategist:
         }
 
     def _get_knowledge(self) -> Dict[str, Any]:
-        """Get trading knowledge (simplified until Knowledge Brain is ready).
+        """Get comprehensive trading knowledge for prompt.
 
         Returns:
-            Knowledge dict with rules, patterns, and coin preferences.
+            Knowledge dict with full context for LLM.
         """
         if self.knowledge:
-            # Use Knowledge Brain when available
+            # Get coin performance summaries
+            coin_summaries = []
+            for score in self.knowledge.get_all_coin_scores()[:10]:
+                status = self._get_coin_status_label(score)
+                summary = {
+                    "coin": score.coin,
+                    "status": status,
+                    "trades": score.total_trades,
+                    "win_rate": f"{score.win_rate:.0%}",
+                    "pnl": f"${score.total_pnl:.2f}",
+                    "trend": score.trend,
+                }
+                coin_summaries.append(summary)
+
+            # Get active regime rules with descriptions
+            active_rules = []
+            for rule in self.knowledge.get_active_rules():
+                active_rules.append({
+                    "description": rule.description,
+                    "action": rule.action,
+                    "times_triggered": rule.times_triggered,
+                })
+
+            # Get bad coins (poor performers not yet blacklisted)
+            bad_coins = self.knowledge.get_bad_coins()
+
             return {
                 "good_coins": self.knowledge.get_good_coins(),
-                "avoid_coins": self.knowledge.get_blacklisted_coins(),
-                "active_rules": self.knowledge.get_active_rules(),
-                "winning_patterns": self.knowledge.get_winning_patterns(),
+                "avoid_coins": self.knowledge.get_blacklisted_coins() + bad_coins,
+                "blacklisted": self.knowledge.get_blacklisted_coins(),
+                "coin_summaries": coin_summaries,
+                "active_rules": active_rules,
+                "winning_patterns": [p.description for p in self.knowledge.get_winning_patterns()],
+                "blacklist_count": len(self.knowledge.get_blacklisted_coins()),
             }
 
-        # Simplified fallback
+        # Simplified fallback when no knowledge brain
         return {
-            "good_coins": ["SOL", "ETH", "BTC", "XRP", "DOGE"],
+            "good_coins": [],
             "avoid_coins": [],
-            "active_rules": [
-                {"id": 1, "rule": "Position size must be $20-$100"},
-                {"id": 2, "rule": "Stop loss should be 1-3%"},
-                {"id": 3, "rule": "Take profit should be 1-2%"},
-            ],
-            "winning_patterns": [
-                "Momentum breakout - enter when price breaks above recent high with volume",
-                "Support bounce - enter on pullback to support level in uptrend",
-                "Dip buy - enter when strong coin drops 2-3% quickly",
-            ],
+            "blacklisted": [],
+            "coin_summaries": [],
+            "active_rules": [],
+            "winning_patterns": [],
+            "blacklist_count": 0,
         }
+
+    def _get_coin_status_label(self, score) -> str:
+        """Get human-readable status label for a coin score."""
+        if score.is_blacklisted:
+            return "BLACKLISTED"
+        if score.total_trades < 5:
+            return "NEW"
+        if score.win_rate >= 0.60 and score.total_pnl > 0:
+            return "FAVORED"
+        if score.win_rate < 0.45:
+            return "REDUCED"
+        return "NORMAL"
+
+    def _get_market_state_for_rules(self) -> Dict[str, Any]:
+        """Build market state dict for regime rule checking.
+
+        Returns:
+            Dict with conditions that rules can check against.
+        """
+        state = {}
+
+        # BTC trend and price
+        btc_tick = self.market.get_latest_tick("BTC")
+        if btc_tick:
+            state["btc_price"] = btc_tick.price
+            state["btc_change_24h"] = btc_tick.change_24h
+            # Determine trend
+            if btc_tick.change_24h > 2:
+                state["btc_trend"] = "up"
+            elif btc_tick.change_24h < -2:
+                state["btc_trend"] = "down"
+            else:
+                state["btc_trend"] = "sideways"
+
+        # Time of day
+        now = datetime.now()
+        state["hour_of_day"] = now.hour
+        state["day_of_week"] = now.weekday()
+        state["is_weekend"] = now.weekday() >= 5
+
+        # Session
+        if 0 <= now.hour < 8:
+            state["session"] = "asia"
+        elif 8 <= now.hour < 14:
+            state["session"] = "europe"
+        elif 14 <= now.hour < 21:
+            state["session"] = "us"
+        else:
+            state["session"] = "late_us"
+
+        return state
+
+    def _check_regime_rules(self) -> List[str]:
+        """Check regime rules and return triggered actions.
+
+        Returns:
+            List of actions from triggered rules (e.g., ["NO_TRADE", "REDUCE_SIZE"]).
+        """
+        if not self.knowledge:
+            return []
+
+        market_state = self._get_market_state_for_rules()
+        actions = self.knowledge.check_rules(market_state)
+
+        if actions:
+            logger.info(f"Regime rules triggered: {actions}")
+
+        return actions
+
+    def _calculate_final_position_size(
+        self,
+        base_size: float,
+        coin: str,
+        pattern_id: Optional[str] = None
+    ) -> float:
+        """Calculate final position size with all modifiers.
+
+        Combines:
+        - Coin score modifier (0.0 - 1.5)
+        - Pattern confidence modifier (0.75 - 1.25)
+        - Regime rule modifier (0.5 for REDUCE_SIZE)
+
+        Args:
+            base_size: Base position size in USD.
+            coin: Coin symbol.
+            pattern_id: Optional pattern ID if using a known pattern.
+
+        Returns:
+            Final position size in USD.
+        """
+        size = base_size
+
+        # 1. Coin score modifier
+        if self.coin_scorer:
+            coin_modifier = self.coin_scorer.get_position_modifier(coin)
+            if coin_modifier == 0.0:
+                return 0.0  # Blacklisted
+            size *= coin_modifier
+            if coin_modifier != 1.0:
+                logger.debug(f"Coin modifier for {coin}: {coin_modifier}")
+
+        # 2. Pattern confidence modifier
+        if pattern_id and self.pattern_library:
+            pattern_modifier = self.pattern_library.get_position_modifier(pattern_id)
+            size *= pattern_modifier
+            if pattern_modifier != 1.0:
+                logger.debug(f"Pattern modifier for {pattern_id}: {pattern_modifier}")
+
+        # 3. Regime rule modifier
+        if hasattr(self, '_active_rule_actions') and self._active_rule_actions:
+            if "REDUCE_SIZE" in self._active_rule_actions:
+                size *= 0.5
+                logger.debug("Regime REDUCE_SIZE modifier: 0.5")
+
+        # Enforce limits
+        size = max(DEFAULT_MIN_POSITION_SIZE, min(DEFAULT_MAX_POSITION_SIZE, size))
+
+        return round(size, 2)
 
     def _get_recent_performance(self) -> Dict[str, Any]:
         """Get recent trading performance metrics.
@@ -403,15 +561,59 @@ Think about:
 
         prices_text = "\n".join(price_lines) if price_lines else "  No price data"
 
+        # Format coin performance summaries
+        coin_summary_text = "  No history yet"
+        if knowledge.get("coin_summaries"):
+            lines = []
+            for cs in knowledge["coin_summaries"][:5]:
+                lines.append(
+                    f"  {cs['coin']}: {cs['status']} | {cs['trades']} trades | "
+                    f"{cs['win_rate']} win | {cs['pnl']} P&L | {cs['trend']}"
+                )
+            if lines:
+                coin_summary_text = "\n".join(lines)
+
+        # Format regime rules
+        rules_text = "  None active"
+        if knowledge.get("active_rules"):
+            rules = knowledge["active_rules"]
+            rules_text = "\n".join(
+                f"  - {r['description']} -> {r['action']}" for r in rules
+            )
+
+        # Build pattern section if pattern library available
+        pattern_section = ""
+        if self.pattern_library:
+            pattern_context = self.pattern_library.get_pattern_context()
+            if pattern_context["high_confidence"]:
+                high_patterns = [
+                    f"  - {p.description} ({p.confidence:.0%} conf, {p.win_rate:.0%} win rate)"
+                    for p in pattern_context["high_confidence"][:5]
+                ]
+                pattern_section = f"""
+HIGH-CONFIDENCE PATTERNS (consider using these):
+{chr(10).join(high_patterns)}
+"""
+
+        # Format winning patterns
+        patterns_list = "None identified"
+        if knowledge.get("winning_patterns"):
+            patterns_list = ", ".join(knowledge["winning_patterns"][:5])
+
         return f"""CURRENT MARKET STATE:
 {prices_text}
 
-YOUR LEARNED KNOWLEDGE:
-- Coins that work well: {', '.join(knowledge['good_coins'])}
-- Coins to AVOID: {', '.join(knowledge['avoid_coins']) if knowledge['avoid_coins'] else 'None'}
-- Active rules: {json.dumps(knowledge['active_rules'], indent=2)}
-- Winning patterns: {json.dumps(knowledge['winning_patterns'], indent=2)}
+COIN PERFORMANCE (your track record):
+{coin_summary_text}
 
+COINS TO FAVOR: {', '.join(knowledge['good_coins']) or 'None identified'}
+COINS TO AVOID: {', '.join(knowledge['avoid_coins']) or 'None blacklisted'}
+
+ACTIVE REGIME RULES:
+{rules_text}
+
+WINNING PATTERNS: {patterns_list}
+{pattern_section}
 ACCOUNT STATE:
 - Balance: ${account['balance_usd']:,.2f}
 - Available: ${account['available_balance']:,.2f}
@@ -423,6 +625,7 @@ RECENT PERFORMANCE:
 
 Based on this data, generate 0-3 specific trade conditions.
 Set trigger prices that are realistic (near current prices).
+If using a known pattern, include pattern_id in your response.
 Respond with JSON only - no other text."""
 
     def _parse_response(self, response: str) -> List[TradeCondition]:
@@ -492,6 +695,24 @@ Respond with JSON only - no other text."""
         Returns:
             True if condition is valid.
         """
+        # TASK-121: Check if coin is blacklisted
+        if self.coin_scorer:
+            from src.coin_scorer import CoinStatus
+            status = self.coin_scorer.get_coin_status(condition.coin)
+            if status == CoinStatus.BLACKLISTED:
+                logger.info(f"Skipping {condition.coin}: BLACKLISTED")
+                return False
+
+            # Apply position modifier based on coin status
+            modifier = self.coin_scorer.get_position_modifier(condition.coin)
+            if modifier != 1.0:
+                original_size = condition.position_size_usd
+                condition.position_size_usd = original_size * modifier
+                logger.info(
+                    f"Adjusted {condition.coin} size: ${original_size:.0f} * "
+                    f"{modifier} = ${condition.position_size_usd:.0f} ({status.value})"
+                )
+
         # Check position size limits
         if condition.position_size_usd < DEFAULT_MIN_POSITION_SIZE:
             logger.warning(
@@ -576,6 +797,46 @@ Respond with JSON only - no other text."""
             else None,
             "interval_seconds": self.interval,
             "is_running": self._running,
+        }
+
+    def get_health(self) -> Dict[str, Any]:
+        """Get component health status for monitoring.
+
+        Returns:
+            Dict with status (healthy/degraded/failed), last_activity, error_count, metrics.
+        """
+        now = datetime.now()
+
+        # Check time since last generation
+        if self.last_generation_time:
+            time_since_gen = (now - self.last_generation_time).total_seconds()
+        else:
+            time_since_gen = None
+
+        # Determine health status
+        if not self._running:
+            status = "stopped"
+        elif time_since_gen is None:
+            status = "degraded"  # Never ran
+        elif time_since_gen > self.interval * 3:
+            status = "degraded"  # Should have run by now
+        else:
+            status = "healthy"
+
+        return {
+            "status": status,
+            "last_activity": self.last_generation_time.isoformat()
+            if self.last_generation_time
+            else None,
+            "error_count": 0,  # Could add error tracking in future
+            "metrics": {
+                "generation_count": self.generation_count,
+                "conditions_generated": self.conditions_generated,
+                "active_conditions": len(self.active_conditions),
+                "interval_seconds": self.interval,
+                "time_since_last_generation": round(time_since_gen, 1) if time_since_gen else None,
+                "is_running": self._running,
+            }
         }
 
 

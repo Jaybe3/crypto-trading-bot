@@ -1,0 +1,103 @@
+/**
+ * Dashboard v2 - Custom Styles
+ * Most styling is done via Tailwind CSS, this is for custom additions
+ */
+
+/* Custom fonts */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+.font-mono {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Scrollbar customization (supplement to Tailwind) */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #475569 #1e293b;
+}
+
+/* Card animations */
+.card-hover {
+    transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Status indicator pulse */
+.status-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Data loading skeleton */
+.skeleton {
+    background: linear-gradient(90deg, #1e293b 0%, #334155 50%, #1e293b 100%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Table row hover */
+tbody tr:hover {
+    background-color: rgba(71, 85, 105, 0.3);
+}
+
+/* Button focus states */
+button:focus {
+    outline: none;
+    ring: 2px solid #06b6d4;
+}
+
+/* Input focus states */
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    ring: 2px solid #06b6d4;
+}
+
+/* Equity chart bars */
+.equity-bar {
+    transition: height 0.3s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .hide-mobile {
+        display: none;
+    }
+}
+
+/* Print styles */
+@media print {
+    nav, footer, button, .no-print {
+        display: none !important;
+    }
+
+    body {
+        background: white !important;
+        color: black !important;
+    }
+
+    .bg-slate-800, .bg-slate-700 {
+        background: #f8f8f8 !important;
+        border: 1px solid #ddd !important;
+    }
+}

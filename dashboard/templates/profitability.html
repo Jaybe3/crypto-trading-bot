@@ -1,0 +1,342 @@
+{% extends "base.html" %}
+
+{% block title %}Profitability - Trading Dashboard{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="bg-slate-800 rounded-lg p-4">
+        <h1 class="text-xl font-bold text-cyan-400">Profitability</h1>
+        <p class="text-gray-400 text-sm mt-1">Performance metrics and improvement tracking</p>
+    </div>
+
+    <!-- Current Snapshot -->
+    <div class="bg-slate-800 rounded-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold">Current Snapshot</h2>
+            <select id="timeframe-select" onchange="loadSnapshot()" class="bg-slate-700 rounded px-3 py-1 text-sm">
+                <option value="all_time">All Time</option>
+                <option value="week">This Week</option>
+                <option value="day">Today</option>
+                <option value="hour">Last Hour</option>
+            </select>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4" id="snapshot-grid">
+            <div class="bg-slate-700 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold font-mono" id="snap-pnl">$0.00</div>
+                <div class="text-gray-400 text-sm">Total P&L</div>
+            </div>
+            <div class="bg-slate-700 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold font-mono" id="snap-winrate">0%</div>
+                <div class="text-gray-400 text-sm">Win Rate</div>
+            </div>
+            <div class="bg-slate-700 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold font-mono" id="snap-trades">0</div>
+                <div class="text-gray-400 text-sm">Trades</div>
+            </div>
+            <div class="bg-slate-700 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold font-mono" id="snap-pf">0.00x</div>
+                <div class="text-gray-400 text-sm">Profit Factor</div>
+            </div>
+            <div class="bg-slate-700 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold font-mono" id="snap-sharpe">0.00</div>
+                <div class="text-gray-400 text-sm">Sharpe Ratio</div>
+            </div>
+            <div class="bg-slate-700 rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold font-mono" id="snap-drawdown">0%</div>
+                <div class="text-gray-400 text-sm">Max Drawdown</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 pt-4 border-t border-slate-700">
+            <div class="text-center">
+                <div class="text-lg font-mono" id="snap-starting">$10,000</div>
+                <div class="text-gray-500 text-xs">Starting Balance</div>
+            </div>
+            <div class="text-center">
+                <div class="text-lg font-mono" id="snap-current">$10,000</div>
+                <div class="text-gray-500 text-xs">Current Balance</div>
+            </div>
+            <div class="text-center">
+                <div class="text-lg font-mono" id="snap-return">0%</div>
+                <div class="text-gray-500 text-xs">Total Return</div>
+            </div>
+            <div class="text-center">
+                <div class="text-lg font-mono" id="snap-expectancy">$0.00</div>
+                <div class="text-gray-500 text-xs">Expectancy/Trade</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Equity Curve -->
+    <div class="bg-slate-800 rounded-lg p-6">
+        <h2 class="text-lg font-semibold mb-4">Equity Curve</h2>
+        <div id="equity-chart" class="h-64 bg-slate-700 rounded-lg flex items-center justify-center">
+            <span class="text-gray-500">Loading equity curve...</span>
+        </div>
+    </div>
+
+    <!-- Performance by Dimension -->
+    <div class="bg-slate-800 rounded-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold">Performance By</h2>
+            <select id="dimension-select" onchange="loadDimension()" class="bg-slate-700 rounded px-3 py-1 text-sm">
+                <option value="coin">Coin</option>
+                <option value="hour_of_day">Hour of Day</option>
+                <option value="day_of_week">Day of Week</option>
+                <option value="exit_reason">Exit Reason</option>
+                <option value="pattern">Pattern</option>
+            </select>
+        </div>
+        <div id="dimension-table" class="overflow-x-auto">
+            <div class="text-gray-500 text-center py-8">Select a dimension to view performance breakdown</div>
+        </div>
+    </div>
+
+    <!-- Improvement Metrics -->
+    <div class="bg-slate-800 rounded-lg p-6">
+        <h2 class="text-lg font-semibold mb-4">Improvement (7-day comparison)</h2>
+        <div id="improvement-metrics" class="space-y-4">
+            <div class="text-gray-500 text-center py-8">Loading improvement metrics...</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    async function loadSnapshot() {
+        const timeframe = document.getElementById('timeframe-select').value;
+        try {
+            const res = await fetch(`/api/profitability/snapshot?timeframe=${timeframe}`);
+            const data = await res.json();
+
+            // Update snapshot values
+            const pnl = data.total_pnl || 0;
+            document.getElementById('snap-pnl').textContent = (pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(2);
+            document.getElementById('snap-pnl').className = 'text-2xl font-bold font-mono ' + (pnl >= 0 ? 'text-green-400' : 'text-red-400');
+
+            const winRate = data.win_rate || 0;
+            document.getElementById('snap-winrate').textContent = winRate.toFixed(1) + '%';
+            document.getElementById('snap-winrate').className = 'text-2xl font-bold font-mono ' + (winRate >= 50 ? 'text-green-400' : 'text-red-400');
+
+            document.getElementById('snap-trades').textContent = data.total_trades || 0;
+
+            const pf = data.profit_factor || 0;
+            document.getElementById('snap-pf').textContent = pf.toFixed(2) + 'x';
+            document.getElementById('snap-pf').className = 'text-2xl font-bold font-mono ' + (pf >= 1 ? 'text-green-400' : 'text-red-400');
+
+            const sharpe = data.sharpe_ratio || 0;
+            document.getElementById('snap-sharpe').textContent = sharpe.toFixed(2);
+            document.getElementById('snap-sharpe').className = 'text-2xl font-bold font-mono ' + (sharpe >= 1 ? 'text-green-400' : sharpe >= 0 ? 'text-yellow-400' : 'text-red-400');
+
+            const drawdown = data.max_drawdown_pct || 0;
+            document.getElementById('snap-drawdown').textContent = drawdown.toFixed(1) + '%';
+            document.getElementById('snap-drawdown').className = 'text-2xl font-bold font-mono ' + (drawdown <= 10 ? 'text-green-400' : drawdown <= 20 ? 'text-yellow-400' : 'text-red-400');
+
+            // Balance info
+            document.getElementById('snap-starting').textContent = '$' + (data.starting_balance || 10000).toLocaleString();
+            document.getElementById('snap-current').textContent = '$' + (data.current_balance || 10000).toLocaleString();
+
+            const returnPct = data.total_return_pct || 0;
+            document.getElementById('snap-return').textContent = (returnPct >= 0 ? '+' : '') + returnPct.toFixed(2) + '%';
+            document.getElementById('snap-return').className = 'text-lg font-mono ' + (returnPct >= 0 ? 'text-green-400' : 'text-red-400');
+
+            const expectancy = data.expectancy || 0;
+            document.getElementById('snap-expectancy').textContent = (expectancy >= 0 ? '+$' : '-$') + Math.abs(expectancy).toFixed(2);
+            document.getElementById('snap-expectancy').className = 'text-lg font-mono ' + (expectancy >= 0 ? 'text-green-400' : 'text-red-400');
+
+        } catch (e) {
+            console.error('Failed to load snapshot:', e);
+        }
+    }
+
+    async function loadEquityCurve() {
+        try {
+            const res = await fetch('/api/profitability/equity-curve');
+            const data = await res.json();
+
+            if (!data.points || data.points.length === 0) {
+                document.getElementById('equity-chart').innerHTML = '<span class="text-gray-500">No equity data yet</span>';
+                return;
+            }
+
+            // Simple text-based chart for now (could use a charting library)
+            const points = data.points;
+            const minBal = Math.min(...points.map(p => p.balance));
+            const maxBal = Math.max(...points.map(p => p.balance));
+            const range = maxBal - minBal || 1;
+
+            let html = '<div class="flex items-end h-48 space-x-1 px-4">';
+            const step = Math.max(1, Math.floor(points.length / 50));
+
+            for (let i = 0; i < points.length; i += step) {
+                const p = points[i];
+                const height = ((p.balance - minBal) / range) * 100;
+                const color = p.pnl >= 0 ? 'bg-green-500' : 'bg-red-500';
+                html += `<div class="flex-1 ${color} rounded-t" style="height: ${Math.max(5, height)}%;" title="$${p.balance.toFixed(2)}"></div>`;
+            }
+
+            html += '</div>';
+            html += `<div class="flex justify-between text-xs text-gray-500 px-4 mt-2">
+                <span>$${minBal.toFixed(0)}</span>
+                <span>${points.length} points</span>
+                <span>$${maxBal.toFixed(0)}</span>
+            </div>`;
+
+            document.getElementById('equity-chart').innerHTML = html;
+        } catch (e) {
+            document.getElementById('equity-chart').innerHTML = '<span class="text-red-400">Failed to load equity curve</span>';
+        }
+    }
+
+    async function loadDimension() {
+        const dimension = document.getElementById('dimension-select').value;
+        try {
+            const res = await fetch(`/api/profitability/by/${dimension}`);
+            const data = await res.json();
+
+            if (!data.data || data.data.length === 0) {
+                document.getElementById('dimension-table').innerHTML = '<div class="text-gray-500 text-center py-8">No data for this dimension</div>';
+                return;
+            }
+
+            let html = `
+                <table class="w-full">
+                    <thead class="text-gray-400 text-sm">
+                        <tr>
+                            <th class="text-left pb-3">${dimension.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</th>
+                            <th class="text-right pb-3">Trades</th>
+                            <th class="text-right pb-3">Win Rate</th>
+                            <th class="text-right pb-3">P&L</th>
+                            <th class="text-right pb-3">Contribution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            for (const item of data.data) {
+                const winRate = item.win_rate || 0;
+                const pnl = item.total_pnl || 0;
+                const contrib = item.contribution_pct || 0;
+
+                html += `
+                    <tr class="border-t border-slate-700">
+                        <td class="py-3 font-semibold">${item.dimension_value || item.name || 'Unknown'}</td>
+                        <td class="text-right font-mono">${item.trade_count || 0}</td>
+                        <td class="text-right font-mono ${winRate >= 50 ? 'text-green-400' : 'text-red-400'}">${winRate.toFixed(1)}%</td>
+                        <td class="text-right font-mono ${pnl >= 0 ? 'text-green-400' : 'text-red-400'}">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}</td>
+                        <td class="text-right font-mono text-gray-400">${contrib.toFixed(1)}%</td>
+                    </tr>
+                `;
+            }
+
+            html += '</tbody></table>';
+            document.getElementById('dimension-table').innerHTML = html;
+        } catch (e) {
+            document.getElementById('dimension-table').innerHTML = '<div class="text-red-400 text-center py-8">Failed to load dimension data</div>';
+        }
+    }
+
+    async function loadImprovement() {
+        try {
+            const res = await fetch('/api/profitability/improvement?days=7');
+            const data = await res.json();
+
+            if (data.error) {
+                document.getElementById('improvement-metrics').innerHTML = `<div class="text-red-400 text-center py-8">${data.error}</div>`;
+                return;
+            }
+
+            let html = '<div class="grid grid-cols-1 md:grid-cols-3 gap-4">';
+
+            // Win Rate improvement
+            const wrChange = data.win_rate_change || 0;
+            const wrImproving = wrChange > 0;
+            html += `
+                <div class="bg-slate-700 rounded-lg p-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Win Rate</span>
+                        <span class="${wrImproving ? 'text-green-400' : 'text-red-400'}">${wrImproving ? 'Improving' : 'Declining'}</span>
+                    </div>
+                    <div class="text-lg font-mono mt-2">
+                        ${(data.current_win_rate || 0).toFixed(1)}%
+                        <span class="text-sm ${wrChange >= 0 ? 'text-green-400' : 'text-red-400'}">
+                            (${wrChange >= 0 ? '+' : ''}${wrChange.toFixed(1)}%)
+                        </span>
+                    </div>
+                    <div class="text-xs text-gray-500 mt-1">was ${(data.previous_win_rate || 0).toFixed(1)}%</div>
+                </div>
+            `;
+
+            // P&L improvement
+            const pnlChange = data.pnl_change || 0;
+            const pnlImproving = pnlChange > 0;
+            html += `
+                <div class="bg-slate-700 rounded-lg p-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">P&L</span>
+                        <span class="${pnlImproving ? 'text-green-400' : 'text-red-400'}">${pnlImproving ? 'Improving' : 'Declining'}</span>
+                    </div>
+                    <div class="text-lg font-mono mt-2">
+                        $${(data.current_pnl || 0).toFixed(2)}
+                        <span class="text-sm ${pnlChange >= 0 ? 'text-green-400' : 'text-red-400'}">
+                            (${pnlChange >= 0 ? '+' : ''}$${pnlChange.toFixed(2)})
+                        </span>
+                    </div>
+                    <div class="text-xs text-gray-500 mt-1">was $${(data.previous_pnl || 0).toFixed(2)}</div>
+                </div>
+            `;
+
+            // Profit Factor improvement
+            const pfChange = data.profit_factor_change || 0;
+            const pfImproving = pfChange > 0;
+            html += `
+                <div class="bg-slate-700 rounded-lg p-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-400">Profit Factor</span>
+                        <span class="${pfImproving ? 'text-green-400' : 'text-red-400'}">${pfImproving ? 'Improving' : 'Declining'}</span>
+                    </div>
+                    <div class="text-lg font-mono mt-2">
+                        ${(data.current_profit_factor || 0).toFixed(2)}x
+                        <span class="text-sm ${pfChange >= 0 ? 'text-green-400' : 'text-red-400'}">
+                            (${pfChange >= 0 ? '+' : ''}${pfChange.toFixed(2)})
+                        </span>
+                    </div>
+                    <div class="text-xs text-gray-500 mt-1">was ${(data.previous_profit_factor || 0).toFixed(2)}x</div>
+                </div>
+            `;
+
+            html += '</div>';
+
+            // Overall verdict
+            const improvingCount = [wrImproving, pnlImproving, pfImproving].filter(Boolean).length;
+            let verdict = '';
+            if (improvingCount >= 2) {
+                verdict = '<div class="mt-4 p-3 bg-green-900 rounded-lg text-green-300 text-center">System is improving overall</div>';
+            } else if (improvingCount === 1) {
+                verdict = '<div class="mt-4 p-3 bg-yellow-900 rounded-lg text-yellow-300 text-center">Mixed performance - some metrics improving</div>';
+            } else {
+                verdict = '<div class="mt-4 p-3 bg-red-900 rounded-lg text-red-300 text-center">Performance declining - review adaptations</div>';
+            }
+
+            html += verdict;
+            document.getElementById('improvement-metrics').innerHTML = html;
+        } catch (e) {
+            document.getElementById('improvement-metrics').innerHTML = '<div class="text-red-400 text-center py-8">Failed to load improvement metrics</div>';
+        }
+    }
+
+    // Initial load
+    loadSnapshot();
+    loadEquityCurve();
+    loadDimension();
+    loadImprovement();
+
+    // Refresh periodically
+    setInterval(loadSnapshot, 30000);
+    setInterval(loadEquityCurve, 60000);
+    setInterval(loadImprovement, 60000);
+</script>
+{% endblock %}

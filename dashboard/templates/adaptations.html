@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+
+{% block title %}Adaptations - Trading Dashboard{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="bg-slate-800 rounded-lg p-4">
+        <h1 class="text-xl font-bold text-cyan-400">Adaptations Log</h1>
+        <p class="text-gray-400 text-sm mt-1">Track system adaptations and their effectiveness</p>
+    </div>
+
+    <!-- Effectiveness Summary -->
+    <div class="bg-slate-800 rounded-lg p-6">
+        <h2 class="text-lg font-semibold mb-4">Effectiveness Summary</h2>
+        <div id="effectiveness-summary" class="grid grid-cols-2 md:grid-cols-6 gap-4">
+            <div class="text-center">
+                <div class="text-2xl font-bold text-green-400" id="eff-highly">0</div>
+                <div class="text-xs text-gray-400">Highly Effective</div>
+            </div>
+            <div class="text-center">
+                <div class="text-2xl font-bold text-green-300" id="eff-effective">0</div>
+                <div class="text-xs text-gray-400">Effective</div>
+            </div>
+            <div class="text-center">
+                <div class="text-2xl font-bold text-gray-400" id="eff-neutral">0</div>
+                <div class="text-xs text-gray-400">Neutral</div>
+            </div>
+            <div class="text-center">
+                <div class="text-2xl font-bold text-yellow-400" id="eff-ineffective">0</div>
+                <div class="text-xs text-gray-400">Ineffective</div>
+            </div>
+            <div class="text-center">
+                <div class="text-2xl font-bold text-red-400" id="eff-harmful">0</div>
+                <div class="text-xs text-gray-400">Harmful</div>
+            </div>
+            <div class="text-center">
+                <div class="text-2xl font-bold text-blue-400" id="eff-pending">0</div>
+                <div class="text-xs text-gray-400">Pending</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="flex space-x-2">
+        <button onclick="filterAdaptations('all')" id="filter-all" class="filter-btn px-4 py-2 rounded-lg bg-slate-700 text-cyan-400">
+            All
+        </button>
+        <button onclick="filterAdaptations('harmful')" id="filter-harmful" class="filter-btn px-4 py-2 rounded-lg text-gray-400 hover:bg-slate-700">
+            Harmful
+        </button>
+        <button onclick="filterAdaptations('effective')" id="filter-effective" class="filter-btn px-4 py-2 rounded-lg text-gray-400 hover:bg-slate-700">
+            Effective
+        </button>
+        <button onclick="filterAdaptations('pending')" id="filter-pending" class="filter-btn px-4 py-2 rounded-lg text-gray-400 hover:bg-slate-700">
+            Pending
+        </button>
+    </div>
+
+    <!-- Adaptations List -->
+    <div class="bg-slate-800 rounded-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold">Recent Adaptations</h2>
+            <span id="adaptations-count" class="text-gray-400 text-sm">Loading...</span>
+        </div>
+        <div id="adaptations-list" class="space-y-4">
+            <div class="text-gray-500 text-center py-8">Loading adaptations...</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    let allAdaptations = [];
+    let currentFilter = 'all';
+
+    async function loadEffectivenessSummary() {
+        try {
+            const res = await fetch('/api/adaptations/effectiveness');
+            const data = await res.json();
+
+            document.getElementById('eff-highly').textContent = data.highly_effective || 0;
+            document.getElementById('eff-effective').textContent = data.effective || 0;
+            document.getElementById('eff-neutral').textContent = data.neutral || 0;
+            document.getElementById('eff-ineffective').textContent = data.ineffective || 0;
+            document.getElementById('eff-harmful').textContent = data.harmful || 0;
+            document.getElementById('eff-pending').textContent = data.pending || 0;
+        } catch (e) {
+            console.error('Failed to load effectiveness summary:', e);
+        }
+    }
+
+    async function loadAdaptations() {
+        try {
+            const res = await fetch('/api/adaptations?limit=50');
+            const data = await res.json();
+            allAdaptations = data.adaptations || [];
+            document.getElementById('adaptations-count').textContent = `${data.count || 0} adaptations`;
+            filterAdaptations(currentFilter);
+        } catch (e) {
+            document.getElementById('adaptations-list').innerHTML = '<div class="text-red-400 text-center py-8">Failed to load adaptations</div>';
+        }
+    }
+
+    function filterAdaptations(filter) {
+        currentFilter = filter;
+
+        // Update filter button styles
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('bg-slate-700', 'text-cyan-400');
+            btn.classList.add('text-gray-400');
+        });
+        document.getElementById('filter-' + filter).classList.add('bg-slate-700', 'text-cyan-400');
+        document.getElementById('filter-' + filter).classList.remove('text-gray-400');
+
+        let filtered = allAdaptations;
+        if (filter !== 'all') {
+            filtered = allAdaptations.filter(a => {
+                const eff = (a.effectiveness_rating || 'pending').toLowerCase();
+                if (filter === 'harmful') return eff === 'harmful';
+                if (filter === 'effective') return eff === 'effective' || eff === 'highly_effective';
+                if (filter === 'pending') return eff === 'pending';
+                return true;
+            });
+        }
+
+        renderAdaptationsList(filtered);
+    }
+
+    function renderAdaptationsList(adaptations) {
+        if (!adaptations || adaptations.length === 0) {
+            document.getElementById('adaptations-list').innerHTML = '<div class="text-gray-500 text-center py-8">No adaptations found</div>';
+            return;
+        }
+
+        let html = '';
+        for (const adapt of adaptations) {
+            const rating = (adapt.effectiveness_rating || 'pending').toLowerCase();
+            const action = adapt.action || 'Unknown';
+            const target = adapt.target || '';
+            const insight = adapt.insight || adapt.reason || '';
+            const confidence = adapt.confidence || 0;
+            const relTime = adapt.relative_time || adapt.applied_at || 'Unknown';
+
+            // Determine styling based on rating
+            let borderClass = 'border-gray-600';
+            let ratingBadge = '';
+
+            switch (rating) {
+                case 'highly_effective':
+                    borderClass = 'border-green-500';
+                    ratingBadge = '<span class="px-2 py-1 rounded text-xs bg-green-900 text-green-300">Highly Effective</span>';
+                    break;
+                case 'effective':
+                    borderClass = 'border-green-400';
+                    ratingBadge = '<span class="px-2 py-1 rounded text-xs bg-green-900 text-green-300">Effective</span>';
+                    break;
+                case 'neutral':
+                    borderClass = 'border-gray-500';
+                    ratingBadge = '<span class="px-2 py-1 rounded text-xs bg-slate-600 text-gray-300">Neutral</span>';
+                    break;
+                case 'ineffective':
+                    borderClass = 'border-yellow-500';
+                    ratingBadge = '<span class="px-2 py-1 rounded text-xs bg-yellow-900 text-yellow-300">Ineffective</span>';
+                    break;
+                case 'harmful':
+                    borderClass = 'border-red-500';
+                    ratingBadge = '<span class="px-2 py-1 rounded text-xs bg-red-900 text-red-300">Harmful</span>';
+                    break;
+                default:
+                    borderClass = 'border-blue-500';
+                    ratingBadge = '<span class="px-2 py-1 rounded text-xs bg-blue-900 text-blue-300">Pending</span>';
+            }
+
+            // Action badge
+            let actionBadge = '';
+            if (action.includes('BLACKLIST')) {
+                actionBadge = '<span class="text-red-400">BLACKLIST</span>';
+            } else if (action.includes('UNBLACKLIST')) {
+                actionBadge = '<span class="text-green-400">UNBLACKLIST</span>';
+            } else if (action.includes('DEACTIVATE')) {
+                actionBadge = '<span class="text-yellow-400">DEACTIVATE</span>';
+            } else if (action.includes('CREATE')) {
+                actionBadge = '<span class="text-cyan-400">CREATE</span>';
+            } else if (action.includes('ADJUST')) {
+                actionBadge = '<span class="text-purple-400">ADJUST</span>';
+            } else {
+                actionBadge = `<span class="text-gray-400">${action}</span>`;
+            }
+
+            html += `
+                <div class="bg-slate-700 rounded-lg p-4 border-l-4 ${borderClass}">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-gray-400 text-sm">${relTime}</span>
+                            <span class="font-semibold">${actionBadge}</span>
+                            ${target ? `<span class="text-gray-300">${target}</span>` : ''}
+                        </div>
+                        ${ratingBadge}
+                    </div>
+                    ${insight ? `<div class="text-sm text-gray-300 mt-2">${insight}</div>` : ''}
+                    <div class="flex justify-between items-center mt-3 text-sm">
+                        <span class="text-gray-500">Confidence: ${(confidence * 100).toFixed(0)}%</span>
+                        ${rating === 'harmful' && adapt.can_rollback ? `
+                            <button onclick="rollbackAdaptation('${adapt.adaptation_id || adapt.id}')"
+                                    class="px-3 py-1 bg-red-800 hover:bg-red-700 rounded text-red-200 text-xs">
+                                Rollback
+                            </button>
+                        ` : ''}
+                    </div>
+                    ${adapt.effectiveness_change ? `
+                        <div class="mt-2 text-sm">
+                            <span class="text-gray-400">Win Rate Change: </span>
+                            <span class="${adapt.effectiveness_change >= 0 ? 'text-green-400' : 'text-red-400'}">
+                                ${adapt.effectiveness_change >= 0 ? '+' : ''}${adapt.effectiveness_change.toFixed(1)}%
+                            </span>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        document.getElementById('adaptations-list').innerHTML = html;
+    }
+
+    async function rollbackAdaptation(adaptationId) {
+        if (!confirm('Are you sure you want to rollback this adaptation?')) {
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/override/rollback', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({adaptation_id: adaptationId})
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                alert('Adaptation rolled back successfully');
+                loadAdaptations();
+                loadEffectivenessSummary();
+            } else {
+                alert('Rollback failed: ' + (data.error || 'Unknown error'));
+            }
+        } catch (e) {
+            alert('Rollback failed: ' + e.message);
+        }
+    }
+
+    // Initial load
+    loadEffectivenessSummary();
+    loadAdaptations();
+
+    // Refresh periodically
+    setInterval(loadEffectivenessSummary, 30000);
+    setInterval(loadAdaptations, 30000);
+</script>
+{% endblock %}
