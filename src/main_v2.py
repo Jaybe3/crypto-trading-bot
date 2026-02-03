@@ -25,14 +25,19 @@ from typing import Optional
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.market_feed import MarketFeed, PriceTick
-from src.sniper import Sniper, TradeCondition
+from src.sniper import Sniper
 from src.journal import TradeJournal, MarketContext
+from src.models.trade_condition import TradeCondition
+from src.strategist import Strategist
+from src.llm_interface import LLMInterface
+from src.database import Database
 
 # Import settings
 try:
     from config.settings import (
         TRADEABLE_COINS, DEFAULT_EXCHANGE, INITIAL_BALANCE,
-        STALE_DATA_THRESHOLD, STATUS_LOG_INTERVAL, SNIPER_STATE_PATH
+        STALE_DATA_THRESHOLD, STATUS_LOG_INTERVAL, SNIPER_STATE_PATH,
+        STRATEGIST_INTERVAL, STRATEGIST_ENABLED
     )
 except ImportError:
     # Defaults if config not available
@@ -42,6 +47,8 @@ except ImportError:
     STALE_DATA_THRESHOLD = 5
     STATUS_LOG_INTERVAL = 60
     SNIPER_STATE_PATH = "data/sniper_state.json"
+    STRATEGIST_INTERVAL = 180  # 3 minutes
+    STRATEGIST_ENABLED = True
 
 # Configure logging
 logging.basicConfig(
@@ -172,6 +179,9 @@ class TradingSystem:
         self.sniper: Optional[Sniper] = None
         self.journal: Optional[TradeJournal] = None
         self.health: Optional[HealthMonitor] = None
+        self.strategist: Optional[Strategist] = None
+        self.llm: Optional[LLMInterface] = None
+        self.db: Optional[Database] = None
 
         # State
         self._running = False
@@ -190,6 +200,11 @@ class TradingSystem:
 
         if not self.test_mode:
             await self._connect_feed()
+
+            # Start Strategist after feed is connected
+            if self.strategist:
+                logger.info("Starting Strategist...")
+                await self.strategist.start()
 
         self._running = True
         logger.info("Trading system started - entering main loop")
@@ -236,6 +251,21 @@ class TradingSystem:
         # Initialize Health Monitor
         self.health = HealthMonitor()
 
+        # Initialize Strategist (if enabled)
+        if STRATEGIST_ENABLED:
+            logger.info("Initializing Strategist...")
+            self.db = Database()
+            self.llm = LLMInterface()
+            self.strategist = Strategist(
+                llm=self.llm,
+                market_feed=self.market_feed,
+                db=self.db,
+                interval_seconds=STRATEGIST_INTERVAL,
+            )
+            logger.info(f"Strategist ready (interval={STRATEGIST_INTERVAL}s)")
+        else:
+            logger.info("Strategist disabled")
+
         # Wire callbacks
         self._wire_callbacks()
 
@@ -254,6 +284,10 @@ class TradingSystem:
 
         # Sniper execution events
         self.sniper.subscribe(self._on_execution)
+
+        # Strategist → Sniper (handoff)
+        if self.strategist:
+            self.strategist.subscribe_conditions(self._on_new_conditions)
 
         logger.debug("Callbacks wired")
 
@@ -284,6 +318,19 @@ class TradingSystem:
         elif event.event_type == "exit":
             pnl_str = f"+${event.pnl:.2f}" if event.pnl >= 0 else f"-${abs(event.pnl):.2f}"
             logger.info(f"TRADE EXIT: {event.coin} @ ${event.price:,.2f} [{event.reason}] {pnl_str}")
+
+    def _on_new_conditions(self, conditions: list[TradeCondition]) -> None:
+        """Handle new conditions from Strategist (handoff to Sniper)."""
+        logger.info("=" * 50)
+        logger.info("STRATEGIST → SNIPER HANDOFF")
+        logger.info(f"Conditions received: {len(conditions)}")
+        for c in conditions:
+            logger.info(f"  {c.direction} {c.coin} @ ${c.trigger_price:,.2f} ({c.trigger_condition})")
+
+        # Pass to Sniper
+        active_count = self.sniper.set_conditions(conditions)
+        logger.info(f"Sniper now watching {active_count} conditions")
+        logger.info("=" * 50)
 
     async def _connect_feed(self) -> None:
         """Connect to exchange WebSocket."""
@@ -321,9 +368,10 @@ class TradingSystem:
         sniper_status = self.sniper.get_status()
 
         feed_status = "OK" if health["healthy"] else "STALE"
+        strategist_status = "ON" if self.strategist else "OFF"
 
         logger.info(
-            f"STATUS: Feed={feed_status} | "
+            f"STATUS: Feed={feed_status} | Strategist={strategist_status} | "
             f"Ticks={health['tick_count']} ({health['ticks_per_second']}/s) | "
             f"Conditions={sniper_status['active_conditions']} | "
             f"Positions={sniper_status['open_positions']} | "
@@ -339,6 +387,11 @@ class TradingSystem:
         """
         logger.info("Stopping trading system...")
         self._running = False
+
+        # Stop strategist first
+        if self.strategist:
+            logger.info("Stopping Strategist...")
+            await self.strategist.stop()
 
         # Save sniper state
         if self.sniper:
@@ -433,6 +486,9 @@ class TradingSystem:
                 "entry_count": self.journal.entry_count(),
                 "pending_entries": len(self.journal.pending_entries),
             }
+
+        if self.strategist:
+            result["strategist"] = self.strategist.get_stats()
 
         return result
 

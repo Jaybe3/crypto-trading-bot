@@ -71,6 +71,15 @@ STALE_DATA_THRESHOLD = 5  # seconds without tick = unhealthy
 STATUS_LOG_INTERVAL = 60  # seconds between status logs
 
 # =============================================================================
+# Strategist Configuration
+# =============================================================================
+
+STRATEGIST_ENABLED = True  # Set to False to disable LLM condition generation
+STRATEGIST_INTERVAL = 180  # Seconds between condition generation (3 minutes)
+STRATEGIST_MAX_CONDITIONS = 3  # Max conditions per generation cycle
+STRATEGIST_CONDITION_TTL = 300  # Seconds until conditions expire (5 minutes)
+
+# =============================================================================
 # Paths
 # =============================================================================
 

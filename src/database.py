@@ -308,6 +308,27 @@ class Database:
                 ON monitoring_alerts(created_at)
             """)
 
+            # 12. active_conditions table (for TASK-110 Strategist)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS active_conditions (
+                    id TEXT PRIMARY KEY,
+                    coin TEXT NOT NULL,
+                    direction TEXT NOT NULL,
+                    trigger_price REAL NOT NULL,
+                    trigger_condition TEXT NOT NULL,
+                    stop_loss_pct REAL NOT NULL,
+                    take_profit_pct REAL NOT NULL,
+                    position_size_usd REAL NOT NULL,
+                    strategy_id TEXT,
+                    reasoning TEXT,
+                    created_at TIMESTAMP NOT NULL,
+                    valid_until TIMESTAMP NOT NULL,
+                    triggered BOOLEAN DEFAULT FALSE,
+                    triggered_at TIMESTAMP,
+                    additional_filters TEXT
+                )
+            """)
+
             # Trade journal indexes
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_journal_coin
@@ -340,6 +361,20 @@ class Database:
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_journal_day
                 ON trade_journal(day_of_week)
+            """)
+
+            # Active conditions indexes
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_conditions_coin
+                ON active_conditions(coin)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_conditions_valid_until
+                ON active_conditions(valid_until)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_conditions_triggered
+                ON active_conditions(triggered)
             """)
 
             conn.commit()
@@ -433,6 +468,167 @@ class Database:
                 LIMIT ?
             """, (limit,))
             return [dict(row) for row in cursor.fetchall()]
+
+    # ========== Active Conditions (TASK-110 Strategist) ==========
+
+    def save_condition(self, condition: Dict[str, Any]) -> None:
+        """Save a trade condition to the database.
+
+        Args:
+            condition: Dictionary with condition fields from TradeCondition.to_dict()
+        """
+        import json
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO active_conditions
+                (id, coin, direction, trigger_price, trigger_condition,
+                 stop_loss_pct, take_profit_pct, position_size_usd,
+                 strategy_id, reasoning, created_at, valid_until, additional_filters)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                condition["id"],
+                condition["coin"],
+                condition["direction"],
+                condition["trigger_price"],
+                condition["trigger_condition"],
+                condition["stop_loss_pct"],
+                condition["take_profit_pct"],
+                condition["position_size_usd"],
+                condition.get("strategy_id"),
+                condition.get("reasoning"),
+                condition["created_at"],
+                condition["valid_until"],
+                json.dumps(condition.get("additional_filters")) if condition.get("additional_filters") else None,
+            ))
+            conn.commit()
+            logger.debug(f"Saved condition {condition['id']} for {condition['coin']}")
+
+    def get_active_conditions(self) -> List[Dict[str, Any]]:
+        """Get all non-expired, non-triggered conditions.
+
+        Returns:
+            List of active condition dictionaries.
+        """
+        import json
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM active_conditions
+                WHERE triggered = FALSE
+                AND valid_until > datetime('now')
+                ORDER BY created_at DESC
+            """)
+            rows = cursor.fetchall()
+            conditions = []
+            for row in rows:
+                cond = dict(row)
+                if cond.get("additional_filters"):
+                    cond["additional_filters"] = json.loads(cond["additional_filters"])
+                conditions.append(cond)
+            return conditions
+
+    def get_condition_by_id(self, condition_id: str) -> Optional[Dict[str, Any]]:
+        """Get a specific condition by ID.
+
+        Args:
+            condition_id: The condition ID.
+
+        Returns:
+            Condition dictionary or None if not found.
+        """
+        import json
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM active_conditions WHERE id = ?
+            """, (condition_id,))
+            row = cursor.fetchone()
+            if row:
+                cond = dict(row)
+                if cond.get("additional_filters"):
+                    cond["additional_filters"] = json.loads(cond["additional_filters"])
+                return cond
+            return None
+
+    def mark_condition_triggered(self, condition_id: str) -> None:
+        """Mark a condition as triggered.
+
+        Args:
+            condition_id: The condition ID to mark as triggered.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE active_conditions
+                SET triggered = TRUE, triggered_at = datetime('now')
+                WHERE id = ?
+            """, (condition_id,))
+            conn.commit()
+            logger.info(f"Marked condition {condition_id} as triggered")
+
+    def delete_expired_conditions(self) -> int:
+        """Delete all expired conditions.
+
+        Returns:
+            Number of conditions deleted.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                DELETE FROM active_conditions
+                WHERE valid_until < datetime('now')
+            """)
+            deleted = cursor.rowcount
+            conn.commit()
+            if deleted > 0:
+                logger.info(f"Deleted {deleted} expired conditions")
+            return deleted
+
+    def clear_all_conditions(self) -> int:
+        """Clear all active conditions (used when Strategist generates new set).
+
+        Returns:
+            Number of conditions deleted.
+        """
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                DELETE FROM active_conditions
+                WHERE triggered = FALSE
+            """)
+            deleted = cursor.rowcount
+            conn.commit()
+            logger.debug(f"Cleared {deleted} untriggered conditions")
+            return deleted
+
+    def get_conditions_for_coin(self, coin: str) -> List[Dict[str, Any]]:
+        """Get active conditions for a specific coin.
+
+        Args:
+            coin: Coin symbol (e.g., "SOL", "ETH").
+
+        Returns:
+            List of condition dictionaries for this coin.
+        """
+        import json
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM active_conditions
+                WHERE coin = ?
+                AND triggered = FALSE
+                AND valid_until > datetime('now')
+                ORDER BY created_at DESC
+            """, (coin,))
+            rows = cursor.fetchall()
+            conditions = []
+            for row in rows:
+                cond = dict(row)
+                if cond.get("additional_filters"):
+                    cond["additional_filters"] = json.loads(cond["additional_filters"])
+                conditions.append(cond)
+            return conditions
 
 
 # Allow running directly to initialize database

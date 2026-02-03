@@ -1,6 +1,6 @@
 """Interface to local LLM via Ollama.
 
-This module connects to a local LLM (qwen2.5-coder:7b) running via Ollama
+This module connects to a local LLM (qwen2.5:14b) running via Ollama
 to make trading decisions and analyze trades.
 """
 
@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 # Default configuration
-DEFAULT_MODEL = "qwen2.5-coder:7b"
+DEFAULT_MODEL = "qwen2.5:14b"
 # Ollama direct API - can be overridden with OLLAMA_HOST env var
 # For WSL2, use the gateway IP to reach Windows host
 OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "172.27.144.1")
@@ -56,7 +56,7 @@ class LLMInterface:
     Verification:
         User can test LLM directly with:
         curl -X POST http://localhost:11434/api/chat -H "Content-Type: application/json" \\
-          -d '{"model": "qwen2.5-coder:7b", "messages": [{"role": "user", "content": "Hello"}], "stream": false}'
+          -d '{"model": "qwen2.5:14b", "messages": [{"role": "user", "content": "Hello"}], "stream": false}'
     """
 
     def __init__(
@@ -70,7 +70,7 @@ class LLMInterface:
 
         Args:
             api_url: Ollama API endpoint (default: http://localhost:11434/api/chat).
-            model: LLM model name (default: qwen2.5-coder:7b).
+            model: LLM model name (default: qwen2.5:14b).
             timeout: Request timeout in seconds (default: 120).
             db: Database instance (creates new one if not provided).
 
@@ -434,6 +434,6 @@ if __name__ == "__main__":
     else:
         print("Failed to connect to LLM")
         print("\nMake sure Ollama is running: ollama serve")
-        print("And model 'qwen2.5-coder:7b' is available: ollama pull qwen2.5-coder:7b")
+        print("And model 'qwen2.5:14b' is available: ollama pull qwen2.5:14b")
         print("\nFor WSL, set OLLAMA_HOST to your Windows gateway IP:")
         print("  export OLLAMA_HOST=172.x.x.x")

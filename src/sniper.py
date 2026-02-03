@@ -18,47 +18,9 @@ from typing import Callable, Literal, Optional
 
 from src.journal import TradeJournal
 from src.market_feed import PriceTick
+from src.models.trade_condition import TradeCondition
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass
-class TradeCondition:
-    """
-    A condition set by the Strategist that triggers a trade entry.
-
-    Example: "BUY SOL if price > $104.50 with 2% stop-loss and 1.5% take-profit"
-    """
-    id: str                                         # Unique identifier
-    coin: str                                       # "SOL", "BTC", etc.
-    direction: Literal["LONG", "SHORT"]             # Trade direction
-    trigger_price: float                            # Price that triggers entry
-    trigger_type: Literal["ABOVE", "BELOW"]         # Trigger when price goes above/below
-    stop_loss_pct: float                            # Stop loss as % (e.g., 0.02 = 2%)
-    take_profit_pct: float                          # Take profit as % (e.g., 0.015 = 1.5%)
-    position_size_usd: float                        # How much to trade
-    strategy_id: str                                # Which strategy created this
-    reasoning: str                                  # Why (for journaling)
-    valid_until: datetime                           # Expiration time
-    created_at: datetime = field(default_factory=datetime.now)
-
-    def is_expired(self) -> bool:
-        """Check if this condition has expired."""
-        return datetime.now() > self.valid_until
-
-    def to_dict(self) -> dict:
-        """Convert to dictionary for serialization."""
-        d = asdict(self)
-        d['valid_until'] = self.valid_until.isoformat()
-        d['created_at'] = self.created_at.isoformat()
-        return d
-
-    @classmethod
-    def from_dict(cls, d: dict) -> 'TradeCondition':
-        """Create from dictionary."""
-        d['valid_until'] = datetime.fromisoformat(d['valid_until'])
-        d['created_at'] = datetime.fromisoformat(d['created_at'])
-        return cls(**d)
 
 
 @dataclass
@@ -225,7 +187,7 @@ class Sniper:
         self.active_conditions[condition.id] = condition
         logger.info(
             f"Added condition: {condition.direction} {condition.coin} "
-            f"{'>' if condition.trigger_type == 'ABOVE' else '<'} "
+            f"{'>' if condition.trigger_condition == 'ABOVE' else '<'} "
             f"${condition.trigger_price:.2f}"
         )
         return True
@@ -361,7 +323,7 @@ class Sniper:
         Returns:
             True if triggered
         """
-        if condition.trigger_type == "ABOVE":
+        if condition.trigger_condition == "ABOVE":
             return price >= condition.trigger_price
         else:  # BELOW
             return price <= condition.trigger_price
@@ -469,18 +431,24 @@ class Sniper:
         )
 
     def _calc_stop_loss_price(self, entry_price: float, condition: TradeCondition) -> float:
-        """Calculate absolute stop-loss price."""
+        """Calculate absolute stop-loss price.
+
+        Note: stop_loss_pct is in percentage form (e.g., 2.0 = 2%), not decimal.
+        """
         if condition.direction == "LONG":
-            return entry_price * (1 - condition.stop_loss_pct)
+            return entry_price * (1 - condition.stop_loss_pct / 100)
         else:  # SHORT
-            return entry_price * (1 + condition.stop_loss_pct)
+            return entry_price * (1 + condition.stop_loss_pct / 100)
 
     def _calc_take_profit_price(self, entry_price: float, condition: TradeCondition) -> float:
-        """Calculate absolute take-profit price."""
+        """Calculate absolute take-profit price.
+
+        Note: take_profit_pct is in percentage form (e.g., 1.5 = 1.5%), not decimal.
+        """
         if condition.direction == "LONG":
-            return entry_price * (1 + condition.take_profit_pct)
+            return entry_price * (1 + condition.take_profit_pct / 100)
         else:  # SHORT
-            return entry_price * (1 - condition.take_profit_pct)
+            return entry_price * (1 - condition.take_profit_pct / 100)
 
     # =========================================================================
     # Exit Logic
