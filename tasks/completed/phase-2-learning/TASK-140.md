@@ -27,7 +27,7 @@ Phases 2.1-2.4 built all the individual components:
 
 ### Current State
 
-The main_v2.py wires:
+The main.py wires:
 - MarketFeed ✅
 - Sniper (with QuickUpdate) ✅
 - TradeJournal ✅
@@ -47,10 +47,10 @@ What's NOT yet hardened:
 
 ### 1. SystemOrchestrator Class
 
-Enhance TradingSystem in main_v2.py to become a proper orchestrator:
+Enhance TradingSystem in main.py to become a proper orchestrator:
 
 ```python
-# src/main_v2.py (enhanced)
+# src/main.py (enhanced)
 
 class TradingSystem:
     """Orchestrates the autonomous trading loop with health monitoring."""
@@ -342,7 +342,7 @@ Update `TradingSystem`:
 
 | File | Change |
 |------|--------|
-| `src/main_v2.py` | Add health monitoring, state persistence, operational commands |
+| `src/main.py` | Add health monitoring, state persistence, operational commands |
 | `src/market_feed.py` | Add `get_health()` method |
 | `src/sniper.py` | Add `get_health()` method |
 | `src/strategist.py` | Add `get_health()` method, circuit breaker |
@@ -444,7 +444,7 @@ await system2.start()
    - `src/reflection.py` - Checks reflection schedule, trade counts
    - `src/adaptation.py` - Checks dependencies (Knowledge Brain, etc.)
 
-2. **System Health Monitoring** - Added to `src/main_v2.py`:
+2. **System Health Monitoring** - Added to `src/main.py`:
    - `health_check()` - Aggregates all component health
    - Periodic health logging (every 30 seconds)
    - Warns on degraded/failed components
@@ -482,7 +482,7 @@ await system2.start()
 | `src/reflection.py` | Added `get_health()` |
 | `src/adaptation.py` | Added `get_health()` |
 | `src/database.py` | Added `runtime_state` table and methods |
-| `src/main_v2.py` | Added health monitoring, state persistence, operational commands |
+| `src/main.py` | Added health monitoring, state persistence, operational commands |
 
 ### Files Created
 

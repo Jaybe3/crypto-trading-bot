@@ -20,13 +20,13 @@ Paper trading mode simulates real trading without risking actual capital. The bo
 source venv/bin/activate
 
 # Start with dashboard
-python src/main_v2.py --mode paper --dashboard --port 8080
+python src/main.py --mode paper --dashboard --port 8080
 ```
 
 ### Command Line Options
 
 ```bash
-python src/main_v2.py \
+python src/main.py \
   --mode paper \           # Paper trading mode (required for validation)
   --dashboard \            # Enable web dashboard
   --port 8080 \           # Dashboard port
@@ -133,7 +133,7 @@ This outputs:
 
 1. **Is the bot running?**
    ```bash
-   pgrep -f "main_v2.py"
+   pgrep -f "main.py"
    ```
 
 2. **Are trades happening?**
@@ -268,7 +268,7 @@ final_size = base_size * modifier
 
 ```bash
 # Ctrl+C in terminal, or:
-pkill -f "main_v2.py"
+pkill -f "main.py"
 ```
 
 The system saves all state before exit:

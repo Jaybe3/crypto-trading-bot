@@ -225,7 +225,7 @@ Strategist.generate_conditions()
 
 | Script | Purpose | Usage |
 |--------|---------|-------|
-| `main_v2.py` | Full autonomous system | `python src/main_v2.py --dashboard` |
+| `main.py` | Full autonomous system | `python src/main.py --dashboard` |
 | `dashboard_v2.py` | Dashboard only | `python src/dashboard_v2.py` |
 | `market_feed.py` | Market data only | Testing/debugging |
 
@@ -239,7 +239,7 @@ Strategist.generate_conditions()
 
 ### Command Line Arguments
 ```bash
-python src/main_v2.py \
+python src/main.py \
   --mode paper \
   --dashboard \
   --port 8080 \

@@ -378,7 +378,7 @@ class Strategist:
         state = {}
 
         # BTC trend and price
-        btc_tick = self.market.get_latest_tick("BTC")
+        btc_tick = self.market.get_price("BTC")
         if btc_tick:
             state["btc_price"] = btc_tick.price
             state["btc_change_24h"] = btc_tick.change_24h
@@ -505,6 +505,13 @@ IMPORTANT RULES:
 6. Each condition must have a clear, specific trigger price
 7. Only suggest LONG trades (we don't support SHORT yet)
 
+CRITICAL - TRIGGER PRICE RULES:
+- Conditions expire in 5 minutes, so trigger prices MUST be very close to current price
+- For ABOVE triggers: set trigger_price 0.1-0.3% ABOVE current price (e.g., if BTC is $76000, trigger at $76076-$76228)
+- For BELOW triggers: set trigger_price 0.1-0.3% BELOW current price
+- DO NOT set triggers more than 0.5% from current price - they will expire before triggering
+- The trigger price is where you WANT to enter, not a distant target
+
 OUTPUT FORMAT:
 You MUST respond with valid JSON in exactly this format:
 {
@@ -534,7 +541,7 @@ If no good setups exist, return:
 
 Think about:
 - Which coins show momentum or clear patterns?
-- What's a realistic trigger price (slightly above/below current)?
+- Trigger price MUST be within 0.1-0.3% of current price (conditions expire in 5 min)
 - What's an appropriate position size given confidence?
 - What stop-loss protects against downside while giving room to work?"""
 
@@ -749,12 +756,12 @@ Respond with JSON only - no other text."""
             logger.warning(f"No price data for {condition.coin}")
             return False
 
-        # Check trigger price is reasonable (within 10% of current)
+        # Check trigger price is reasonable (within 2% of current - conditions expire in 5 min)
         price_diff_pct = abs(condition.trigger_price - current_price.price) / current_price.price * 100
-        if price_diff_pct > 10:
+        if price_diff_pct > 2:
             logger.warning(
                 f"Trigger price ${condition.trigger_price} is {price_diff_pct:.1f}% "
-                f"away from current ${current_price.price}"
+                f"away from current ${current_price.price} - too far for 5-min TTL"
             )
             return False
 

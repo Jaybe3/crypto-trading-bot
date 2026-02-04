@@ -161,8 +161,13 @@ class TestHandoff:
             # Generate conditions
             conditions = await strategist.generate_conditions()
 
-            # Verify conditions were generated and passed to sniper
+            # Verify conditions were generated
             assert len(conditions) == 1
+
+            # Notify callbacks (mimics what _run_once does)
+            strategist._notify_callbacks(conditions)
+
+            # Verify conditions passed to sniper
             assert len(sniper.active_conditions) == 1
 
             # Simulate price tick below trigger
@@ -181,7 +186,12 @@ class TestHandoff:
             assert position.direction == "LONG"
             assert position.entry_price == 141.00
 
-        asyncio.run(run_test())
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            loop.run_until_complete(run_test())
+        finally:
+            loop.close()
 
     def test_multiple_conditions(self):
         """Test handling multiple conditions from Strategist."""

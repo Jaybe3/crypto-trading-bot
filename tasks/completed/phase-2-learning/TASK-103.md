@@ -55,7 +55,7 @@ This is the foundation everything else builds on.
 ### Main Entry Point
 
 ```python
-# src/main_v2.py
+# src/main.py
 
 import asyncio
 from src.market_feed import MarketFeed
@@ -222,7 +222,7 @@ class HealthMonitor:
 
 | File | Purpose |
 |------|---------|
-| `src/main_v2.py` | New main entry point |
+| `src/main.py` | New main entry point |
 | `config/settings.py` | Configuration constants |
 | `tests/test_integration.py` | End-to-end tests |
 
@@ -260,7 +260,7 @@ class HealthMonitor:
 
 ```bash
 # Start system and verify it connects
-python src/main_v2.py &
+python src/main.py &
 sleep 10
 
 # Check health
@@ -357,7 +357,7 @@ asyncio.run(test())
 
 ```bash
 # Run for 1 hour, check for crashes
-timeout 3600 python src/main_v2.py
+timeout 3600 python src/main.py
 
 # Check logs for errors
 grep -i error logs/trading.log
@@ -372,7 +372,7 @@ grep -i exception logs/trading.log
 
 **Files Created:**
 - `config/settings.py` (~80 lines) - Central configuration for trading bot
-- `src/main_v2.py` (~477 lines) - Main TradingSystem orchestrator with HealthMonitor
+- `src/main.py` (~477 lines) - Main TradingSystem orchestrator with HealthMonitor
 - `tests/test_integration.py` (~500 lines) - Comprehensive end-to-end tests
 
 ### Key Components

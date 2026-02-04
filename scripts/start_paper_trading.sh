@@ -155,4 +155,4 @@ echo ""
 
 # Start the system
 cd "$PROJECT_DIR"
-python3 src/main_v2.py --dashboard --port $DASHBOARD_PORT
+python3 src/main.py --dashboard --port $DASHBOARD_PORT

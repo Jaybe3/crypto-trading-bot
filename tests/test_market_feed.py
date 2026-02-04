@@ -118,86 +118,92 @@ class TestStreamUrlBuilding:
 class TestMessageHandling:
     """Test WebSocket message parsing."""
 
-    @pytest.mark.asyncio
-    async def test_handle_binance_trade(self):
-        feed = MarketFeed(['BTC'], exchange='binance')
-        received_trades = []
-        received_prices = []
+    def test_handle_binance_trade(self):
+        async def run_test():
+            feed = MarketFeed(['BTC'], exchange='binance')
+            received_trades = []
+            received_prices = []
 
-        feed.subscribe_trades(lambda t: received_trades.append(t))
-        feed.subscribe_price(lambda p: received_prices.append(p))
+            feed.subscribe_trades(lambda t: received_trades.append(t))
+            feed.subscribe_price(lambda p: received_prices.append(p))
 
-        # Simulate Binance trade data
-        trade_data = {
-            's': 'BTCUSDT',
-            'p': '42000.50',
-            'q': '0.001',
-            'T': 1672515782136,
-            'm': True
-        }
+            # Simulate Binance trade data
+            trade_data = {
+                's': 'BTCUSDT',
+                'p': '42000.50',
+                'q': '0.001',
+                'T': 1672515782136,
+                'm': True
+            }
 
-        await feed._handle_binance_trade(trade_data)
+            await feed._handle_binance_trade(trade_data)
 
-        # Should have received trade event
-        assert len(received_trades) == 1
-        assert received_trades[0].coin == 'BTC'
-        assert received_trades[0].price == 42000.50
-        assert received_trades[0].is_buyer_maker == True
+            # Should have received trade event
+            assert len(received_trades) == 1
+            assert received_trades[0].coin == 'BTC'
+            assert received_trades[0].price == 42000.50
+            assert received_trades[0].is_buyer_maker == True
 
-        # Should have received price update
-        assert len(received_prices) == 1
-        assert received_prices[0].coin == 'BTC'
-        assert received_prices[0].price == 42000.50
+            # Should have received price update
+            assert len(received_prices) == 1
+            assert received_prices[0].coin == 'BTC'
+            assert received_prices[0].price == 42000.50
 
-    @pytest.mark.asyncio
-    async def test_handle_bybit_trade(self):
-        feed = MarketFeed(['BTC'], exchange='bybit')
-        received_trades = []
-        received_prices = []
+        asyncio.run(run_test())
 
-        feed.subscribe_trades(lambda t: received_trades.append(t))
-        feed.subscribe_price(lambda p: received_prices.append(p))
+    def test_handle_bybit_trade(self):
+        async def run_test():
+            feed = MarketFeed(['BTC'], exchange='bybit')
+            received_trades = []
+            received_prices = []
 
-        # Simulate Bybit trade data
-        trade_data = {
-            's': 'BTCUSDT',
-            'p': '42000.50',
-            'v': '0.001',
-            'T': 1672515782136,
-            'S': 'Sell'
-        }
+            feed.subscribe_trades(lambda t: received_trades.append(t))
+            feed.subscribe_price(lambda p: received_prices.append(p))
 
-        await feed._handle_bybit_trade(trade_data)
+            # Simulate Bybit trade data
+            trade_data = {
+                's': 'BTCUSDT',
+                'p': '42000.50',
+                'v': '0.001',
+                'T': 1672515782136,
+                'S': 'Sell'
+            }
 
-        # Should have received trade event
-        assert len(received_trades) == 1
-        assert received_trades[0].coin == 'BTC'
-        assert received_trades[0].price == 42000.50
+            await feed._handle_bybit_trade(trade_data)
 
-        # Should have received price update
-        assert len(received_prices) == 1
-        assert received_prices[0].coin == 'BTC'
-        assert received_prices[0].price == 42000.50
+            # Should have received trade event
+            assert len(received_trades) == 1
+            assert received_trades[0].coin == 'BTC'
+            assert received_trades[0].price == 42000.50
 
-    @pytest.mark.asyncio
-    async def test_ignore_unknown_symbol(self):
-        feed = MarketFeed(['BTC'], exchange='binance')  # Only BTC
-        received = []
-        feed.subscribe_price(lambda p: received.append(p))
+            # Should have received price update
+            assert len(received_prices) == 1
+            assert received_prices[0].coin == 'BTC'
+            assert received_prices[0].price == 42000.50
 
-        # Send ETH trade (not subscribed)
-        trade_data = {
-            's': 'ETHUSDT',
-            'p': '2500.00',
-            'q': '1.0',
-            'T': 1672515782136,
-            'm': False
-        }
+        asyncio.run(run_test())
 
-        await feed._handle_binance_trade(trade_data)
+    def test_ignore_unknown_symbol(self):
+        async def run_test():
+            feed = MarketFeed(['BTC'], exchange='binance')  # Only BTC
+            received = []
+            feed.subscribe_price(lambda p: received.append(p))
 
-        # Should not trigger callback
-        assert len(received) == 0
+            # Send ETH trade (not subscribed)
+            trade_data = {
+                's': 'ETHUSDT',
+                'p': '2500.00',
+                'q': '1.0',
+                'T': 1672515782136,
+                'm': False
+            }
+
+            await feed._handle_binance_trade(trade_data)
+
+            # Should not trigger callback
+            assert len(received) == 0
+
+        asyncio.run(run_test())
 
 
 class TestCallbacks:
@@ -237,53 +243,57 @@ class TestCallbacks:
 
         assert len(feed._price_callbacks) == 3
 
-    @pytest.mark.asyncio
-    async def test_callback_error_doesnt_break_feed(self):
-        feed = MarketFeed(['BTC'], exchange='binance')
-        good_received = []
+    def test_callback_error_doesnt_break_feed(self):
+        async def run_test():
+            feed = MarketFeed(['BTC'], exchange='binance')
+            good_received = []
 
-        def bad_callback(tick):
-            raise Exception("Callback error!")
+            def bad_callback(tick):
+                raise Exception("Callback error!")
 
-        def good_callback(tick):
-            good_received.append(tick)
+            def good_callback(tick):
+                good_received.append(tick)
 
-        feed.subscribe_price(bad_callback)
-        feed.subscribe_price(good_callback)
+            feed.subscribe_price(bad_callback)
+            feed.subscribe_price(good_callback)
 
-        # Simulate trade (using Binance handler)
-        await feed._handle_binance_trade({
-            's': 'BTCUSDT',
-            'p': '42000.00',
-            'q': '0.001',
-            'T': 1672515782136,
-            'm': False
-        })
+            # Simulate trade (using Binance handler)
+            await feed._handle_binance_trade({
+                's': 'BTCUSDT',
+                'p': '42000.00',
+                'q': '0.001',
+                'T': 1672515782136,
+                'm': False
+            })
 
-        # Good callback should still be called despite bad callback error
-        assert len(good_received) == 1
+            # Good callback should still be called despite bad callback error
+            assert len(good_received) == 1
+
+        asyncio.run(run_test())
 
 
 class TestPriceCache:
     """Test price caching functionality."""
 
-    @pytest.mark.asyncio
-    async def test_get_price(self):
-        feed = MarketFeed(['BTC', 'ETH'], exchange='binance')
+    def test_get_price(self):
+        async def run_test():
+            feed = MarketFeed(['BTC', 'ETH'], exchange='binance')
 
-        # Simulate price update
-        await feed._handle_binance_trade({
-            's': 'BTCUSDT',
-            'p': '42000.00',
-            'q': '0.001',
-            'T': 1672515782136,
-            'm': False
-        })
+            # Simulate price update
+            await feed._handle_binance_trade({
+                's': 'BTCUSDT',
+                'p': '42000.00',
+                'q': '0.001',
+                'T': 1672515782136,
+                'm': False
+            })
 
-        price = feed.get_price('BTC')
-        assert price is not None
-        assert price.price == 42000.00
-        assert price.coin == 'BTC'
+            price = feed.get_price('BTC')
+            assert price is not None
+            assert price.price == 42000.00
+            assert price.coin == 'BTC'
+
+        asyncio.run(run_test())
 
     def test_get_price_not_found(self):
         feed = MarketFeed(['BTC'])
@@ -299,17 +309,19 @@ class TestPriceCache:
         assert feed.get_price('btc') is not None
         assert feed.get_price('BTC') is not None
 
-    @pytest.mark.asyncio
-    async def test_get_all_prices(self):
-        feed = MarketFeed(['BTC', 'ETH'], exchange='binance')
+    def test_get_all_prices(self):
+        async def run_test():
+            feed = MarketFeed(['BTC', 'ETH'], exchange='binance')
 
-        await feed._handle_binance_trade({'s': 'BTCUSDT', 'p': '42000', 'q': '0.001', 'T': 0, 'm': False})
-        await feed._handle_binance_trade({'s': 'ETHUSDT', 'p': '2500', 'q': '0.1', 'T': 0, 'm': False})
+            await feed._handle_binance_trade({'s': 'BTCUSDT', 'p': '42000', 'q': '0.001', 'T': 0, 'm': False})
+            await feed._handle_binance_trade({'s': 'ETHUSDT', 'p': '2500', 'q': '0.1', 'T': 0, 'm': False})
 
-        prices = feed.get_all_prices()
-        assert 'BTC' in prices
-        assert 'ETH' in prices
-        assert prices['BTC'].price == 42000
+            prices = feed.get_all_prices()
+            assert 'BTC' in prices
+            assert 'ETH' in prices
+            assert prices['BTC'].price == 42000
+
+        asyncio.run(run_test())
 
 
 class TestStatus:

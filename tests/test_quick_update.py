@@ -215,7 +215,8 @@ class TestQuickUpdateProcessing:
 
     def test_blacklist_triggered(self, quick_update, knowledge_brain):
         """Blacklist adaptation triggers after 5+ trades with <30% win rate."""
-        # Process 6 losing trades
+        # Process losing trades until blacklist triggers
+        blacklist_triggered = False
         for i in range(6):
             result = quick_update.process_trade_close(TradeResult(
                 trade_id=f"test-loss-{i}",
@@ -229,12 +230,14 @@ class TestQuickUpdateProcessing:
                 exit_reason="stop_loss",
             ))
 
-            # Check if blacklist was triggered (should be on trade 5 or later)
-            if result.coin_adaptation == "BLACKLIST":
+            # Check if blacklist was triggered on THIS trade
+            # Note: CoinStatus.BLACKLISTED.value = "blacklisted" -> upper() = "BLACKLISTED"
+            if result.coin_adaptation == "BLACKLISTED":
+                blacklist_triggered = True
                 break
 
-        # Verify blacklist
-        assert result.coin_adaptation == "BLACKLIST"
+        # Verify blacklist was triggered (on trade 5 when threshold crossed)
+        assert blacklist_triggered, "Blacklist should have been triggered"
         score = knowledge_brain.get_coin_score("SHIB")
         assert score.is_blacklisted is True
 
@@ -286,6 +289,8 @@ class TestPatternUpdates:
             entry_conditions={"test": True},
             exit_conditions={"stop_loss_pct": 2.0},
         )
+        # Capture initial values BEFORE trade (object is mutated in place)
+        initial_times_used = pattern.times_used  # Should be 0
         initial_confidence = pattern.confidence
 
         # Process a winning trade with this pattern
@@ -305,9 +310,9 @@ class TestPatternUpdates:
         assert result.pattern_updated is True
         assert result.pattern_id == pattern.pattern_id
 
-        # Confidence should have increased (or at least not decreased for a win)
+        # times_used should have increased from initial value
         updated = pattern_library.get_pattern(pattern.pattern_id)
-        assert updated.times_used > pattern.times_used
+        assert updated.times_used > initial_times_used
 
     def test_no_pattern_update_without_pattern_id(self, quick_update):
         """No pattern update when pattern_id is not provided."""
@@ -372,14 +377,17 @@ class TestPerformance:
 class TestSniperIntegration:
     """Tests for QuickUpdate integration with Sniper."""
 
-    def test_sniper_calls_quick_update(self, quick_update, temp_db):
+    def test_sniper_calls_quick_update(self, quick_update):
         """Sniper calls QuickUpdate after trade exit."""
         from src.sniper import Sniper
         from src.journal import TradeJournal
         from src.models.trade_condition import TradeCondition
         from datetime import datetime, timedelta
 
-        journal = TradeJournal(db=temp_db)
+        # Create a temp journal with its own database
+        fd, journal_path = tempfile.mkstemp(suffix=".db")
+        os.close(fd)
+        journal = TradeJournal(db_path=journal_path, enable_async=False)
         sniper = Sniper(
             journal=journal,
             initial_balance=10000.0,
@@ -395,6 +403,8 @@ class TestSniperIntegration:
             stop_loss_pct=2.0,
             take_profit_pct=2.0,
             position_size_usd=50.0,
+            reasoning="Test quick update",
+            strategy_id="test_strategy",
             valid_until=datetime.now() + timedelta(hours=1),
         )
 
@@ -419,6 +429,9 @@ class TestSniperIntegration:
         # Close the position (simulating take profit)
         initial_updates = quick_update.updates_processed
         sniper._execute_exit(position, 102.0, int(time.time() * 1000), "take_profit")
+
+        # Cleanup
+        os.unlink(journal_path)
 
         # QuickUpdate should have been called
         assert quick_update.updates_processed == initial_updates + 1

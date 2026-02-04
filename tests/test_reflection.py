@@ -279,32 +279,36 @@ class TestExitAnalysis:
 class TestLLMInsightGeneration:
     """Tests for LLM insight generation."""
 
-    @pytest.mark.asyncio
-    async def test_generate_insights(self, reflection_engine, mock_journal, mock_llm):
+    def test_generate_insights(self, reflection_engine, mock_journal, mock_llm):
         """LLM generates structured insights."""
-        trades = mock_journal.get_recent()
+        import asyncio
 
-        coin_analyses = reflection_engine._analyze_by_coin(trades)
-        pattern_analyses = reflection_engine._analyze_by_pattern(trades)
-        time_analysis = reflection_engine._analyze_by_time(trades)
-        regime_analysis = reflection_engine._analyze_by_regime(trades)
-        exit_analysis = reflection_engine._analyze_exits(trades)
+        async def run_test():
+            trades = mock_journal.get_recent()
 
-        insights, summary = await reflection_engine._generate_insights(
-            trades=trades,
-            coin_analyses=coin_analyses,
-            pattern_analyses=pattern_analyses,
-            time_analysis=time_analysis,
-            regime_analysis=regime_analysis,
-            exit_analysis=exit_analysis,
-            period_hours=12.0,
-            total_pnl=5.0,
-            win_rate=0.54,
-        )
+            coin_analyses = reflection_engine._analyze_by_coin(trades)
+            pattern_analyses = reflection_engine._analyze_by_pattern(trades)
+            time_analysis = reflection_engine._analyze_by_time(trades)
+            regime_analysis = reflection_engine._analyze_by_regime(trades)
+            exit_analysis = reflection_engine._analyze_exits(trades)
 
-        assert len(insights) == 2
-        assert "SOL" in summary
-        assert insights[0].insight_type == "coin"
+            insights, summary = await reflection_engine._generate_insights(
+                trades=trades,
+                coin_analyses=coin_analyses,
+                pattern_analyses=pattern_analyses,
+                time_analysis=time_analysis,
+                regime_analysis=regime_analysis,
+                exit_analysis=exit_analysis,
+                period_hours=12.0,
+                total_pnl=5.0,
+                win_rate=0.54,
+            )
+
+            assert len(insights) == 2
+            assert "SOL" in summary
+            assert insights[0].insight_type == "coin"
+
+        asyncio.run(run_test())
 
     def test_parse_llm_response(self, reflection_engine):
         """Can parse valid LLM JSON response."""
@@ -380,51 +384,67 @@ class TestTriggerConditions:
 class TestFullReflection:
     """Tests for full reflection cycle."""
 
-    @pytest.mark.asyncio
-    async def test_full_reflect(self, reflection_engine):
+    def test_full_reflect(self, reflection_engine):
         """Full reflection produces valid result."""
-        result = await reflection_engine.reflect()
+        import asyncio
 
-        assert isinstance(result, ReflectionResult)
-        assert result.trades_analyzed == 13
-        assert len(result.insights) > 0
-        assert result.summary != ""
-        assert result.total_time_ms > 0
+        async def run_test():
+            result = await reflection_engine.reflect()
 
-    @pytest.mark.asyncio
-    async def test_reflect_updates_state(self, reflection_engine):
+            assert isinstance(result, ReflectionResult)
+            assert result.trades_analyzed == 13
+            assert len(result.insights) > 0
+            assert result.summary != ""
+            assert result.total_time_ms > 0
+
+        asyncio.run(run_test())
+
+    def test_reflect_updates_state(self, reflection_engine):
         """Reflection updates internal state."""
-        reflection_engine.trades_since_reflection = 15
+        import asyncio
 
-        await reflection_engine.reflect()
+        async def run_test():
+            reflection_engine.trades_since_reflection = 15
 
-        assert reflection_engine.trades_since_reflection == 0
-        assert reflection_engine.last_reflection_time is not None
-        assert reflection_engine.reflections_completed == 1
+            await reflection_engine.reflect()
 
-    @pytest.mark.asyncio
-    async def test_reflect_empty_journal(self, reflection_engine, mock_journal):
+            assert reflection_engine.trades_since_reflection == 0
+            assert reflection_engine.last_reflection_time is not None
+            assert reflection_engine.reflections_completed == 1
+
+        asyncio.run(run_test())
+
+    def test_reflect_empty_journal(self, reflection_engine, mock_journal):
         """Handles empty journal gracefully."""
-        mock_journal.get_recent.return_value = []
+        import asyncio
 
-        result = await reflection_engine.reflect()
+        async def run_test():
+            mock_journal.get_recent.return_value = []
 
-        assert result.trades_analyzed == 0
-        assert len(result.insights) == 0
+            result = await reflection_engine.reflect()
+
+            assert result.trades_analyzed == 0
+            assert len(result.insights) == 0
+
+        asyncio.run(run_test())
 
 
 class TestDatabaseIntegration:
     """Tests for database logging."""
 
-    @pytest.mark.asyncio
-    async def test_reflection_logged_to_db(self, reflection_engine, temp_db):
+    def test_reflection_logged_to_db(self, reflection_engine, temp_db):
         """Reflection is saved to database."""
-        await reflection_engine.reflect()
+        import asyncio
 
-        reflections = temp_db.get_recent_reflections(limit=1)
+        async def run_test():
+            await reflection_engine.reflect()
 
-        assert len(reflections) == 1
-        assert reflections[0]["trades_analyzed"] == 13
+            reflections = temp_db.get_recent_reflections(limit=1)
+
+            assert len(reflections) == 1
+            assert reflections[0]["trades_analyzed"] == 13
+
+        asyncio.run(run_test())
 
 
 class TestOnTradeClose:

@@ -321,20 +321,28 @@ class MarketFeed:
                 self._reconnect_delay = min(self._reconnect_delay * 2, self._reconnect_delay_max)
 
     async def _subscribe_bybit(self):
-        """Subscribe to Bybit streams."""
-        # Subscribe to trades for each coin
-        args = [f"publicTrade.{coin.symbol}USDT" for coin in self.coin_configs]
+        """Subscribe to Bybit streams in batches (Bybit limits to 10 args per request)."""
+        # Build all subscription args
+        args = []
+        for coin in self.coin_configs:
+            args.append(f"publicTrade.{coin.symbol}USDT")
+            args.append(f"tickers.{coin.symbol}USDT")
 
-        # Also subscribe to tickers for 24h data
-        args += [f"tickers.{coin.symbol}USDT" for coin in self.coin_configs]
+        # Batch into groups of 10 (Bybit limit)
+        batch_size = 10
+        for i in range(0, len(args), batch_size):
+            batch = args[i:i + batch_size]
+            subscribe_msg = {
+                "op": "subscribe",
+                "args": batch
+            }
+            await self.ws.send(json.dumps(subscribe_msg))
+            logger.debug(f"Subscribed to batch {i//batch_size + 1}: {len(batch)} streams")
+            # Small delay between batches to avoid rate limiting
+            if i + batch_size < len(args):
+                await asyncio.sleep(0.1)
 
-        subscribe_msg = {
-            "op": "subscribe",
-            "args": args
-        }
-
-        await self.ws.send(json.dumps(subscribe_msg))
-        logger.debug(f"Subscribed to {len(args)} Bybit streams")
+        logger.info(f"Subscribed to {len(args)} Bybit streams in {(len(args) + batch_size - 1) // batch_size} batches")
 
     async def _listen(self, exchange_type: str):
         """Listen for WebSocket messages."""

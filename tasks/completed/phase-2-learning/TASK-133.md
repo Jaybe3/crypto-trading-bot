@@ -351,7 +351,7 @@ Update `src/reflection.py`:
 - Call `apply_insights()` after generating insights
 - Include adaptations in result
 
-### Step 6: Wire in main_v2.py
+### Step 6: Wire in main.py
 
 - Create AdaptationEngine
 - Pass to ReflectionEngine
@@ -383,7 +383,7 @@ Test:
 | `src/reflection.py` | Add adaptation_engine, call apply_insights() |
 | `src/knowledge.py` | Add favor_coin() if missing |
 | `src/database.py` | Add adaptations table and methods |
-| `src/main_v2.py` | Create and wire AdaptationEngine |
+| `src/main.py` | Create and wire AdaptationEngine |
 
 ---
 
@@ -584,7 +584,7 @@ Regime Rules:
 6. **Updated `src/models/reflection.py`**:
    - Added `adaptations` field to `ReflectionResult`
 
-7. **Updated `src/main_v2.py`**:
+7. **Updated `src/main.py`**:
    - Create and wire `AdaptationEngine`
    - Pass to `ReflectionEngine`
 

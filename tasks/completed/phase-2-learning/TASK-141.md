@@ -311,7 +311,7 @@ def get_improvement_metrics(self, lookback_days: int = 7) -> Dict[str, Any]:
 | File | Change |
 |------|--------|
 | `src/database.py` | Add snapshot tables and methods |
-| `src/main_v2.py` | Integrate ProfitabilityTracker |
+| `src/main.py` | Integrate ProfitabilityTracker |
 
 ---
 
@@ -402,7 +402,7 @@ print(f"Improving: {improvement['is_improving']}")
    - Methods: `save_profit_snapshot()`, `get_profit_snapshots()`, `delete_old_snapshots()`
    - Methods: `save_equity_point()`, `get_equity_curve()`, `get_high_water_marks()`
 
-5. **TradingSystem Integration** (`src/main_v2.py`):
+5. **TradingSystem Integration** (`src/main.py`):
    - ProfitabilityTracker initialized on startup
    - SnapshotScheduler checks for due snapshots every 5 minutes
    - Added to health check components
@@ -446,5 +446,5 @@ print(f"Improving: {improvement['is_improving']}")
 | File | Changes |
 |------|---------|
 | `src/database.py` | Added profit_snapshots and equity_points tables |
-| `src/main_v2.py` | Integrated ProfitabilityTracker, added operational commands |
+| `src/main.py` | Integrated ProfitabilityTracker, added operational commands |
 

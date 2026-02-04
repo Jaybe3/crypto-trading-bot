@@ -4,14 +4,28 @@
 
 ---
 
+## PRODUCTION SWITCH NOTICE
+
+**Date:** February 3, 2026
+
+Production switched from Phase 1 (`main_legacy.py`) to Phase 2 (`main.py`) system.
+
+Changes made:
+- `main.py` is now the Phase 2 autonomous learning system
+- `main_legacy.py` contains the old Phase 1 system (deprecated)
+- `supervisor.conf` updated to run Phase 2 with built-in dashboard
+- See `docs/DEPRECATION-LOG.md` for details
+
+---
+
 ## Project Status
 
 | Metric | Value |
 |--------|-------|
-| Current Phase | Phase 2 Complete |
-| Completed Tasks | 45 |
+| Current Phase | Phase 2 Deployed |
+| Completed Tasks | 50 |
 | Active Tasks | 0 |
-| Backlog Tasks | 0 |
+| Backlog Tasks | 8 (Phase 3) |
 | Open Bugs | 0 |
 
 ---
@@ -84,10 +98,37 @@
 | [TASK-151](./completed/phase-2-learning/TASK-151.md) | Learning Validation | ✅ Complete |
 | [TASK-152](./completed/phase-2-learning/TASK-152.md) | Performance Analysis | ✅ Complete |
 
-#### Future
-| Task | Description | Status |
-|------|-------------|--------|
-| [TASK-300](./completed/phase-2-learning/TASK-300.md) | Phase 3 Planning | ⬜ Backlog |
+---
+
+## Backlog: Phase 3 - Intelligence Layer
+
+### Phase 3A: Sentiment Layer
+| Task | Description | Priority | Status |
+|------|-------------|----------|--------|
+| [TASK-301](./backlog/phase-3-intelligence/TASK-301.md) | Fear & Greed Index Integration | High | ✅ Complete |
+| [TASK-302](./backlog/phase-3-intelligence/TASK-302.md) | BTC Correlation Tracking | High | ⬜ Not Started |
+| [TASK-303](./backlog/phase-3-intelligence/TASK-303.md) | News Feed Integration | Medium | ⬜ Not Started |
+| [TASK-304](./backlog/phase-3-intelligence/TASK-304.md) | Social Sentiment Integration | Low | ⬜ Not Started |
+| [TASK-305](./backlog/phase-3-intelligence/TASK-305.md) | ContextManager & Strategist Integration | High | ⬜ Not Started |
+
+**Milestone:** Sentiment data flowing to Strategist for context-aware decisions
+
+### Phase 3B: Technical Indicators
+| Task | Description | Priority | Status |
+|------|-------------|----------|--------|
+| [TASK-309](./backlog/phase-3-intelligence/TASK-309.md) | Candle Data Fetcher | High | ✅ Complete |
+| [TASK-310](./backlog/phase-3-intelligence/TASK-310.md) | RSI (Relative Strength Index) | High | ✅ Complete |
+| [TASK-311](./backlog/phase-3-intelligence/TASK-311.md) | VWAP (Volume-Weighted Average Price) | Medium | ⬜ Not Started |
+| [TASK-312](./backlog/phase-3-intelligence/TASK-312.md) | ATR (Average True Range) | High | ✅ Complete |
+| [TASK-313](./backlog/phase-3-intelligence/TASK-313.md) | Funding Rates | Medium | ✅ Complete |
+| [TASK-314](./backlog/phase-3-intelligence/TASK-314.md) | Support/Resistance Levels | Medium | ⬜ Not Started |
+| [TASK-315](./backlog/phase-3-intelligence/TASK-315.md) | Volume Profile | Low | ⬜ Not Started |
+| [TASK-316](./backlog/phase-3-intelligence/TASK-316.md) | Order Book Depth | Low | ⬜ Not Started |
+| [TASK-317](./backlog/phase-3-intelligence/TASK-317.md) | TechnicalManager & Strategist Integration | High | ⬜ Not Started |
+
+**Milestone:** Technical analysis providing trade setup quality scoring
+
+See also: [Phase 3 Index](../docs/specs/PHASE-3-INDEX.md)
 
 ---
 

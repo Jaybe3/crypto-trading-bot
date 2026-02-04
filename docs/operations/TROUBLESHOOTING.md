@@ -11,7 +11,7 @@ Common issues and how to fix them.
 
 ```bash
 # Is bot running?
-pgrep -f "main_v2.py"
+pgrep -f "main.py"
 
 # Is dashboard running?
 curl -s http://localhost:8080/api/status | jq .
@@ -39,7 +39,7 @@ sqlite3 data/trading_bot.db "SELECT COUNT(*) FROM trade_journal;"
 
 **Diagnosis:**
 ```bash
-pgrep -f "main_v2.py"
+pgrep -f "main.py"
 # No output = not running
 ```
 
@@ -47,7 +47,7 @@ pgrep -f "main_v2.py"
 
 1. Start manually to see errors:
    ```bash
-   python src/main_v2.py --mode paper
+   python src/main.py --mode paper
    ```
 
 2. Check logs for crash:
@@ -57,7 +57,7 @@ pgrep -f "main_v2.py"
 
 3. Restart:
    ```bash
-   python src/main_v2.py --mode paper --dashboard
+   python src/main.py --mode paper --dashboard
    ```
 
 ---
@@ -85,8 +85,8 @@ grep "WebSocket" logs/bot.log | tail -10
 
 3. Restart the bot (WebSocket reconnects automatically):
    ```bash
-   pkill -f "main_v2.py"
-   python src/main_v2.py --mode paper --dashboard
+   pkill -f "main.py"
+   python src/main.py --mode paper --dashboard
    ```
 
 4. If persistent, check firewall/proxy settings
@@ -158,7 +158,7 @@ lsof -i :8080
 
 3. Start with different port:
    ```bash
-   python src/main_v2.py --dashboard --port 9090
+   python src/main.py --dashboard --port 9090
    ```
 
 4. Check for startup errors:
@@ -181,19 +181,19 @@ lsof data/trading_bot.db
 
 1. Check for multiple bot instances:
    ```bash
-   pgrep -af "main_v2.py"
+   pgrep -af "main.py"
    # Should be only one
    ```
 
 2. Kill duplicates:
    ```bash
-   pkill -f "main_v2.py"
+   pkill -f "main.py"
    ```
 
 3. Wait and restart:
    ```bash
    sleep 5
-   python src/main_v2.py --mode paper --dashboard
+   python src/main.py --mode paper --dashboard
    ```
 
 ---
@@ -386,15 +386,15 @@ du -sh data/ logs/
 
 ### Full Restart
 ```bash
-pkill -f "main_v2.py"
+pkill -f "main.py"
 sleep 5
-python src/main_v2.py --mode paper --dashboard
+python src/main.py --mode paper --dashboard
 ```
 
 ### Database Recovery
 ```bash
 # Stop bot
-pkill -f "main_v2.py"
+pkill -f "main.py"
 
 # Check integrity
 sqlite3 data/trading_bot.db "PRAGMA integrity_check;"
@@ -403,13 +403,13 @@ sqlite3 data/trading_bot.db "PRAGMA integrity_check;"
 cp data/backups/trading_bot_YYYYMMDD.db data/trading_bot.db
 
 # Restart
-python src/main_v2.py --mode paper --dashboard
+python src/main.py --mode paper --dashboard
 ```
 
 ### Reset Learning (CAUTION)
 ```bash
 # This resets all learning - use only if learning is badly corrupted
-pkill -f "main_v2.py"
+pkill -f "main.py"
 
 sqlite3 data/trading_bot.db "
 DELETE FROM coin_scores;
@@ -420,7 +420,7 @@ DELETE FROM insights;
 DELETE FROM reflections;
 "
 
-python src/main_v2.py --mode paper --dashboard
+python src/main.py --mode paper --dashboard
 ```
 
 ---

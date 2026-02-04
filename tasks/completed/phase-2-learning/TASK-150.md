@@ -72,7 +72,7 @@ MIN_HOURS_FOR_MEASUREMENT = 24   # Or after 24 hours
 
 ```bash
 # Start the system with dashboard
-python src/main_v2.py --dashboard --port 8080
+python src/main.py --dashboard --port 8080
 
 # In another terminal, watch logs
 tail -f logs/trading.log

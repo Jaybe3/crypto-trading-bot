@@ -92,7 +92,7 @@ Choose one:
 
 - [ ] **No other trading instances** running
   ```bash
-  ps aux | grep main_v2.py
+  ps aux | grep main.py
   ```
 
 - [ ] **Terminal/screen** ready for long-running process
@@ -136,5 +136,5 @@ If needed, stop gracefully with Ctrl+C. The system will:
 
 For immediate stop (not recommended):
 ```bash
-pkill -f main_v2.py
+pkill -f main.py
 ```

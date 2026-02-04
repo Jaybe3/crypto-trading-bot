@@ -23,7 +23,7 @@ http://localhost:8080
 
 **With Trading System:**
 ```bash
-python src/main_v2.py --dashboard --port 8080
+python src/main.py --dashboard --port 8080
 ```
 
 **Standalone (view only):**

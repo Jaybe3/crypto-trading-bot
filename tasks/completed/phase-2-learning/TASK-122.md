@@ -262,7 +262,7 @@ Create `tests/test_pattern_library.py`:
 | File | Change |
 |------|--------|
 | `src/strategist.py` | Query pattern library, include in prompts |
-| `src/main_v2.py` | Initialize PatternLibrary, wire to components |
+| `src/main.py` | Initialize PatternLibrary, wire to components |
 
 ---
 
@@ -420,7 +420,7 @@ When generating conditions, reference pattern_id if using a known pattern.
 | File | Changes |
 |------|---------|
 | `src/strategist.py` | Added `pattern_library` parameter, includes pattern context in prompts |
-| `src/main_v2.py` | Initializes PatternLibrary, wires to Strategist |
+| `src/main.py` | Initializes PatternLibrary, wires to Strategist |
 
 ### Key Implementation Details
 

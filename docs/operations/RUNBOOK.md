@@ -11,12 +11,12 @@ Day-to-day operations guide for running the crypto trading bot.
 
 ### Start Everything
 ```bash
-python src/main_v2.py --mode paper --dashboard --port 8080
+python src/main.py --mode paper --dashboard --port 8080
 ```
 
 ### Stop Everything
 ```bash
-pkill -f "main_v2.py"
+pkill -f "main.py"
 ```
 
 ### Check Status
@@ -37,7 +37,7 @@ tail -f logs/bot.log
 
 1. **Verify bot is running:**
    ```bash
-   pgrep -f "main_v2.py"
+   pgrep -f "main.py"
    curl -s http://localhost:8080/api/status
    ```
 
@@ -130,7 +130,7 @@ tail -f logs/bot.log
 ollama serve &
 
 # Start trading system
-python src/main_v2.py --mode paper --dashboard --port 8080
+python src/main.py --mode paper --dashboard --port 8080
 ```
 
 This starts:
@@ -144,7 +144,7 @@ This starts:
 ### Normal Stop
 ```bash
 # Ctrl+C in terminal, or:
-pkill -f "main_v2.py"
+pkill -f "main.py"
 ```
 
 The system gracefully:
@@ -154,12 +154,12 @@ The system gracefully:
 
 ### Background Mode
 ```bash
-nohup python src/main_v2.py --mode paper --dashboard > logs/bot.log 2>&1 &
+nohup python src/main.py --mode paper --dashboard > logs/bot.log 2>&1 &
 ```
 
 Check it's running:
 ```bash
-pgrep -f "main_v2.py"
+pgrep -f "main.py"
 tail -f logs/bot.log
 ```
 
@@ -273,9 +273,9 @@ cp data/trading_bot.db data/backups/trading_bot_$(date +%Y%m%d_%H%M%S).db
 ### Restore from Backup
 ```bash
 # Stop bot first!
-pkill -f "main_v2.py"
+pkill -f "main.py"
 cp data/backups/trading_bot_YYYYMMDD.db data/trading_bot.db
-python src/main_v2.py --mode paper --dashboard
+python src/main.py --mode paper --dashboard
 ```
 
 ### Query with SQLite
@@ -314,7 +314,7 @@ VACUUM;
 ### Command Line Arguments
 
 ```bash
-python src/main_v2.py \
+python src/main.py \
   --mode paper \           # paper or live
   --dashboard \            # Enable dashboard
   --port 8080 \           # Dashboard port
@@ -327,12 +327,12 @@ python src/main_v2.py \
 
 ### Emergency Stop
 ```bash
-pkill -f "main_v2.py"
+pkill -f "main.py"
 ```
 
 ### If Bot Won't Stop
 ```bash
-pkill -9 -f "main_v2.py"
+pkill -9 -f "main.py"
 ```
 
 ### If Database Corrupted
@@ -341,7 +341,7 @@ pkill -9 -f "main_v2.py"
 sqlite3 data/trading_bot.db "PRAGMA integrity_check;"
 
 # If failed, restore backup
-pkill -f "main_v2.py"
+pkill -f "main.py"
 cp data/backups/trading_bot_latest.db data/trading_bot.db
 ```
 

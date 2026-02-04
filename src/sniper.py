@@ -714,8 +714,8 @@ class Sniper:
         """
         now = time.time()
 
-        # Check if processing ticks
-        tick_age = now - self.last_tick_time if self.last_tick_time else None
+        # Check if processing ticks (last_tick_time is in milliseconds)
+        tick_age = now - (self.last_tick_time / 1000) if self.last_tick_time else None
 
         # Determine health status
         if tick_age is None:
@@ -741,7 +741,7 @@ class Sniper:
         return {
             "status": status,
             "last_activity": datetime.fromtimestamp(
-                self.last_tick_time
+                self.last_tick_time / 1000
             ).isoformat() if self.last_tick_time else None,
             "error_count": 0,  # No explicit error tracking yet
             "metrics": {

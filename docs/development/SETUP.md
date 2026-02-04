@@ -39,7 +39,7 @@ python -c "from src.database import Database; Database()"
 pytest tests/ -v
 
 # Start paper trading
-python src/main_v2.py --mode paper --dashboard
+python src/main.py --mode paper --dashboard
 ```
 
 ---
@@ -169,7 +169,7 @@ Expected output: All tests pass
 ### Start System
 
 ```bash
-python src/main_v2.py --mode paper --dashboard --port 8080
+python src/main.py --mode paper --dashboard --port 8080
 ```
 
 Open http://localhost:8080 to verify dashboard.
@@ -181,7 +181,7 @@ Open http://localhost:8080 to verify dashboard.
 ```
 crypto-trading-bot/
 ├── src/
-│   ├── main_v2.py           # Entry point
+│   ├── main.py           # Entry point
 │   ├── market_feed.py       # WebSocket data
 │   ├── strategist.py        # LLM conditions
 │   ├── sniper.py            # Execution
@@ -271,7 +271,7 @@ export LOG_LEVEL=DEBUG
 ### Paper Trading Mode
 
 ```bash
-python src/main_v2.py --mode paper --dashboard --port 8080
+python src/main.py --mode paper --dashboard --port 8080
 ```
 
 ### Dashboard Only
@@ -283,7 +283,7 @@ python src/dashboard_v2.py --port 8080 --db data/trading_bot.db
 ### Background Mode
 
 ```bash
-nohup python src/main_v2.py --mode paper --dashboard > logs/bot.log 2>&1 &
+nohup python src/main.py --mode paper --dashboard > logs/bot.log 2>&1 &
 ```
 
 ### Check Status
@@ -315,7 +315,7 @@ pytest tests/ -v
 ### 4. Test Manually
 
 ```bash
-python src/main_v2.py --mode paper --dashboard
+python src/main.py --mode paper --dashboard
 ```
 
 ### 5. Commit
@@ -355,7 +355,7 @@ curl http://172.27.144.1:11434/api/tags
 lsof data/trading_bot.db
 
 # Kill if needed
-pkill -f "main_v2.py"
+pkill -f "main.py"
 ```
 
 ### Port 8080 in Use
@@ -365,7 +365,7 @@ pkill -f "main_v2.py"
 lsof -i :8080
 
 # Use different port
-python src/main_v2.py --dashboard --port 9090
+python src/main.py --dashboard --port 9090
 ```
 
 ### Import Errors

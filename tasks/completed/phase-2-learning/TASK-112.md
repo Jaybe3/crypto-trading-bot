@@ -66,9 +66,9 @@ strategist.subscribe_conditions(sniper.set_conditions)
 
 The Sniper's `set_conditions()` method will receive the list of `TradeCondition` objects directly from the Strategist callback.
 
-### 3. Update Orchestrator (main_v2.py)
+### 3. Update Orchestrator (main.py)
 
-Extend `src/main_v2.py` to include Strategist:
+Extend `src/main.py` to include Strategist:
 
 ```python
 class TradingSystem:
@@ -216,7 +216,7 @@ Create integration test that verifies end-to-end flow.
 | File | Change |
 |------|--------|
 | `src/sniper.py` | Remove local TradeCondition, import from models, rename trigger_type → trigger_condition |
-| `src/main_v2.py` | Add Strategist integration, wire callback, lifecycle management |
+| `src/main.py` | Add Strategist integration, wire callback, lifecycle management |
 | `config/settings.py` | Add STRATEGIST_* settings |
 | `tests/test_sniper.py` | Update imports, fix field names |
 
@@ -299,7 +299,7 @@ asyncio.run(test_handoff())
 
 ```bash
 # Start full system and watch logs
-python src/main_v2.py
+python src/main.py
 
 # Should see logs like:
 # [INFO] Strategist: Generated 2 conditions
@@ -323,7 +323,7 @@ python src/main_v2.py
 | File | Changes |
 |------|---------|
 | `src/sniper.py` | Removed local TradeCondition class, import from models, updated `trigger_type` → `trigger_condition`, fixed percentage calculations (2.0 = 2% not 0.02) |
-| `src/main_v2.py` | Added Strategist initialization, wired `_on_new_conditions` callback, added lifecycle management |
+| `src/main.py` | Added Strategist initialization, wired `_on_new_conditions` callback, added lifecycle management |
 | `config/settings.py` | Added `STRATEGIST_ENABLED`, `STRATEGIST_INTERVAL`, `STRATEGIST_MAX_CONDITIONS`, `STRATEGIST_CONDITION_TTL` |
 | `tests/test_sniper.py` | Updated imports, fixed field names and percentage format |
 

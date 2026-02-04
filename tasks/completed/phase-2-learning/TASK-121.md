@@ -252,7 +252,7 @@ Create `tests/test_coin_scorer.py`:
 | `src/database.py` | Add coin_adaptations table |
 | `src/sniper.py` | Call CoinScorer on trade close |
 | `src/strategist.py` | Query position modifiers, skip blacklisted |
-| `src/main_v2.py` | Initialize CoinScorer, wire components |
+| `src/main.py` | Initialize CoinScorer, wire components |
 
 ---
 
@@ -314,7 +314,7 @@ print("Coin Scorer working!")
 
 ```bash
 # Watch logs during trading
-python src/main_v2.py
+python src/main.py
 
 # Should see:
 # [INFO] Trade closed: SHIB -$2.00
@@ -368,7 +368,7 @@ python src/main_v2.py
 | `src/database.py` | Added `coin_adaptations` table + indexes + CRUD methods |
 | `src/sniper.py` | Added `coin_scorer` parameter, calls `process_trade_result()` on exit |
 | `src/strategist.py` | Added `coin_scorer` parameter, applies position modifiers, skips blacklisted |
-| `src/main_v2.py` | Initializes KnowledgeBrain + CoinScorer, wires to Sniper and Strategist |
+| `src/main.py` | Initializes KnowledgeBrain + CoinScorer, wires to Sniper and Strategist |
 
 ### Key Implementation Details
 

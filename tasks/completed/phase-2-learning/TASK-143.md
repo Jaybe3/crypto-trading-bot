@@ -541,7 +541,7 @@ eventSource.onmessage = (event) => {
 
 | File | Change |
 |------|--------|
-| `src/main_v2.py` | Add dashboard integration, --dashboard flag |
+| `src/main.py` | Add dashboard integration, --dashboard flag |
 | `requirements.txt` | Add fastapi, uvicorn, jinja2 |
 
 ---
@@ -565,7 +565,7 @@ eventSource.onmessage = (event) => {
 ### Start Dashboard
 
 ```bash
-python src/main_v2.py --dashboard --port 8080
+python src/main.py --dashboard --port 8080
 ```
 
 Then open: http://localhost:8080

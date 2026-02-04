@@ -390,11 +390,11 @@ class ReflectionResult:
 
 ## Entry Points
 
-### main_v2.py
+### main.py
 **Purpose:** Full autonomous trading system
 
 ```bash
-python src/main_v2.py --mode paper --dashboard --port 8080
+python src/main.py --mode paper --dashboard --port 8080
 ```
 
 | Class | Key Methods |
@@ -408,7 +408,7 @@ python src/main_v2.py --mode paper --dashboard --port 8080
 ```
 src/
 ├── __init__.py
-├── main_v2.py              # Entry point
+├── main.py              # Entry point
 ├── market_feed.py          # WebSocket data
 ├── strategist.py           # LLM conditions
 ├── sniper.py               # Execution

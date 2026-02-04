@@ -1,8 +1,8 @@
-# Phase 3: Market Context Enhancement
+# Phase 3: Intelligence Layer
 
 ## Overview
 
-Enhance the autonomous trader with market-wide context and sentiment data to improve decision quality. The bot should understand *why* prices are moving, not just *that* they're moving.
+Enhance the autonomous trader with market-wide context, sentiment data, and technical indicators to improve decision quality. The bot should understand *why* prices are moving, not just *that* they're moving.
 
 **Prerequisite:** Phase 2 complete with proven learning loop
 
@@ -18,50 +18,74 @@ Phase 2 creates a bot that learns from its own trades. Phase 3 gives it external
 3. Bot loses money → Learns "SOL shorts risky"
 
 ### With Context (Phase 3)
-1. SOL drops 5% → Bot checks: BTC also down 4%, Fear at 25
-2. Bot recognizes: "Market-wide dip, not SOL weakness"
-3. Bot skips trade or goes long on oversold bounce
+1. SOL drops 5% → Bot checks: BTC also down 4%, Fear at 25, RSI oversold
+2. Bot recognizes: "Market-wide dip, not SOL weakness, oversold bounce likely"
+3. Bot skips short or goes long on oversold bounce
 4. No loss required to learn
 
 ---
 
 ## Implementation Phases
 
-### Phase 3.1: Core Context Layer
-| Task | Description | Status |
-|------|-------------|--------|
-| TASK-300 | Sentiment & Context Layer | Not Started |
-| TASK-301 | BTC Correlation Tracking | Not Started |
-| TASK-302 | Fear & Greed Integration | Not Started |
+### Phase 3A: Sentiment Layer
+| Task | Description | Priority | Status |
+|------|-------------|----------|--------|
+| [TASK-301](tasks/backlog/phase-3-intelligence/TASK-301.md) | Fear & Greed Index Integration | High | Not Started |
+| [TASK-302](tasks/backlog/phase-3-intelligence/TASK-302.md) | BTC Correlation Tracking | High | Not Started |
+| [TASK-303](tasks/backlog/phase-3-intelligence/TASK-303.md) | News Feed Integration | Medium | Not Started |
+| [TASK-304](tasks/backlog/phase-3-intelligence/TASK-304.md) | Social Sentiment Integration | Low | Not Started |
+| [TASK-305](tasks/backlog/phase-3-intelligence/TASK-305.md) | ContextManager & Strategist Integration | High | Not Started |
 
-**Milestone:** Context data flowing to Strategist
+**Milestone:** Sentiment data flowing to Strategist for context-aware decisions
 
-### Phase 3.2: News & Events
-| Task | Description | Status |
-|------|-------------|--------|
-| TASK-310 | News Feed Integration | Not Started |
-| TASK-311 | Event Detection (listings, unlocks) | Not Started |
-| TASK-312 | News → Trade Signal Mapping | Not Started |
+### Phase 3B: Technical Indicators
+| Task | Description | Priority | Status |
+|------|-------------|----------|--------|
+| [TASK-309](tasks/backlog/phase-3-intelligence/TASK-309.md) | Candle Data Fetcher | High | Not Started |
+| [TASK-310](tasks/backlog/phase-3-intelligence/TASK-310.md) | RSI (Relative Strength Index) | High | Not Started |
+| [TASK-311](tasks/backlog/phase-3-intelligence/TASK-311.md) | VWAP (Volume-Weighted Average Price) | Medium | Not Started |
+| [TASK-312](tasks/backlog/phase-3-intelligence/TASK-312.md) | ATR (Average True Range) | High | Not Started |
+| [TASK-313](tasks/backlog/phase-3-intelligence/TASK-313.md) | Funding Rates | Medium | Not Started |
+| [TASK-314](tasks/backlog/phase-3-intelligence/TASK-314.md) | Support/Resistance Levels | Medium | Not Started |
+| [TASK-315](tasks/backlog/phase-3-intelligence/TASK-315.md) | Volume Profile | Low | Not Started |
+| [TASK-316](tasks/backlog/phase-3-intelligence/TASK-316.md) | Order Book Depth | Low | Not Started |
+| [TASK-317](tasks/backlog/phase-3-intelligence/TASK-317.md) | TechnicalManager & Strategist Integration | High | Not Started |
 
-**Milestone:** Bot avoids trades during negative news events
+**Milestone:** Technical analysis providing trade setup quality scoring
 
-### Phase 3.3: Social Signals (Optional)
-| Task | Description | Status |
-|------|-------------|--------|
-| TASK-320 | Social Sentiment Integration | Not Started |
-| TASK-321 | Trending Coin Detection | Not Started |
-| TASK-322 | Crowd Mood Analysis | Not Started |
+---
 
-**Milestone:** Bot uses social signals for timing
+## Architecture
 
-### Phase 3.4: Context Learning
-| Task | Description | Status |
-|------|-------------|--------|
-| TASK-330 | Context Performance Tracking | Not Started |
-| TASK-331 | Context Weight Optimization | Not Started |
-| TASK-332 | Context → Knowledge Brain | Not Started |
+### New Directory Structure
+```
+src/
+  sentiment/
+    __init__.py
+    fear_greed.py           # TASK-301
+    btc_correlation.py      # TASK-302
+    news_feed.py            # TASK-303
+    social_sentiment.py     # TASK-304
+    context_manager.py      # TASK-305
+  technical/
+    __init__.py
+    candle_fetcher.py       # TASK-309
+    rsi.py                  # TASK-310
+    vwap.py                 # TASK-311
+    atr.py                  # TASK-312
+    funding.py              # TASK-313
+    support_resistance.py   # TASK-314
+    volume_profile.py       # TASK-315
+    orderbook.py            # TASK-316
+    manager.py              # TASK-317
+```
 
-**Milestone:** Bot learns which context signals matter
+### Data Flow
+```
+External APIs ──► Sentiment Layer ──► ContextManager ──┐
+                                                       ├──► Strategist
+Bybit API ──────► Technical Layer ──► TechnicalManager ┘
+```
 
 ---
 
@@ -73,18 +97,22 @@ Phase 2 creates a bot that learns from its own trades. Phase 3 gives it external
 | BTC Correlation | Internal (MarketFeed) | Free | High |
 | News | CryptoPanic | Free (limited) | Medium |
 | Social | LunarCrush | Free (limited) | Low |
+| Candles/OHLCV | Bybit | Free | High |
+| Funding Rates | Bybit | Free | Medium |
+| Order Book | Bybit | Free | Low |
 
 ---
 
 ## Success Criteria
 
-The context layer is working when:
+The intelligence layer is working when:
 
 1. Trade decisions incorporate market-wide context
 2. Bot avoids trades during obvious market-wide moves
-3. Context is recorded with each trade for learning
-4. Win rate improves compared to Phase 2 baseline
-5. Fewer "learned the hard way" losses
+3. Technical indicators provide trade setup quality scoring
+4. Context and technicals are recorded with each trade
+5. Win rate improves compared to Phase 2 baseline
+6. Fewer "learned the hard way" losses
 
 ---
 
@@ -99,4 +127,4 @@ The context layer is working when:
 
 ---
 
-*Last Updated: February 2, 2026*
+*Last Updated: February 3, 2026*

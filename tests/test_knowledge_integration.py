@@ -26,7 +26,7 @@ def temp_db():
     os.close(fd)
     db = Database(path)
     yield db
-    db.close()
+    # Database uses connection pooling, no close() needed
     os.unlink(path)
 
 
@@ -205,6 +205,7 @@ class TestRegimeRuleEnforcement:
 
     def test_no_trade_rule_skips_generation(self, knowledge_brain, coin_scorer, pattern_library, mock_market_feed, mock_llm, temp_db):
         """NO_TRADE rule prevents condition generation."""
+        import asyncio
         from src.strategist import Strategist
 
         # Add a rule that always triggers
@@ -225,14 +226,13 @@ class TestRegimeRuleEnforcement:
             db=temp_db,
         )
 
-        import asyncio
-        conditions = asyncio.get_event_loop().run_until_complete(
-            strategist.generate_conditions()
-        )
+        async def run_test():
+            conditions = await strategist.generate_conditions()
+            # Should return empty list without calling LLM
+            assert conditions == []
+            mock_llm.query.assert_not_called()
 
-        # Should return empty list without calling LLM
-        assert conditions == []
-        mock_llm.query.assert_not_called()
+        asyncio.run(run_test())
 
     def test_reduce_size_rule_halves_positions(self, knowledge_brain, coin_scorer, pattern_library, mock_market_feed, mock_llm, temp_db):
         """REDUCE_SIZE rule halves position sizes."""
@@ -356,11 +356,13 @@ class TestCombinedPositionModifiers:
         """Position size cannot go below minimum."""
         from src.strategist import Strategist, DEFAULT_MIN_POSITION_SIZE
 
-        # Create a reduced coin
-        for _ in range(2):
-            knowledge_brain.update_coin_score("DOGE", {"won": True, "pnl": 1.0})
-        for _ in range(8):
+        # Create a REDUCED coin (30-45% win rate, NOT blacklisted)
+        # 4 wins out of 10 = 40% win rate, with positive P&L to avoid blacklist
+        for _ in range(4):
+            knowledge_brain.update_coin_score("DOGE", {"won": True, "pnl": 3.0})
+        for _ in range(6):
             knowledge_brain.update_coin_score("DOGE", {"won": False, "pnl": -1.0})
+        # Total: 4*3 - 6*1 = +$6 P&L, 40% win rate -> REDUCED (not blacklisted)
 
         strategist = Strategist(
             llm=mock_llm,
@@ -370,12 +372,13 @@ class TestCombinedPositionModifiers:
             pattern_library=pattern_library,
             db=temp_db,
         )
+        strategist._active_rule_actions = []  # No regime modifiers
 
         # Very small base would be below minimum
+        # 10 * 0.5 (reduced modifier) = 5, but min is 20
         final_size = strategist._calculate_final_position_size(10.0, "DOGE")
 
-        # Should clamp to minimum (note: blacklisted returns 0, reduced gets 0.5x)
-        # 10 * 0.5 = 5, but minimum is 20, so should be 20
+        # Should clamp to minimum
         assert final_size == DEFAULT_MIN_POSITION_SIZE
 
     def test_enforces_max_position_size(self, knowledge_brain, coin_scorer, pattern_library, mock_market_feed, mock_llm, temp_db):
@@ -430,6 +433,8 @@ class TestValidationWithKnowledge:
             stop_loss_pct=2.0,
             take_profit_pct=1.5,
             position_size_usd=50.0,
+            reasoning="Test blacklist validation",
+            strategy_id="test_strategy",
         )
 
         is_valid = strategist._validate_condition(condition)

@@ -25,7 +25,7 @@ class TestTradingRule:
             id=1,
             rule_text="When 24h change > 5%, BUY",
             source_learning_id=1,
-            rule_type="momentum trading",
+            source_pattern="momentum trading",
             trigger_condition="high momentum",
             expected_action="BUY",
             status="testing",
@@ -40,7 +40,7 @@ class TestTradingRule:
         """Test success rate with no trades."""
         rule = TradingRule(
             id=1, rule_text="Test", source_learning_id=1,
-            rule_type="", trigger_condition="",
+            source_pattern="", trigger_condition="",
             expected_action="HOLD", status="testing",
             success_count=0, failure_count=0
         )
@@ -50,7 +50,7 @@ class TestTradingRule:
         """Test success rate calculation."""
         rule = TradingRule(
             id=1, rule_text="Test", source_learning_id=1,
-            rule_type="", trigger_condition="",
+            source_pattern="", trigger_condition="",
             expected_action="HOLD", status="testing",
             success_count=7, failure_count=3
         )
@@ -60,7 +60,7 @@ class TestTradingRule:
         """Test total trades calculation."""
         rule = TradingRule(
             id=1, rule_text="Test", source_learning_id=1,
-            rule_type="", trigger_condition="",
+            source_pattern="", trigger_condition="",
             expected_action="HOLD", status="testing",
             success_count=5, failure_count=5
         )
@@ -70,7 +70,7 @@ class TestTradingRule:
         """Test conversion to dict."""
         rule = TradingRule(
             id=1, rule_text="Test rule", source_learning_id=1,
-            rule_type="pattern", trigger_condition="trigger",
+            source_pattern="pattern", trigger_condition="trigger",
             expected_action="BUY", status="active",
             success_count=8, failure_count=2
         )
@@ -83,7 +83,7 @@ class TestTradingRule:
         """Test conversion to readable text."""
         rule = TradingRule(
             id=1, rule_text="When momentum > 5%, BUY", source_learning_id=1,
-            rule_type="", trigger_condition="",
+            source_pattern="", trigger_condition="",
             expected_action="BUY", status="active",
             success_count=7, failure_count=3
         )

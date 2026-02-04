@@ -356,7 +356,7 @@ def get_adaptation_effectiveness_summary(self) -> Dict[str, Any]:
 ### 8. Integration with TradingSystem
 
 ```python
-# In src/main_v2.py
+# In src/main.py
 
 # Add to __init__
 self.effectiveness_monitor: Optional[EffectivenessMonitor] = None
@@ -431,7 +431,7 @@ def get_adaptation_effectiveness(self) -> dict:
 |------|--------|
 | `src/database.py` | Add effectiveness query methods |
 | `src/adaptation.py` | Enhance pre-metrics capture |
-| `src/main_v2.py` | Integrate EffectivenessMonitor |
+| `src/main.py` | Integrate EffectivenessMonitor |
 | `src/knowledge.py` | Add unblacklist method for rollback |
 
 ---
@@ -551,7 +551,7 @@ print(f"Rollbacks executed: {summary['rollbacks_executed']}")
 5. **Knowledge Brain Updates** (`src/knowledge.py`):
    - `reactivate_pattern()` - For rollback of pattern deactivations
 
-6. **TradingSystem Integration** (`src/main_v2.py`):
+6. **TradingSystem Integration** (`src/main.py`):
    - EffectivenessMonitor initialized with other components
    - Periodic check every hour in main loop
    - Warnings logged for harmful adaptations
@@ -580,4 +580,4 @@ print(f"Rollbacks executed: {summary['rollbacks_executed']}")
 |------|---------|
 | `src/database.py` | Added effectiveness query methods |
 | `src/knowledge.py` | Added `reactivate_pattern()` for rollback |
-| `src/main_v2.py` | Integrated EffectivenessMonitor, added operational commands |
+| `src/main.py` | Integrated EffectivenessMonitor, added operational commands |

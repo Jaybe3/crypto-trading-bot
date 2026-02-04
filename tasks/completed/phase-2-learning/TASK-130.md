@@ -245,7 +245,7 @@ Update `src/sniper.py`:
 - Call `quick_update.process_trade_close()` in `_execute_exit()`
 - Build `TradeResult` from position and exit data
 
-### Step 4: Wire in main_v2.py
+### Step 4: Wire in main.py
 
 Update initialization to create and wire QuickUpdate:
 - Create QuickUpdate instance
@@ -277,7 +277,7 @@ Test:
 | File | Change |
 |------|--------|
 | `src/sniper.py` | Add quick_update parameter, call after exits |
-| `src/main_v2.py` | Create and wire QuickUpdate |
+| `src/main.py` | Create and wire QuickUpdate |
 
 ---
 
@@ -438,7 +438,7 @@ Pattern DEACTIVATED (confidence < 0.3)
 | File | Changes |
 |------|---------|
 | `src/sniper.py` | Added `quick_update` parameter, calls QuickUpdate in `_execute_exit()` |
-| `src/main_v2.py` | Creates QuickUpdate instance, wires to Sniper |
+| `src/main.py` | Creates QuickUpdate instance, wires to Sniper |
 
 ### Key Implementation Details
 

@@ -384,7 +384,7 @@ Update `src/quick_update.py`:
 - Call on_trade_close() after each update
 - Trigger reflection when conditions met
 
-### Step 4: Wire in main_v2.py
+### Step 4: Wire in main.py
 
 Update initialization:
 - Create ReflectionEngine
@@ -432,7 +432,7 @@ Test:
 | File | Change |
 |------|--------|
 | `src/quick_update.py` | Add reflection_engine, trigger reflection |
-| `src/main_v2.py` | Create and wire ReflectionEngine |
+| `src/main.py` | Create and wire ReflectionEngine |
 | `src/database.py` | Add reflections table |
 
 ---
@@ -629,7 +629,7 @@ PERFORMANCE BY TIME:
 |------|---------|
 | `src/database.py` | Added `reflections` table, `log_reflection()`, `get_recent_reflections()` |
 | `src/quick_update.py` | Added `reflection_engine` parameter and `set_reflection_engine()` |
-| `src/main_v2.py` | Creates ReflectionEngine, wires to QuickUpdate, starts/stops with system |
+| `src/main.py` | Creates ReflectionEngine, wires to QuickUpdate, starts/stops with system |
 
 ### Key Implementation Details
 

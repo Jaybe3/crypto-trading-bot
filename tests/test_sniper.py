@@ -2,8 +2,10 @@
 Tests for Sniper Execution Engine.
 """
 
+import os
 import sys
 import time
+import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -389,79 +391,98 @@ class TestExitLogic:
         tick = PriceTick(coin="BTC", price=42000.0, timestamp=int(time.time() * 1000), volume_24h=0, change_24h=0)
         sniper.on_price_tick(tick)
 
+    def _create_temp_journal(self):
+        """Create a journal with a unique temp database."""
+        fd, path = tempfile.mkstemp(suffix=".db")
+        os.close(fd)
+        # Disable async writes for tests to ensure data is written before queries
+        return TradeJournal(db_path=path, enable_async=False), path
+
     def test_stop_loss_long(self):
-        journal = TradeJournal()
-        sniper = Sniper(journal)
-        self._setup_position(sniper, "LONG")
+        journal, db_path = self._create_temp_journal()
+        try:
+            sniper = Sniper(journal)
+            self._setup_position(sniper, "LONG")
 
-        assert len(sniper.open_positions) == 1
-        # Stop loss at 42000 * 0.98 = 41160
+            assert len(sniper.open_positions) == 1
+            # Stop loss at 42000 * 0.98 = 41160
 
-        # Price above stop - should stay open
-        tick = PriceTick(coin="BTC", price=41200.0, timestamp=int(time.time() * 1000), volume_24h=0, change_24h=0)
-        sniper.on_price_tick(tick)
-        assert len(sniper.open_positions) == 1
+            # Price above stop - should stay open
+            tick = PriceTick(coin="BTC", price=41200.0, timestamp=int(time.time() * 1000), volume_24h=0, change_24h=0)
+            sniper.on_price_tick(tick)
+            assert len(sniper.open_positions) == 1
 
-        # Price at stop loss - should close
-        tick = PriceTick(coin="BTC", price=41100.0, timestamp=int(time.time() * 1000), volume_24h=0, change_24h=0)
-        sniper.on_price_tick(tick)
-        assert len(sniper.open_positions) == 0
+            # Price at stop loss - should close
+            tick = PriceTick(coin="BTC", price=41100.0, timestamp=int(time.time() * 1000), volume_24h=0, change_24h=0)
+            sniper.on_price_tick(tick)
+            assert len(sniper.open_positions) == 0
 
-        # Check journal recorded exit
-        exits = [e for e in journal.entries if e.event_type == "exit"]
-        assert len(exits) == 1
-        assert exits[0].exit_reason == "stop_loss"
-        assert exits[0].pnl < 0  # Loss
+            # Check journal recorded exit
+            exits = journal.db.query(where="exit_reason IS NOT NULL")
+            assert len(exits) == 1
+            assert exits[0].exit_reason == "stop_loss"
+            assert exits[0].pnl_usd < 0  # Loss
+        finally:
+            os.unlink(db_path)
 
     def test_take_profit_long(self):
-        journal = TradeJournal()
-        sniper = Sniper(journal)
-        self._setup_position(sniper, "LONG")
+        journal, db_path = self._create_temp_journal()
+        try:
+            sniper = Sniper(journal)
+            self._setup_position(sniper, "LONG")
 
-        assert len(sniper.open_positions) == 1
-        # Take profit at 42000 * 1.015 = 42630
+            assert len(sniper.open_positions) == 1
+            # Take profit at 42000 * 1.015 = 42630
 
-        # Price below TP - should stay open
-        tick = PriceTick(coin="BTC", price=42500.0, timestamp=int(time.time() * 1000), volume_24h=0, change_24h=0)
-        sniper.on_price_tick(tick)
-        assert len(sniper.open_positions) == 1
+            # Price below TP - should stay open
+            tick = PriceTick(coin="BTC", price=42500.0, timestamp=int(time.time() * 1000), volume_24h=0, change_24h=0)
+            sniper.on_price_tick(tick)
+            assert len(sniper.open_positions) == 1
 
-        # Price at take profit - should close
-        tick = PriceTick(coin="BTC", price=42700.0, timestamp=int(time.time() * 1000), volume_24h=0, change_24h=0)
-        sniper.on_price_tick(tick)
-        assert len(sniper.open_positions) == 0
+            # Price at take profit - should close
+            tick = PriceTick(coin="BTC", price=42700.0, timestamp=int(time.time() * 1000), volume_24h=0, change_24h=0)
+            sniper.on_price_tick(tick)
+            assert len(sniper.open_positions) == 0
 
-        # Check journal recorded exit
-        exits = [e for e in journal.entries if e.event_type == "exit"]
-        assert len(exits) == 1
-        assert exits[0].exit_reason == "take_profit"
-        assert exits[0].pnl > 0  # Profit
+            # Check journal recorded exit
+            exits = journal.db.query(where="exit_reason IS NOT NULL")
+            assert len(exits) == 1
+            assert exits[0].exit_reason == "take_profit"
+            assert exits[0].pnl_usd > 0  # Profit
+        finally:
+            os.unlink(db_path)
 
     def test_stop_loss_short(self):
-        journal = TradeJournal()
-        sniper = Sniper(journal)
-        self._setup_position(sniper, "SHORT")
+        journal, db_path = self._create_temp_journal()
+        try:
+            sniper = Sniper(journal)
+            self._setup_position(sniper, "SHORT")
 
-        # For SHORT: stop loss at 42000 * 1.02 = 42840
-        tick = PriceTick(coin="BTC", price=42900.0, timestamp=int(time.time() * 1000), volume_24h=0, change_24h=0)
-        sniper.on_price_tick(tick)
-        assert len(sniper.open_positions) == 0
+            # For SHORT: stop loss at 42000 * 1.02 = 42840
+            tick = PriceTick(coin="BTC", price=42900.0, timestamp=int(time.time() * 1000), volume_24h=0, change_24h=0)
+            sniper.on_price_tick(tick)
+            assert len(sniper.open_positions) == 0
 
-        exits = [e for e in journal.entries if e.event_type == "exit"]
-        assert exits[0].exit_reason == "stop_loss"
+            exits = journal.db.query(where="exit_reason IS NOT NULL")
+            assert exits[0].exit_reason == "stop_loss"
+        finally:
+            os.unlink(db_path)
 
     def test_take_profit_short(self):
-        journal = TradeJournal()
-        sniper = Sniper(journal)
-        self._setup_position(sniper, "SHORT")
+        journal, db_path = self._create_temp_journal()
+        try:
+            sniper = Sniper(journal)
+            self._setup_position(sniper, "SHORT")
 
-        # For SHORT: take profit at 42000 * 0.985 = 41370
-        tick = PriceTick(coin="BTC", price=41300.0, timestamp=int(time.time() * 1000), volume_24h=0, change_24h=0)
-        sniper.on_price_tick(tick)
-        assert len(sniper.open_positions) == 0
+            # For SHORT: take profit at 42000 * 0.985 = 41370
+            tick = PriceTick(coin="BTC", price=41300.0, timestamp=int(time.time() * 1000), volume_24h=0, change_24h=0)
+            sniper.on_price_tick(tick)
+            assert len(sniper.open_positions) == 0
 
-        exits = [e for e in journal.entries if e.event_type == "exit"]
-        assert exits[0].exit_reason == "take_profit"
+            exits = journal.db.query(where="exit_reason IS NOT NULL")
+            assert exits[0].exit_reason == "take_profit"
+        finally:
+            os.unlink(db_path)
 
 
 class TestPnLCalculation:

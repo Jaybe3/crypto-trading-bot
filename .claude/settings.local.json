@@ -31,7 +31,13 @@
       "Bash(ls:*)",
       "Bash(PYTHONPATH=. python3:*)",
       "Bash(pip install:*)",
-      "Bash(source .venv/bin/activate)"
+      "Bash(source .venv/bin/activate)",
+      "Bash(wc:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(tree:*)",
+      "Bash(__NEW_LINE_b363cf4a25899902__ echo \"\")",
+      "Bash(__NEW_LINE_a036fb401aeaeac3__ echo \"\")"
     ]
   }
 }

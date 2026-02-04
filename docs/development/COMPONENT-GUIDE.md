@@ -11,7 +11,7 @@ Detailed guide for understanding and modifying trading bot components.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         main_v2.py                               │
+│                         main.py                               │
 │                      (Orchestration)                             │
 ├──────────────┬──────────────┬──────────────┬───────────────────┤
 │  MarketFeed  │  Strategist  │   Sniper     │    Dashboard      │
