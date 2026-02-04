@@ -1,9 +1,30 @@
 # TASK-302: BTC Correlation Tracking
 
-**Status:** Not Started
+**Status:** Complete
 **Phase:** 3A - Sentiment Layer
 **Priority:** High
 **Estimated Complexity:** Medium
+
+---
+
+## Implementation Summary
+
+**Completed:** February 4, 2026
+
+### Files Created
+- `src/sentiment/btc_correlation.py` - BTCCorrelationTracker class with Pearson correlation
+- `tests/test_btc_correlation.py` - 21 unit tests
+
+### Key Components
+- **BTCCorrelation** dataclass with move_type and correlation_strength properties
+- **BTCCorrelationTracker** class using CandleFetcher for price data
+- Pearson correlation calculation over 24h of hourly candles
+- BTC-driven move detection (BTC >1%, same direction, correlation >0.5)
+- `get_all_correlations()` for batch processing multiple coins
+
+### Test Results
+- 21/21 tests passing
+- Tests cover correlation calculation, move detection, edge cases
 
 ---
 

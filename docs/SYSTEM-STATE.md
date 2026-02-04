@@ -1,6 +1,6 @@
 # System State - Ground Truth
 
-**Last Updated:** 2026-02-03
+**Last Updated:** 2026-02-04
 **Updated By:** Claude Code
 
 ---
@@ -41,6 +41,15 @@
 | RSICalculator | technical/rsi.py | Overbought/oversold detection |
 | ATRCalculator | technical/atr.py | Volatility and position sizing |
 | FundingRateFetcher | technical/funding.py | Crowded position detection |
+| BTCCorrelationTracker | sentiment/btc_correlation.py | Detect BTC-driven moves |
+| VWAPCalculator | technical/vwap.py | Fair value and deviation |
+| SRLevelDetector | technical/support_resistance.py | Auto S/R detection |
+| NewsFeedFetcher | sentiment/news_feed.py | Breaking news detection |
+| SocialSentimentFetcher | sentiment/social_sentiment.py | Social trending/sentiment |
+| VolumeProfileCalculator | technical/volume_profile.py | POC and value area |
+| OrderBookAnalyzer | technical/orderbook.py | Bid/ask imbalance and walls |
+| ContextManager | sentiment/context_manager.py | Aggregates sentiment for Strategist |
+| TechnicalManager | technical/manager.py | Aggregates technicals for Strategist |
 
 ---
 
@@ -102,30 +111,30 @@ Strategist (reads knowledge for next decision)
 
 ## Phase 3: Intelligence Layer (Preview)
 
-**Status:** In Progress (5/13 tasks complete)
+**Status:** Complete (14/14 tasks complete)
 **Prerequisite:** Phase 2 complete with proven learning loop
 
 ### Phase 3A: Sentiment Layer
 | Component | File | Purpose | Status |
 |-----------|------|---------|--------|
 | FearGreedFetcher | sentiment/fear_greed.py | Alternative.me Fear & Greed Index | ✅ Complete |
-| BTCCorrelationTracker | sentiment/btc_correlation.py | Detect BTC-driven moves | Backlog |
-| NewsFeedFetcher | sentiment/news_feed.py | CryptoPanic news integration | Backlog |
-| SocialSentimentFetcher | sentiment/social_sentiment.py | LunarCrush social metrics | Backlog |
-| ContextManager | sentiment/context_manager.py | Aggregates all sentiment sources | Backlog |
+| BTCCorrelationTracker | sentiment/btc_correlation.py | Detect BTC-driven moves | ✅ Complete |
+| NewsFeedFetcher | sentiment/news_feed.py | CryptoPanic news integration | ✅ Complete |
+| SocialSentimentFetcher | sentiment/social_sentiment.py | LunarCrush social metrics | ✅ Complete |
+| ContextManager | sentiment/context_manager.py | Aggregates all sentiment sources | ✅ Complete |
 
 ### Phase 3B: Technical Indicators
 | Component | File | Purpose | Status |
 |-----------|------|---------|--------|
 | CandleFetcher | technical/candle_fetcher.py | OHLCV data from Bybit | ✅ Complete |
 | RSICalculator | technical/rsi.py | Overbought/oversold detection | ✅ Complete |
-| VWAPCalculator | technical/vwap.py | Fair value and deviation | Backlog |
+| VWAPCalculator | technical/vwap.py | Fair value and deviation | ✅ Complete |
 | ATRCalculator | technical/atr.py | Volatility and dynamic stops | ✅ Complete |
 | FundingRateFetcher | technical/funding.py | Perpetual funding rates | ✅ Complete |
-| SRLevelDetector | technical/support_resistance.py | Auto S/R detection | Backlog |
-| VolumeProfileCalculator | technical/volume_profile.py | Volume distribution | Backlog |
-| OrderBookAnalyzer | technical/orderbook.py | Bid/ask imbalance | Backlog |
-| TechnicalManager | technical/manager.py | Aggregates all indicators | Backlog |
+| SRLevelDetector | technical/support_resistance.py | Auto S/R detection | ✅ Complete |
+| VolumeProfileCalculator | technical/volume_profile.py | Volume distribution | ✅ Complete |
+| OrderBookAnalyzer | technical/orderbook.py | Bid/ask imbalance | ✅ Complete |
+| TechnicalManager | technical/manager.py | Aggregates all indicators | ✅ Complete |
 
 ### LLM Input (Phase 3 Additions)
 When Phase 3 is complete, Strategist will receive:
