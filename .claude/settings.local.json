@@ -57,7 +57,8 @@
       "Bash(sudo npm i:*)",
       "Bash(claude:*)",
       "Bash(__NEW_LINE_eb007509fe3c966b__ echo \"\")",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(test:*)"
     ]
   }
 }
