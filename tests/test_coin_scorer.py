@@ -165,7 +165,6 @@ class TestCoinScorer:
         assert status == CoinStatus.FAVORED
         assert scorer.get_position_modifier("SOL") == 1.5
 
-    @pytest.mark.skip(reason="IMPLEMENTATION BUG: check_thresholds() doesn't demote from FAVORED when P&L goes negative (only checks win_rate). See coin_scorer.py:211-215. Coin becomes FAVORED on trade 5 with positive P&L, then stays FAVORED despite P&L going negative.")
     def test_favored_requires_positive_pnl(self, scorer):
         """Test that favored requires positive total P&L."""
         # 60% win rate but negative P&L

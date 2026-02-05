@@ -45,6 +45,33 @@ COIN_TIERS = {
     3: ["NEAR", "APT", "ARB", "OP", "INJ"],
 }
 
+# Maps coin symbols to exchange trading pair format (Bybit uses COINUSDT)
+SYMBOL_MAP = {
+    # Tier 1
+    "BTC": "BTCUSDT",
+    "ETH": "ETHUSDT",
+    "SOL": "SOLUSDT",
+    "BNB": "BNBUSDT",
+    "XRP": "XRPUSDT",
+    # Tier 2
+    "DOGE": "DOGEUSDT",
+    "ADA": "ADAUSDT",
+    "AVAX": "AVAXUSDT",
+    "LINK": "LINKUSDT",
+    "DOT": "DOTUSDT",
+    "MATIC": "MATICUSDT",
+    "UNI": "UNIUSDT",
+    "ATOM": "ATOMUSDT",
+    "LTC": "LTCUSDT",
+    "ETC": "ETCUSDT",
+    # Tier 3
+    "NEAR": "NEARUSDT",
+    "APT": "APTUSDT",
+    "ARB": "ARBUSDT",
+    "OP": "OPUSDT",
+    "INJ": "INJUSDT",
+}
+
 # =============================================================================
 # Risk Management
 # =============================================================================

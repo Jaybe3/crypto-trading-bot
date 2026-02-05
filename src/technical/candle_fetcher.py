@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 from typing import Optional, List, Dict
 import requests
 
+from config.settings import SYMBOL_MAP
+
 logger = logging.getLogger(__name__)
 
 
@@ -97,29 +99,7 @@ class CandleFetcher:
         "1w": "W",
     }
 
-    # Symbol mapping
-    SYMBOL_MAP = {
-        "BTC": "BTCUSDT",
-        "ETH": "ETHUSDT",
-        "SOL": "SOLUSDT",
-        "XRP": "XRPUSDT",
-        "BNB": "BNBUSDT",
-        "ADA": "ADAUSDT",
-        "DOGE": "DOGEUSDT",
-        "AVAX": "AVAXUSDT",
-        "DOT": "DOTUSDT",
-        "LINK": "LINKUSDT",
-        "MATIC": "MATICUSDT",
-        "UNI": "UNIUSDT",
-        "ATOM": "ATOMUSDT",
-        "LTC": "LTCUSDT",
-        "ETC": "ETCUSDT",
-        "PEPE": "PEPEUSDT",
-        "FLOKI": "FLOKIUSDT",
-        "BONK": "BONKUSDT",
-        "WIF": "WIFUSDT",
-        "SHIB": "SHIBUSDT",
-    }
+    # Symbol mapping (imported from config.settings)
 
     def __init__(self, cache_seconds: int = 60):
         """Initialize fetcher with cache duration.
@@ -222,8 +202,8 @@ class CandleFetcher:
     def _get_symbol(self, coin: str) -> str:
         """Convert coin symbol to Bybit trading pair."""
         coin_upper = coin.upper()
-        if coin_upper in self.SYMBOL_MAP:
-            return self.SYMBOL_MAP[coin_upper]
+        if coin_upper in SYMBOL_MAP:
+            return SYMBOL_MAP[coin_upper]
         return f"{coin_upper}USDT"
 
     def _get_cached_or_empty(self, coin: str, interval: str) -> CandleData:

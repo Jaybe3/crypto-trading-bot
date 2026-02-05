@@ -456,6 +456,19 @@ class Database:
                 )
             """)
 
+            # 17b. insights table (individual insights from reflections)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS insights (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    reflection_id INTEGER,
+                    insight_type TEXT NOT NULL,
+                    description TEXT NOT NULL,
+                    discovered_at TIMESTAMP NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (reflection_id) REFERENCES reflections(id)
+                )
+            """)
+
             # 18. adaptations table (for TASK-133 Adaptation Application)
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS adaptations (

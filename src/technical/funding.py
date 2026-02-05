@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 from typing import Optional, List, Dict
 import requests
 
+from config.settings import SYMBOL_MAP
+
 logger = logging.getLogger(__name__)
 
 
@@ -69,29 +71,7 @@ class FundingRateFetcher:
     API_URL = "https://api.bybit.com/v5/market/funding/history"
     TICKERS_URL = "https://api.bybit.com/v5/market/tickers"
 
-    # Symbol mapping
-    SYMBOL_MAP = {
-        "BTC": "BTCUSDT",
-        "ETH": "ETHUSDT",
-        "SOL": "SOLUSDT",
-        "XRP": "XRPUSDT",
-        "BNB": "BNBUSDT",
-        "ADA": "ADAUSDT",
-        "DOGE": "DOGEUSDT",
-        "AVAX": "AVAXUSDT",
-        "DOT": "DOTUSDT",
-        "LINK": "LINKUSDT",
-        "MATIC": "MATICUSDT",
-        "UNI": "UNIUSDT",
-        "ATOM": "ATOMUSDT",
-        "LTC": "LTCUSDT",
-        "ETC": "ETCUSDT",
-        "PEPE": "PEPEUSDT",
-        "FLOKI": "FLOKIUSDT",
-        "BONK": "BONKUSDT",
-        "WIF": "WIFUSDT",
-        "SHIB": "SHIBUSDT",
-    }
+    # Symbol mapping (imported from config.settings)
 
     def __init__(self, cache_seconds: int = 300):
         """Initialize funding rate fetcher.
@@ -188,7 +168,7 @@ class FundingRateFetcher:
             Dict mapping coin to FundingData for coins with extreme rates
         """
         extreme = {}
-        for coin in self.SYMBOL_MAP.keys():
+        for coin in SYMBOL_MAP.keys():
             try:
                 data = self.get_current(coin)
                 if data.is_extreme_long or data.is_extreme_short:
@@ -220,8 +200,8 @@ class FundingRateFetcher:
     def _get_symbol(self, coin: str) -> str:
         """Convert coin symbol to Bybit trading pair."""
         coin_upper = coin.upper()
-        if coin_upper in self.SYMBOL_MAP:
-            return self.SYMBOL_MAP[coin_upper]
+        if coin_upper in SYMBOL_MAP:
+            return SYMBOL_MAP[coin_upper]
         return f"{coin_upper}USDT"
 
     def _fetch_ticker(self, symbol: str) -> dict:

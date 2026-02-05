@@ -8,6 +8,7 @@ Analyzes how well the learning system is working:
 - Knowledge growth over time
 """
 
+import json
 from collections import defaultdict
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any
@@ -152,10 +153,10 @@ def analyze_adaptation_effectiveness(db: Database) -> dict:
 
             # Get all adaptations
             cursor.execute("""
-                SELECT adaptation_id, action, target, confidence, effectiveness_rating,
-                       win_rate_before, win_rate_after, pnl_before, pnl_after, applied_at
+                SELECT adaptation_id, action, target, insight_confidence, effectiveness,
+                       pre_metrics, post_metrics, timestamp
                 FROM adaptations
-                ORDER BY applied_at DESC
+                ORDER BY timestamp DESC
             """)
 
             adaptations = cursor.fetchall()
@@ -164,11 +165,20 @@ def analyze_adaptation_effectiveness(db: Database) -> dict:
             by_type = defaultdict(lambda: {"count": 0, "effective": 0, "harmful": 0})
 
             for row in adaptations:
-                (adapt_id, action, target, conf, rating,
-                 wr_before, wr_after, pnl_before, pnl_after, applied_at) = row
+                (adapt_id, action, target, conf, effectiveness,
+                 pre_metrics_json, post_metrics_json, applied_at) = row
+
+                # Parse JSON metrics
+                pre_metrics = json.loads(pre_metrics_json) if pre_metrics_json else {}
+                post_metrics = json.loads(post_metrics_json) if post_metrics_json else {}
+
+                wr_before = pre_metrics.get('win_rate', 0)
+                wr_after = post_metrics.get('win_rate', 0)
+                pnl_before = pre_metrics.get('pnl', 0)
+                pnl_after = post_metrics.get('pnl', 0)
+                rating = effectiveness or "pending"  # rest of code uses 'rating'
 
                 action = action or "unknown"
-                rating = rating or "pending"
 
                 # Count by rating
                 if rating == "highly_effective":

@@ -208,11 +208,14 @@ class CoinScorer:
             reason = f"Win rate recovered to {score.win_rate:.0%} (>= {RECOVERY_WIN_RATE:.0%})"
 
         # Check if coin dropped from FAVORED status
-        elif (score.win_rate < FAVORED_WIN_RATE and
+        elif ((score.win_rate < FAVORED_WIN_RATE or score.total_pnl <= 0) and
               current_status == CoinStatus.FAVORED):
 
             new_status = CoinStatus.NORMAL
-            reason = f"Win rate dropped to {score.win_rate:.0%} (< {FAVORED_WIN_RATE:.0%})"
+            if score.total_pnl <= 0:
+                reason = f"P&L went negative (${score.total_pnl:.2f})"
+            else:
+                reason = f"Win rate dropped to {score.win_rate:.0%} (< {FAVORED_WIN_RATE:.0%})"
 
         # Update cache and return adaptation if changed
         if new_status != current_status:

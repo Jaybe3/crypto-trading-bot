@@ -15,6 +15,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Callable, Optional, Literal
 
+from config.settings import (
+    DEFAULT_EXCHANGE, TRADEABLE_COINS, COIN_TIERS, SYMBOL_MAP
+)
+
 try:
     import websockets
     from websockets.exceptions import ConnectionClosed, WebSocketException
@@ -114,9 +118,9 @@ class MarketFeed:
 
         Args:
             coins: List of coin symbols to monitor (e.g., ['BTC', 'ETH']).
-                   If None, loads from config/coins.json.
+                   If None, uses TRADEABLE_COINS from config/settings.py.
             exchange: Exchange to use ('bybit', 'binance', 'binance_us').
-            config_path: Path to coins.json config file.
+            config_path: Deprecated, kept for backwards compatibility.
         """
         self.config = self._load_config(config_path)
         self.exchange = exchange or self.config.get('exchange', 'bybit')
@@ -162,23 +166,38 @@ class MarketFeed:
         logger.info(f"MarketFeed initialized: {self.exchange}, {len(self.coin_configs)} coins")
 
     def _load_config(self, config_path: Optional[str] = None) -> dict:
-        """Load configuration from coins.json."""
-        if config_path is None:
-            possible_paths = [
-                Path(__file__).parent.parent / 'config' / 'coins.json',
-                Path('config/coins.json'),
-                Path('/mnt/c/documents/crypto-trading-bot/config/coins.json'),
-            ]
-            for path in possible_paths:
-                if path.exists():
-                    config_path = str(path)
-                    break
-            else:
-                logger.warning("coins.json not found, using defaults")
-                return self._default_config()
+        """Build configuration from settings.py.
 
-        with open(config_path, 'r') as f:
-            return json.load(f)
+        Note: config_path parameter kept for backwards compatibility but ignored.
+        All configuration now comes from config/settings.py.
+        """
+        # Build monitored_coins from settings
+        monitored_coins = []
+        for coin in TRADEABLE_COINS:
+            # Find tier for this coin
+            tier = 3  # default
+            for t, coins in COIN_TIERS.items():
+                if coin in coins:
+                    tier = t
+                    break
+
+            monitored_coins.append({
+                'symbol': coin,
+                'binance': SYMBOL_MAP.get(coin, f"{coin}USDT"),
+                'tier': tier,
+                'name': coin  # Simplified name
+            })
+
+        return {
+            'exchange': DEFAULT_EXCHANGE,
+            'monitored_coins': monitored_coins,
+            'websocket': {
+                'reconnect_delay_initial': 1.0,
+                'reconnect_delay_max': 30.0,
+                'ping_interval': 20,
+                'stale_threshold_seconds': 5
+            }
+        }
 
     def _default_config(self) -> dict:
         return {

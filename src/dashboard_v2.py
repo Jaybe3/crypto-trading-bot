@@ -25,7 +25,7 @@ from fastapi.responses import HTMLResponse, StreamingResponse
 from pydantic import BaseModel
 
 if TYPE_CHECKING:
-    from src.main_v2 import TradingSystem
+    from src.main import TradingSystem
 
 logger = logging.getLogger("Dashboard")
 
