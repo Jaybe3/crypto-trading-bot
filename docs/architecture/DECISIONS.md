@@ -10,7 +10,7 @@ This document captures significant technical decisions made during development, 
 **Status:** Accepted
 **Context:** Need LLM for trading decisions and trade analysis. Options are cloud APIs (OpenAI, Anthropic) or local inference.
 
-**Decision:** Use Ollama with qwen2.5-coder:7b model running locally on Windows host.
+**Decision:** Use Ollama with qwen2.5:14b model running locally on Windows host.
 
 **Alternatives Considered:**
 | Option | Pros | Cons |
@@ -23,7 +23,7 @@ This document captures significant technical decisions made during development, 
 - Trading bot makes decisions every 30 seconds, 24/7
 - At ~2,880 calls/day, API costs would be significant
 - Local inference has ~1-2s latency vs 3-5s for API
-- qwen2.5-coder:7b provides sufficient quality for trading decisions
+- qwen2.5:14b provides sufficient quality for trading decisions
 - No external dependency for core functionality
 
 **Consequences:**
@@ -68,19 +68,19 @@ This document captures significant technical decisions made during development, 
 **Status:** Accepted
 **Context:** Need to decide which coins to trade and how to manage risk across different volatility levels.
 
-**Decision:** 45 coins in 3 tiers with tier-specific risk parameters.
+**Decision:** 20 coins in 3 tiers with tier-specific risk parameters.
 
 **Tiers:**
 | Tier | Coins | Max Position | Stop-Loss |
 |------|-------|--------------|-----------|
 | 1 (Blue Chip) | 5 | 25% of balance | 3% |
-| 2 (Established) | 15 | 15% of balance | 5% |
-| 3 (High Volatility) | 25 | 10% of balance | 7% |
+| 2 (Established) | 10 | 15% of balance | 5% |
+| 3 (High Volatility) | 5 | 10% of balance | 7% |
 
 **Rationale:**
 - Blue chips (BTC, ETH) are more predictable → larger positions, tighter stops
 - High volatility coins need room to move → smaller positions, wider stops
-- 45 coins provides diversity for learning without overwhelming
+- 20 coins provides diversity for learning without overwhelming
 - Tier structure allows risk-appropriate behavior
 
 **Consequences:**

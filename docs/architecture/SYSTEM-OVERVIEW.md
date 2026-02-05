@@ -57,7 +57,7 @@ The Autonomous Trading Bot is a self-learning cryptocurrency trading system that
 
 | Component | File | Purpose | Latency |
 |-----------|------|---------|---------|
-| **MarketFeed** | `market_feed.py` | WebSocket connection to Binance, real-time price/kline data | <1ms |
+| **MarketFeed** | `market_feed.py` | WebSocket connection to Bybit, real-time price/kline data | <1ms |
 | **Strategist** | `strategist.py` | LLM-powered condition generation using market context | 2-10s |
 | **Sniper** | `sniper.py` | Monitors conditions, executes trades instantly | <0.01ms |
 | **Journal** | `journal.py` | Records all trades with full context | <5ms |
@@ -85,7 +85,7 @@ The Autonomous Trading Bot is a self-learning cryptocurrency trading system that
 
 ### 1. Market Data Ingestion
 ```
-Binance WebSocket → MarketFeed → Price Cache → Strategist Context
+Bybit WebSocket → MarketFeed → Price Cache → Strategist Context
                                             → Sniper Monitoring
 ```
 

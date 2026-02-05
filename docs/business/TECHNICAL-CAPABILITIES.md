@@ -41,9 +41,9 @@ WebSocket     LLM      Execution   Record   Update+     Context
 ## Market Data
 
 ### WebSocket Connection
-- **Source**: Binance WebSocket API
+- **Source**: Bybit WebSocket API
 - **Data Types**: Real-time prices, 24h changes, klines
-- **Pairs**: Configurable (default: top 45 by volume)
+- **Pairs**: Configurable (default: 20 coins in 3 tiers)
 - **Reconnection**: Automatic with backoff
 
 ### Market State

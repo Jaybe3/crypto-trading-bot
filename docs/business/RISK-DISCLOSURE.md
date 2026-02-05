@@ -60,7 +60,7 @@ This document provides honest disclosure of risks associated with this trading s
 
 **Mitigation:**
 - Position sizes too small to move markets
-- 45-coin universe spreads impact
+- 20-coin universe spreads impact
 - Effectiveness tracking detects degradation
 
 **Residual Risk:** Subtle feedback effects in illiquid coins.

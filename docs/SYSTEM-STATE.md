@@ -109,10 +109,10 @@ Strategist (reads knowledge for next decision)
 
 ---
 
-## Phase 3: Intelligence Layer (Preview)
+## Phase 3: Intelligence Layer (Built, Not Integrated)
 
-**Status:** Complete (14/14 tasks complete)
-**Prerequisite:** Phase 2 complete with proven learning loop
+**Status:** Components complete (14/14 tasks), awaiting Strategist integration
+**Note:** Phase 2 is complete. These components are ready but NOT YET feeding data to the LLM.
 
 ### Phase 3A: Sentiment Layer
 | Component | File | Purpose | Status |
@@ -136,8 +136,8 @@ Strategist (reads knowledge for next decision)
 | OrderBookAnalyzer | technical/orderbook.py | Bid/ask imbalance | ✅ Complete |
 | TechnicalManager | technical/manager.py | Aggregates all indicators | ✅ Complete |
 
-### LLM Input (Phase 3 Additions)
-When Phase 3 is complete, Strategist will receive:
+### LLM Input (After Phase 3 Integration)
+When Phase 3 integration is enabled, Strategist will also receive:
 - Fear & Greed Index value and classification
 - BTC correlation status for each coin
 - Breaking news affecting coins

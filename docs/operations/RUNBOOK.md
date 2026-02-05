@@ -353,7 +353,7 @@ Bot continues with existing conditions but won't generate new ones.
 ### If WebSocket Down
 Bot auto-reconnects. If persistent:
 - Check internet connectivity
-- Check Binance status
+- Check Bybit status
 - Restart bot
 
 ---

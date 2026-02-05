@@ -34,7 +34,7 @@ A fully autonomous trading system that consistently generates returns through se
 **Objective:** Scale to production-ready 24/7 operation
 
 ### Delivered
-- [x] Expanded to 45 coins across 3 risk tiers
+- [x] Expanded to 20 coins across 3 risk tiers
 - [x] Tier-specific risk parameters
 - [x] Volatility-based position sizing
 - [x] 24/7 deployment with Supervisor
@@ -132,7 +132,7 @@ A fully autonomous trading system that consistently generates returns through se
 - [ ] Learning demonstrably improving decisions
 
 ### Planned Work
-- [ ] Exchange API integration (Binance)
+- [ ] Exchange API integration (Bybit live trading)
 - [ ] Real order execution with confirmation
 - [ ] Enhanced error handling
 - [ ] Circuit breakers and kill switches
@@ -180,9 +180,9 @@ A fully autonomous trading system that consistently generates returns through se
 |------|----------|-----------|
 | Jan 2026 | Local LLM (Ollama) | No API costs, no rate limits |
 | Jan 2026 | SQLite for Phase 1-2 | Simplicity, sufficient scale |
-| Jan 2026 | 45 coins in 3 tiers | Balance diversity and risk |
+| Jan 2026 | 20 coins in 3 tiers | Balance diversity and risk |
 | Feb 2026 | Two-tier learning | Fast updates + deep analysis |
-| Feb 2026 | WebSocket (Binance) | Sub-millisecond latency |
+| Feb 2026 | WebSocket (Bybit) | Sub-millisecond latency |
 | Feb 2026 | qwen2.5:14b model | Good reasoning, local performance |
 
 ---

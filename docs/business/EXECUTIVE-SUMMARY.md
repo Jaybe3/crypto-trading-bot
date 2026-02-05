@@ -44,7 +44,7 @@ Every trade generates data. The system tracks outcomes, identifies patterns, and
 | Milestone | Status | Details |
 |-----------|--------|---------|
 | Phase 1: Foundation | ✅ Complete | Core trading loop, basic learning |
-| Phase 1.5: Production | ✅ Complete | 45 coins, 3 tiers, 24/7 operation |
+| Phase 1.5: Production | ✅ Complete | 20 coins, 3 tiers, 24/7 operation |
 | Phase 2: Autonomous Learning | ✅ Complete | Full self-learning system |
 | Phase 3: Real Money | ⬜ Planned | Requires validation |
 
@@ -113,7 +113,7 @@ Every trade generates data. The system tracks outcomes, identifies patterns, and
 
 ## Investment Required for Phase 3
 
-- Exchange API integration (Binance/Coinbase)
+- Exchange API integration (Bybit live trading)
 - Initial trading capital ($1,000-$5,000 recommended)
 - Enhanced monitoring for real money
 - Potential cloud deployment for reliability

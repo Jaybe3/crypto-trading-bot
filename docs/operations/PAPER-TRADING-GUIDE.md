@@ -64,7 +64,7 @@ Every 5 minutes:
 
 | Aspect | Paper Mode | Real Mode |
 |--------|-----------|-----------|
-| Market Data | Real (Binance WebSocket) | Real |
+| Market Data | Real (Bybit WebSocket) | Real |
 | Order Execution | Simulated | Real exchange |
 | Fills | Instant at market price | May slip |
 | Position Tracking | Database | Exchange + Database |

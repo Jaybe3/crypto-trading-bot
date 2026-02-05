@@ -111,11 +111,11 @@ External:
 
 | Data | Source | Update Frequency | Use |
 |------|--------|------------------|-----|
-| Price | Binance/ByBit | Real-time (ms) | Trigger entries/exits |
-| Trades | Binance/ByBit | Real-time | Order flow analysis |
-| Order book | Binance/ByBit | 100ms | Liquidity/walls |
-| Funding rate | Binance/ByBit | 8 hours | Leverage sentiment |
-| Open interest | Binance/ByBit | Periodic | Money flow |
+| Price | Bybit | Real-time (ms) | Trigger entries/exits |
+| Trades | Bybit | Real-time | Order flow analysis |
+| Order book | Bybit | 100ms | Liquidity/walls |
+| Funding rate | Bybit | 8 hours | Leverage sentiment |
+| Open interest | Bybit | Periodic | Money flow |
 
 **Implementation:**
 
@@ -814,8 +814,7 @@ src/
 └── dashboard.py            # Monitoring UI (existing, modified)
 
 config/
-├── coins.json              # Tradeable coins list
-└── settings.py             # Configuration
+└── settings.py             # Configuration and SYMBOL_MAP (tradeable coins)
 
 tests/
 ├── test_sniper.py
@@ -829,7 +828,7 @@ tests/
 ## Implementation Phases
 
 ### Phase 1: Speed Infrastructure (Week 1)
-- [ ] WebSocket market data feed (Binance)
+- [x] WebSocket market data feed (Bybit)
 - [ ] Sniper execution engine
 - [ ] Basic trade journal
 - [ ] Wire up: prices flow, sniper can execute
@@ -901,7 +900,7 @@ The system is working when:
 
 | Question | Decision | Rationale |
 |----------|----------|-----------|
-| Exchange | Binance | Higher volume, more pairs |
+| Exchange | Bybit | Primary exchange for perpetual futures |
 | Paper trading | Simulate locally | Full control until ready for real money |
 | Initial knowledge | Blank | Bot learns from scratch, no assumptions |
 | Reflection frequency | Two-tier (see below) | Balance speed with depth |

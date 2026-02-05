@@ -37,7 +37,7 @@ Detailed guide for understanding and modifying trading bot components.
 
 ### Key Concepts
 
-- Maintains persistent WebSocket connection to Binance
+- Maintains persistent WebSocket connection to Bybit
 - Subscribes to multiple trading pairs
 - Caches latest prices for instant access
 - Provides market state for Strategist

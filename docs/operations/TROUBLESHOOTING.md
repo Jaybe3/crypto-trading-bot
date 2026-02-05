@@ -75,12 +75,12 @@ grep "WebSocket" logs/bot.log | tail -10
 
 1. Check internet connectivity:
    ```bash
-   ping -c 3 stream.binance.com
+   ping -c 3 api.bybit.com
    ```
 
-2. Check if Binance is accessible:
+2. Check if Bybit is accessible:
    ```bash
-   curl -s "https://api.binance.com/api/v3/ping"
+   curl -s "https://api.bybit.com/v5/market/time"
    ```
 
 3. Restart the bot (WebSocket reconnects automatically):
