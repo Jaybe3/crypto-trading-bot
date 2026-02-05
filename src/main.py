@@ -26,7 +26,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.market_feed import MarketFeed, PriceTick
 from src.sniper import Sniper
-from src.journal import TradeJournal, MarketContext
+from src.journal import TradeJournal
 from src.models.trade_condition import TradeCondition
 from src.strategist import Strategist
 from src.llm_interface import LLMInterface
@@ -38,7 +38,7 @@ from src.pattern_library import PatternLibrary
 from src.reflection import ReflectionEngine
 from src.adaptation import AdaptationEngine
 from src.profitability import ProfitabilityTracker, SnapshotScheduler, TimeFrame
-from src.effectiveness import EffectivenessMonitor, EffectivenessRating
+from src.effectiveness import EffectivenessMonitor
 from src.dashboard_v2 import DashboardServer
 
 # Phase 3: Technical Analysis + Market Sentiment

@@ -10,7 +10,7 @@ TASK-141: Profitability Tracking
 
 import logging
 import math
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, TYPE_CHECKING

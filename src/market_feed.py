@@ -10,10 +10,9 @@ import asyncio
 import json
 import logging
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
-from pathlib import Path
-from typing import Callable, Optional, Literal
+from typing import Callable, Optional
 
 from config.settings import (
     DEFAULT_EXCHANGE, TRADEABLE_COINS, COIN_TIERS, SYMBOL_MAP

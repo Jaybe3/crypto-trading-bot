@@ -13,7 +13,7 @@ import logging
 import time
 from typing import Optional
 
-from src.coin_scorer import CoinScorer, CoinStatus
+from src.coin_scorer import CoinScorer
 from src.database import Database
 from src.models.quick_update import QuickUpdateResult, TradeResult
 from src.pattern_library import PatternLibrary

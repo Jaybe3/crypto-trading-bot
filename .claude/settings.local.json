@@ -58,7 +58,8 @@
       "Bash(claude:*)",
       "Bash(__NEW_LINE_eb007509fe3c966b__ echo \"\")",
       "Bash(git rm:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(for f in tests/deprecated/test_learning_system.py tests/deprecated/test_trading_engine.py tests/deprecated/test_risk_manager.py tests/test_quick_update.py)"
     ]
   }
 }

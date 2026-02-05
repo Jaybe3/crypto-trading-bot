@@ -10,8 +10,7 @@ This module provides pattern storage, matching, and confidence management:
 
 import logging
 import uuid
-from dataclasses import dataclass, field
-from datetime import datetime
+from dataclasses import dataclass
 from typing import Optional, Dict, Any, List
 
 from src.knowledge import KnowledgeBrain

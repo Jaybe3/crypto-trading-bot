@@ -7,7 +7,7 @@ This module implements the "Quick Update" tier of reflection:
 """
 
 import logging
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Optional, Dict, Any

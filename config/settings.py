@@ -13,11 +13,9 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
-LOGS_DIR = PROJECT_ROOT / "logs"
 
 # Ensure directories exist
 DATA_DIR.mkdir(exist_ok=True)
-LOGS_DIR.mkdir(exist_ok=True)
 
 # =============================================================================
 # Exchange Configuration
@@ -77,12 +75,7 @@ SYMBOL_MAP = {
 # =============================================================================
 
 MAX_POSITIONS = 5
-MAX_POSITION_PER_COIN = 1
 MAX_EXPOSURE_PCT = 0.10  # 10% of balance
-
-DEFAULT_STOP_LOSS_PCT = 0.02    # 2%
-DEFAULT_TAKE_PROFIT_PCT = 0.015  # 1.5%
-DEFAULT_POSITION_SIZE_USD = 100.0
 
 # =============================================================================
 # Paper Trading
@@ -103,12 +96,9 @@ STATUS_LOG_INTERVAL = 60  # seconds between status logs
 
 STRATEGIST_ENABLED = True  # Set to False to disable LLM condition generation
 STRATEGIST_INTERVAL = 180  # Seconds between condition generation (3 minutes)
-STRATEGIST_MAX_CONDITIONS = 3  # Max conditions per generation cycle
-STRATEGIST_CONDITION_TTL = 300  # Seconds until conditions expire (5 minutes)
 
 # =============================================================================
 # Paths
 # =============================================================================
 
-DATABASE_PATH = str(DATA_DIR / "trading_bot.db")
 SNIPER_STATE_PATH = str(DATA_DIR / "sniper_state.json")

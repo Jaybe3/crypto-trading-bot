@@ -10,16 +10,15 @@ This is the raw data that feeds the Reflection Engine.
 """
 
 import asyncio
-import json
 import logging
 import sqlite3
 import threading
 import uuid
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field, asdict, fields
 from datetime import datetime, timedelta
 from pathlib import Path
 from queue import Queue, Empty
-from typing import Callable, Optional, TYPE_CHECKING, Any
+from typing import Optional, TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from src.sniper import Position
@@ -56,7 +55,8 @@ class MarketContext:
     def from_dict(cls, d: dict) -> 'MarketContext':
         if d is None:
             return cls()
-        return cls(**{k: v for k, v in d.items() if k in cls.__dataclass_fields__})
+        valid_keys = {f.name for f in fields(cls)}
+        return cls(**{k: v for k, v in d.items() if k in valid_keys})
 
 
 @dataclass
@@ -145,7 +145,7 @@ class JournalEntry:
                     d[key] = None
 
         # Filter to only valid fields
-        valid_fields = cls.__dataclass_fields__.keys()
+        valid_fields = {f.name for f in fields(cls)}
         filtered = {k: v for k, v in d.items() if k in valid_fields}
         return cls(**filtered)
 
