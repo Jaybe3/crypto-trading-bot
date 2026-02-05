@@ -65,6 +65,8 @@ class Strategist:
         interval_seconds: int = DEFAULT_INTERVAL_SECONDS,
         condition_ttl_minutes: int = DEFAULT_CONDITION_TTL_MINUTES,
         max_conditions: int = DEFAULT_MAX_CONDITIONS,
+        technical_manager: Optional[Any] = None,
+        context_manager: Optional[Any] = None,
     ):
         """Initialize the Strategist.
 
@@ -78,6 +80,8 @@ class Strategist:
             interval_seconds: Seconds between condition generation (default: 180).
             condition_ttl_minutes: Minutes until conditions expire (default: 5).
             max_conditions: Maximum conditions per generation cycle (default: 3).
+            technical_manager: Optional TechnicalManager for Phase 3 technical analysis.
+            context_manager: Optional ContextManager for Phase 3 market sentiment.
         """
         self.llm = llm
         self.market = market_feed
@@ -88,6 +92,10 @@ class Strategist:
         self.interval = interval_seconds
         self.condition_ttl = condition_ttl_minutes
         self.max_conditions = max_conditions
+
+        # Phase 3: Technical + Sentiment managers
+        self.technical_manager = technical_manager
+        self.context_manager = context_manager
 
         # State
         self.active_conditions: List[TradeCondition] = []
@@ -291,6 +299,35 @@ class Strategist:
         # Get recent performance
         recent_performance = self._get_recent_performance()
 
+        # === Phase 3: Technical + Sentiment Data ===
+        technical_data = {}
+        sentiment_data = {}
+
+        if self.technical_manager:
+            for coin in market_state["prices"].keys():
+                try:
+                    snapshot = self.technical_manager.get_technical_snapshot(coin)
+                    if snapshot:
+                        technical_data[coin] = snapshot
+                except Exception as e:
+                    logger.warning(f"Phase 3: Technical fetch failed for {coin}: {e}")
+
+        if self.context_manager:
+            try:
+                market_ctx = self.context_manager.get_context()
+                if market_ctx:
+                    sentiment_data["market"] = market_ctx
+            except Exception as e:
+                logger.warning(f"Phase 3: Market sentiment fetch failed: {e}")
+
+            for coin in market_state["prices"].keys():
+                try:
+                    coin_ctx = self.context_manager.get_coin_context(coin)
+                    if coin_ctx:
+                        sentiment_data[coin] = coin_ctx
+                except Exception as e:
+                    logger.warning(f"Phase 3: Coin sentiment failed for {coin}: {e}")
+
         return {
             "market_state": market_state,
             "knowledge": knowledge,
@@ -301,6 +338,8 @@ class Strategist:
                 "recent_pnl_24h": account.get("daily_pnl", 0),
             },
             "recent_performance": recent_performance,
+            "technical": technical_data,
+            "sentiment": sentiment_data,
         }
 
     def _get_knowledge(self) -> Dict[str, Any]:
@@ -607,6 +646,38 @@ HIGH-CONFIDENCE PATTERNS (consider using these):
         if knowledge.get("winning_patterns"):
             patterns_list = ", ".join(knowledge["winning_patterns"][:5])
 
+        # === Phase 3: Technical Analysis Section ===
+        technical_section = ""
+        if context.get("technical"):
+            tech_lines = []
+            for coin, snapshot in context["technical"].items():
+                try:
+                    tech_lines.append(snapshot.to_prompt())
+                except Exception as e:
+                    logger.warning(f"Phase 3: Tech prompt format failed for {coin}: {e}")
+            if tech_lines:
+                technical_section = "\nTECHNICAL ANALYSIS:\n" + "\n\n".join(tech_lines)
+
+        # === Phase 3: Sentiment Section ===
+        sentiment_section = ""
+        if context.get("sentiment"):
+            sent_parts = []
+            market_ctx = context["sentiment"].get("market")
+            if market_ctx:
+                try:
+                    sent_parts.append(market_ctx.to_prompt())
+                except Exception as e:
+                    logger.warning(f"Phase 3: Market sentiment format failed: {e}")
+            for coin, coin_ctx in context["sentiment"].items():
+                if coin == "market":
+                    continue
+                try:
+                    sent_parts.append(coin_ctx.to_prompt())
+                except Exception as e:
+                    logger.warning(f"Phase 3: Coin sentiment format failed for {coin}: {e}")
+            if sent_parts:
+                sentiment_section = "\n" + "\n\n".join(sent_parts)
+
         return f"""CURRENT MARKET STATE:
 {prices_text}
 
@@ -620,7 +691,8 @@ ACTIVE REGIME RULES:
 {rules_text}
 
 WINNING PATTERNS: {patterns_list}
-{pattern_section}
+{pattern_section}{technical_section}{sentiment_section}
+
 ACCOUNT STATE:
 - Balance: ${account['balance_usd']:,.2f}
 - Available: ${account['available_balance']:,.2f}
@@ -632,6 +704,7 @@ RECENT PERFORMANCE:
 
 Based on this data, generate 0-3 specific trade conditions.
 Set trigger prices that are realistic (near current prices).
+Consider technical indicators and market sentiment when setting entry/exit levels.
 If using a known pattern, include pattern_id in your response.
 Respond with JSON only - no other text."""
 

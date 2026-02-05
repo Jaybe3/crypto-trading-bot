@@ -41,6 +41,11 @@ from src.profitability import ProfitabilityTracker, SnapshotScheduler, TimeFrame
 from src.effectiveness import EffectivenessMonitor, EffectivenessRating
 from src.dashboard_v2 import DashboardServer
 
+# Phase 3: Technical Analysis + Market Sentiment
+from src.technical.candle_fetcher import CandleFetcher
+from src.technical.manager import TechnicalManager
+from src.sentiment.context_manager import ContextManager
+
 # Import settings
 try:
     from config.settings import (
@@ -300,6 +305,22 @@ class TradingSystem:
         # Initialize Health Monitor
         self.health = HealthMonitor()
 
+        # Phase 3: Technical Analysis + Market Sentiment
+        try:
+            candle_fetcher = CandleFetcher(cache_seconds=60)
+            self.technical_manager = TechnicalManager(candle_fetcher)
+            logger.info("Phase 3: TechnicalManager initialized")
+        except Exception as e:
+            logger.warning(f"Phase 3: TechnicalManager init failed, continuing without: {e}")
+            self.technical_manager = None
+
+        try:
+            self.context_manager = ContextManager()
+            logger.info("Phase 3: ContextManager initialized")
+        except Exception as e:
+            logger.warning(f"Phase 3: ContextManager init failed, continuing without: {e}")
+            self.context_manager = None
+
         # Initialize Strategist (if enabled)
         if STRATEGIST_ENABLED:
             logger.info("Initializing Strategist...")
@@ -312,6 +333,8 @@ class TradingSystem:
                 pattern_library=self.pattern_library,
                 db=self.db,
                 interval_seconds=STRATEGIST_INTERVAL,
+                technical_manager=self.technical_manager,
+                context_manager=self.context_manager,
             )
             logger.info(f"Strategist ready (interval={STRATEGIST_INTERVAL}s)")
 
