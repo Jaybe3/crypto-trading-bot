@@ -16,6 +16,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Callable, Literal, Optional
 
+from src.calculations import calculate_pnl
 from src.journal import TradeJournal
 from src.market_feed import PriceTick
 from src.models.trade_condition import TradeCondition
@@ -508,12 +509,12 @@ class Sniper:
         Returns:
             P&L in USD (positive = profit, negative = loss)
         """
-        price_change_pct = (current_price - position.entry_price) / position.entry_price
-
-        if position.direction == "SHORT":
-            price_change_pct = -price_change_pct
-
-        return position.size_usd * price_change_pct
+        return calculate_pnl(
+            entry_price=position.entry_price,
+            current_price=current_price,
+            size_usd=position.size_usd,
+            direction=position.direction
+        )
 
     def _execute_exit(
         self,

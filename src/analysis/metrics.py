@@ -7,10 +7,17 @@ Calculates core trading performance metrics:
 - Average win/loss statistics
 """
 
-import math
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Tuple, Optional
+
+from src.calculations import (
+    calculate_win_rate,
+    calculate_profit_factor,
+    calculate_sharpe_ratio,
+    calculate_max_drawdown,
+    build_equity_curve,
+)
 
 
 @dataclass
@@ -165,8 +172,7 @@ def calculate_metrics(trades: List[dict], starting_balance: float = 1000.0) -> T
                 timestamps.append(ts)
 
     # Win rate
-    if metrics.total_trades > 0:
-        metrics.win_rate = (metrics.wins / metrics.total_trades) * 100
+    metrics.win_rate = calculate_win_rate(metrics.wins, metrics.total_trades)
 
     # P&L totals
     metrics.total_pnl = sum(pnl_values)
@@ -217,116 +223,6 @@ def calculate_metrics(trades: List[dict], starting_balance: float = 1000.0) -> T
         metrics.sharpe_ratio = calculate_sharpe_ratio(returns)
 
     return metrics
-
-
-def calculate_profit_factor(gross_profit: float, gross_loss: float) -> float:
-    """
-    Calculate profit factor.
-
-    Args:
-        gross_profit: Total profit from winning trades.
-        gross_loss: Total loss from losing trades (positive number).
-
-    Returns:
-        Profit factor (gross_profit / gross_loss), or 0 if no losses.
-    """
-    if gross_loss <= 0:
-        return float("inf") if gross_profit > 0 else 0.0
-    return gross_profit / gross_loss
-
-
-def calculate_sharpe_ratio(
-    returns: List[float],
-    risk_free_rate: float = 0.0,
-    annualize: bool = True,
-    periods_per_year: int = 365
-) -> float:
-    """
-    Calculate Sharpe ratio.
-
-    Args:
-        returns: List of periodic returns (daily, per-trade, etc.).
-        risk_free_rate: Risk-free rate (annualized if annualize=True).
-        annualize: Whether to annualize the ratio.
-        periods_per_year: Number of periods in a year (365 for daily).
-
-    Returns:
-        Sharpe ratio.
-    """
-    if not returns or len(returns) < 2:
-        return 0.0
-
-    # Calculate mean and std
-    mean_return = sum(returns) / len(returns)
-    variance = sum((r - mean_return) ** 2 for r in returns) / (len(returns) - 1)
-    std_return = math.sqrt(variance) if variance > 0 else 0
-
-    if std_return == 0:
-        return 0.0
-
-    # Adjust risk-free rate to per-period
-    rf_per_period = risk_free_rate / periods_per_year if annualize else risk_free_rate
-
-    # Calculate Sharpe
-    sharpe = (mean_return - rf_per_period) / std_return
-
-    # Annualize if requested
-    if annualize:
-        sharpe *= math.sqrt(periods_per_year)
-
-    return sharpe
-
-
-def calculate_max_drawdown(equity_curve: List[float]) -> Tuple[float, float]:
-    """
-    Calculate maximum drawdown from equity curve.
-
-    Args:
-        equity_curve: List of equity values over time.
-
-    Returns:
-        Tuple of (max_drawdown_amount, max_drawdown_percentage).
-    """
-    if not equity_curve or len(equity_curve) < 2:
-        return 0.0, 0.0
-
-    peak = equity_curve[0]
-    max_dd_amount = 0.0
-    max_dd_pct = 0.0
-
-    for equity in equity_curve:
-        if equity > peak:
-            peak = equity
-
-        drawdown = peak - equity
-        drawdown_pct = (drawdown / peak * 100) if peak > 0 else 0
-
-        if drawdown > max_dd_amount:
-            max_dd_amount = drawdown
-            max_dd_pct = drawdown_pct
-
-    return max_dd_amount, max_dd_pct
-
-
-def build_equity_curve(pnl_values: List[float], starting_balance: float = 1000.0) -> List[float]:
-    """
-    Build equity curve from P&L values.
-
-    Args:
-        pnl_values: List of trade P&L values.
-        starting_balance: Initial account balance.
-
-    Returns:
-        List of equity values after each trade.
-    """
-    curve = [starting_balance]
-    current = starting_balance
-
-    for pnl in pnl_values:
-        current += pnl
-        curve.append(current)
-
-    return curve
 
 
 def calculate_daily_returns(trades: List[dict]) -> List[float]:

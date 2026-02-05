@@ -20,6 +20,8 @@ from pathlib import Path
 from queue import Queue, Empty
 from typing import Optional, TYPE_CHECKING, Any
 
+from src.calculations import calculate_pnl_percentage
+
 if TYPE_CHECKING:
     from src.sniper import Position
     from src.market_feed import MarketFeed
@@ -579,8 +581,8 @@ class TradeJournal:
 
         exit_time = datetime.fromtimestamp(timestamp / 1000)
 
-        # Calculate metrics
-        pnl_pct = (pnl / position.size_usd) * 100 if position.size_usd > 0 else 0
+        # Calculate metrics using canonical function
+        pnl_pct = calculate_pnl_percentage(pnl, position.size_usd)
         duration = int((exit_time - entry.entry_time).total_seconds())
 
         # Update entry

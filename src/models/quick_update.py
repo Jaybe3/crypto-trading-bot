@@ -7,6 +7,8 @@ TASK-130: Data classes for post-trade quick updates.
 from dataclasses import dataclass, field
 from typing import Optional
 
+from src.calculations import calculate_return_pct
+
 
 @dataclass
 class TradeResult:
@@ -48,12 +50,7 @@ class TradeResult:
     @property
     def return_pct(self) -> float:
         """Calculate return percentage."""
-        if self.entry_price > 0:
-            if self.direction == "LONG":
-                return ((self.exit_price - self.entry_price) / self.entry_price) * 100
-            else:
-                return ((self.entry_price - self.exit_price) / self.entry_price) * 100
-        return 0.0
+        return calculate_return_pct(self.entry_price, self.exit_price, self.direction)
 
 
 @dataclass

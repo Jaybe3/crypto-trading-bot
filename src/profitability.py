@@ -9,11 +9,21 @@ TASK-141: Profitability Tracking
 """
 
 import logging
-import math
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
+
+from src.calculations import (
+    calculate_win_rate,
+    calculate_profit_factor,
+    calculate_avg_win_loss_ratio,
+    calculate_expectancy,
+    calculate_return_on_balance,
+    calculate_max_drawdown,
+    calculate_sharpe_ratio,
+    build_equity_curve,
+)
 
 if TYPE_CHECKING:
     from src.database import Database
@@ -278,16 +288,11 @@ class ProfitabilityTracker:
         avg_win = gross_profit / winning_trades if winning_trades > 0 else 0
         avg_loss = gross_loss / losing_trades if losing_trades > 0 else 0
 
-        # Rates
-        win_rate = (winning_trades / total_trades * 100) if total_trades > 0 else 0
-        profit_factor = (gross_profit / gross_loss) if gross_loss > 0 else float('inf') if gross_profit > 0 else 0
-
-        # Win/Loss ratio
-        avg_win_loss_ratio = (avg_win / avg_loss) if avg_loss > 0 else float('inf') if avg_win > 0 else 0
-
-        # Expectancy: (win_rate * avg_win) - (loss_rate * avg_loss)
-        loss_rate = (losing_trades / total_trades) if total_trades > 0 else 0
-        expectancy = ((win_rate / 100) * avg_win) - (loss_rate * avg_loss)
+        # Use canonical calculations from src.calculations
+        win_rate = calculate_win_rate(winning_trades, total_trades)
+        profit_factor = calculate_profit_factor(gross_profit, gross_loss)
+        avg_win_loss_ratio = calculate_avg_win_loss_ratio(avg_win, avg_loss)
+        expectancy = calculate_expectancy(win_rate, avg_win, avg_loss)
 
         # Drawdown calculation
         max_drawdown, max_drawdown_pct = self._calculate_drawdown(trades)
@@ -296,7 +301,7 @@ class ProfitabilityTracker:
         sharpe_ratio = self._calculate_sharpe_ratio(trades)
 
         # Return percentage
-        return_pct = (total_pnl / self.initial_balance * 100) if self.initial_balance > 0 else 0
+        return_pct = calculate_return_on_balance(total_pnl, self.initial_balance)
 
         return {
             "total_trades": total_trades,
@@ -357,27 +362,10 @@ class ProfitabilityTracker:
         if not sorted_trades:
             return 0.0, 0.0
 
-        # Calculate running balance and drawdown
-        balance = self.initial_balance
-        high_water_mark = balance
-        max_drawdown = 0.0
-        max_drawdown_pct = 0.0
-
-        for trade in sorted_trades:
-            if trade.pnl_usd is not None:
-                balance += trade.pnl_usd
-
-                if balance > high_water_mark:
-                    high_water_mark = balance
-
-                drawdown = high_water_mark - balance
-                drawdown_pct = (drawdown / high_water_mark * 100) if high_water_mark > 0 else 0
-
-                if drawdown > max_drawdown:
-                    max_drawdown = drawdown
-                    max_drawdown_pct = drawdown_pct
-
-        return max_drawdown, max_drawdown_pct
+        # Extract P&L values and use canonical functions
+        pnl_values = [t.pnl_usd for t in sorted_trades if t.pnl_usd is not None]
+        equity_curve = build_equity_curve(pnl_values, self.initial_balance)
+        return calculate_max_drawdown(equity_curve)
 
     def _calculate_sharpe_ratio(
         self,
@@ -399,9 +387,9 @@ class ProfitabilityTracker:
         if len(trades) < 2:
             return None
 
-        # Get trade returns as percentages
+        # Get trade returns as decimal fractions (not percentages)
         returns = [
-            (t.pnl_usd / t.position_size_usd * 100)
+            (t.pnl_usd / t.position_size_usd)
             for t in trades
             if t.pnl_usd is not None and t.position_size_usd and t.position_size_usd > 0
         ]
@@ -409,24 +397,15 @@ class ProfitabilityTracker:
         if len(returns) < 2:
             return None
 
-        # Calculate mean and standard deviation
-        mean_return = sum(returns) / len(returns)
-        variance = sum((r - mean_return) ** 2 for r in returns) / (len(returns) - 1)
-        std_dev = math.sqrt(variance) if variance > 0 else 0
+        # Use canonical Sharpe ratio calculation
+        sharpe = calculate_sharpe_ratio(
+            returns,
+            risk_free_rate=risk_free_rate,
+            annualize=True,
+            periods_per_year=periods_per_year
+        )
 
-        if std_dev == 0:
-            return None
-
-        # Annualize
-        # Estimate trades per year based on sample
-        trades_per_day = len(returns) / max(1, self._trading_days_in_sample(trades))
-        annualization_factor = math.sqrt(trades_per_day * periods_per_year)
-
-        # Sharpe = (mean_return - risk_free) / std_dev * sqrt(periods)
-        daily_rf = risk_free_rate / periods_per_year
-        sharpe = ((mean_return - daily_rf) / std_dev) * annualization_factor
-
-        return round(sharpe, 2)
+        return round(sharpe, 2) if sharpe != 0.0 else None
 
     def _trading_days_in_sample(self, trades: List[Any]) -> int:
         """Estimate trading days in sample."""

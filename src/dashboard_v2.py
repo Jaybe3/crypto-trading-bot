@@ -18,6 +18,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from src.calculations import calculate_pnl, calculate_pnl_percentage
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -208,14 +209,15 @@ class DashboardServer:
                     size = pos_dict.get("size_usd", 0)
                     direction = pos_dict.get("direction", "LONG").upper()
 
-                    if direction == "LONG":
-                        pos_data["unrealized_pnl"] = ((current_price - entry) / entry) * size if entry else 0
-                    else:
-                        pos_data["unrealized_pnl"] = ((entry - current_price) / entry) * size if entry else 0
-
-                    pos_data["unrealized_pnl_pct"] = (
-                        (pos_data["unrealized_pnl"] / size) * 100
-                        if size > 0 else 0
+                    # Use canonical P&L calculation
+                    pos_data["unrealized_pnl"] = calculate_pnl(
+                        entry_price=entry,
+                        current_price=current_price,
+                        size_usd=size,
+                        direction=direction
+                    )
+                    pos_data["unrealized_pnl_pct"] = calculate_pnl_percentage(
+                        pos_data["unrealized_pnl"], size
                     )
 
                 formatted.append(pos_data)
