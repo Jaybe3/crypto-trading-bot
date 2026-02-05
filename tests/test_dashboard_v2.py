@@ -69,7 +69,7 @@ def mock_trading_system():
 
     # Knowledge Brain
     system.knowledge = MagicMock()
-    system.knowledge.get_all_coins.return_value = [
+    system.knowledge.get_all_coin_scores.return_value = [
         MagicMock(to_dict=lambda: {
             "coin": "BTC", "total_trades": 50, "win_rate": 55.0,
             "total_pnl": 250.0, "status": "active", "is_blacklisted": False
@@ -79,7 +79,7 @@ def mock_trading_system():
             "total_pnl": 180.0, "status": "favored", "is_blacklisted": False
         }),
     ]
-    system.knowledge.get_coin.return_value = MagicMock(
+    system.knowledge.get_coin_score.return_value = MagicMock(
         to_dict=lambda: {"coin": "BTC", "total_trades": 50}
     )
     system.knowledge.get_all_rules.return_value = []
@@ -214,7 +214,7 @@ class TestKnowledgeEndpoints:
 
     def test_get_coin_not_found(self, client, mock_trading_system):
         """Test 404 when coin not found."""
-        mock_trading_system.knowledge.get_coin.return_value = None
+        mock_trading_system.knowledge.get_coin_score.return_value = None
         response = client.get("/api/knowledge/coins/NOTACOIN")
         assert response.status_code == 404
 

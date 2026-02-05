@@ -269,7 +269,7 @@ class DashboardServer:
             if not self.system.knowledge:
                 raise HTTPException(500, "Knowledge Brain not initialized")
 
-            coins = self.system.knowledge.get_all_coins()
+            coins = self.system.knowledge.get_all_coin_scores()
             return {
                 "count": len(coins),
                 "coins": [self._format_coin(c) for c in coins],
@@ -281,7 +281,7 @@ class DashboardServer:
             if not self.system.knowledge:
                 raise HTTPException(500, "Knowledge Brain not initialized")
 
-            coin_data = self.system.knowledge.get_coin(coin.upper())
+            coin_data = self.system.knowledge.get_coin_score(coin.upper())
             if not coin_data:
                 raise HTTPException(404, f"Coin {coin} not found")
 
@@ -305,7 +305,7 @@ class DashboardServer:
             if not self.system.knowledge:
                 raise HTTPException(500, "Knowledge Brain not initialized")
 
-            rules = self.system.knowledge.get_all_rules()
+            rules = self.system.knowledge.get_active_rules()
             return {
                 "count": len(rules),
                 "rules": [self._format_rule(r) for r in rules],
@@ -317,7 +317,7 @@ class DashboardServer:
             if not self.system.knowledge:
                 raise HTTPException(500, "Knowledge Brain not initialized")
 
-            blacklist = self.system.knowledge.get_blacklist()
+            blacklist = self.system.knowledge.get_blacklisted_coins()
             return {
                 "count": len(blacklist),
                 "coins": blacklist,
