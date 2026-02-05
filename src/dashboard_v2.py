@@ -190,29 +190,32 @@ class DashboardServer:
             # Add current prices for unrealized P&L
             formatted = []
             for pos in positions:
+                # Convert Position dataclass to dict
+                pos_dict = pos.to_dict() if hasattr(pos, 'to_dict') else pos
+
                 current_price = None
                 if self.system.health:
-                    current_price = self.system.health.get_last_price(pos.get("coin", ""))
+                    current_price = self.system.health.get_last_price(pos_dict.get("coin", ""))
 
                 pos_data = {
-                    **pos,
+                    **pos_dict,
                     "current_price": current_price,
                 }
 
                 # Calculate unrealized P&L if we have current price
-                if current_price and pos.get("entry_price"):
-                    entry = pos["entry_price"]
-                    size = pos.get("size", 0)
-                    direction = pos.get("direction", "long")
+                if current_price and pos_dict.get("entry_price"):
+                    entry = pos_dict["entry_price"]
+                    size = pos_dict.get("size_usd", 0)
+                    direction = pos_dict.get("direction", "LONG").upper()
 
-                    if direction == "long":
-                        pos_data["unrealized_pnl"] = (current_price - entry) * size
+                    if direction == "LONG":
+                        pos_data["unrealized_pnl"] = ((current_price - entry) / entry) * size if entry else 0
                     else:
-                        pos_data["unrealized_pnl"] = (entry - current_price) * size
+                        pos_data["unrealized_pnl"] = ((entry - current_price) / entry) * size if entry else 0
 
                     pos_data["unrealized_pnl_pct"] = (
-                        (pos_data["unrealized_pnl"] / (entry * size)) * 100
-                        if entry * size > 0 else 0
+                        (pos_data["unrealized_pnl"] / size) * 100
+                        if size > 0 else 0
                     )
 
                 formatted.append(pos_data)
