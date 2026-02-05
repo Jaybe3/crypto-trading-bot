@@ -267,3 +267,77 @@ git checkout .  # Revert to pre-wave checkpoint
 | Documentation describing wrong system | Rule: "Code and docs change together" |
 | "All chains COMPLETE" when they crash | Anti-pattern: "Optimistic reading" |
 | Config fallbacks silently overriding settings | Challenge checklist: "What else touches this?" |
+
+---
+
+## MANDATORY AUDIT PROTOCOL
+
+### Before ANY Code Change
+
+1. **Run full audit and save baseline**
+   ```bash
+   ./scripts/audit.sh > /tmp/audit_before.txt 2>&1
+   cat /tmp/audit_before.txt
+   ```
+
+2. **Verify all tests pass**
+   ```bash
+   python3 -m pytest tests/ -q
+   ```
+   If any tests fail, DO NOT proceed.
+
+3. **Document what you're changing and why**
+   - Bug ID being fixed
+   - Files expected to change
+   - Expected outcome
+
+### After ANY Code Change
+
+1. **Run audit again and compare**
+   ```bash
+   ./scripts/audit.sh > /tmp/audit_after.txt 2>&1
+   diff /tmp/audit_before.txt /tmp/audit_after.txt || true
+   cat /tmp/audit_after.txt
+   ```
+
+2. **Verify no regressions**
+   - All previously passing checks must still pass
+   - New checks related to fix should now pass
+   - No new failures introduced
+
+3. **Run affected tests**
+   ```bash
+   python3 -m pytest tests/ -v -k "test_name"
+   ```
+
+4. **Add regression test if fixing a bug**
+   - Test should fail before fix
+   - Test should pass after fix
+
+### Commit Requirements
+
+Every commit message must include:
+- Bug ID (RT-XXX, DASH-XXX) if fixing a bug
+- "Audit: PASSED" or explanation of any warnings
+- Brief description of verification performed
+
+Example:
+```
+Fix RT-009: Knowledge API endpoints
+
+Changes:
+- dashboard_v2.py: get_all_coins() → get_all_coin_scores()
+
+Verification:
+- curl /api/knowledge/coins returns HTTP 200
+- All tests pass
+
+Audit: PASSED (existing warnings for RT-001, RT-006 unchanged)
+```
+
+### New Feature Requirements
+
+- Must include tests that would catch regression
+- Must not break existing audit checks
+- Must update documentation if architecture changes
+- Must follow DATA-FLOW.md patterns
