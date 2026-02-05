@@ -293,7 +293,7 @@ class DashboardServer:
             if not self.system.pattern_library:
                 raise HTTPException(500, "Pattern Library not initialized")
 
-            patterns = self.system.pattern_library.get_all_patterns()
+            patterns = self.system.pattern_library.get_active_patterns()
             return {
                 "count": len(patterns),
                 "patterns": [self._format_pattern(p) for p in patterns],
