@@ -37,7 +37,25 @@
       "Bash(find:*)",
       "Bash(tree:*)",
       "Bash(__NEW_LINE_b363cf4a25899902__ echo \"\")",
-      "Bash(__NEW_LINE_a036fb401aeaeac3__ echo \"\")"
+      "Bash(__NEW_LINE_a036fb401aeaeac3__ echo \"\")",
+      "Bash(source audit_venv/bin/activate:*)",
+      "Bash(pylint:*)",
+      "Bash(echo:*)",
+      "Bash(flake8:*)",
+      "Bash(ruff check:*)",
+      "Bash(mypy:*)",
+      "Bash(bandit:*)",
+      "Bash(vulture:*)",
+      "Bash(radon cc:*)",
+      "Bash(radon mi:*)",
+      "Bash(black:*)",
+      "Bash(isort:*)",
+      "Bash(pydocstyle:*)",
+      "Bash(interrogate:*)",
+      "Bash(sort:*)",
+      "Bash(uniq:*)",
+      "Bash(sudo npm i:*)",
+      "Bash(claude:*)"
     ]
   }
 }

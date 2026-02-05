@@ -1,0 +1,178 @@
+src/coin_config.py:17 in public class `TierConfig`:
+        D204: 1 blank line required after class docstring (found 0)
+src/coin_scorer.py:21 in public class `CoinStatus`:
+        D204: 1 blank line required after class docstring (found 0)
+src/coin_scorer.py:50 in public class `CoinAdaptation`:
+        D204: 1 blank line required after class docstring (found 0)
+src/dashboard.py:754 in public function `index`:
+        D401: First line should be in imperative mood; try rephrasing (found 'Main')
+src/dashboard_v2.py:37 in public class `BlacklistRequest`:
+        D101: Missing docstring in public class
+src/dashboard_v2.py:42 in public class `UnblacklistRequest`:
+        D101: Missing docstring in public class
+src/dashboard_v2.py:46 in public class `PatternToggleRequest`:
+        D101: Missing docstring in public class
+src/dashboard_v2.py:50 in public class `RuleToggleRequest`:
+        D101: Missing docstring in public class
+src/dashboard_v2.py:54 in public class `RollbackRequest`:
+        D101: Missing docstring in public class
+src/dashboard_v2.py:58 in public class `NoteRequest`:
+        D101: Missing docstring in public class
+src/dashboard_v2.py:112 in private method `_setup_routes`:
+        D202: No blank lines allowed after function docstring (found 1)
+src/dashboard_v2.py:398 in private nested function `get_improvement`:
+        D400: First line should end with a period (not '?')
+src/effectiveness.py:28 in public class `EffectivenessRating`:
+        D204: 1 blank line required after class docstring (found 0)
+src/effectiveness.py:39 in public class `EffectivenessResult`:
+        D204: 1 blank line required after class docstring (found 0)
+src/journal.py:37 in public class `MarketContext`:
+        D204: 1 blank line required after class docstring (found 0)
+src/journal.py:52 in public method `to_dict`:
+        D102: Missing docstring in public method
+src/journal.py:56 in public method `from_dict`:
+        D102: Missing docstring in public method
+src/journal.py:64 in public class `JournalEntry`:
+        D204: 1 blank line required after class docstring (found 0)
+src/journal.py:172 in public method `__init__`:
+        D107: Missing docstring in __init__
+src/journal.py:337 in public method `__init__`:
+        D107: Missing docstring in __init__
+src/journal.py:713 in private method `_capture_post_trade_sync`:
+        D401: First line should be in imperative mood (perhaps 'Synchronize', not 'Synchronous')
+src/learning_system.py:32 in public class `Learning`:
+        D204: 1 blank line required after class docstring (found 0)
+src/learning_system.py:536 in public class `TradingRule`:
+        D204: 1 blank line required after class docstring (found 0)
+src/llm_interface.py:39 in public class `LLMInterface`:
+        D301: Use r""" if any backslashes in a docstring
+src/main.py:78 in public method `__init__`:
+        D107: Missing docstring in __init__
+src/main.py:87 in public method `on_tick`:
+        D401: First line should be in imperative mood (perhaps 'Call', not 'Called')
+src/main.py:93 in public method `on_error`:
+        D401: First line should be in imperative mood (perhaps 'Call', not 'Called')
+src/main.py:450 in private method `_main_loop`:
+        D401: First line should be in imperative mood; try rephrasing (found 'Main')
+src/main.py:990 in public function `main`:
+        D401: First line should be in imperative mood; try rephrasing (found 'Main')
+src/main_legacy.py:124 in public method `run`:
+        D401: First line should be in imperative mood; try rephrasing (found 'Main')
+src/main_legacy.py:428 in public function `main`:
+        D401: First line should be in imperative mood; try rephrasing (found 'Main')
+src/market_feed.py:29 in public class `PriceTick`:
+        D204: 1 blank line required after class docstring (found 0)
+src/market_feed.py:39 in public class `TradeEvent`:
+        D204: 1 blank line required after class docstring (found 0)
+src/market_feed.py:49 in public class `CoinConfig`:
+        D204: 1 blank line required after class docstring (found 0)
+src/market_feed.py:58 in public class `FeedStatus`:
+        D204: 1 blank line required after class docstring (found 0)
+src/market_feed.py:258 in private method `_connect`:
+        D401: First line should be in imperative mood; try rephrasing (found 'Internal')
+src/metrics.py:24 in public class `AlertLevel`:
+        D204: 1 blank line required after class docstring (found 0)
+src/metrics.py:32 in public class `Alert`:
+        D204: 1 blank line required after class docstring (found 0)
+src/pattern_library.py:43 in public class `PatternMatch`:
+        D204: 1 blank line required after class docstring (found 0)
+src/pattern_library.py:57 in public class `PatternSuggestion`:
+        D204: 1 blank line required after class docstring (found 0)
+src/profitability.py:26 in public class `TimeFrame`:
+        D204: 1 blank line required after class docstring (found 0)
+src/profitability.py:36 in public class `ProfitSnapshot`:
+        D204: 1 blank line required after class docstring (found 0)
+src/profitability.py:120 in public class `DimensionPerformance`:
+        D204: 1 blank line required after class docstring (found 0)
+src/profitability.py:860 in public method `__init__`:
+        D107: Missing docstring in __init__
+src/reflection.py:178 in public method `on_trade_close`:
+        D401: First line should be in imperative mood (perhaps 'Call', not 'Called')
+src/risk_manager.py:37 in public class `TradeValidation`:
+        D204: 1 blank line required after class docstring (found 0)
+src/sniper.py:28 in public class `Position`:
+        D204: 1 blank line required after class docstring (found 0)
+src/sniper.py:62 in public class `ExecutionEvent`:
+        D204: 1 blank line required after class docstring (found 0)
+src/strategist.py:155 in private method `_run_loop`:
+        D401: First line should be in imperative mood; try rephrasing (found 'Main')
+src/strategist.py:859 in public function `test_strategist`:
+        D103: Missing docstring in public function
+src/trading_engine.py:26 in public class `TradeResult`:
+        D204: 1 blank line required after class docstring (found 0)
+src/models/knowledge.py:11 in public class `CoinScore`:
+        D204: 1 blank line required after class docstring (found 0)
+src/models/knowledge.py:30 in public method `__post_init__`:
+        D105: Missing docstring in magic method
+src/models/knowledge.py:57 in public class `TradingPattern`:
+        D204: 1 blank line required after class docstring (found 0)
+src/models/knowledge.py:75 in public method `__post_init__`:
+        D105: Missing docstring in magic method
+src/models/knowledge.py:128 in public class `RegimeRule`:
+        D204: 1 blank line required after class docstring (found 0)
+src/models/knowledge.py:145 in public method `__post_init__`:
+        D105: Missing docstring in magic method
+src/models/reflection.py:32 in public method `to_dict`:
+        D102: Missing docstring in public method
+src/models/reflection.py:63 in public method `to_dict`:
+        D102: Missing docstring in public method
+src/models/reflection.py:98 in public method `to_dict`:
+        D102: Missing docstring in public method
+src/models/reflection.py:135 in public method `to_dict`:
+        D102: Missing docstring in public method
+src/models/reflection.py:170 in public method `to_dict`:
+        D102: Missing docstring in public method
+src/models/reflection.py:197 in public method `to_dict`:
+        D102: Missing docstring in public method
+src/models/reflection.py:209 in public method `from_dict`:
+        D102: Missing docstring in public method
+src/models/reflection.py:220 in public method `__str__`:
+        D105: Missing docstring in magic method
+src/models/reflection.py:258 in public method `to_dict`:
+        D102: Missing docstring in public method
+src/models/reflection.py:280 in public method `__str__`:
+        D105: Missing docstring in magic method
+src/sentiment/btc_correlation.py:15 in public class `BTCCorrelation`:
+        D204: 1 blank line required after class docstring (found 0)
+src/sentiment/context_manager.py:17 in public class `MarketContext`:
+        D204: 1 blank line required after class docstring (found 0)
+src/sentiment/context_manager.py:82 in public class `CoinContext`:
+        D204: 1 blank line required after class docstring (found 0)
+src/sentiment/fear_greed.py:13 in public class `FearGreedData`:
+        D204: 1 blank line required after class docstring (found 0)
+src/sentiment/news_feed.py:15 in public class `NewsItem`:
+        D204: 1 blank line required after class docstring (found 0)
+src/sentiment/news_feed.py:51 in public class `NewsFeed`:
+        D204: 1 blank line required after class docstring (found 0)
+src/sentiment/social_sentiment.py:15 in public class `SocialMetrics`:
+        D204: 1 blank line required after class docstring (found 0)
+src/technical/atr.py:14 in public class `ATRData`:
+        D204: 1 blank line required after class docstring (found 0)
+src/technical/atr.py:153 in private method `_calculate_atr`:
+        D401: First line should be in imperative mood; try rephrasing (found 'Internal')
+src/technical/candle_fetcher.py:13 in public class `Candle`:
+        D204: 1 blank line required after class docstring (found 0)
+src/technical/candle_fetcher.py:44 in public class `CandleData`:
+        D204: 1 blank line required after class docstring (found 0)
+src/technical/funding.py:13 in public class `FundingData`:
+        D204: 1 blank line required after class docstring (found 0)
+src/technical/manager.py:21 in public class `TechnicalSnapshot`:
+        D204: 1 blank line required after class docstring (found 0)
+src/technical/orderbook.py:15 in public class `PriceWall`:
+        D204: 1 blank line required after class docstring (found 0)
+src/technical/orderbook.py:34 in public class `OrderBookDepth`:
+        D204: 1 blank line required after class docstring (found 0)
+src/technical/rsi.py:14 in public class `RSIData`:
+        D204: 1 blank line required after class docstring (found 0)
+src/technical/rsi.py:125 in private method `_calculate_rsi`:
+        D401: First line should be in imperative mood; try rephrasing (found 'Internal')
+src/technical/support_resistance.py:15 in public class `PriceLevel`:
+        D204: 1 blank line required after class docstring (found 0)
+src/technical/support_resistance.py:30 in public class `SRLevels`:
+        D204: 1 blank line required after class docstring (found 0)
+src/technical/volume_profile.py:15 in public class `VolumeLevel`:
+        D204: 1 blank line required after class docstring (found 0)
+src/technical/volume_profile.py:23 in public class `VolumeProfile`:
+        D204: 1 blank line required after class docstring (found 0)
+src/technical/vwap.py:14 in public class `VWAPData`:
+        D204: 1 blank line required after class docstring (found 0)

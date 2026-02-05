@@ -1,0 +1,396 @@
+scripts/analyze_learning.py:26:1: E402 module level import not at top of file
+scripts/analyze_performance.py:15:1: F401 'datetime.datetime' imported but unused
+scripts/analyze_performance.py:15:1: F401 'datetime.timedelta' imported but unused
+scripts/analyze_performance.py:21:1: E402 module level import not at top of file
+scripts/analyze_performance.py:22:1: E402 module level import not at top of file
+scripts/analyze_performance.py:23:1: F401 'src.analysis.performance.get_best_worst_hours' imported but unused
+scripts/analyze_performance.py:23:1: F401 'src.analysis.performance.get_best_worst_coins' imported but unused
+scripts/analyze_performance.py:23:1: E402 module level import not at top of file
+scripts/analyze_performance.py:32:1: E402 module level import not at top of file
+scripts/analyze_performance.py:41:1: E402 module level import not at top of file
+scripts/analyze_performance.py:48:1: E402 module level import not at top of file
+scripts/analyze_performance.py:72:121: E501 line too long (121 > 120 characters)
+scripts/analyze_performance.py:90:121: E501 line too long (121 > 120 characters)
+scripts/analyze_performance.py:169:5: F841 local variable 'by_hour' is assigned to but never used
+scripts/analyze_performance.py:170:5: F841 local variable 'by_coin' is assigned to but never used
+scripts/analyze_performance.py:171:5: F841 local variable 'by_pattern' is assigned to but never used
+scripts/analyze_performance.py:184:5: F841 local variable 'consistency' is assigned to but never used
+scripts/autonomous_monitor.py:19:1: F401 'datetime.timedelta' imported but unused
+scripts/autonomous_monitor.py:20:1: F401 'typing.Optional' imported but unused
+scripts/autonomous_monitor.py:25:1: E402 module level import not at top of file
+scripts/autonomous_monitor.py:26:1: E402 module level import not at top of file
+scripts/autonomous_monitor.py:27:1: E402 module level import not at top of file
+scripts/autonomous_monitor.py:330:121: E501 line too long (123 > 120 characters)
+scripts/export_trades.py:22:1: E402 module level import not at top of file
+scripts/export_trades.py:283:24: E128 continuation line under-indented for visual indent
+scripts/generate_report.py:21:1: E402 module level import not at top of file
+scripts/generate_report.py:22:1: E402 module level import not at top of file
+scripts/generate_report.py:23:1: E402 module level import not at top of file
+scripts/generate_report.py:32:1: E402 module level import not at top of file
+scripts/generate_report.py:380:24: E128 continuation line under-indented for visual indent
+scripts/validate_learning.py:18:1: F401 'datetime.timedelta' imported but unused
+scripts/validate_learning.py:397:35: E261 at least two spaces before inline comment
+src/adaptation.py:14:1: F401 'datetime.timedelta' imported but unused
+src/analysis/learning.py:13:1: F401 'typing.Dict' imported but unused
+src/analysis/learning.py:13:1: F401 'typing.List' imported but unused
+src/analysis/learning.py:13:1: F401 'typing.Optional' imported but unused
+src/analysis/learning.py:13:1: F401 'typing.Any' imported but unused
+src/analysis/metrics.py:11:1: F401 'dataclasses.field' imported but unused
+src/analysis/performance.py:12:1: F401 'datetime.timedelta' imported but unused
+src/analysis/performance.py:13:1: F401 'typing.Tuple' imported but unused
+src/analysis/performance.py:15:1: F401 'src.analysis.metrics.build_equity_curve' imported but unused
+src/coin_scorer.py:10:1: F401 'dataclasses.asdict' imported but unused
+src/coin_scorer.py:179:13: E129 visually indented line with same indent as next logical line
+src/coin_scorer.py:183:22: E128 continuation line under-indented for visual indent
+src/coin_scorer.py:192:22: E128 continuation line under-indented for visual indent
+src/coin_scorer.py:201:22: E128 continuation line under-indented for visual indent
+src/daily_summary.py:16:1: F401 'typing.Optional' imported but unused
+src/daily_summary.py:21:1: E402 module level import not at top of file
+src/daily_summary.py:52:23: E128 continuation line under-indented for visual indent
+src/daily_summary.py:53:23: E128 continuation line under-indented for visual indent
+src/daily_summary.py:99:25: E128 continuation line under-indented for visual indent
+src/daily_summary.py:110:29: E128 continuation line under-indented for visual indent
+src/dashboard.py:19:1: E402 module level import not at top of file
+src/dashboard.py:20:1: F401 'src.market_data.format_price' imported but unused
+src/dashboard.py:20:1: E402 module level import not at top of file
+src/dashboard.py:21:1: E402 module level import not at top of file
+src/dashboard.py:22:1: E402 module level import not at top of file
+src/dashboard.py:23:1: E402 module level import not at top of file
+src/dashboard.py:354:121: E501 line too long (136 > 120 characters)
+src/dashboard.py:359:121: E501 line too long (147 > 120 characters)
+src/dashboard.py:410:121: E501 line too long (144 > 120 characters)
+src/dashboard.py:524:121: E501 line too long (147 > 120 characters)
+src/dashboard.py:581:121: E501 line too long (123 > 120 characters)
+src/dashboard.py:656:23: E128 continuation line under-indented for visual indent
+src/dashboard.py:657:23: E128 continuation line under-indented for visual indent
+src/dashboard.py:675:23: E128 continuation line under-indented for visual indent
+src/dashboard.py:676:23: E128 continuation line under-indented for visual indent
+src/dashboard_v2.py:19:1: F401 'typing.Optional' imported but unused
+src/database.py:1269:5: E303 too many blank lines (2)
+src/database.py:1271:5: E301 expected 1 blank line, found 0
+src/database.py:1417:121: E501 line too long (136 > 120 characters)
+src/effectiveness.py:13:1: F401 'datetime.timedelta' imported but unused
+src/journal.py:13:1: F401 'json' imported but unused
+src/journal.py:22:1: F401 'typing.Callable' imported but unused
+src/journal.py:654:43: E127 continuation line over-indented for visual indent
+src/journal.py:655:43: E127 continuation line over-indented for visual indent
+src/journal.py:656:43: E127 continuation line over-indented for visual indent
+src/journal.py:657:43: E127 continuation line over-indented for visual indent
+src/journal.py:709:35: E127 continuation line over-indented for visual indent
+src/journal.py:710:35: E127 continuation line over-indented for visual indent
+src/journal.py:711:35: E127 continuation line over-indented for visual indent
+src/journal.py:712:35: E127 continuation line over-indented for visual indent
+src/journal.py:750:35: E127 continuation line over-indented for visual indent
+src/journal.py:751:35: E127 continuation line over-indented for visual indent
+src/journal.py:752:35: E127 continuation line over-indented for visual indent
+src/knowledge.py:49:20: E128 continuation line under-indented for visual indent
+src/knowledge.py:138:21: E128 continuation line under-indented for visual indent
+src/knowledge.py:334:21: E128 continuation line under-indented for visual indent
+src/learning_system.py:16:1: F401 'datetime.datetime' imported but unused
+src/learning_system.py:108:23: E128 continuation line under-indented for visual indent
+src/learning_system.py:109:23: E128 continuation line under-indented for visual indent
+src/learning_system.py:520:29: E741 ambiguous variable name 'l'
+src/learning_system.py:619:121: E501 line too long (130 > 120 characters)
+src/llm_interface.py:11:1: F401 'datetime.datetime' imported but unused
+src/llm_interface.py:133:9: F841 local variable 'e' is assigned to but never used
+src/main.py:27:1: E402 module level import not at top of file
+src/main.py:28:1: E402 module level import not at top of file
+src/main.py:29:1: F401 'src.journal.MarketContext' imported but unused
+src/main.py:29:1: E402 module level import not at top of file
+src/main.py:30:1: E402 module level import not at top of file
+src/main.py:31:1: E402 module level import not at top of file
+src/main.py:32:1: E402 module level import not at top of file
+src/main.py:33:1: E402 module level import not at top of file
+src/main.py:34:1: E402 module level import not at top of file
+src/main.py:35:1: E402 module level import not at top of file
+src/main.py:36:1: E402 module level import not at top of file
+src/main.py:37:1: E402 module level import not at top of file
+src/main.py:38:1: E402 module level import not at top of file
+src/main.py:39:1: E402 module level import not at top of file
+src/main.py:40:1: E402 module level import not at top of file
+src/main.py:41:1: F401 'src.effectiveness.EffectivenessRating' imported but unused
+src/main.py:41:1: E402 module level import not at top of file
+src/main.py:42:1: E402 module level import not at top of file
+src/main.py:267:20: E128 continuation line under-indented for visual indent
+src/main.py:269:20: E128 continuation line under-indented for visual indent
+src/main.py:291:24: E128 continuation line under-indented for visual indent
+src/main.py:560:24: E128 continuation line under-indented for visual indent
+src/main.py:561:24: E128 continuation line under-indented for visual indent
+src/main_legacy.py:26:1: E402 module level import not at top of file
+src/main_legacy.py:27:1: F401 'src.market_data.format_price' imported but unused
+src/main_legacy.py:27:1: E402 module level import not at top of file
+src/main_legacy.py:28:1: E402 module level import not at top of file
+src/main_legacy.py:29:1: E402 module level import not at top of file
+src/main_legacy.py:30:1: E402 module level import not at top of file
+src/main_legacy.py:31:1: E402 module level import not at top of file
+src/main_legacy.py:32:1: F401 'src.coin_config.get_tier_config' imported but unused
+src/main_legacy.py:32:1: E402 module level import not at top of file
+src/market_data.py:9:1: F401 'datetime.datetime' imported but unused
+src/market_feed.py:13:1: F401 'dataclasses.field' imported but unused
+src/market_feed.py:16:1: F401 'typing.Literal' imported but unused
+src/metrics.py:8:1: F401 'datetime.timedelta' imported but unused
+src/metrics.py:9:1: F401 'typing.Optional' imported but unused
+src/metrics.py:316:121: E501 line too long (140 > 120 characters)
+src/metrics.py:327:121: E501 line too long (133 > 120 characters)
+src/metrics.py:436:9: E741 ambiguous variable name 'l'
+src/metrics.py:465:9: E741 ambiguous variable name 'l'
+src/models/knowledge.py:3:1: F401 'dataclasses.field' imported but unused
+src/models/quick_update.py:7:1: F401 'dataclasses.field' imported but unused
+src/pattern_library.py:13:1: F401 'dataclasses.field' imported but unused
+src/pattern_library.py:14:1: F401 'datetime.datetime' imported but unused
+src/profitability.py:13:1: F401 'dataclasses.field' imported but unused
+src/profitability.py:758:9: F841 local variable 'prev_hours' is assigned to but never used
+src/quick_update.py:16:1: F401 'src.coin_scorer.CoinStatus' imported but unused
+src/quick_update.py:46:37: F821 undefined name 'ReflectionEngine'
+src/quick_update.py:69:45: F821 undefined name 'ReflectionEngine'
+src/quick_update.py:228:121: E501 line too long (129 > 120 characters)
+src/quick_update.py:344:9: F811 redefinition of unused 'time' from line 13
+src/reflection.py:16:1: F401 'datetime.timedelta' imported but unused
+src/reflection.py:636:121: E501 line too long (121 > 120 characters)
+src/reflection.py:638:121: E501 line too long (121 > 120 characters)
+src/reflection.py:660:121: E501 line too long (133 > 120 characters)
+src/reflection.py:661:121: E501 line too long (141 > 120 characters)
+src/reflection.py:662:121: E501 line too long (157 > 120 characters)
+src/reflection.py:667:121: E501 line too long (137 > 120 characters)
+src/reflection.py:668:121: E501 line too long (145 > 120 characters)
+src/reflection.py:782:5: F401 'sys' imported but unused
+src/risk_manager.py:11:1: F401 'typing.Optional' imported but unused
+src/risk_manager.py:334:121: E501 line too long (142 > 120 characters)
+src/risk_manager.py:345:121: E501 line too long (157 > 120 characters)
+src/risk_manager.py:560:121: E501 line too long (158 > 120 characters)
+src/risk_manager.py:570:121: E501 line too long (130 > 120 characters)
+src/risk_manager.py:626:9: F841 local variable 'config' is assigned to but never used
+src/risk_manager.py:769:9: F841 local variable 'config' is assigned to but never used
+src/sentiment/btc_correlation.py:5:1: F401 'typing.Optional' imported but unused
+src/sentiment/context_manager.py:5:1: F401 'typing.Any' imported but unused
+src/sentiment/context_manager.py:9:1: F401 '.news_feed.NewsFeed' imported but unused
+src/sniper.py:14:1: F401 'dataclasses.field' imported but unused
+src/strategist.py:497:121: E501 line too long (147 > 120 characters)
+src/technical/funding.py:127:13: F841 local variable 'history' is assigned to but never used
+src/technical/manager.py:5:1: F401 'typing.Dict' imported but unused
+src/technical/support_resistance.py:6:1: F401 'collections.defaultdict' imported but unused
+src/technical/support_resistance.py:138:33: E741 ambiguous variable name 'l'
+src/technical/support_resistance.py:140:36: E741 ambiguous variable name 'l'
+src/technical/support_resistance.py:143:40: E741 ambiguous variable name 'l'
+src/technical/support_resistance.py:144:43: E741 ambiguous variable name 'l'
+src/technical/support_resistance.py:280:32: E741 ambiguous variable name 'l'
+src/trading_engine.py:322:23: E128 continuation line under-indented for visual indent
+src/trading_engine.py:323:23: E128 continuation line under-indented for visual indent
+src/trading_engine.py:351:23: E128 continuation line under-indented for visual indent
+src/trading_engine.py:352:23: E128 continuation line under-indented for visual indent
+src/trading_engine.py:377:23: E128 continuation line under-indented for visual indent
+src/trading_engine.py:378:23: E128 continuation line under-indented for visual indent
+src/volatility.py:453:11: F541 f-string is missing placeholders
+src/volatility.py:459:11: F541 f-string is missing placeholders
+tests/deprecated/test_dashboard.py:5:1: F401 'pytest' imported but unused
+tests/deprecated/test_learning_system.py:7:1: F401 'unittest.mock.patch' imported but unused
+tests/deprecated/test_learning_system.py:11:1: F401 'src.llm_interface.LLMInterface' imported but unused
+tests/deprecated/test_learning_system.py:292:9: F841 local variable 'result1' is assigned to but never used
+tests/deprecated/test_market_data.py:8:1: F401 'src.market_data.DEFAULT_COINS' imported but unused
+tests/deprecated/test_risk_manager.py:5:1: F401 'pytest' imported but unused
+tests/deprecated/test_trading_engine.py:5:1: F401 'pytest' imported but unused
+tests/deprecated/test_trading_engine.py:75:9: F841 local variable 'result' is assigned to but never used
+tests/test_adaptation.py:16:1: E402 module level import not at top of file
+tests/test_adaptation.py:17:1: E402 module level import not at top of file
+tests/test_adaptation.py:18:1: E402 module level import not at top of file
+tests/test_adaptation.py:19:1: E402 module level import not at top of file
+tests/test_adaptation.py:20:1: F401 'src.adaptation.THRESHOLDS' imported but unused
+tests/test_adaptation.py:20:1: E402 module level import not at top of file
+tests/test_adaptation.py:21:1: E402 module level import not at top of file
+tests/test_adaptation.py:22:1: E402 module level import not at top of file
+tests/test_analysis.py:12:1: F401 'src.analysis.metrics.TradingMetrics' imported but unused
+tests/test_analysis.py:20:1: F401 'src.analysis.performance.get_best_worst_hours' imported but unused
+tests/test_atr.py:14:121: E501 line too long (131 > 120 characters)
+tests/test_atr.py:18:121: E501 line too long (131 > 120 characters)
+tests/test_atr.py:22:121: E501 line too long (131 > 120 characters)
+tests/test_atr.py:26:121: E501 line too long (130 > 120 characters)
+tests/test_atr.py:30:121: E501 line too long (131 > 120 characters)
+tests/test_atr.py:36:121: E501 line too long (131 > 120 characters)
+tests/test_atr.py:42:121: E501 line too long (131 > 120 characters)
+tests/test_btc_correlation.py:170:121: E501 line too long (123 > 120 characters)
+tests/test_coin_scorer.py:4:1: F401 'tempfile' imported but unused
+tests/test_coin_scorer.py:5:1: F401 'os' imported but unused
+tests/test_coin_scorer.py:10:1: F401 'src.coin_scorer.MIN_TRADES_FOR_ADAPTATION' imported but unused
+tests/test_coin_scorer.py:10:1: F401 'src.coin_scorer.BLACKLIST_WIN_RATE' imported but unused
+tests/test_coin_scorer.py:10:1: F401 'src.coin_scorer.REDUCED_WIN_RATE' imported but unused
+tests/test_coin_scorer.py:10:1: F401 'src.coin_scorer.FAVORED_WIN_RATE' imported but unused
+tests/test_coin_scorer.py:112:13: F841 local variable 'adaptation' is assigned to but never used
+tests/test_coin_scorer.py:168:121: E501 line too long (271 > 120 characters)
+tests/test_coin_scorer.py:264:9: F841 local variable 'adaptation' is assigned to but never used
+tests/test_context_manager.py:4:1: F401 'unittest.mock.patch' imported but unused
+tests/test_dashboard_v2.py:4:1: F401 'unittest.mock.patch' imported but unused
+tests/test_dashboard_v2.py:6:1: F401 'pathlib.Path' imported but unused
+tests/test_database.py:5:1: F401 'pytest' imported but unused
+tests/test_effectiveness.py:12:1: F401 'unittest.mock.patch' imported but unused
+tests/test_effectiveness.py:17:1: E402 module level import not at top of file
+tests/test_effectiveness.py:18:1: E402 module level import not at top of file
+tests/test_effectiveness.py:19:1: E402 module level import not at top of file
+tests/test_execution_path.py:9:1: F401 'pytest' imported but unused
+tests/test_execution_path.py:9:1: E402 module level import not at top of file
+tests/test_execution_path.py:10:1: E402 module level import not at top of file
+tests/test_execution_path.py:11:1: E402 module level import not at top of file
+tests/test_execution_path.py:13:1: F401 'src.sniper.Position' imported but unused
+tests/test_execution_path.py:13:1: E402 module level import not at top of file
+tests/test_execution_path.py:14:1: E402 module level import not at top of file
+tests/test_execution_path.py:15:1: E402 module level import not at top of file
+tests/test_fear_greed.py:2:1: F401 'pytest' imported but unused
+tests/test_funding.py:2:1: F401 'pytest' imported but unused
+tests/test_funding.py:4:1: F401 'unittest.mock.Mock' imported but unused
+tests/test_funding.py:14:121: E501 line too long (128 > 120 characters)
+tests/test_funding.py:15:121: E501 line too long (132 > 120 characters)
+tests/test_funding.py:22:121: E501 line too long (131 > 120 characters)
+tests/test_funding.py:23:121: E501 line too long (135 > 120 characters)
+tests/test_funding.py:29:121: E501 line too long (124 > 120 characters)
+tests/test_funding.py:33:121: E501 line too long (127 > 120 characters)
+tests/test_funding.py:37:121: E501 line too long (125 > 120 characters)
+tests/test_funding.py:41:121: E501 line too long (128 > 120 characters)
+tests/test_funding.py:45:121: E501 line too long (126 > 120 characters)
+tests/test_funding.py:49:121: E501 line too long (124 > 120 characters)
+tests/test_funding.py:53:121: E501 line too long (127 > 120 characters)
+tests/test_funding.py:57:121: E501 line too long (126 > 120 characters)
+tests/test_handoff.py:11:1: F401 'unittest.mock.patch' imported but unused
+tests/test_handoff.py:16:1: E402 module level import not at top of file
+tests/test_handoff.py:17:1: F401 'src.sniper.Position' imported but unused
+tests/test_handoff.py:17:1: E402 module level import not at top of file
+tests/test_handoff.py:18:1: E402 module level import not at top of file
+tests/test_handoff.py:19:1: F401 'src.market_feed.MarketFeed' imported but unused
+tests/test_handoff.py:19:1: E402 module level import not at top of file
+tests/test_handoff.py:20:1: E402 module level import not at top of file
+tests/test_imports.py:6:5: F401 'src.market_data' imported but unused
+tests/test_imports.py:7:5: F401 'src.database' imported but unused
+tests/test_imports.py:8:5: F401 'src.llm_interface' imported but unused
+tests/test_imports.py:9:5: F401 'src.trading_engine' imported but unused
+tests/test_imports.py:10:5: F401 'src.risk_manager' imported but unused
+tests/test_imports.py:11:5: F401 'src.learning_system' imported but unused
+tests/test_imports.py:12:5: F401 'src.dashboard' imported but unused
+tests/test_integration.py:7:1: F401 'asyncio' imported but unused
+tests/test_integration.py:11:1: F401 'time' imported but unused
+tests/test_integration.py:14:1: F401 'unittest.mock.MagicMock' imported but unused
+tests/test_integration.py:14:1: F401 'unittest.mock.patch' imported but unused
+tests/test_integration.py:19:1: E402 module level import not at top of file
+tests/test_integration.py:20:1: E402 module level import not at top of file
+tests/test_integration.py:21:1: E402 module level import not at top of file
+tests/test_integration.py:22:1: E402 module level import not at top of file
+tests/test_integration.py:23:1: E402 module level import not at top of file
+tests/test_integration.py:24:1: E402 module level import not at top of file
+tests/test_integration.py:324:13: F841 local variable 'patterns1' is assigned to but never used
+tests/test_journal.py:8:1: F401 'datetime.timedelta' imported but unused
+tests/test_journal.py:10:1: F401 'unittest.mock.MagicMock' imported but unused
+tests/test_journal.py:14:1: E402 module level import not at top of file
+tests/test_knowledge.py:4:1: F401 'datetime.timedelta' imported but unused
+tests/test_knowledge_integration.py:12:1: F401 'datetime.datetime' imported but unused
+tests/test_knowledge_integration.py:13:1: F401 'unittest.mock.MagicMock' imported but unused
+tests/test_knowledge_integration.py:13:1: F401 'unittest.mock.patch' imported but unused
+tests/test_knowledge_integration.py:17:1: F401 'src.coin_scorer.CoinStatus' imported but unused
+tests/test_knowledge_integration.py:19:1: F401 'src.models.knowledge.CoinScore' imported but unused
+tests/test_knowledge_integration.py:19:1: F401 'src.models.knowledge.TradingPattern' imported but unused
+tests/test_knowledge_integration.py:108:121: E501 line too long (125 > 120 characters)
+tests/test_knowledge_integration.py:131:121: E501 line too long (130 > 120 characters)
+tests/test_knowledge_integration.py:152:121: E501 line too long (136 > 120 characters)
+tests/test_knowledge_integration.py:175:121: E501 line too long (132 > 120 characters)
+tests/test_knowledge_integration.py:206:121: E501 line too long (134 > 120 characters)
+tests/test_knowledge_integration.py:237:121: E501 line too long (137 > 120 characters)
+tests/test_knowledge_integration.py:263:121: E501 line too long (133 > 120 characters)
+tests/test_knowledge_integration.py:282:121: E501 line too long (127 > 120 characters)
+tests/test_knowledge_integration.py:305:121: E501 line too long (129 > 120 characters)
+tests/test_knowledge_integration.py:330:121: E501 line too long (131 > 120 characters)
+tests/test_knowledge_integration.py:355:121: E501 line too long (130 > 120 characters)
+tests/test_knowledge_integration.py:384:121: E501 line too long (130 > 120 characters)
+tests/test_knowledge_integration.py:412:121: E501 line too long (129 > 120 characters)
+tests/test_knowledge_integration.py:448:121: E501 line too long (123 > 120 characters)
+tests/test_knowledge_integration.py:467:121: E501 line too long (125 > 120 characters)
+tests/test_knowledge_integration.py:491:121: E501 line too long (123 > 120 characters)
+tests/test_knowledge_integration.py:526:121: E501 line too long (135 > 120 characters)
+tests/test_learning_validation.py:15:1: F401 'uuid' imported but unused
+tests/test_learning_validation.py:16:1: F401 'datetime.datetime' imported but unused
+tests/test_learning_validation.py:16:1: F401 'datetime.timedelta' imported but unused
+tests/test_learning_validation.py:17:1: F401 'unittest.mock.MagicMock' imported but unused
+tests/test_learning_validation.py:17:1: F401 'unittest.mock.AsyncMock' imported but unused
+tests/test_learning_validation.py:17:1: F401 'unittest.mock.patch' imported but unused
+tests/test_learning_validation.py:19:1: F401 'tests.fixtures.learning_fixtures.make_timestamp' imported but unused
+tests/test_learning_validation.py:432:9: F841 local variable 'context' is assigned to but never used
+tests/test_learning_validation.py:451:9: F841 local variable 'good_coins' is assigned to but never used
+tests/test_llm_interface.py:99:121: E501 line too long (127 > 120 characters)
+tests/test_llm_interface.py:136:121: E501 line too long (149 > 120 characters)
+tests/test_market_feed.py:6:1: F401 'json' imported but unused
+tests/test_market_feed.py:8:1: F401 'unittest.mock.AsyncMock' imported but unused
+tests/test_market_feed.py:8:1: F401 'unittest.mock.patch' imported but unused
+tests/test_market_feed.py:9:1: F401 'dataclasses.asdict' imported but unused
+tests/test_market_feed.py:15:1: F401 'src.market_feed.FeedStatus' imported but unused
+tests/test_market_feed.py:15:1: E402 module level import not at top of file
+tests/test_market_feed.py:46:37: E712 comparison to True should be 'if cond is True:' or 'if cond:'
+tests/test_market_feed.py:93:38: E712 comparison to False should be 'if cond is False:' or 'if not cond:'
+tests/test_market_feed.py:145:54: E712 comparison to True should be 'if cond is True:' or 'if cond:'
+tests/test_market_feed.py:337:36: E712 comparison to False should be 'if cond is False:' or 'if not cond:'
+tests/test_market_feed.py:366:9: F841 local variable 'connect_task' is assigned to but never used
+tests/test_news_feed.py:2:1: F401 'pytest' imported but unused
+tests/test_orderbook.py:2:1: F401 'pytest' imported but unused
+tests/test_orderbook.py:3:1: F401 'datetime.datetime' imported but unused
+tests/test_orderbook.py:3:1: F401 'datetime.timezone' imported but unused
+tests/test_pattern_library.py:4:1: F401 'tempfile' imported but unused
+tests/test_pattern_library.py:5:1: F401 'os' imported but unused
+tests/test_pattern_library.py:6:1: F401 'datetime.datetime' imported but unused
+tests/test_pattern_library.py:11:1: F401 'src.pattern_library.HIGH_CONFIDENCE' imported but unused
+tests/test_pattern_library.py:11:1: F401 'src.pattern_library.MEDIUM_CONFIDENCE' imported but unused
+tests/test_profitability.py:12:1: F401 'unittest.mock.MagicMock' imported but unused
+tests/test_profitability.py:12:1: F401 'unittest.mock.patch' imported but unused
+tests/test_profitability.py:17:1: E402 module level import not at top of file
+tests/test_profitability.py:18:1: F401 'src.profitability.DimensionPerformance' imported but unused
+tests/test_profitability.py:18:1: E402 module level import not at top of file
+tests/test_quick_update.py:11:1: F401 'unittest.mock.Mock' imported but unused
+tests/test_quick_update.py:11:1: F401 'unittest.mock.patch' imported but unused
+tests/test_quick_update.py:294:9: F841 local variable 'initial_confidence' is assigned to but never used
+tests/test_reflection.py:11:1: F401 'unittest.mock.patch' imported but unused
+tests/test_reflection.py:11:1: F401 'unittest.mock.MagicMock' imported but unused
+tests/test_reflection.py:13:1: F401 'src.models.reflection.CoinAnalysis' imported but unused
+tests/test_reflection.py:13:1: F401 'src.models.reflection.PatternAnalysis' imported but unused
+tests/test_rsi.py:4:1: F401 'unittest.mock.patch' imported but unused
+tests/test_rule_creation.py:9:1: F401 'pytest' imported but unused
+tests/test_sniper.py:14:1: F401 'src.sniper.Position' imported but unused
+tests/test_sniper.py:14:1: F401 'src.sniper.ExecutionEvent' imported but unused
+tests/test_sniper.py:14:1: E402 module level import not at top of file
+tests/test_sniper.py:15:1: E402 module level import not at top of file
+tests/test_sniper.py:16:1: E402 module level import not at top of file
+tests/test_sniper.py:17:1: E402 module level import not at top of file
+tests/test_sniper.py:216:23: E712 comparison to True should be 'if cond is True:' or 'if cond:'
+tests/test_sniper.py:238:23: E712 comparison to False should be 'if cond is False:' or 'if not cond:'
+tests/test_social_sentiment.py:2:1: F401 'pytest' imported but unused
+tests/test_social_sentiment.py:3:1: F401 'datetime.datetime' imported but unused
+tests/test_social_sentiment.py:3:1: F401 'datetime.timezone' imported but unused
+tests/test_social_sentiment.py:313:121: E501 line too long (155 > 120 characters)
+tests/test_social_sentiment.py:315:121: E501 line too long (155 > 120 characters)
+tests/test_social_sentiment.py:317:121: E501 line too long (156 > 120 characters)
+tests/test_strategist.py:5:1: F401 'unittest.mock.MagicMock' imported but unused
+tests/test_strategist.py:5:1: F401 'unittest.mock.patch' imported but unused
+tests/test_strategist.py:9:1: F401 'src.strategist.DEFAULT_MAX_POSITION_SIZE' imported but unused
+tests/test_strategist.py:9:1: F401 'src.strategist.DEFAULT_MIN_POSITION_SIZE' imported but unused
+tests/test_support_resistance.py:199:13: E741 ambiguous variable name 'l'
+tests/test_support_resistance.py:254:9: F841 local variable 'detector' is assigned to but never used
+tests/test_support_resistance.py:267:47: E741 ambiguous variable name 'l'
+tests/test_technical_manager.py:4:1: F401 'unittest.mock.MagicMock' imported but unused
+tests/test_technical_manager.py:13:1: F401 'src.technical.volume_profile.VolumeProfile' imported but unused
+tests/test_technical_manager.py:14:1: F401 'src.technical.orderbook.OrderBookDepth' imported but unused
+tests/test_technical_manager.py:47:121: E501 line too long (134 > 120 characters)
+tests/test_technical_manager.py:53:121: E501 line too long (140 > 120 characters)
+tests/test_technical_manager.py:59:121: E501 line too long (126 > 120 characters)
+tests/test_technical_manager.py:64:121: E501 line too long (129 > 120 characters)
+tests/test_technical_manager.py:69:121: E501 line too long (127 > 120 characters)
+tests/test_technical_manager.py:75:121: E501 line too long (134 > 120 characters)
+tests/test_technical_manager.py:77:121: E501 line too long (129 > 120 characters)
+tests/test_technical_manager.py:88:121: E501 line too long (140 > 120 characters)
+tests/test_technical_manager.py:90:121: E501 line too long (126 > 120 characters)
+tests/test_technical_manager.py:124:121: E501 line too long (122 > 120 characters)
+tests/test_technical_manager.py:130:121: E501 line too long (136 > 120 characters)
+tests/test_technical_manager.py:136:121: E501 line too long (153 > 120 characters)
+tests/test_technical_manager.py:142:121: E501 line too long (154 > 120 characters)
+tests/test_technical_manager.py:170:121: E501 line too long (126 > 120 characters)
+tests/test_technical_manager.py:181:121: E501 line too long (126 > 120 characters)
+tests/test_technical_manager.py:192:121: E501 line too long (126 > 120 characters)
+tests/test_technical_manager.py:211:121: E501 line too long (126 > 120 characters)
+tests/test_technical_manager.py:213:121: E501 line too long (134 > 120 characters)
+tests/test_technical_manager.py:218:121: E501 line too long (164 > 120 characters)
+tests/test_technical_manager.py:250:121: E501 line too long (132 > 120 characters)
+tests/test_technical_manager.py:267:121: E501 line too long (126 > 120 characters)
+tests/test_technical_manager.py:282:121: E501 line too long (126 > 120 characters)
+tests/test_technical_manager.py:296:121: E501 line too long (157 > 120 characters)
+tests/test_volume_profile.py:3:1: F401 'datetime.datetime' imported but unused

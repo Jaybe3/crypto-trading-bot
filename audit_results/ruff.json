@@ -1,0 +1,2169 @@
+[
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 30,
+      "row": 15
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/scripts/analyze_performance.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 16
+          },
+          "location": {
+            "column": 1,
+            "row": 15
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 22,
+      "row": 15
+    },
+    "message": "`datetime.datetime` imported but unused",
+    "noqa_row": 15,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 15
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/scripts/analyze_performance.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 16
+          },
+          "location": {
+            "column": 1,
+            "row": 15
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 32,
+      "row": 15
+    },
+    "message": "`datetime.timedelta` imported but unused",
+    "noqa_row": 15,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 25,
+      "row": 28
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/scripts/analyze_performance.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from src.analysis.performance import (\n    analyze_by_hour,\n    analyze_by_coin,\n    analyze_by_pattern,\n    compare_periods,\n    calculate_consistency,\n)",
+          "end_location": {
+            "column": 2,
+            "row": 31
+          },
+          "location": {
+            "column": 1,
+            "row": 23
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 5,
+      "row": 28
+    },
+    "message": "`src.analysis.performance.get_best_worst_hours` imported but unused",
+    "noqa_row": 28,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 25,
+      "row": 29
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/scripts/analyze_performance.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from src.analysis.performance import (\n    analyze_by_hour,\n    analyze_by_coin,\n    analyze_by_pattern,\n    compare_periods,\n    calculate_consistency,\n)",
+          "end_location": {
+            "column": 2,
+            "row": 31
+          },
+          "location": {
+            "column": 1,
+            "row": 23
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 5,
+      "row": 29
+    },
+    "message": "`src.analysis.performance.get_best_worst_coins` imported but unused",
+    "noqa_row": 29,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F841",
+    "end_location": {
+      "column": 12,
+      "row": 169
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/scripts/analyze_performance.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 15,
+            "row": 169
+          },
+          "location": {
+            "column": 5,
+            "row": 169
+          }
+        }
+      ],
+      "message": "Remove assignment to unused variable `by_hour`"
+    },
+    "location": {
+      "column": 5,
+      "row": 169
+    },
+    "message": "Local variable `by_hour` is assigned to but never used",
+    "noqa_row": 169,
+    "url": "https://docs.astral.sh/ruff/rules/unused-variable"
+  },
+  {
+    "cell": null,
+    "code": "F841",
+    "end_location": {
+      "column": 12,
+      "row": 170
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/scripts/analyze_performance.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 15,
+            "row": 170
+          },
+          "location": {
+            "column": 5,
+            "row": 170
+          }
+        }
+      ],
+      "message": "Remove assignment to unused variable `by_coin`"
+    },
+    "location": {
+      "column": 5,
+      "row": 170
+    },
+    "message": "Local variable `by_coin` is assigned to but never used",
+    "noqa_row": 170,
+    "url": "https://docs.astral.sh/ruff/rules/unused-variable"
+  },
+  {
+    "cell": null,
+    "code": "F841",
+    "end_location": {
+      "column": 15,
+      "row": 171
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/scripts/analyze_performance.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 18,
+            "row": 171
+          },
+          "location": {
+            "column": 5,
+            "row": 171
+          }
+        }
+      ],
+      "message": "Remove assignment to unused variable `by_pattern`"
+    },
+    "location": {
+      "column": 5,
+      "row": 171
+    },
+    "message": "Local variable `by_pattern` is assigned to but never used",
+    "noqa_row": 171,
+    "url": "https://docs.astral.sh/ruff/rules/unused-variable"
+  },
+  {
+    "cell": null,
+    "code": "F841",
+    "end_location": {
+      "column": 16,
+      "row": 184
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/scripts/analyze_performance.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 19,
+            "row": 184
+          },
+          "location": {
+            "column": 5,
+            "row": 184
+          }
+        }
+      ],
+      "message": "Remove assignment to unused variable `consistency`"
+    },
+    "location": {
+      "column": 5,
+      "row": 184
+    },
+    "message": "Local variable `consistency` is assigned to but never used",
+    "noqa_row": 184,
+    "url": "https://docs.astral.sh/ruff/rules/unused-variable"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 19
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/scripts/autonomous_monitor.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from datetime import datetime",
+          "end_location": {
+            "column": 41,
+            "row": 19
+          },
+          "location": {
+            "column": 1,
+            "row": 19
+          }
+        }
+      ],
+      "message": "Remove unused import: `datetime.timedelta`"
+    },
+    "location": {
+      "column": 32,
+      "row": 19
+    },
+    "message": "`datetime.timedelta` imported but unused",
+    "noqa_row": 19,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 45,
+      "row": 20
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/scripts/autonomous_monitor.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import Dict, List, Any",
+          "end_location": {
+            "column": 45,
+            "row": 20
+          },
+          "location": {
+            "column": 1,
+            "row": 20
+          }
+        }
+      ],
+      "message": "Remove unused import: `typing.Optional`"
+    },
+    "location": {
+      "column": 37,
+      "row": 20
+    },
+    "message": "`typing.Optional` imported but unused",
+    "noqa_row": 20,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 18
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/scripts/validate_learning.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from datetime import datetime",
+          "end_location": {
+            "column": 41,
+            "row": 18
+          },
+          "location": {
+            "column": 1,
+            "row": 18
+          }
+        }
+      ],
+      "message": "Remove unused import: `datetime.timedelta`"
+    },
+    "location": {
+      "column": 32,
+      "row": 18
+    },
+    "message": "`datetime.timedelta` imported but unused",
+    "noqa_row": 18,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 14
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/adaptation.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from datetime import datetime",
+          "end_location": {
+            "column": 41,
+            "row": 14
+          },
+          "location": {
+            "column": 1,
+            "row": 14
+          }
+        }
+      ],
+      "message": "Remove unused import: `datetime.timedelta`"
+    },
+    "location": {
+      "column": 32,
+      "row": 14
+    },
+    "message": "`datetime.timedelta` imported but unused",
+    "noqa_row": 14,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 24,
+      "row": 13
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/analysis/learning.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 14
+          },
+          "location": {
+            "column": 1,
+            "row": 13
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 20,
+      "row": 13
+    },
+    "message": "`typing.Dict` imported but unused",
+    "noqa_row": 13,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 30,
+      "row": 13
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/analysis/learning.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 14
+          },
+          "location": {
+            "column": 1,
+            "row": 13
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 26,
+      "row": 13
+    },
+    "message": "`typing.List` imported but unused",
+    "noqa_row": 13,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 40,
+      "row": 13
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/analysis/learning.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 14
+          },
+          "location": {
+            "column": 1,
+            "row": 13
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 32,
+      "row": 13
+    },
+    "message": "`typing.Optional` imported but unused",
+    "noqa_row": 13,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 45,
+      "row": 13
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/analysis/learning.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 14
+          },
+          "location": {
+            "column": 1,
+            "row": 13
+          }
+        }
+      ],
+      "message": "Remove unused import"
+    },
+    "location": {
+      "column": 42,
+      "row": 13
+    },
+    "message": "`typing.Any` imported but unused",
+    "noqa_row": 13,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 11
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/analysis/metrics.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from dataclasses import dataclass",
+          "end_location": {
+            "column": 41,
+            "row": 11
+          },
+          "location": {
+            "column": 1,
+            "row": 11
+          }
+        }
+      ],
+      "message": "Remove unused import: `dataclasses.field`"
+    },
+    "location": {
+      "column": 36,
+      "row": 11
+    },
+    "message": "`dataclasses.field` imported but unused",
+    "noqa_row": 11,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 12
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/analysis/performance.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from datetime import datetime",
+          "end_location": {
+            "column": 41,
+            "row": 12
+          },
+          "location": {
+            "column": 1,
+            "row": 12
+          }
+        }
+      ],
+      "message": "Remove unused import: `datetime.timedelta`"
+    },
+    "location": {
+      "column": 32,
+      "row": 12
+    },
+    "message": "`datetime.timedelta` imported but unused",
+    "noqa_row": 12,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 47,
+      "row": 13
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/analysis/performance.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import Dict, List, Optional",
+          "end_location": {
+            "column": 47,
+            "row": 13
+          },
+          "location": {
+            "column": 1,
+            "row": 13
+          }
+        }
+      ],
+      "message": "Remove unused import: `typing.Tuple`"
+    },
+    "location": {
+      "column": 42,
+      "row": 13
+    },
+    "message": "`typing.Tuple` imported but unused",
+    "noqa_row": 13,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 87,
+      "row": 15
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/analysis/performance.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from src.analysis.metrics import TradingMetrics, calculate_metrics",
+          "end_location": {
+            "column": 87,
+            "row": 15
+          },
+          "location": {
+            "column": 1,
+            "row": 15
+          }
+        }
+      ],
+      "message": "Remove unused import: `src.analysis.metrics.build_equity_curve`"
+    },
+    "location": {
+      "column": 69,
+      "row": 15
+    },
+    "message": "`src.analysis.metrics.build_equity_curve` imported but unused",
+    "noqa_row": 15,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 49,
+      "row": 10
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/coin_scorer.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from dataclasses import dataclass, field",
+          "end_location": {
+            "column": 49,
+            "row": 10
+          },
+          "location": {
+            "column": 1,
+            "row": 10
+          }
+        }
+      ],
+      "message": "Remove unused import: `dataclasses.asdict`"
+    },
+    "location": {
+      "column": 43,
+      "row": 10
+    },
+    "message": "`dataclasses.asdict` imported but unused",
+    "noqa_row": 10,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 45,
+      "row": 16
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/daily_summary.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import Dict, Any, List",
+          "end_location": {
+            "column": 45,
+            "row": 16
+          },
+          "location": {
+            "column": 1,
+            "row": 16
+          }
+        }
+      ],
+      "message": "Remove unused import: `typing.Optional`"
+    },
+    "location": {
+      "column": 37,
+      "row": 16
+    },
+    "message": "`typing.Optional` imported but unused",
+    "noqa_row": 16,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "E741",
+    "end_location": {
+      "column": 21,
+      "row": 223
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/daily_summary.py",
+    "fix": null,
+    "location": {
+      "column": 20,
+      "row": 223
+    },
+    "message": "Ambiguous variable name: `l`",
+    "noqa_row": 223,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-variable-name"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 20
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/dashboard.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 21
+          },
+          "location": {
+            "column": 1,
+            "row": 20
+          }
+        }
+      ],
+      "message": "Remove unused import: `src.market_data.format_price`"
+    },
+    "location": {
+      "column": 29,
+      "row": 20
+    },
+    "message": "`src.market_data.format_price` imported but unused",
+    "noqa_row": 20,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 28,
+      "row": 19
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/dashboard_v2.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import TYPE_CHECKING",
+          "end_location": {
+            "column": 43,
+            "row": 19
+          },
+          "location": {
+            "column": 1,
+            "row": 19
+          }
+        }
+      ],
+      "message": "Remove unused import: `typing.Optional`"
+    },
+    "location": {
+      "column": 20,
+      "row": 19
+    },
+    "message": "`typing.Optional` imported but unused",
+    "noqa_row": 19,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 13
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/effectiveness.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from datetime import datetime",
+          "end_location": {
+            "column": 41,
+            "row": 13
+          },
+          "location": {
+            "column": 1,
+            "row": 13
+          }
+        }
+      ],
+      "message": "Remove unused import: `datetime.timedelta`"
+    },
+    "location": {
+      "column": 32,
+      "row": 13
+    },
+    "message": "`datetime.timedelta` imported but unused",
+    "noqa_row": 13,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 12,
+      "row": 13
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/journal.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 14
+          },
+          "location": {
+            "column": 1,
+            "row": 13
+          }
+        }
+      ],
+      "message": "Remove unused import: `json`"
+    },
+    "location": {
+      "column": 8,
+      "row": 13
+    },
+    "message": "`json` imported but unused",
+    "noqa_row": 13,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 28,
+      "row": 22
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/journal.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import Optional, TYPE_CHECKING, Any",
+          "end_location": {
+            "column": 58,
+            "row": 22
+          },
+          "location": {
+            "column": 1,
+            "row": 22
+          }
+        }
+      ],
+      "message": "Remove unused import: `typing.Callable`"
+    },
+    "location": {
+      "column": 20,
+      "row": 22
+    },
+    "message": "`typing.Callable` imported but unused",
+    "noqa_row": 22,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 30,
+      "row": 16
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/learning_system.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 17
+          },
+          "location": {
+            "column": 1,
+            "row": 16
+          }
+        }
+      ],
+      "message": "Remove unused import: `datetime.datetime`"
+    },
+    "location": {
+      "column": 22,
+      "row": 16
+    },
+    "message": "`datetime.datetime` imported but unused",
+    "noqa_row": 16,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "E741",
+    "end_location": {
+      "column": 30,
+      "row": 520
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/learning_system.py",
+    "fix": null,
+    "location": {
+      "column": 29,
+      "row": 520
+    },
+    "message": "Ambiguous variable name: `l`",
+    "noqa_row": 520,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-variable-name"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 30,
+      "row": 11
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/llm_interface.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 12
+          },
+          "location": {
+            "column": 1,
+            "row": 11
+          }
+        }
+      ],
+      "message": "Remove unused import: `datetime.datetime`"
+    },
+    "location": {
+      "column": 22,
+      "row": 11
+    },
+    "message": "`datetime.datetime` imported but unused",
+    "noqa_row": 11,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F841",
+    "end_location": {
+      "column": 28,
+      "row": 133
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/llm_interface.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 28,
+            "row": 133
+          },
+          "location": {
+            "column": 23,
+            "row": 133
+          }
+        }
+      ],
+      "message": "Remove assignment to unused variable `e`"
+    },
+    "location": {
+      "column": 27,
+      "row": 133
+    },
+    "message": "Local variable `e` is assigned to but never used",
+    "noqa_row": 133,
+    "url": "https://docs.astral.sh/ruff/rules/unused-variable"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 52,
+      "row": 29
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/main.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from src.journal import TradeJournal",
+          "end_location": {
+            "column": 52,
+            "row": 29
+          },
+          "location": {
+            "column": 1,
+            "row": 29
+          }
+        }
+      ],
+      "message": "Remove unused import: `src.journal.MarketContext`"
+    },
+    "location": {
+      "column": 39,
+      "row": 29
+    },
+    "message": "`src.journal.MarketContext` imported but unused",
+    "noqa_row": 29,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 72,
+      "row": 41
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/main.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from src.effectiveness import EffectivenessMonitor",
+          "end_location": {
+            "column": 72,
+            "row": 41
+          },
+          "location": {
+            "column": 1,
+            "row": 41
+          }
+        }
+      ],
+      "message": "Remove unused import: `src.effectiveness.EffectivenessRating`"
+    },
+    "location": {
+      "column": 53,
+      "row": 41
+    },
+    "message": "`src.effectiveness.EffectivenessRating` imported but unused",
+    "noqa_row": 41,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 60,
+      "row": 27
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/main_legacy.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from src.market_data import MarketDataFetcher",
+          "end_location": {
+            "column": 60,
+            "row": 27
+          },
+          "location": {
+            "column": 1,
+            "row": 27
+          }
+        }
+      ],
+      "message": "Remove unused import: `src.market_data.format_price`"
+    },
+    "location": {
+      "column": 48,
+      "row": 27
+    },
+    "message": "`src.market_data.format_price` imported but unused",
+    "noqa_row": 27,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 68,
+      "row": 32
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/main_legacy.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from src.coin_config import get_coin_ids, get_tier",
+          "end_location": {
+            "column": 68,
+            "row": 32
+          },
+          "location": {
+            "column": 1,
+            "row": 32
+          }
+        }
+      ],
+      "message": "Remove unused import: `src.coin_config.get_tier_config`"
+    },
+    "location": {
+      "column": 53,
+      "row": 32
+    },
+    "message": "`src.coin_config.get_tier_config` imported but unused",
+    "noqa_row": 32,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 30,
+      "row": 9
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/market_data.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 10
+          },
+          "location": {
+            "column": 1,
+            "row": 9
+          }
+        }
+      ],
+      "message": "Remove unused import: `datetime.datetime`"
+    },
+    "location": {
+      "column": 22,
+      "row": 9
+    },
+    "message": "`datetime.datetime` imported but unused",
+    "noqa_row": 9,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 13
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/market_feed.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from dataclasses import dataclass",
+          "end_location": {
+            "column": 41,
+            "row": 13
+          },
+          "location": {
+            "column": 1,
+            "row": 13
+          }
+        }
+      ],
+      "message": "Remove unused import: `dataclasses.field`"
+    },
+    "location": {
+      "column": 36,
+      "row": 13
+    },
+    "message": "`dataclasses.field` imported but unused",
+    "noqa_row": 13,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 47,
+      "row": 16
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/market_feed.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import Callable, Optional",
+          "end_location": {
+            "column": 47,
+            "row": 16
+          },
+          "location": {
+            "column": 1,
+            "row": 16
+          }
+        }
+      ],
+      "message": "Remove unused import: `typing.Literal`"
+    },
+    "location": {
+      "column": 40,
+      "row": 16
+    },
+    "message": "`typing.Literal` imported but unused",
+    "noqa_row": 16,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 8
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/metrics.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from datetime import datetime",
+          "end_location": {
+            "column": 41,
+            "row": 8
+          },
+          "location": {
+            "column": 1,
+            "row": 8
+          }
+        }
+      ],
+      "message": "Remove unused import: `datetime.timedelta`"
+    },
+    "location": {
+      "column": 32,
+      "row": 8
+    },
+    "message": "`datetime.timedelta` imported but unused",
+    "noqa_row": 8,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 45,
+      "row": 9
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/metrics.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import Dict, List, Any",
+          "end_location": {
+            "column": 45,
+            "row": 9
+          },
+          "location": {
+            "column": 1,
+            "row": 9
+          }
+        }
+      ],
+      "message": "Remove unused import: `typing.Optional`"
+    },
+    "location": {
+      "column": 37,
+      "row": 9
+    },
+    "message": "`typing.Optional` imported but unused",
+    "noqa_row": 9,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "E741",
+    "end_location": {
+      "column": 10,
+      "row": 436
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/metrics.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 436
+    },
+    "message": "Ambiguous variable name: `l`",
+    "noqa_row": 436,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-variable-name"
+  },
+  {
+    "cell": null,
+    "code": "E741",
+    "end_location": {
+      "column": 10,
+      "row": 465
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/metrics.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 465
+    },
+    "message": "Ambiguous variable name: `l`",
+    "noqa_row": 465,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-variable-name"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 3
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/models/knowledge.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from dataclasses import dataclass, asdict",
+          "end_location": {
+            "column": 49,
+            "row": 3
+          },
+          "location": {
+            "column": 1,
+            "row": 3
+          }
+        }
+      ],
+      "message": "Remove unused import: `dataclasses.field`"
+    },
+    "location": {
+      "column": 36,
+      "row": 3
+    },
+    "message": "`dataclasses.field` imported but unused",
+    "noqa_row": 3,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 7
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/models/quick_update.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from dataclasses import dataclass",
+          "end_location": {
+            "column": 41,
+            "row": 7
+          },
+          "location": {
+            "column": 1,
+            "row": 7
+          }
+        }
+      ],
+      "message": "Remove unused import: `dataclasses.field`"
+    },
+    "location": {
+      "column": 36,
+      "row": 7
+    },
+    "message": "`dataclasses.field` imported but unused",
+    "noqa_row": 7,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 13
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/pattern_library.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from dataclasses import dataclass",
+          "end_location": {
+            "column": 41,
+            "row": 13
+          },
+          "location": {
+            "column": 1,
+            "row": 13
+          }
+        }
+      ],
+      "message": "Remove unused import: `dataclasses.field`"
+    },
+    "location": {
+      "column": 36,
+      "row": 13
+    },
+    "message": "`dataclasses.field` imported but unused",
+    "noqa_row": 13,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 30,
+      "row": 14
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/pattern_library.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 15
+          },
+          "location": {
+            "column": 1,
+            "row": 14
+          }
+        }
+      ],
+      "message": "Remove unused import: `datetime.datetime`"
+    },
+    "location": {
+      "column": 22,
+      "row": 14
+    },
+    "message": "`datetime.datetime` imported but unused",
+    "noqa_row": 14,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 13
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/profitability.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from dataclasses import dataclass",
+          "end_location": {
+            "column": 41,
+            "row": 13
+          },
+          "location": {
+            "column": 1,
+            "row": 13
+          }
+        }
+      ],
+      "message": "Remove unused import: `dataclasses.field`"
+    },
+    "location": {
+      "column": 36,
+      "row": 13
+    },
+    "message": "`dataclasses.field` imported but unused",
+    "noqa_row": 13,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F841",
+    "end_location": {
+      "column": 19,
+      "row": 758
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/profitability.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 22,
+            "row": 758
+          },
+          "location": {
+            "column": 9,
+            "row": 758
+          }
+        }
+      ],
+      "message": "Remove assignment to unused variable `prev_hours`"
+    },
+    "location": {
+      "column": 9,
+      "row": 758
+    },
+    "message": "Local variable `prev_hours` is assigned to but never used",
+    "noqa_row": 758,
+    "url": "https://docs.astral.sh/ruff/rules/unused-variable"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 51,
+      "row": 16
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/quick_update.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from src.coin_scorer import CoinScorer",
+          "end_location": {
+            "column": 51,
+            "row": 16
+          },
+          "location": {
+            "column": 1,
+            "row": 16
+          }
+        }
+      ],
+      "message": "Remove unused import: `src.coin_scorer.CoinStatus`"
+    },
+    "location": {
+      "column": 41,
+      "row": 16
+    },
+    "message": "`src.coin_scorer.CoinStatus` imported but unused",
+    "noqa_row": 16,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F821",
+    "end_location": {
+      "column": 54,
+      "row": 46
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/quick_update.py",
+    "fix": null,
+    "location": {
+      "column": 38,
+      "row": 46
+    },
+    "message": "Undefined name `ReflectionEngine`",
+    "noqa_row": 46,
+    "url": "https://docs.astral.sh/ruff/rules/undefined-name"
+  },
+  {
+    "cell": null,
+    "code": "F821",
+    "end_location": {
+      "column": 62,
+      "row": 69
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/quick_update.py",
+    "fix": null,
+    "location": {
+      "column": 46,
+      "row": 69
+    },
+    "message": "Undefined name `ReflectionEngine`",
+    "noqa_row": 69,
+    "url": "https://docs.astral.sh/ruff/rules/undefined-name"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 16
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/reflection.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from datetime import datetime",
+          "end_location": {
+            "column": 41,
+            "row": 16
+          },
+          "location": {
+            "column": 1,
+            "row": 16
+          }
+        }
+      ],
+      "message": "Remove unused import: `datetime.timedelta`"
+    },
+    "location": {
+      "column": 32,
+      "row": 16
+    },
+    "message": "`datetime.timedelta` imported but unused",
+    "noqa_row": 16,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 15,
+      "row": 782
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/reflection.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 783
+          },
+          "location": {
+            "column": 1,
+            "row": 782
+          }
+        }
+      ],
+      "message": "Remove unused import: `sys`"
+    },
+    "location": {
+      "column": 12,
+      "row": 782
+    },
+    "message": "`sys` imported but unused",
+    "noqa_row": 782,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 39,
+      "row": 11
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/risk_manager.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import Dict, Any, List",
+          "end_location": {
+            "column": 45,
+            "row": 11
+          },
+          "location": {
+            "column": 1,
+            "row": 11
+          }
+        }
+      ],
+      "message": "Remove unused import: `typing.Optional`"
+    },
+    "location": {
+      "column": 31,
+      "row": 11
+    },
+    "message": "`typing.Optional` imported but unused",
+    "noqa_row": 11,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F841",
+    "end_location": {
+      "column": 15,
+      "row": 626
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/risk_manager.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 18,
+            "row": 626
+          },
+          "location": {
+            "column": 9,
+            "row": 626
+          }
+        }
+      ],
+      "message": "Remove assignment to unused variable `config`"
+    },
+    "location": {
+      "column": 9,
+      "row": 626
+    },
+    "message": "Local variable `config` is assigned to but never used",
+    "noqa_row": 626,
+    "url": "https://docs.astral.sh/ruff/rules/unused-variable"
+  },
+  {
+    "cell": null,
+    "code": "F841",
+    "end_location": {
+      "column": 15,
+      "row": 769
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/risk_manager.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 18,
+            "row": 769
+          },
+          "location": {
+            "column": 9,
+            "row": 769
+          }
+        }
+      ],
+      "message": "Remove assignment to unused variable `config`"
+    },
+    "location": {
+      "column": 9,
+      "row": 769
+    },
+    "message": "Local variable `config` is assigned to but never used",
+    "noqa_row": 769,
+    "url": "https://docs.astral.sh/ruff/rules/unused-variable"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 28,
+      "row": 5
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/sentiment/btc_correlation.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import List",
+          "end_location": {
+            "column": 34,
+            "row": 5
+          },
+          "location": {
+            "column": 1,
+            "row": 5
+          }
+        }
+      ],
+      "message": "Remove unused import: `typing.Optional`"
+    },
+    "location": {
+      "column": 20,
+      "row": 5
+    },
+    "message": "`typing.Optional` imported but unused",
+    "noqa_row": 5,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 45,
+      "row": 5
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/sentiment/context_manager.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import List, Optional, Dict",
+          "end_location": {
+            "column": 45,
+            "row": 5
+          },
+          "location": {
+            "column": 1,
+            "row": 5
+          }
+        }
+      ],
+      "message": "Remove unused import: `typing.Any`"
+    },
+    "location": {
+      "column": 42,
+      "row": 5
+    },
+    "message": "`typing.Any` imported but unused",
+    "noqa_row": 5,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 59,
+      "row": 9
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/sentiment/context_manager.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from .news_feed import NewsFeedFetcher, NewsItem",
+          "end_location": {
+            "column": 59,
+            "row": 9
+          },
+          "location": {
+            "column": 1,
+            "row": 9
+          }
+        }
+      ],
+      "message": "Remove unused import: `.news_feed.NewsFeed`"
+    },
+    "location": {
+      "column": 51,
+      "row": 9
+    },
+    "message": "`.news_feed.NewsFeed` imported but unused",
+    "noqa_row": 9,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 41,
+      "row": 14
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/sniper.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from dataclasses import dataclass, asdict",
+          "end_location": {
+            "column": 49,
+            "row": 14
+          },
+          "location": {
+            "column": 1,
+            "row": 14
+          }
+        }
+      ],
+      "message": "Remove unused import: `dataclasses.field`"
+    },
+    "location": {
+      "column": 36,
+      "row": 14
+    },
+    "message": "`dataclasses.field` imported but unused",
+    "noqa_row": 14,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F841",
+    "end_location": {
+      "column": 20,
+      "row": 127
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/technical/funding.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 23,
+            "row": 127
+          },
+          "location": {
+            "column": 13,
+            "row": 127
+          }
+        }
+      ],
+      "message": "Remove assignment to unused variable `history`"
+    },
+    "location": {
+      "column": 13,
+      "row": 127
+    },
+    "message": "Local variable `history` is assigned to but never used",
+    "noqa_row": 127,
+    "url": "https://docs.astral.sh/ruff/rules/unused-variable"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 40,
+      "row": 5
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/technical/manager.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import List, Optional, Tuple",
+          "end_location": {
+            "column": 47,
+            "row": 5
+          },
+          "location": {
+            "column": 1,
+            "row": 5
+          }
+        }
+      ],
+      "message": "Remove unused import: `typing.Dict`"
+    },
+    "location": {
+      "column": 36,
+      "row": 5
+    },
+    "message": "`typing.Dict` imported but unused",
+    "noqa_row": 5,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "F401",
+    "end_location": {
+      "column": 36,
+      "row": 6
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/technical/support_resistance.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 7
+          },
+          "location": {
+            "column": 1,
+            "row": 6
+          }
+        }
+      ],
+      "message": "Remove unused import: `collections.defaultdict`"
+    },
+    "location": {
+      "column": 25,
+      "row": 6
+    },
+    "message": "`collections.defaultdict` imported but unused",
+    "noqa_row": 6,
+    "url": "https://docs.astral.sh/ruff/rules/unused-import"
+  },
+  {
+    "cell": null,
+    "code": "E741",
+    "end_location": {
+      "column": 34,
+      "row": 138
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/technical/support_resistance.py",
+    "fix": null,
+    "location": {
+      "column": 33,
+      "row": 138
+    },
+    "message": "Ambiguous variable name: `l`",
+    "noqa_row": 138,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-variable-name"
+  },
+  {
+    "cell": null,
+    "code": "E741",
+    "end_location": {
+      "column": 37,
+      "row": 140
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/technical/support_resistance.py",
+    "fix": null,
+    "location": {
+      "column": 36,
+      "row": 140
+    },
+    "message": "Ambiguous variable name: `l`",
+    "noqa_row": 140,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-variable-name"
+  },
+  {
+    "cell": null,
+    "code": "E741",
+    "end_location": {
+      "column": 41,
+      "row": 143
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/technical/support_resistance.py",
+    "fix": null,
+    "location": {
+      "column": 40,
+      "row": 143
+    },
+    "message": "Ambiguous variable name: `l`",
+    "noqa_row": 143,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-variable-name"
+  },
+  {
+    "cell": null,
+    "code": "E741",
+    "end_location": {
+      "column": 44,
+      "row": 144
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/technical/support_resistance.py",
+    "fix": null,
+    "location": {
+      "column": 43,
+      "row": 144
+    },
+    "message": "Ambiguous variable name: `l`",
+    "noqa_row": 144,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-variable-name"
+  },
+  {
+    "cell": null,
+    "code": "E741",
+    "end_location": {
+      "column": 33,
+      "row": 280
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/technical/support_resistance.py",
+    "fix": null,
+    "location": {
+      "column": 32,
+      "row": 280
+    },
+    "message": "Ambiguous variable name: `l`",
+    "noqa_row": 280,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-variable-name"
+  },
+  {
+    "cell": null,
+    "code": "F541",
+    "end_location": {
+      "column": 36,
+      "row": 453
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/volatility.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "\"\\nPrice History Stats:\"",
+          "end_location": {
+            "column": 36,
+            "row": 453
+          },
+          "location": {
+            "column": 11,
+            "row": 453
+          }
+        }
+      ],
+      "message": "Remove extraneous `f` prefix"
+    },
+    "location": {
+      "column": 11,
+      "row": 453
+    },
+    "message": "f-string without any placeholders",
+    "noqa_row": 453,
+    "url": "https://docs.astral.sh/ruff/rules/f-string-missing-placeholders"
+  },
+  {
+    "cell": null,
+    "code": "F541",
+    "end_location": {
+      "column": 53,
+      "row": 459
+    },
+    "filename": "/mnt/c/documents/crypto-trading-bot/src/volatility.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "\"\\nVolatility Scores (cached for 5 min):\"",
+          "end_location": {
+            "column": 53,
+            "row": 459
+          },
+          "location": {
+            "column": 11,
+            "row": 459
+          }
+        }
+      ],
+      "message": "Remove extraneous `f` prefix"
+    },
+    "location": {
+      "column": 11,
+      "row": 459
+    },
+    "message": "f-string without any placeholders",
+    "noqa_row": 459,
+    "url": "https://docs.astral.sh/ruff/rules/f-string-missing-placeholders"
+  }
+]

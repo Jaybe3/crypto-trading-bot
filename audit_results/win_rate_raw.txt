@@ -1,0 +1,334 @@
+src/adaptation.py:28:# Confidence thresholds for automatic adaptation
+src/adaptation.py:30:    "blacklist": {"confidence": 0.85, "min_trades": 5, "max_win_rate": 0.30},
+src/adaptation.py:31:    "favor": {"confidence": 0.80, "min_trades": 5, "min_win_rate": 0.60},
+src/adaptation.py:114:        """Apply a single insight if it meets thresholds.
+src/adaptation.py:124:            logger.debug(f"Skipping insight: {insight.title} (thresholds not met)")
+src/adaptation.py:143:        """Check if insight meets thresholds for automatic application.
+src/adaptation.py:266:        win_rate = insight.evidence.get("win_rate", 0.5)
+src/adaptation.py:272:        pre_metrics["win_rate"] = win_rate
+src/adaptation.py:277:            thresholds = THRESHOLDS["blacklist"]
+src/adaptation.py:280:                insight.confidence >= thresholds["confidence"]
+src/adaptation.py:281:                and trades >= thresholds["min_trades"]
+src/adaptation.py:282:                and win_rate < thresholds["max_win_rate"]
+src/adaptation.py:293:                    action=AdaptationAction.BLACKLIST_COIN.value,
+src/adaptation.py:295:                    description=f"Blacklisted {coin}: {win_rate:.0%} win rate over {trades} trades",
+src/adaptation.py:306:            thresholds = THRESHOLDS["favor"]
+src/adaptation.py:309:                insight.confidence >= thresholds["confidence"]
+src/adaptation.py:310:                and trades >= thresholds["min_trades"]
+src/adaptation.py:311:                and win_rate >= thresholds["min_win_rate"]
+src/adaptation.py:324:                    description=f"Favored {coin}: {win_rate:.0%} win rate over {trades} trades",
+src/adaptation.py:351:        win_rate = insight.evidence.get("win_rate", 0.5)
+src/adaptation.py:361:            thresholds = THRESHOLDS["deactivate_pattern"]
+src/adaptation.py:364:                insight.confidence >= thresholds["confidence"]
+src/adaptation.py:365:                and trades >= thresholds["min_trades"]
+src/adaptation.py:366:                and win_rate < 0.35
+src/adaptation.py:377:                    description=f"Deactivated pattern {pattern_id}: {win_rate:.0%} win rate",
+src/adaptation.py:400:        thresholds = THRESHOLDS["create_time_rule"]
+src/adaptation.py:401:        if insight.confidence < thresholds["confidence"]:
+src/adaptation.py:410:        if trades < thresholds["min_trades"]:
+src/adaptation.py:454:        thresholds = THRESHOLDS["create_regime_rule"]
+src/adaptation.py:455:        if insight.confidence < thresholds["confidence"]:
+src/adaptation.py:464:        if trades < thresholds["min_trades"]:
+src/adaptation.py:614:            evidence={"coin": "DOGE", "win_rate": 0.20, "trades": 10, "pnl": -15.0},
+src/adaptation.py:635:            evidence={"coin": "SOL", "win_rate": 0.75, "trades": 12, "pnl": 18.0},
+src/adaptation.py:658:            evidence={"worst_hours": [2, 3, 4, 5], "win_rate": 0.25, "trades": 15},
+src/adaptation.py:680:            evidence={"coin": "BTC", "win_rate": 0.45, "trades": 5, "pnl": -2.0},
+src/adaptation.py:682:            confidence=0.50,  # Too low
+src/coin_scorer.py:5:- Automatically triggers adaptations when thresholds are crossed
+src/coin_scorer.py:22:    BLACKLISTED = "blacklisted"    # Do not trade
+src/coin_scorer.py:23:    REDUCED = "reduced"            # Trade with reduced size (50%)
+src/coin_scorer.py:25:    FAVORED = "favored"            # Can trade with increased size (150%)
+src/coin_scorer.py:31:    CoinStatus.BLACKLISTED: 0.0,
+src/coin_scorer.py:32:    CoinStatus.REDUCED: 0.5,
+src/coin_scorer.py:34:    CoinStatus.FAVORED: 1.5,
+src/coin_scorer.py:42:BLACKLIST_WIN_RATE = 0.30      # Below this + negative P&L = blacklist
+src/coin_scorer.py:43:REDUCED_WIN_RATE = 0.45        # Below this = reduced size
+src/coin_scorer.py:44:FAVORED_WIN_RATE = 0.60        # Above this + positive P&L = favored
+src/coin_scorer.py:45:RECOVERY_WIN_RATE = 0.50       # Above this to recover from reduced
+src/coin_scorer.py:73:    Called after every trade close to update scores and check thresholds.
+src/coin_scorer.py:106:            return CoinStatus.BLACKLISTED
+src/coin_scorer.py:111:        if score.win_rate < BLACKLIST_WIN_RATE and score.total_pnl < 0:
+src/coin_scorer.py:112:            return CoinStatus.BLACKLISTED
+src/coin_scorer.py:114:        if score.win_rate < REDUCED_WIN_RATE:
+src/coin_scorer.py:115:            return CoinStatus.REDUCED
+src/coin_scorer.py:117:        if score.win_rate >= FAVORED_WIN_RATE and score.total_pnl > 0:
+src/coin_scorer.py:118:            return CoinStatus.FAVORED
+src/coin_scorer.py:146:        # Check for threshold crossings
+src/coin_scorer.py:147:        adaptation = self.check_thresholds(coin)
+src/coin_scorer.py:154:    def check_thresholds(self, coin: str) -> Optional[CoinAdaptation]:
+src/coin_scorer.py:155:        """Check if coin crosses any adaptation thresholds.
+src/coin_scorer.py:176:        # Check BLACKLIST threshold (most severe)
+src/coin_scorer.py:177:        if (score.win_rate < BLACKLIST_WIN_RATE and
+src/coin_scorer.py:181:            new_status = CoinStatus.BLACKLISTED
+src/coin_scorer.py:182:            reason = (f"Win rate {score.win_rate:.0%} < {BLACKLIST_WIN_RATE:.0%} "
+src/coin_scorer.py:186:        # Check REDUCED threshold (not blacklisted, but underperforming)
+src/coin_scorer.py:187:        elif (score.win_rate < REDUCED_WIN_RATE and
+src/coin_scorer.py:188:              current_status not in [CoinStatus.BLACKLISTED, CoinStatus.REDUCED]):
+src/coin_scorer.py:190:            new_status = CoinStatus.REDUCED
+src/coin_scorer.py:191:            reason = (f"Win rate {score.win_rate:.0%} < {REDUCED_WIN_RATE:.0%} "
+src/coin_scorer.py:194:        # Check FAVORED threshold (performing well)
+src/coin_scorer.py:195:        elif (score.win_rate >= FAVORED_WIN_RATE and
+src/coin_scorer.py:197:              current_status not in [CoinStatus.BLACKLISTED, CoinStatus.FAVORED]):
+src/coin_scorer.py:199:            new_status = CoinStatus.FAVORED
+src/coin_scorer.py:200:            reason = (f"Win rate {score.win_rate:.0%} >= {FAVORED_WIN_RATE:.0%} "
+src/coin_scorer.py:203:        # Check if coin recovered from REDUCED status
+src/coin_scorer.py:204:        elif (score.win_rate >= RECOVERY_WIN_RATE and
+src/coin_scorer.py:205:              current_status == CoinStatus.REDUCED):
+src/coin_scorer.py:208:            reason = f"Win rate recovered to {score.win_rate:.0%} (>= {RECOVERY_WIN_RATE:.0%})"
+src/coin_scorer.py:210:        # Check if coin dropped from FAVORED status
+src/coin_scorer.py:211:        elif (score.win_rate < FAVORED_WIN_RATE and
+src/coin_scorer.py:212:              current_status == CoinStatus.FAVORED):
+src/coin_scorer.py:215:            reason = f"Win rate dropped to {score.win_rate:.0%} (< {FAVORED_WIN_RATE:.0%})"
+src/coin_scorer.py:231:                    "win_rate": score.win_rate,
+src/coin_scorer.py:271:            self._status_cache[coin] = CoinStatus.BLACKLISTED
+src/coin_scorer.py:272:            return CoinStatus.BLACKLISTED
+src/coin_scorer.py:296:        self._status_cache[coin] = CoinStatus.BLACKLISTED
+src/coin_scorer.py:302:            new_status=CoinStatus.BLACKLISTED,
+src/coin_scorer.py:308:        logger.info(f"MANUAL BLACKLIST: {coin} - {reason}")
+src/coin_scorer.py:344:        logger.info(f"MANUAL UNBLACKLIST: {coin} -> {new_status.value}")
+src/daily_summary.py:124:                'win_rate': 0,
+src/daily_summary.py:144:            'win_rate': len(wins) / len(trades) if trades else 0,
+src/daily_summary.py:205:            f"  Win Rate:    {stats['win_rate']:.1%}",
+src/dashboard.py:410:                    <div class="metric-value {{ 'profit' if metrics.trading.win_rate >= 50 else 'loss' }}">{{ metrics.trading.win_rate }}%</div>
+src/dashboard.py:832:                    'threshold': a.threshold
+src/database.py:389:                    win_rate REAL DEFAULT 0,
+src/database.py:507:                    win_rate REAL NOT NULL,
+src/database.py:544:                CREATE INDEX IF NOT EXISTS idx_coin_scores_win_rate
+src/database.py:545:                ON coin_scores(win_rate)
+src/database.py:917:                (coin, total_trades, wins, losses, total_pnl, avg_pnl, win_rate,
+src/database.py:927:                score_data["win_rate"],
+src/database.py:1557:                 total_trades, winning_trades, losing_trades, win_rate,
+src/database.py:1570:                snapshot["win_rate"],
+src/effectiveness.py:48:    win_rate_change: float = 0.0       # Percentage points (+5 means 50% -> 55%)
+src/effectiveness.py:69:            "win_rate_change": self.win_rate_change,
+src/effectiveness.py:99:    # Measurement thresholds
+src/effectiveness.py:104:    # Effectiveness thresholds (percentage points for win rate)
+src/effectiveness.py:110:    # Rollback thresholds
+src/effectiveness.py:167:                        f"Win rate: {result.win_rate_change:+.1f}%, "
+src/effectiveness.py:176:                        f"Win rate: {result.win_rate_change:+.1f}%, "
+src/effectiveness.py:293:                "win_rate": 0.0,
+src/effectiveness.py:305:                "win_rate": metrics.get("win_rate", 0.0),
+src/effectiveness.py:335:        pre_win_rate = pre_overall.get("win_rate", 0.0)
+src/effectiveness.py:336:        post_win_rate = post_overall.get("win_rate", 0.0)
+src/effectiveness.py:345:        win_rate_change = post_win_rate - pre_win_rate
+src/effectiveness.py:350:        if win_rate_change >= self.HIGHLY_EFFECTIVE_THRESHOLD:
+src/effectiveness.py:352:        elif win_rate_change >= self.EFFECTIVE_THRESHOLD:
+src/effectiveness.py:354:        elif win_rate_change >= self.INEFFECTIVE_THRESHOLD:
+src/effectiveness.py:356:        elif win_rate_change >= self.HARMFUL_THRESHOLD:
+src/effectiveness.py:371:                f"Win rate dropped {abs(win_rate_change):.1f}% and "
+src/effectiveness.py:380:            win_rate_change=win_rate_change,
+src/journal.py:946:            'win_rate': (wins / total * 100) if total > 0 else 0,
+src/journal.py:961:            'win_rate': 0,
+src/journal.py:993:                'win_rate': (r['wins'] / r['trades'] * 100) if r['trades'] > 0 else 0,
+src/journal.py:1023:                'win_rate': (r['wins'] / r['trades'] * 100) if r['trades'] > 0 else 0,
+src/journal.py:1053:                'win_rate': (r['wins'] / r['trades'] * 100) if r['trades'] > 0 else 0,
+src/journal.py:1083:                'win_rate': (r['wins'] / r['trades'] * 100) if r['trades'] > 0 else 0,
+src/knowledge.py:34:        >>> print(f"SOL win rate: {score.win_rate:.1%}")
+src/knowledge.py:138:                    f"{score.win_rate:.1%} win rate, ${score.total_pnl:.2f} total P&L")
+src/knowledge.py:156:        # For now, base it on win rate thresholds
+src/knowledge.py:157:        if score.win_rate >= 0.6:
+src/knowledge.py:159:        elif score.win_rate <= 0.35:
+src/knowledge.py:163:    def get_good_coins(self, min_trades: int = 5, min_win_rate: float = 0.5) -> List[str]:
+src/knowledge.py:168:            min_win_rate: Minimum win rate to be considered "good".
+src/knowledge.py:176:            and score.win_rate >= min_win_rate
+src/knowledge.py:180:    def get_bad_coins(self, min_trades: int = 5, max_win_rate: float = 0.35) -> List[str]:
+src/knowledge.py:185:            max_win_rate: Maximum win rate to be considered "bad".
+src/knowledge.py:193:            and score.win_rate <= max_win_rate
+src/knowledge.py:330:            pattern.confidence = min(0.9, max(0.1, pattern.win_rate))
+src/knowledge.py:334:                    f"{pattern.win_rate:.1%} win rate")
+src/knowledge.py:375:        min_win_rate: float = 0.55
+src/knowledge.py:381:            min_win_rate: Minimum win rate to be considered "winning".
+src/knowledge.py:390:            and p.win_rate >= min_win_rate
+src/knowledge.py:496:            "win_rate": f"{score.win_rate:.1%}",
+src/knowledge.py:501:            "status": "BLACKLISTED" if score.is_blacklisted else "ACTIVE",
+src/learning_system.py:527:# Rule creation configuration - adjustable thresholds
+src/learning_system.py:617:        # Check confidence threshold
+src/learning_system.py:619:            logger.info(f"Learning #{learning.id} confidence {learning.confidence:.0%} below threshold {self.min_confidence:.0%}")
+src/main.py:78:    def __init__(self, stale_threshold: float = STALE_DATA_THRESHOLD):
+src/main.py:79:        self.stale_threshold = stale_threshold
+src/main.py:102:        return time.time() - self.last_tick_time < self.stale_threshold
+src/main.py:109:        return time.time() - self.last_tick_time >= self.stale_threshold
+src/main.py:808:                stats["win_rate"] = snapshot.win_rate
+src/main_legacy.py:339:        # Check confidence threshold
+src/market_feed.py:156:        self._stale_threshold = ws_config.get('stale_threshold_seconds', 5)
+src/market_feed.py:191:                'stale_threshold_seconds': 5
+src/market_feed.py:566:                if elapsed > self._stale_threshold:
+src/metrics.py:37:    threshold: Any
+src/metrics.py:48:    # Alert thresholds
+src/metrics.py:55:        'min_win_rate': 40.0,           # Warning if win rate below
+src/metrics.py:102:            win_rate = (wins / total * 100) if total > 0 else 0
+src/metrics.py:109:                'win_rate': round(win_rate, 1),
+src/metrics.py:266:        """Check all metrics against thresholds and generate alerts.
+src/metrics.py:269:            List of Alert objects for any threshold violations.
+src/metrics.py:284:                threshold=self.THRESHOLDS['min_balance'],
+src/metrics.py:295:                threshold=self.THRESHOLDS['max_daily_loss'],
+src/metrics.py:305:                message=f"No trades for {hours:.1f} hours (threshold: {self.THRESHOLDS['max_trade_gap_hours']}h)",
+src/metrics.py:307:                threshold=self.THRESHOLDS['max_trade_gap_hours'],
+src/metrics.py:316:                message=f"Price data {health['price_age_minutes']:.1f} min old (threshold: {self.THRESHOLDS['max_price_age_minutes']} min)",
+src/metrics.py:318:                threshold=self.THRESHOLDS['max_price_age_minutes'],
+src/metrics.py:327:                message=f"{health['api_errors_1h']} API errors in last hour (threshold: {self.THRESHOLDS['max_api_errors_hourly']})",
+src/metrics.py:329:                threshold=self.THRESHOLDS['max_api_errors_hourly'],
+src/metrics.py:334:        if trading['total_trades'] >= 10 and trading['win_rate'] < self.THRESHOLDS['min_win_rate']:
+src/metrics.py:337:                metric='win_rate',
+src/metrics.py:338:                message=f"Win rate {trading['win_rate']:.1f}% below {self.THRESHOLDS['min_win_rate']}%",
+src/metrics.py:339:                value=trading['win_rate'],
+src/metrics.py:340:                threshold=self.THRESHOLDS['min_win_rate'],
+src/metrics.py:383:        lines.append("# HELP cryptobot_win_rate Win rate percentage")
+src/metrics.py:384:        lines.append("# TYPE cryptobot_win_rate gauge")
+src/metrics.py:385:        lines.append(f"cryptobot_win_rate {t['win_rate']}")
+src/metrics.py:484:            f"  Win Rate:       {t['win_rate']:.1f}%",
+src/pattern_library.py:23:# Confidence thresholds
+src/pattern_library.py:182:            min_confidence: Minimum confidence threshold (default: 0.7).
+src/pattern_library.py:537:        - Base from win rate: (win_rate - 0.5) * 0.5 + 0.5
+src/pattern_library.py:548:        win_rate_contrib = (pattern.win_rate - 0.5) * 0.5
+src/pattern_library.py:549:        base_confidence = 0.5 + win_rate_contrib
+src/pattern_library.py:607:                    "win_rate": p.win_rate,
+src/pattern_library.py:654:            f"Pattern has {pattern.win_rate:.0%} win rate over {pattern.times_used} uses."
+src/pattern_library.py:693:                "avg_win_rate": 0.0,
+src/pattern_library.py:703:        avg_win_rate = (
+src/pattern_library.py:704:            sum(p.win_rate for p in patterns_with_data) / len(patterns_with_data)
+src/pattern_library.py:713:            "avg_win_rate": avg_win_rate,
+src/profitability.py:51:    win_rate: float = 0.0
+src/profitability.py:81:            "win_rate": self.win_rate,
+src/profitability.py:105:            win_rate=d.get("win_rate", 0.0),
+src/profitability.py:126:    win_rate: float = 0.0
+src/profitability.py:137:            "win_rate": self.win_rate,
+src/profitability.py:232:            win_rate=metrics["win_rate"],
+src/profitability.py:282:        win_rate = (winning_trades / total_trades * 100) if total_trades > 0 else 0
+src/profitability.py:288:        # Expectancy: (win_rate * avg_win) - (loss_rate * avg_loss)
+src/profitability.py:290:        expectancy = ((win_rate / 100) * avg_win) - (loss_rate * avg_loss)
+src/profitability.py:310:            "win_rate": win_rate,
+src/profitability.py:331:            "win_rate": 0.0,
+src/profitability.py:487:            f"Win Rate={snapshot.win_rate:.1f}%, "
+src/profitability.py:602:                win_rate=(wins / count * 100) if count > 0 else 0,
+src/profitability.py:769:        win_rate_change = current_metrics["win_rate"] - prev_metrics["win_rate"]
+src/profitability.py:777:            current_metrics["win_rate"] >= prev_metrics["win_rate"] - 5  # Allow 5% variance
+src/profitability.py:785:                "win_rate": current_metrics["win_rate"],
+src/profitability.py:792:                "win_rate": prev_metrics["win_rate"],
+src/profitability.py:797:                "win_rate_change": win_rate_change,
+src/quick_update.py:113:                result.new_coin_win_rate = score.win_rate
+src/quick_update.py:150:        """Update coin score and check thresholds.
+src/quick_update.py:156:            CoinAdaptation if threshold was crossed, else None.
+src/quick_update.py:221:            "new_coin_win_rate": result.new_coin_win_rate,
+src/reflection.py:88:    # Trigger thresholds
+src/reflection.py:233:        win_rate = wins / len(trades) if trades else 0
+src/reflection.py:258:            win_rate=win_rate,
+src/reflection.py:280:            win_rate=win_rate,
+src/reflection.py:318:            win_rate=0,
+src/reflection.py:365:                win_rate=len(winners) / len(coin_list) if coin_list else 0,
+src/reflection.py:409:                win_rate=wins / len(pattern_list) if pattern_list else 0,
+src/reflection.py:428:        hour_win_rates = {}
+src/reflection.py:432:            hour_win_rates[hour] = wins / len(hour_list) if hour_list else 0
+src/reflection.py:436:        day_win_rates = {}
+src/reflection.py:440:            day_win_rates[day] = wins / len(day_list) if day_list else 0
+src/reflection.py:444:        valid_hours = {h: r for h, r in hour_win_rates.items() if hour_trade_counts.get(h, 0) >= 2}
+src/reflection.py:449:        valid_days = {d: r for d, r in day_win_rates.items() if day_trade_counts.get(d, 0) >= 2}
+src/reflection.py:463:            hour_win_rates=hour_win_rates,
+src/reflection.py:467:            day_win_rates=day_win_rates,
+src/reflection.py:470:            weekend_win_rate=weekend_wins / len(weekend_trades) if weekend_trades else 0,
+src/reflection.py:471:            weekday_win_rate=weekday_wins / len(weekday_trades) if weekday_trades else 0,
+src/reflection.py:508:            btc_up_win_rate=up_wr,
+src/reflection.py:511:            btc_down_win_rate=down_wr,
+src/reflection.py:514:            btc_sideways_win_rate=side_wr,
+src/reflection.py:563:        win_rate: float,
+src/reflection.py:576:            win_rate=win_rate,
+src/reflection.py:605:        win_rate: float,
+src/reflection.py:614:            if c.win_rate >= 0.6 and c.total_pnl > 0:
+src/reflection.py:616:            elif c.win_rate < 0.3 and c.total_pnl < 0:
+src/reflection.py:619:                f"  {c.coin}: {c.total_trades} trades, {c.win_rate:.0%} win rate, "
+src/reflection.py:628:                f"  {p.pattern_id}: {p.total_trades} trades, {p.win_rate:.0%} win rate, "
+src/reflection.py:643:OVERALL: {len(trades)} trades, {wins} wins ({win_rate:.0%}), ${total_pnl:+.2f} P&L
+src/reflection.py:656:  Weekend win rate: {time_analysis.weekend_win_rate:.0%} ({time_analysis.weekend_trades} trades)
+src/reflection.py:657:  Weekday win rate: {time_analysis.weekday_win_rate:.0%}
+src/reflection.py:660:  BTC Up: {regime_analysis.btc_up_win_rate:.0%} win rate ({regime_analysis.btc_up_trades} trades), ${regime_analysis.btc_up_pnl:+.2f}
+src/reflection.py:661:  BTC Down: {regime_analysis.btc_down_win_rate:.0%} win rate ({regime_analysis.btc_down_trades} trades), ${regime_analysis.btc_down_pnl:+.2f}
+src/reflection.py:662:  BTC Sideways: {regime_analysis.btc_sideways_win_rate:.0%} win rate ({regime_analysis.btc_sideways_trades} trades), ${regime_analysis.btc_sideways_pnl:+.2f}
+src/strategist.py:321:                    "win_rate": f"{score.win_rate:.0%}",
+src/strategist.py:363:            return "BLACKLISTED"
+src/strategist.py:366:        if score.win_rate >= 0.60 and score.total_pnl > 0:
+src/strategist.py:367:            return "FAVORED"
+src/strategist.py:368:        if score.win_rate < 0.45:
+src/strategist.py:369:            return "REDUCED"
+src/strategist.py:486:            "win_rate_24h": 0.50,
+src/strategist.py:578:                    f"{cs['win_rate']} win | {cs['pnl']} P&L | {cs['trend']}"
+src/strategist.py:597:                    f"  - {p.description} ({p.confidence:.0%} conf, {p.win_rate:.0%} win rate)"
+src/strategist.py:630:- Win rate (24h): {performance['win_rate_24h']*100:.0f}%
+src/strategist.py:709:            if status == CoinStatus.BLACKLISTED:
+src/strategist.py:710:                logger.info(f"Skipping {condition.coin}: BLACKLISTED")
+src/volatility.py:31:# Volatility multiplier thresholds (score -> multiplier)
+src/volatility.py:284:        for threshold, multiplier in VOLATILITY_MULTIPLIERS:
+src/volatility.py:285:            if vol_score <= threshold:
+src/analysis/learning.py:44:                SELECT coin, score, total_trades, win_rate, total_pnl
+src/analysis/learning.py:62:            for coin, score, trades, win_rate, pnl in coins:
+src/analysis/learning.py:69:                    "win_rate": win_rate or 0,
+src/analysis/learning.py:76:                    high_score_wins.append(win_rate or 0)
+src/analysis/learning.py:80:                    low_score_wins.append(win_rate or 0)
+src/analysis/learning.py:85:                results["high_score_avg_win_rate"] = sum(high_score_wins) / len(high_score_wins)
+src/analysis/learning.py:88:                results["high_score_avg_win_rate"] = 0
+src/analysis/learning.py:92:                results["low_score_avg_win_rate"] = sum(low_score_wins) / len(low_score_wins)
+src/analysis/learning.py:95:                results["low_score_avg_win_rate"] = 0
+src/analysis/learning.py:101:                if results["high_score_avg_win_rate"] > results["low_score_avg_win_rate"]:
+src/analysis/learning.py:102:                    diff = results["high_score_avg_win_rate"] - results["low_score_avg_win_rate"]
+src/analysis/learning.py:156:                       win_rate_before, win_rate_after, pnl_before, pnl_after, applied_at
+src/analysis/learning.py:204:                        "win_rate_change": (wr_after or 0) - (wr_before or 0) if wr_after and wr_before else None,
+src/analysis/learning.py:247:                SELECT pattern_id, name, confidence, usage_count, win_rate, total_pnl, is_active
+src/analysis/learning.py:258:            for pattern_id, name, conf, usage, win_rate, pnl, active in patterns:
+src/analysis/learning.py:266:                    "win_rate": win_rate or 0,
+src/analysis/learning.py:274:                    high_conf_wins.append(win_rate or 0)
+src/analysis/learning.py:277:                    low_conf_wins.append(win_rate or 0)
+src/analysis/learning.py:281:                results["high_conf_avg_win_rate"] = sum(high_conf_wins) / len(high_conf_wins)
+src/analysis/learning.py:283:                results["high_conf_avg_win_rate"] = 0
+src/analysis/learning.py:286:                results["low_conf_avg_win_rate"] = sum(low_conf_wins) / len(low_conf_wins)
+src/analysis/learning.py:288:                results["low_conf_avg_win_rate"] = 0
+src/analysis/learning.py:292:                if results["high_conf_avg_win_rate"] > results["low_conf_avg_win_rate"]:
+src/analysis/learning.py:450:        "adaptation_effectiveness": 0.30,
+src/analysis/metrics.py:27:    win_rate: float = 0.0
+src/analysis/metrics.py:66:            "win_rate": self.win_rate,
+src/analysis/metrics.py:90:            f"Win Rate: {self.win_rate:.1f}% ({self.wins}/{self.total_trades})",
+src/analysis/metrics.py:169:        metrics.win_rate = (metrics.wins / metrics.total_trades) * 100
+src/analysis/performance.py:200:        "win_rate_change": metrics_second.win_rate - metrics_first.win_rate,
+src/analysis/performance.py:207:            metrics_second.win_rate > metrics_first.win_rate and
+src/analysis/performance.py:241:        key=lambda x: (x[1].win_rate, x[1].profit_factor),
+src/analysis/performance.py:250:            {"hour": h, "win_rate": m.win_rate, "pnl": m.total_pnl, "trades": m.total_trades}
+src/analysis/performance.py:254:            {"hour": h, "win_rate": m.win_rate, "pnl": m.total_pnl, "trades": m.total_trades}
+src/analysis/performance.py:291:            {"coin": c, "pnl": m.total_pnl, "win_rate": m.win_rate, "trades": m.total_trades}
+src/analysis/performance.py:295:            {"coin": c, "pnl": m.total_pnl, "win_rate": m.win_rate, "trades": m.total_trades}
+src/models/adaptation.py:16:    BLACKLIST_COIN = "blacklist"
+src/models/knowledge.py:22:    win_rate: float = 0.0
+src/models/knowledge.py:51:            self.win_rate = self.wins / self.total_trades
+src/models/knowledge.py:80:    def win_rate(self) -> float:
+src/models/quick_update.py:78:    coin_adaptation: Optional[str] = None  # "BLACKLIST", "REDUCE", "FAVOR", None
+src/models/quick_update.py:84:    new_coin_win_rate: float = 0.0
+src/models/reflection.py:23:    win_rate: float
+src/models/reflection.py:38:            "win_rate": self.win_rate,
+src/models/reflection.py:58:    win_rate: float
+src/models/reflection.py:70:            "win_rate": self.win_rate,
+src/models/reflection.py:84:    hour_win_rates: Dict[int, float]
+src/models/reflection.py:90:    day_win_rates: Dict[int, float]
+src/models/reflection.py:95:    weekend_win_rate: float
+src/models/reflection.py:96:    weekday_win_rate: float
+src/models/reflection.py:102:            "hour_win_rates": self.hour_win_rates,
+src/models/reflection.py:106:            "day_win_rates": self.day_win_rates,
+src/models/reflection.py:109:            "weekend_win_rate": self.weekend_win_rate,
+src/models/reflection.py:110:            "weekday_win_rate": self.weekday_win_rate,
+src/models/reflection.py:120:    btc_up_win_rate: float
+src/models/reflection.py:124:    btc_down_win_rate: float
+src/models/reflection.py:128:    btc_sideways_win_rate: float
+src/models/reflection.py:138:            "btc_up_win_rate": self.btc_up_win_rate,
+src/models/reflection.py:141:            "btc_down_win_rate": self.btc_down_win_rate,
+src/models/reflection.py:144:            "btc_sideways_win_rate": self.btc_sideways_win_rate,
+src/models/reflection.py:235:    win_rate: float
+src/models/reflection.py:264:            "win_rate": self.win_rate,
+src/models/reflection.py:284:            f"{self.win_rate:.0%} win rate, ${self.total_pnl:+.2f} P&L, "
+src/sentiment/btc_correlation.py:110:        btc_threshold: float = 1.0,
+src/sentiment/btc_correlation.py:111:        correlation_threshold: float = 0.5
+src/sentiment/btc_correlation.py:117:            btc_threshold: Minimum BTC move % to consider (default 1%)
+src/sentiment/btc_correlation.py:118:            correlation_threshold: Minimum correlation to consider (default 0.5)
+src/sentiment/btc_correlation.py:125:        if abs(corr.btc_change_1h) < btc_threshold:
+src/sentiment/btc_correlation.py:128:        if corr.correlation_24h < correlation_threshold:
+src/technical/orderbook.py:207:        threshold = avg_size * self.wall_multiplier
+src/technical/orderbook.py:211:            if size > threshold:
+src/technical/volume_profile.py:315:        threshold = avg_volume * 1.5  # 50% above average
+src/technical/volume_profile.py:317:        hvn = [price for price, vol in volume_dist.items() if vol > threshold]
+src/technical/volume_profile.py:326:        threshold = avg_volume * 0.5  # 50% below average
+src/technical/volume_profile.py:328:        lvn = [price for price, vol in volume_dist.items() if vol < threshold]

@@ -1,0 +1,990 @@
+ERROR: /mnt/c/documents/crypto-trading-bot/src/adaptation.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/coin_scorer.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/daily_summary.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/dashboard.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/dashboard_v2.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/database.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/effectiveness.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/journal.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/knowledge.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/learning_system.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/llm_interface.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/main.py Imports are incorrectly sorted and/or formatted.
+--- /mnt/c/documents/crypto-trading-bot/src/adaptation.py:before	2026-02-03 11:12:59.748264
++++ /mnt/c/documents/crypto-trading-bot/src/adaptation.py:after	2026-02-04 14:34:28.222659
+@@ -574,8 +574,8 @@
+ 
+ # Allow running directly for testing
+ if __name__ == "__main__":
++    import os
+     import tempfile
+-    import os
+ 
+     logging.basicConfig(
+         level=logging.INFO,
+@@ -591,11 +591,11 @@
+     os.close(fd)
+ 
+     try:
++        from src.coin_scorer import CoinScorer
+         from src.database import Database
+         from src.knowledge import KnowledgeBrain
+-        from src.coin_scorer import CoinScorer
++        from src.models.reflection import Insight
+         from src.pattern_library import PatternLibrary
+-        from src.models.reflection import Insight
+ 
+         db = Database(path)
+         brain = KnowledgeBrain(db)
+--- /mnt/c/documents/crypto-trading-bot/src/coin_scorer.py:before	2026-02-03 09:35:51.961996
++++ /mnt/c/documents/crypto-trading-bot/src/coin_scorer.py:after	2026-02-04 14:34:28.239927
+@@ -7,10 +7,10 @@
+ """
+ 
+ import logging
+-from dataclasses import dataclass, field, asdict
++from dataclasses import asdict, dataclass, field
+ from datetime import datetime
+ from enum import Enum
+-from typing import Optional, Dict, Any
++from typing import Any, Dict, Optional
+ 
+ from src.knowledge import KnowledgeBrain
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/daily_summary.py:before	2026-01-14 10:48:16.857463
++++ /mnt/c/documents/crypto-trading-bot/src/daily_summary.py:after	2026-02-04 14:34:28.247509
+@@ -11,9 +11,9 @@
+ import logging
+ import os
+ import sys
+-from datetime import datetime, date
++from datetime import date, datetime
+ from pathlib import Path
+-from typing import Dict, Any, List, Optional
++from typing import Any, Dict, List, Optional
+ 
+ # Add parent directory to path for imports when running directly
+ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+--- /mnt/c/documents/crypto-trading-bot/src/dashboard.py:before	2026-01-14 12:52:24.276214
++++ /mnt/c/documents/crypto-trading-bot/src/dashboard.py:after	2026-02-04 14:34:28.266845
+@@ -9,18 +9,18 @@
+ import os
+ import sys
+ from datetime import datetime
+-from typing import Dict, Any, List
+-
+-from flask import Flask, render_template_string, jsonify
++from typing import Any, Dict, List
++
++from flask import Flask, jsonify, render_template_string
+ 
+ # Add parent directory to path for imports when running directly
+ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ 
++from src.coin_config import get_tier
+ from src.database import Database
+ from src.market_data import format_price
+-from src.coin_config import get_tier
++from src.metrics import MetricsCollector
+ from src.volatility import VolatilityCalculator
+-from src.metrics import MetricsCollector
+ 
+ # Configure logging
+ logging.basicConfig(
+--- /mnt/c/documents/crypto-trading-bot/src/dashboard_v2.py:before	2026-02-03 12:05:46.887989
++++ /mnt/c/documents/crypto-trading-bot/src/dashboard_v2.py:after	2026-02-04 14:34:28.290228
+@@ -16,12 +16,12 @@
+ import logging
+ from datetime import datetime
+ from pathlib import Path
+-from typing import Optional, TYPE_CHECKING
++from typing import TYPE_CHECKING, Optional
+ 
+ from fastapi import FastAPI, HTTPException, Request
++from fastapi.responses import HTMLResponse, StreamingResponse
+ from fastapi.staticfiles import StaticFiles
+ from fastapi.templating import Jinja2Templates
+-from fastapi.responses import HTMLResponse, StreamingResponse
+ from pydantic import BaseModel
+ 
+ if TYPE_CHECKING:
+--- /mnt/c/documents/crypto-trading-bot/src/database.py:before	2026-02-03 11:31:49.417171
++++ /mnt/c/documents/crypto-trading-bot/src/database.py:after	2026-02-04 14:34:28.303957
+@@ -1,10 +1,10 @@
+ """SQLite database operations for the trading bot."""
+ 
++import logging
+ import sqlite3
+-import logging
+ from datetime import datetime
+ from pathlib import Path
+-from typing import Optional, List, Dict, Any
++from typing import Any, Dict, List, Optional
+ 
+ # Configure logging
+ logging.basicConfig(
+--- /mnt/c/documents/crypto-trading-bot/src/effectiveness.py:before	2026-02-03 11:31:29.150286
++++ /mnt/c/documents/crypto-trading-bot/src/effectiveness.py:after	2026-02-04 14:34:28.320571
+@@ -12,7 +12,7 @@
+ from dataclasses import dataclass, field
+ from datetime import datetime, timedelta
+ from enum import Enum
+-from typing import Any, Dict, List, Optional, TYPE_CHECKING
++from typing import TYPE_CHECKING, Any, Dict, List, Optional
+ 
+ if TYPE_CHECKING:
+     from src.adaptation import AdaptationEngine
+--- /mnt/c/documents/crypto-trading-bot/src/journal.py:before	2026-02-02 18:11:59.604383
++++ /mnt/c/documents/crypto-trading-bot/src/journal.py:after	2026-02-04 14:34:28.334566
+@@ -15,15 +15,15 @@
+ import sqlite3
+ import threading
+ import uuid
+-from dataclasses import dataclass, field, asdict
++from dataclasses import asdict, dataclass, field
+ from datetime import datetime, timedelta
+ from pathlib import Path
+-from queue import Queue, Empty
+-from typing import Callable, Optional, TYPE_CHECKING, Any
++from queue import Empty, Queue
++from typing import TYPE_CHECKING, Any, Callable, Optional
+ 
+ if TYPE_CHECKING:
++    from src.market_feed import MarketFeed
+     from src.sniper import Position
+-    from src.market_feed import MarketFeed
+ 
+ logger = logging.getLogger(__name__)
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/knowledge.py:before	2026-02-03 11:32:11.457317
++++ /mnt/c/documents/crypto-trading-bot/src/knowledge.py:after	2026-02-04 14:34:28.343746
+@@ -11,10 +11,10 @@
+ 
+ import logging
+ from datetime import datetime
+-from typing import Optional, Dict, Any, List
++from typing import Any, Dict, List, Optional
+ 
+ from src.database import Database
+-from src.models.knowledge import CoinScore, TradingPattern, RegimeRule
++from src.models.knowledge import CoinScore, RegimeRule, TradingPattern
+ 
+ logger = logging.getLogger(__name__)
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/learning_system.py:before	2026-01-14 16:39:37.072617
++++ /mnt/c/documents/crypto-trading-bot/src/learning_system.py:after	2026-02-04 14:34:28.356576
+@@ -14,7 +14,7 @@
+ import logging
+ from dataclasses import dataclass
+ from datetime import datetime
+-from typing import Dict, List, Optional, Any
++from typing import Any, Dict, List, Optional
+ 
+ from src.database import Database
+ from src.llm_interface import LLMInterface
+--- /mnt/c/documents/crypto-trading-bot/src/llm_interface.py:before	2026-02-03 07:02:06.011904
++++ /mnt/c/documents/crypto-trading-bot/src/llm_interface.py:after	2026-02-04 14:34:28.369655
+@@ -9,10 +9,10 @@
+ import os
+ import time
+ from datetime import datetime
+-from typing import Dict, List, Optional, Any
++from typing import Any, Dict, List, Optional
+ 
+ import requests
+-from requests.exceptions import RequestException, Timeout, ConnectionError
++from requests.exceptions import ConnectionError, RequestException, Timeout
+ 
+ from src.database import Database
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/main.py:before	2026-02-03 16:33:31.692441
++++ /mnt/c/documents/crypto-trading-bot/src/main.py:after	2026-02-04 14:34:28.404262
+@@ -24,30 +24,30 @@
+ # Add project root to path
+ sys.path.insert(0, str(Path(__file__).parent.parent))
+ 
++from src.adaptation import AdaptationEngine
++from src.coin_scorer import CoinScorer
++from src.dashboard_v2 import DashboardServer
++from src.database import Database
++from src.effectiveness import EffectivenessMonitor, EffectivenessRating
++from src.journal import MarketContext, TradeJournal
++from src.knowledge import KnowledgeBrain
++from src.llm_interface import LLMInterface
+ from src.market_feed import MarketFeed, PriceTick
++from src.models.trade_condition import TradeCondition
++from src.pattern_library import PatternLibrary
++from src.profitability import (ProfitabilityTracker, SnapshotScheduler,
++                               TimeFrame)
++from src.quick_update import QuickUpdate
++from src.reflection import ReflectionEngine
+ from src.sniper import Sniper
+-from src.journal import TradeJournal, MarketContext
+-from src.models.trade_condition import TradeCondition
+ from src.strategist import Strategist
+-from src.llm_interface import LLMInterface
+ERROR: /mnt/c/documents/crypto-trading-bot/src/main_legacy.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/market_data.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/market_feed.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/metrics.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/pattern_library.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/profitability.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/quick_update.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/reflection.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/risk_manager.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/sniper.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/strategist.py Imports are incorrectly sorted and/or formatted.
+-from src.database import Database
+-from src.knowledge import KnowledgeBrain
+-from src.coin_scorer import CoinScorer
+-from src.quick_update import QuickUpdate
+-from src.pattern_library import PatternLibrary
+-from src.reflection import ReflectionEngine
+-from src.adaptation import AdaptationEngine
+-from src.profitability import ProfitabilityTracker, SnapshotScheduler, TimeFrame
+-from src.effectiveness import EffectivenessMonitor, EffectivenessRating
+-from src.dashboard_v2 import DashboardServer
+ 
+ # Import settings
+ try:
+-    from config.settings import (
+-        TRADEABLE_COINS, DEFAULT_EXCHANGE, INITIAL_BALANCE,
+-        STALE_DATA_THRESHOLD, STATUS_LOG_INTERVAL, SNIPER_STATE_PATH,
+-        STRATEGIST_INTERVAL, STRATEGIST_ENABLED
+-    )
++    from config.settings import (DEFAULT_EXCHANGE, INITIAL_BALANCE,
++                                 SNIPER_STATE_PATH, STALE_DATA_THRESHOLD,
++                                 STATUS_LOG_INTERVAL, STRATEGIST_ENABLED,
++                                 STRATEGIST_INTERVAL, TRADEABLE_COINS)
+ except ImportError:
+     # Defaults if config not available
+     TRADEABLE_COINS = ["BTC", "ETH", "SOL"]
+--- /mnt/c/documents/crypto-trading-bot/src/main_legacy.py:before	2026-01-14 16:35:06.148711
++++ /mnt/c/documents/crypto-trading-bot/src/main_legacy.py:after	2026-02-04 14:34:28.421789
+@@ -18,18 +18,19 @@
+ import sys
+ import time
+ from datetime import datetime
+-from typing import Dict, Any, List, Optional
++from typing import Any, Dict, List, Optional
+ 
+ # Add parent directory to path for imports
+ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ 
++from src.coin_config import get_coin_ids, get_tier, get_tier_config
+ from src.database import Database
++from src.learning_system import (LearningSystem, RuleManager,
++                                 get_learnings_as_text, get_rules_as_text)
++from src.llm_interface import LLMInterface
+ from src.market_data import MarketDataFetcher, format_price
++from src.risk_manager import RiskManager
+ from src.trading_engine import TradingEngine
+-from src.learning_system import LearningSystem, RuleManager, get_learnings_as_text, get_rules_as_text
+-from src.llm_interface import LLMInterface
+-from src.risk_manager import RiskManager
+-from src.coin_config import get_coin_ids, get_tier, get_tier_config
+ 
+ # =============================================================================
+ # CONFIGURATION - All configurable parameters in one place
+--- /mnt/c/documents/crypto-trading-bot/src/market_data.py:before	2026-01-14 11:44:57.962458
++++ /mnt/c/documents/crypto-trading-bot/src/market_data.py:after	2026-02-04 14:34:28.430712
+@@ -7,13 +7,13 @@
+ import logging
+ import time
+ from datetime import datetime
+-from typing import Dict, List, Optional, Any
++from typing import Any, Dict, List, Optional
+ 
+ import requests
+-from requests.exceptions import RequestException, Timeout, HTTPError
+-
++from requests.exceptions import HTTPError, RequestException, Timeout
++
++from src.coin_config import get_coin_ids, get_tier, get_tier_config
+ from src.database import Database
+-from src.coin_config import get_coin_ids, get_tier, get_tier_config
+ from src.volatility import VolatilityCalculator
+ 
+ # Configure logging
+--- /mnt/c/documents/crypto-trading-bot/src/market_feed.py:before	2026-02-03 13:32:17.814248
++++ /mnt/c/documents/crypto-trading-bot/src/market_feed.py:after	2026-02-04 14:34:28.443366
+@@ -13,7 +13,7 @@
+ from dataclasses import dataclass, field
+ from datetime import datetime
+ from pathlib import Path
+-from typing import Callable, Optional, Literal
++from typing import Callable, Literal, Optional
+ 
+ try:
+     import websockets
+--- /mnt/c/documents/crypto-trading-bot/src/metrics.py:before	2026-01-14 12:04:09.575297
++++ /mnt/c/documents/crypto-trading-bot/src/metrics.py:after	2026-02-04 14:34:28.450615
+@@ -5,10 +5,10 @@
+ """
+ 
+ import logging
++from dataclasses import dataclass
+ from datetime import datetime, timedelta
+-from typing import Dict, List, Any, Optional
+-from dataclasses import dataclass
+ from enum import Enum
++from typing import Any, Dict, List, Optional
+ 
+ from src.database import Database
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/pattern_library.py:before	2026-02-03 09:54:56.919497
++++ /mnt/c/documents/crypto-trading-bot/src/pattern_library.py:after	2026-02-04 14:34:28.457638
+@@ -12,7 +12,7 @@
+ import uuid
+ from dataclasses import dataclass, field
+ from datetime import datetime
+-from typing import Optional, Dict, Any, List
++from typing import Any, Dict, List, Optional
+ 
+ from src.knowledge import KnowledgeBrain
+ from src.models.knowledge import TradingPattern
+--- /mnt/c/documents/crypto-trading-bot/src/profitability.py:before	2026-02-03 11:23:33.852839
++++ /mnt/c/documents/crypto-trading-bot/src/profitability.py:after	2026-02-04 14:34:28.465240
+@@ -13,7 +13,7 @@
+ from dataclasses import dataclass, field
+ from datetime import datetime, timedelta
+ from enum import Enum
+-from typing import Any, Dict, List, Optional, TYPE_CHECKING
++from typing import TYPE_CHECKING, Any, Dict, List, Optional
+ 
+ if TYPE_CHECKING:
+     from src.database import Database
+--- /mnt/c/documents/crypto-trading-bot/src/quick_update.py:before	2026-02-03 10:42:17.522294
++++ /mnt/c/documents/crypto-trading-bot/src/quick_update.py:after	2026-02-04 14:34:28.476074
+@@ -245,8 +245,8 @@
+ 
+ # Allow running directly for testing
+ if __name__ == "__main__":
++    import os
+     import tempfile
+-    import os
+ 
+     logging.basicConfig(
+         level=logging.INFO,
+@@ -262,9 +262,9 @@
+     os.close(fd)
+ 
+     try:
++        from src.coin_scorer import CoinScorer
+         from src.database import Database
+         from src.knowledge import KnowledgeBrain
+-        from src.coin_scorer import CoinScorer
+         from src.pattern_library import PatternLibrary
+ 
+         db = Database(path)
+--- /mnt/c/documents/crypto-trading-bot/src/reflection.py:before	2026-02-03 11:12:48.912959
++++ /mnt/c/documents/crypto-trading-bot/src/reflection.py:after	2026-02-04 14:34:28.485225
+@@ -14,24 +14,17 @@
+ import time
+ from collections import defaultdict
+ from datetime import datetime, timedelta
+-from typing import Any, Dict, List, Optional
++# Import for type hint only - avoid circular import
++from typing import TYPE_CHECKING, Any, Dict, List, Optional
+ 
+ from src.database import Database
+ from src.journal import JournalEntry, TradeJournal
+ from src.knowledge import KnowledgeBrain
+ from src.llm_interface import LLMInterface
+-from src.models.reflection import (
+-    CoinAnalysis,
+-    ExitAnalysis,
+-    Insight,
+-    PatternAnalysis,
+-    ReflectionResult,
+-    RegimeAnalysis,
+-    TimeAnalysis,
+-)
+-
+-# Import for type hint only - avoid circular import
+-from typing import TYPE_CHECKING
++from src.models.reflection import (CoinAnalysis, ExitAnalysis, Insight,
++                                   PatternAnalysis, ReflectionResult,
++                                   RegimeAnalysis, TimeAnalysis)
++
+ if TYPE_CHECKING:
+     from src.adaptation import AdaptationEngine
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/risk_manager.py:before	2026-01-14 17:53:03.864024
++++ /mnt/c/documents/crypto-trading-bot/src/risk_manager.py:after	2026-02-04 14:34:28.496277
+@@ -8,10 +8,10 @@
+ import os
+ import time
+ from dataclasses import dataclass
+-from typing import Dict, Any, Optional, List
+-
++from typing import Any, Dict, List, Optional
++
++from src.coin_config import TIERS, get_tier, get_tier_config
+ from src.database import Database
+-from src.coin_config import get_tier, get_tier_config, TIERS
+ from src.volatility import VolatilityCalculator
+ 
+ # Configure logging
+--- /mnt/c/documents/crypto-trading-bot/src/sniper.py:before	2026-02-03 13:46:42.619709
++++ /mnt/c/documents/crypto-trading-bot/src/sniper.py:after	2026-02-04 14:34:28.506101
+@@ -11,7 +11,7 @@
+ import logging
+ import time
+ import uuid
+-from dataclasses import dataclass, field, asdict
++from dataclasses import asdict, dataclass, field
+ from datetime import datetime
+ from pathlib import Path
+ from typing import Callable, Literal, Optional
+--- /mnt/c/documents/crypto-trading-bot/src/strategist.py:before	2026-02-03 14:57:44.498479
+ERROR: /mnt/c/documents/crypto-trading-bot/src/trading_engine.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/volatility.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/analysis/learning.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/analysis/metrics.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/analysis/performance.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/analysis/__init__.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/models/knowledge.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/models/reflection.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/models/trade_condition.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/models/__init__.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/sentiment/btc_correlation.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/sentiment/context_manager.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/sentiment/fear_greed.py Imports are incorrectly sorted and/or formatted.
++++ /mnt/c/documents/crypto-trading-bot/src/strategist.py:after	2026-02-04 14:34:28.516156
+@@ -22,7 +22,7 @@
+ import json
+ import logging
+ from datetime import datetime, timedelta
+-from typing import Callable, List, Optional, Dict, Any
++from typing import Any, Callable, Dict, List, Optional
+ 
+ from src.database import Database
+ from src.llm_interface import LLMInterface
+--- /mnt/c/documents/crypto-trading-bot/src/trading_engine.py:before	2026-01-14 09:36:51.900901
++++ /mnt/c/documents/crypto-trading-bot/src/trading_engine.py:after	2026-02-04 14:34:28.526850
+@@ -7,11 +7,11 @@
+ import logging
+ from dataclasses import dataclass
+ from datetime import datetime
+-from typing import Dict, Any, List, Optional
++from typing import Any, Dict, List, Optional
+ 
+ from src.database import Database
++from src.learning_system import RuleManager
+ from src.risk_manager import RiskManager
+-from src.learning_system import RuleManager
+ 
+ # Configure logging
+ logging.basicConfig(
+--- /mnt/c/documents/crypto-trading-bot/src/volatility.py:before	2026-01-14 11:42:59.063065
++++ /mnt/c/documents/crypto-trading-bot/src/volatility.py:after	2026-02-04 14:34:28.535186
+@@ -12,13 +12,13 @@
+ - Automatic cleanup of old data (>7 days)
+ """
+ 
++import logging
+ import math
+-import logging
+ from datetime import datetime, timedelta
+-from typing import Dict, List, Optional, Tuple, Any
+-
++from typing import Any, Dict, List, Optional, Tuple
++
++from src.coin_config import get_tier, get_tier_config
+ from src.database import Database
+-from src.coin_config import get_tier, get_tier_config
+ 
+ # Configure logging
+ logging.basicConfig(
+--- /mnt/c/documents/crypto-trading-bot/src/analysis/learning.py:before	2026-02-03 12:32:36.119776
++++ /mnt/c/documents/crypto-trading-bot/src/analysis/learning.py:after	2026-02-04 14:34:28.583041
+@@ -10,7 +10,7 @@
+ 
+ from collections import defaultdict
+ from datetime import datetime, timedelta
+-from typing import Dict, List, Optional, Any
++from typing import Any, Dict, List, Optional
+ 
+ from src.database import Database
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/analysis/metrics.py:before	2026-02-03 12:31:19.016970
++++ /mnt/c/documents/crypto-trading-bot/src/analysis/metrics.py:after	2026-02-04 14:34:28.602977
+@@ -10,7 +10,7 @@
+ import math
+ from dataclasses import dataclass, field
+ from datetime import datetime
+-from typing import List, Tuple, Optional
++from typing import List, Optional, Tuple
+ 
+ 
+ @dataclass
+--- /mnt/c/documents/crypto-trading-bot/src/analysis/performance.py:before	2026-02-03 12:31:47.660627
++++ /mnt/c/documents/crypto-trading-bot/src/analysis/performance.py:after	2026-02-04 14:34:28.627230
+@@ -12,7 +12,8 @@
+ from datetime import datetime, timedelta
+ from typing import Dict, List, Optional, Tuple
+ 
+-from src.analysis.metrics import TradingMetrics, calculate_metrics, build_equity_curve
++from src.analysis.metrics import (TradingMetrics, build_equity_curve,
++                                  calculate_metrics)
+ 
+ 
+ def analyze_by_hour(trades: List[dict]) -> Dict[int, TradingMetrics]:
+--- /mnt/c/documents/crypto-trading-bot/src/analysis/__init__.py:before	2026-02-03 12:30:43.898753
++++ /mnt/c/documents/crypto-trading-bot/src/analysis/__init__.py:after	2026-02-04 14:34:28.644260
+@@ -7,28 +7,16 @@
+ - learning: Learning effectiveness analysis
+ """
+ 
+-from src.analysis.metrics import (
+-    TradingMetrics,
+-    calculate_metrics,
+-    calculate_sharpe_ratio,
+-    calculate_max_drawdown,
+-    calculate_profit_factor,
+-)
+-
+-from src.analysis.performance import (
+-    analyze_by_hour,
+-    analyze_by_coin,
+-    analyze_by_pattern,
+-    compare_periods,
+-    build_equity_curve,
+-)
+-
+-from src.analysis.learning import (
+-    analyze_coin_score_accuracy,
+-    analyze_adaptation_effectiveness,
+-    analyze_pattern_confidence_accuracy,
+-    analyze_knowledge_growth,
+-)
++from src.analysis.learning import (analyze_adaptation_effectiveness,
++                                   analyze_coin_score_accuracy,
++                                   analyze_knowledge_growth,
++                                   analyze_pattern_confidence_accuracy)
++from src.analysis.metrics import (TradingMetrics, calculate_max_drawdown,
++                                  calculate_metrics, calculate_profit_factor,
++                                  calculate_sharpe_ratio)
++from src.analysis.performance import (analyze_by_coin, analyze_by_hour,
++                                      analyze_by_pattern, build_equity_curve,
++                                      compare_periods)
+ 
+ __all__ = [
+     # Metrics
+--- /mnt/c/documents/crypto-trading-bot/src/models/knowledge.py:before	2026-02-03 09:27:51.781120
++++ /mnt/c/documents/crypto-trading-bot/src/models/knowledge.py:after	2026-02-04 14:34:28.687132
+@@ -1,9 +1,9 @@
+ """Knowledge Brain data models for accumulated trading wisdom."""
+ 
+-from dataclasses import dataclass, field, asdict
++import json
++from dataclasses import asdict, dataclass, field
+ from datetime import datetime
+-from typing import Optional, Dict, Any
+-import json
++from typing import Any, Dict, Optional
+ 
+ 
+ @dataclass
+--- /mnt/c/documents/crypto-trading-bot/src/models/reflection.py:before	2026-02-03 11:05:52.863555
++++ /mnt/c/documents/crypto-trading-bot/src/models/reflection.py:after	2026-02-04 14:34:28.706550
+@@ -6,7 +6,7 @@
+ 
+ from dataclasses import dataclass, field
+ from datetime import datetime
+-from typing import Any, Dict, List, Optional, TYPE_CHECKING
++from typing import TYPE_CHECKING, Any, Dict, List, Optional
+ 
+ if TYPE_CHECKING:
+     from src.models.adaptation import AdaptationRecord
+--- /mnt/c/documents/crypto-trading-bot/src/models/trade_condition.py:before	2026-02-03 07:05:38.666071
++++ /mnt/c/documents/crypto-trading-bot/src/models/trade_condition.py:after	2026-02-04 14:34:28.717108
+@@ -1,9 +1,9 @@
+ """TradeCondition dataclass for Strategist output."""
+ 
++import uuid
+ from dataclasses import dataclass, field
+ from datetime import datetime, timedelta
+ from typing import Literal, Optional
+-import uuid
+ 
+ 
+ @dataclass
+--- /mnt/c/documents/crypto-trading-bot/src/models/__init__.py:before	2026-02-03 09:29:24.144811
++++ /mnt/c/documents/crypto-trading-bot/src/models/__init__.py:after	2026-02-04 14:34:28.725148
+@@ -1,7 +1,7 @@
+ """Data models for the trading bot."""
+ 
++from src.models.knowledge import CoinScore, RegimeRule, TradingPattern
+ from src.models.trade_condition import TradeCondition
+-from src.models.knowledge import CoinScore, TradingPattern, RegimeRule
+ 
+ __all__ = [
+     "TradeCondition",
+--- /mnt/c/documents/crypto-trading-bot/src/sentiment/btc_correlation.py:before	2026-02-04 08:19:07.179485
++++ /mnt/c/documents/crypto-trading-bot/src/sentiment/btc_correlation.py:after	2026-02-04 14:34:28.753582
+@@ -1,9 +1,9 @@
+ """BTC Correlation Tracker for detecting market-wide vs coin-specific moves."""
+ import logging
++import statistics
+ from dataclasses import dataclass
+ from datetime import datetime
+-from typing import Optional, List
+-import statistics
++from typing import List, Optional
+ 
+ from src.technical.candle_fetcher import CandleFetcher
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/sentiment/context_manager.py:before	2026-02-04 08:42:10.449804
++++ /mnt/c/documents/crypto-trading-bot/src/sentiment/context_manager.py:after	2026-02-04 14:34:28.762831
+@@ -2,12 +2,12 @@
+ import logging
+ from dataclasses import dataclass, field
+ from datetime import datetime, timezone
+-from typing import List, Optional, Dict, Any
+-
+-from .fear_greed import FearGreedFetcher, FearGreedData
+-from .btc_correlation import BTCCorrelationTracker, BTCCorrelation
+-from .news_feed import NewsFeedFetcher, NewsItem, NewsFeed
+-from .social_sentiment import SocialSentimentFetcher, SocialMetrics
++from typing import Any, Dict, List, Optional
++
++from .btc_correlation import BTCCorrelation, BTCCorrelationTracker
++from .fear_greed import FearGreedData, FearGreedFetcher
++from .news_feed import NewsFeed, NewsFeedFetcher, NewsItem
++from .social_sentiment import SocialMetrics, SocialSentimentFetcher
+ 
+ logger = logging.getLogger(__name__)
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/sentiment/fear_greed.py:before	2026-02-03 18:05:41.545465
+ERROR: /mnt/c/documents/crypto-trading-bot/src/sentiment/news_feed.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/sentiment/social_sentiment.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/sentiment/__init__.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/technical/atr.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/technical/candle_fetcher.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/technical/funding.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/technical/manager.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/technical/orderbook.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/technical/support_resistance.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/technical/volume_profile.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/technical/vwap.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/src/technical/__init__.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/scripts/analyze_learning.py Imports are incorrectly sorted and/or formatted.
++++ /mnt/c/documents/crypto-trading-bot/src/sentiment/fear_greed.py:after	2026-02-04 14:34:28.770501
+@@ -2,7 +2,8 @@
+ import logging
+ from dataclasses import dataclass
+ from datetime import datetime, timedelta
+-from typing import Optional, List
++from typing import List, Optional
++
+ import requests
+ 
+ logger = logging.getLogger(__name__)
+--- /mnt/c/documents/crypto-trading-bot/src/sentiment/news_feed.py:before	2026-02-04 08:30:23.547383
++++ /mnt/c/documents/crypto-trading-bot/src/sentiment/news_feed.py:after	2026-02-04 14:34:28.780788
+@@ -3,7 +3,7 @@
+ import time
+ from dataclasses import dataclass, field
+ from datetime import datetime, timezone
+-from typing import List, Optional, Dict, Any
++from typing import Any, Dict, List, Optional
+ 
+ import requests
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/sentiment/social_sentiment.py:before	2026-02-04 08:30:45.137089
++++ /mnt/c/documents/crypto-trading-bot/src/sentiment/social_sentiment.py:after	2026-02-04 14:34:28.788358
+@@ -3,7 +3,7 @@
+ import time
+ from dataclasses import dataclass, field
+ from datetime import datetime, timezone
+-from typing import Optional, Dict, Any, List
++from typing import Any, Dict, List, Optional
+ 
+ import requests
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/sentiment/__init__.py:before	2026-02-04 08:44:26.256737
++++ /mnt/c/documents/crypto-trading-bot/src/sentiment/__init__.py:after	2026-02-04 14:34:28.798313
+@@ -1,9 +1,9 @@
+ """Sentiment analysis module for market context."""
+-from .fear_greed import FearGreedFetcher, FearGreedData
+-from .btc_correlation import BTCCorrelationTracker, BTCCorrelation
+-from .news_feed import NewsFeedFetcher, NewsItem, NewsFeed
+-from .social_sentiment import SocialSentimentFetcher, SocialMetrics
+-from .context_manager import ContextManager, MarketContext, CoinContext
++from .btc_correlation import BTCCorrelation, BTCCorrelationTracker
++from .context_manager import CoinContext, ContextManager, MarketContext
++from .fear_greed import FearGreedData, FearGreedFetcher
++from .news_feed import NewsFeed, NewsFeedFetcher, NewsItem
++from .social_sentiment import SocialMetrics, SocialSentimentFetcher
+ 
+ __all__ = [
+     "FearGreedFetcher",
+--- /mnt/c/documents/crypto-trading-bot/src/technical/atr.py:before	2026-02-03 18:23:32.032104
++++ /mnt/c/documents/crypto-trading-bot/src/technical/atr.py:after	2026-02-04 14:34:28.870586
+@@ -4,7 +4,7 @@
+ from datetime import datetime
+ from typing import List, Optional, Tuple
+ 
+-from .candle_fetcher import CandleFetcher, Candle
++from .candle_fetcher import Candle, CandleFetcher
+ 
+ logger = logging.getLogger(__name__)
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/technical/candle_fetcher.py:before	2026-02-03 18:06:06.981263
++++ /mnt/c/documents/crypto-trading-bot/src/technical/candle_fetcher.py:after	2026-02-04 14:34:28.879215
+@@ -2,7 +2,8 @@
+ import logging
+ from dataclasses import dataclass, field
+ from datetime import datetime, timedelta
+-from typing import Optional, List, Dict
++from typing import Dict, List, Optional
++
+ import requests
+ 
+ logger = logging.getLogger(__name__)
+--- /mnt/c/documents/crypto-trading-bot/src/technical/funding.py:before	2026-02-03 18:24:00.575990
++++ /mnt/c/documents/crypto-trading-bot/src/technical/funding.py:after	2026-02-04 14:34:28.892983
+@@ -2,7 +2,8 @@
+ import logging
+ from dataclasses import dataclass
+ from datetime import datetime, timedelta
+-from typing import Optional, List, Dict
++from typing import Dict, List, Optional
++
+ import requests
+ 
+ logger = logging.getLogger(__name__)
+--- /mnt/c/documents/crypto-trading-bot/src/technical/manager.py:before	2026-02-04 08:48:31.171324
++++ /mnt/c/documents/crypto-trading-bot/src/technical/manager.py:after	2026-02-04 14:34:28.905053
+@@ -2,16 +2,16 @@
+ import logging
+ from dataclasses import dataclass, field
+ from datetime import datetime
+-from typing import List, Optional, Dict, Tuple
+-
++from typing import Dict, List, Optional, Tuple
++
++from .atr import ATRCalculator, ATRData
+ from .candle_fetcher import CandleFetcher
++from .funding import FundingData, FundingRateFetcher
++from .orderbook import OrderBookAnalyzer, OrderBookDepth
+ from .rsi import RSICalculator, RSIData
++from .support_resistance import SRLevelDetector, SRLevels
++from .volume_profile import VolumeProfile, VolumeProfileCalculator
+ from .vwap import VWAPCalculator, VWAPData
+-from .atr import ATRCalculator, ATRData
+-from .funding import FundingRateFetcher, FundingData
+-from .support_resistance import SRLevelDetector, SRLevels
+-from .volume_profile import VolumeProfileCalculator, VolumeProfile
+-from .orderbook import OrderBookAnalyzer, OrderBookDepth
+ 
+ logger = logging.getLogger(__name__)
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/technical/orderbook.py:before	2026-02-04 08:31:46.889343
++++ /mnt/c/documents/crypto-trading-bot/src/technical/orderbook.py:after	2026-02-04 14:34:28.919694
+@@ -3,7 +3,7 @@
+ import time
+ from dataclasses import dataclass, field
+ from datetime import datetime, timezone
+-from typing import List, Optional, Dict, Any
++from typing import Any, Dict, List, Optional
+ 
+ import requests
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/technical/support_resistance.py:before	2026-02-04 08:19:53.880259
++++ /mnt/c/documents/crypto-trading-bot/src/technical/support_resistance.py:after	2026-02-04 14:34:28.941437
+@@ -1,11 +1,11 @@
+ """Support and Resistance level detection."""
+ import logging
++from collections import defaultdict
+ from dataclasses import dataclass, field
+ from datetime import datetime
+ from typing import List, Optional
+-from collections import defaultdict
+-
+-from .candle_fetcher import CandleFetcher, Candle
++
++from .candle_fetcher import Candle, CandleFetcher
+ 
+ logger = logging.getLogger(__name__)
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/technical/volume_profile.py:before	2026-02-04 08:31:20.366136
++++ /mnt/c/documents/crypto-trading-bot/src/technical/volume_profile.py:after	2026-02-04 14:34:28.958600
+@@ -1,11 +1,11 @@
+ """Volume Profile analysis for identifying key price levels."""
+ import logging
++from collections import defaultdict
+ from dataclasses import dataclass, field
+ from datetime import datetime
+ from typing import List, Optional
+-from collections import defaultdict
+-
+-from .candle_fetcher import CandleFetcher, Candle
++
++from .candle_fetcher import Candle, CandleFetcher
+ 
+ logger = logging.getLogger(__name__)
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/technical/vwap.py:before	2026-02-04 08:19:27.032969
++++ /mnt/c/documents/crypto-trading-bot/src/technical/vwap.py:after	2026-02-04 14:34:28.966695
+@@ -4,7 +4,7 @@
+ from datetime import datetime, timezone
+ from typing import List, Optional
+ 
+-from .candle_fetcher import CandleFetcher, Candle
++from .candle_fetcher import Candle, CandleFetcher
+ 
+ logger = logging.getLogger(__name__)
+ 
+--- /mnt/c/documents/crypto-trading-bot/src/technical/__init__.py:before	2026-02-04 08:44:31.533780
++++ /mnt/c/documents/crypto-trading-bot/src/technical/__init__.py:after	2026-02-04 14:34:28.983992
+@@ -1,13 +1,13 @@
+ """Technical analysis module for indicators."""
+-from .candle_fetcher import CandleFetcher, Candle, CandleData
++from .atr import ATRCalculator, ATRData
++from .candle_fetcher import Candle, CandleData, CandleFetcher
++from .funding import FundingData, FundingRateFetcher
++from .manager import TechnicalManager, TechnicalSnapshot
++from .orderbook import OrderBookAnalyzer, OrderBookDepth, PriceWall
+ from .rsi import RSICalculator, RSIData
+-from .atr import ATRCalculator, ATRData
+-from .funding import FundingRateFetcher, FundingData
++from .support_resistance import PriceLevel, SRLevelDetector, SRLevels
++from .volume_profile import VolumeProfile, VolumeProfileCalculator
+ from .vwap import VWAPCalculator, VWAPData
+-from .support_resistance import SRLevelDetector, PriceLevel, SRLevels
+-from .volume_profile import VolumeProfileCalculator, VolumeProfile
+-from .orderbook import OrderBookAnalyzer, OrderBookDepth, PriceWall
+-from .manager import TechnicalManager, TechnicalSnapshot
+ 
+ __all__ = [
+     "CandleFetcher",
+--- /mnt/c/documents/crypto-trading-bot/scripts/analyze_learning.py:before	2026-02-03 12:20:43.386807
+ERROR: /mnt/c/documents/crypto-trading-bot/scripts/analyze_performance.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/scripts/autonomous_monitor.py Imports are incorrectly sorted and/or formatted.
+ERROR: /mnt/c/documents/crypto-trading-bot/scripts/generate_report.py Imports are incorrectly sorted and/or formatted.
++++ /mnt/c/documents/crypto-trading-bot/scripts/analyze_learning.py:after	2026-02-04 14:34:29.056279
+@@ -16,9 +16,9 @@
+ import json
+ import os
+ import sys
++from collections import defaultdict
+ from datetime import datetime, timedelta
+ from pathlib import Path
+-from collections import defaultdict
+ 
+ # Add project root to path
+ sys.path.insert(0, str(Path(__file__).parent.parent))
+--- /mnt/c/documents/crypto-trading-bot/scripts/analyze_performance.py:before	2026-02-03 12:34:41.339977
++++ /mnt/c/documents/crypto-trading-bot/scripts/analyze_performance.py:after	2026-02-04 14:34:29.079966
+@@ -18,34 +18,24 @@
+ # Add project root to path
+ sys.path.insert(0, str(Path(__file__).parent.parent))
+ 
++from scripts.export_trades import export_full_dataset, export_trades_csv
++# Import report generation
++from scripts.generate_report import (generate_detailed_report,
++                                     generate_improvement_report,
++                                     generate_learning_report,
++                                     generate_summary_report, load_trades)
++from src.analysis.learning import (analyze_adaptation_effectiveness,
++                                   analyze_coin_score_accuracy,
++                                   analyze_knowledge_growth,
++                                   analyze_pattern_confidence_accuracy,
++                                   calculate_learning_score)
++from src.analysis.metrics import calculate_metrics
++from src.analysis.performance import (analyze_by_coin, analyze_by_hour,
++                                      analyze_by_pattern,
++                                      calculate_consistency, compare_periods,
++                                      get_best_worst_coins,
++                                      get_best_worst_hours)
+ from src.database import Database
+-from src.analysis.metrics import calculate_metrics
+-from src.analysis.performance import (
+-    analyze_by_hour,
+-    analyze_by_coin,
+-    analyze_by_pattern,
+-    compare_periods,
+-    get_best_worst_hours,
+-    get_best_worst_coins,
+-    calculate_consistency,
+-)
+-from src.analysis.learning import (
+-    analyze_coin_score_accuracy,
+-    analyze_adaptation_effectiveness,
+-    analyze_pattern_confidence_accuracy,
+-    analyze_knowledge_growth,
+-    calculate_learning_score,
+-)
+-
+-# Import report generation
+-from scripts.generate_report import (
+-    load_trades,
+-    generate_summary_report,
+-    generate_learning_report,
+-    generate_improvement_report,
+-    generate_detailed_report,
+-)
+-from scripts.export_trades import export_trades_csv, export_full_dataset
+ 
+ 
+ def print_banner():
+--- /mnt/c/documents/crypto-trading-bot/scripts/autonomous_monitor.py:before	2026-01-14 17:31:55.586458
++++ /mnt/c/documents/crypto-trading-bot/scripts/autonomous_monitor.py:after	2026-02-04 14:34:29.090478
+@@ -17,14 +17,14 @@
+ import os
+ import sys
+ from datetime import datetime, timedelta
+-from typing import Dict, List, Any, Optional
++from typing import Any, Dict, List, Optional
+ 
+ # Add project root to path
+ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ 
++from src.coin_config import get_tier
+ from src.database import Database
+ from src.llm_interface import LLMInterface
+-from src.coin_config import get_tier
+ 
+ # Configure logging
+ logging.basicConfig(
+--- /mnt/c/documents/crypto-trading-bot/scripts/generate_report.py:before	2026-02-03 12:34:09.969155
++++ /mnt/c/documents/crypto-trading-bot/scripts/generate_report.py:after	2026-02-04 14:34:29.109909
+@@ -18,24 +18,18 @@
+ # Add project root to path
+ sys.path.insert(0, str(Path(__file__).parent.parent))
+ 
++from src.analysis.learning import (analyze_adaptation_effectiveness,
++                                   analyze_coin_score_accuracy,
++                                   analyze_knowledge_growth,
++                                   analyze_pattern_confidence_accuracy,
++                                   calculate_learning_score)
++from src.analysis.metrics import calculate_metrics
++from src.analysis.performance import (analyze_by_coin, analyze_by_hour,
++                                      analyze_by_pattern,
++                                      calculate_consistency, compare_periods,
++                                      get_best_worst_coins,
++                                      get_best_worst_hours)
+ from src.database import Database
+-from src.analysis.metrics import calculate_metrics
+-from src.analysis.performance import (
+-    analyze_by_hour,
+-    analyze_by_coin,
+-    analyze_by_pattern,
+-    compare_periods,
+-    get_best_worst_hours,
+-    get_best_worst_coins,
+-    calculate_consistency,
+-)
+-from src.analysis.learning import (
+-    analyze_coin_score_accuracy,
+-    analyze_adaptation_effectiveness,
+-    analyze_pattern_confidence_accuracy,
+-    analyze_knowledge_growth,
+-    calculate_learning_score,
+-)
+ 
+ 
+ def load_trades(db: Database, days: int = 7) -> list:

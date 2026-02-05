@@ -1,0 +1,60 @@
+============ Coverage for /mnt/c/documents/crypto-trading-bot/src/ =============
+----------------------------------- Summary ------------------------------------
+| Name                                 |   Total |   Miss |   Cover |   Cover% |
+|--------------------------------------|---------|--------|---------|----------|
+| __init__.py                          |       1 |      0 |       1 |     100% |
+| adaptation.py                        |      16 |      0 |      16 |     100% |
+| coin_config.py                       |       7 |      0 |       7 |     100% |
+| coin_scorer.py                       |      17 |      0 |      17 |     100% |
+| daily_summary.py                     |      11 |      0 |      11 |     100% |
+| dashboard.py                         |      15 |      0 |      15 |     100% |
+| dashboard_v2.py                      |      56 |      7 |      49 |      88% |
+| database.py                          |      52 |      0 |      52 |     100% |
+| effectiveness.py                     |      19 |      0 |      19 |     100% |
+| journal.py                           |      59 |      4 |      55 |      93% |
+| knowledge.py                         |      30 |      0 |      30 |     100% |
+| learning_system.py                   |      37 |      0 |      37 |     100% |
+| llm_interface.py                     |      10 |      0 |      10 |     100% |
+| main.py                              |      45 |      2 |      43 |      96% |
+| main_legacy.py                       |      14 |      1 |      13 |      93% |
+| market_data.py                       |      17 |      0 |      17 |     100% |
+| market_feed.py                       |      38 |      5 |      33 |      87% |
+| metrics.py                           |      14 |      0 |      14 |     100% |
+| pattern_library.py                   |      31 |      0 |      31 |     100% |
+| profitability.py                     |      30 |      1 |      29 |      97% |
+| quick_update.py                      |       9 |      0 |       9 |     100% |
+| reflection.py                        |      22 |      1 |      21 |      95% |
+| risk_manager.py                      |      34 |      0 |      34 |     100% |
+| sniper.py                            |      37 |      0 |      37 |     100% |
+| strategist.py                        |      27 |      2 |      25 |      93% |
+| trading_engine.py                    |      12 |      0 |      12 |     100% |
+| volatility.py                        |      20 |      0 |      20 |     100% |
+| analysis/__init__.py                 |       1 |      0 |       1 |     100% |
+| analysis/learning.py                 |       6 |      0 |       6 |     100% |
+| analysis/metrics.py                  |      10 |      0 |      10 |     100% |
+| analysis/performance.py              |      10 |      0 |      10 |     100% |
+| models/__init__.py                   |       1 |      0 |       1 |     100% |
+| models/adaptation.py                 |       6 |      0 |       6 |     100% |
+| models/knowledge.py                  |      17 |      3 |      14 |      82% |
+| models/quick_update.py               |       6 |      0 |       6 |     100% |
+| models/reflection.py                 |      18 |     10 |       8 |      44% |
+| models/trade_condition.py            |       9 |      0 |       9 |     100% |
+| sentiment/__init__.py                |       1 |      0 |       1 |     100% |
+| sentiment/btc_correlation.py         |      13 |      0 |      13 |     100% |
+| sentiment/context_manager.py         |      29 |      0 |      29 |     100% |
+| sentiment/fear_greed.py              |      10 |      0 |      10 |     100% |
+| sentiment/news_feed.py               |      21 |      0 |      21 |     100% |
+| sentiment/social_sentiment.py        |      19 |      0 |      19 |     100% |
+| technical/__init__.py                |       1 |      0 |       1 |     100% |
+| technical/atr.py                     |      13 |      0 |      13 |     100% |
+| technical/candle_fetcher.py          |      16 |      0 |      16 |     100% |
+| technical/funding.py                 |      15 |      0 |      15 |     100% |
+| technical/manager.py                 |      24 |      0 |      24 |     100% |
+| technical/orderbook.py               |      20 |      0 |      20 |     100% |
+| technical/rsi.py                     |      11 |      0 |      11 |     100% |
+| technical/support_resistance.py      |      15 |      0 |      15 |     100% |
+| technical/volume_profile.py          |      20 |      0 |      20 |     100% |
+| technical/vwap.py                    |      13 |      0 |      13 |     100% |
+|--------------------------------------|---------|--------|---------|----------|
+| TOTAL                                |    1005 |     36 |     969 |    96.4% |
+---------------- RESULT: PASSED (minimum: 80.0%, actual: 96.4%) ----------------

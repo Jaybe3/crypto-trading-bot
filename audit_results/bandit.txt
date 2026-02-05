@@ -1,0 +1,290 @@
+[main]	INFO	profile include tests: None
+[main]	INFO	profile exclude tests: None
+[main]	INFO	cli include tests: None
+[main]	INFO	cli exclude tests: None
+[main]	INFO	running on Python 3.12.3
+Working... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:01
+Run started:2026-02-04 21:33:42.675716+00:00
+
+Test results:
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '[92m'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b105_hardcoded_password_string.html
+   Location: scripts/validate_learning.py:396:12
+395	        status_color = {
+396	            "PASS": "\033[92m",    # Green
+397	            "PARTIAL": "\033[93m", # Yellow
+398	            "FAIL": "\033[91m",    # Red
+399	        }.get(status, "")
+400	        reset = "\033[0m"
+401	
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b101_assert_used.html
+   Location: src/adaptation.py:623:12
+622	            # Verify
+623	            assert brain.is_blacklisted("DOGE"), "DOGE should be blacklisted"
+624	            print("  PASSED: DOGE blacklisted")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b101_assert_used.html
+   Location: src/adaptation.py:645:12
+644	            sol_score = brain.get_coin_score("SOL")
+645	            assert sol_score is not None, "SOL should have score"
+646	            assert sol_score.trend == "improving", "SOL should be improving"
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b101_assert_used.html
+   Location: src/adaptation.py:646:12
+645	            assert sol_score is not None, "SOL should have score"
+646	            assert sol_score.trend == "improving", "SOL should be improving"
+647	            print("  PASSED: SOL favored (trend=improving)")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b101_assert_used.html
+   Location: src/adaptation.py:668:12
+667	            time_rules = [r for r in rules if "time_filter" in r.rule_id]
+668	            assert len(time_rules) > 0, "Should have time rule"
+669	            print(f"  PASSED: Time rule created ({time_rules[0].rule_id})")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b101_assert_used.html
+   Location: src/adaptation.py:686:8
+685	        adaptations = engine.apply_insights([insight])
+686	        assert len(adaptations) == 0, "Should skip low confidence"
+687	        print("  PASSED: Low confidence insight skipped")
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b110_try_except_pass.html
+   Location: src/dashboard.py:623:16
+622	                    result[coin_id]['vol_score'] = vc.calculate_volatility_score(coin_id)
+623	                except Exception:
+624	                    pass  # Keep default of 50
+625	        except Exception as e:
+
+--------------------------------------------------
+>> Issue: [B104:hardcoded_bind_all_interfaces] Possible binding to all interfaces.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-605 (https://cwe.mitre.org/data/definitions/605.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b104_hardcoded_bind_all_interfaces.html
+   Location: src/dashboard.py:844:30
+843	
+844	def run_dashboard(host: str = '0.0.0.0', port: int = 8080, debug: bool = False):
+845	    """Run the dashboard server.
+
+--------------------------------------------------
+>> Issue: [B104:hardcoded_bind_all_interfaces] Possible binding to all interfaces.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-605 (https://cwe.mitre.org/data/definitions/605.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b104_hardcoded_bind_all_interfaces.html
+   Location: src/dashboard_v2.py:625:38
+624	
+625	    async def start(self, host: str = "0.0.0.0", port: int = 8080) -> None:
+626	        """
+
+--------------------------------------------------
+>> Issue: [B608:hardcoded_sql_expressions] Possible SQL injection vector through string-based query construction.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b608_hardcoded_sql_expressions.html
+   Location: src/database.py:649:31
+648	            cursor = conn.cursor()
+649	            cursor.execute(f"""
+650	                UPDATE account_state
+651	                SET {set_clause}, last_updated = CURRENT_TIMESTAMP
+652	                WHERE id = (SELECT MAX(id) FROM account_state)
+653	            """, values)
+654	            conn.commit()
+
+--------------------------------------------------
+>> Issue: [B608:hardcoded_sql_expressions] Possible SQL injection vector through string-based query construction.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b608_hardcoded_sql_expressions.html
+   Location: src/database.py:1622:31
+1621	            cursor = conn.cursor()
+1622	            cursor.execute(f"""
+1623	                SELECT * FROM profit_snapshots
+1624	                WHERE {where}
+1625	                ORDER BY timestamp DESC
+1626	                LIMIT ?
+1627	            """, params + [limit])
+1628	            return [dict(row) for row in cursor.fetchall()]
+
+--------------------------------------------------
+>> Issue: [B608:hardcoded_sql_expressions] Possible SQL injection vector through string-based query construction.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b608_hardcoded_sql_expressions.html
+   Location: src/database.py:1710:31
+1709	            cursor = conn.cursor()
+1710	            cursor.execute(f"""
+1711	                SELECT * FROM equity_points
+1712	                WHERE {where}
+1713	                ORDER BY timestamp ASC
+1714	                LIMIT ?
+1715	            """, params + [limit])
+1716	            return [dict(row) for row in cursor.fetchall()]
+
+--------------------------------------------------
+>> Issue: [B608:hardcoded_sql_expressions] Possible SQL injection vector through string-based query construction.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b608_hardcoded_sql_expressions.html
+   Location: src/journal.py:257:18
+256	            cursor.execute(
+257	                f"UPDATE trade_journal SET {set_clause} WHERE id = ?",
+258	                list(updates.values()) + [entry_id]
+
+--------------------------------------------------
+>> Issue: [B608:hardcoded_sql_expressions] Possible SQL injection vector through string-based query construction.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b608_hardcoded_sql_expressions.html
+   Location: src/journal.py:294:18
+293	            cursor.execute(
+294	                f"SELECT * FROM trade_journal WHERE {where} ORDER BY {order_by} LIMIT ?",
+295	                params + (limit,)
+
+--------------------------------------------------
+>> Issue: [B608:hardcoded_sql_expressions] Possible SQL injection vector through string-based query construction.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b608_hardcoded_sql_expressions.html
+   Location: src/journal.py:304:18
+303	            cursor.execute(
+304	                f"SELECT COUNT(*) FROM trade_journal WHERE {where}",
+305	                params
+
+--------------------------------------------------
+>> Issue: [B608:hardcoded_sql_expressions] Possible SQL injection vector through string-based query construction.
+   Severity: Medium   Confidence: Low
+   CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b608_hardcoded_sql_expressions.html
+   Location: src/journal.py:315:18
+314	        """Run aggregate query."""
+315	        query = f"SELECT {select} FROM trade_journal WHERE {where}"
+316	        if group_by:
+
+--------------------------------------------------
+>> Issue: [B608:hardcoded_sql_expressions] Possible SQL injection vector through string-based query construction.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b608_hardcoded_sql_expressions.html
+   Location: src/learning_system.py:827:31
+826	            cursor = conn.cursor()
+827	            cursor.execute(f"""
+828	                UPDATE trading_rules
+829	                SET {column} = {column} + 1
+830	                WHERE id = ?
+831	            """, (rule_id,))
+832	            conn.commit()
+
+--------------------------------------------------
+>> Issue: [B608:hardcoded_sql_expressions] Possible SQL injection vector through string-based query construction.
+   Severity: Medium   Confidence: Low
+   CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b608_hardcoded_sql_expressions.html
+   Location: src/llm_interface.py:305:21
+304	
+305	        prompt = f"""Current Market Data:
+306	{json.dumps(market_data, indent=2)}
+307	
+308	Account State:
+309	{json.dumps(account_state, indent=2)}
+310	
+311	Recent Learnings:
+312	{json.dumps(recent_learnings or [], indent=2)}
+313	
+314	Active Rules:
+315	{json.dumps(active_rules or [], indent=2)}
+316	
+317	FORBIDDEN COINS (DO NOT TRADE - in cooldown):
+318	{json.dumps(coins_in_cooldown or [], indent=2)}
+319	
+320	Based on this data, what trading action should I take?
+321	REMEMBER: You MUST NOT select any coin from the FORBIDDEN list above.
+322	Respond with JSON only."""
+323	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b110_try_except_pass.html
+   Location: src/main.py:812:12
+811	                stats["sharpe_ratio"] = snapshot.sharpe_ratio
+812	            except Exception:
+813	                pass
+814	
+
+--------------------------------------------------
+>> Issue: [B104:hardcoded_bind_all_interfaces] Possible binding to all interfaces.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-605 (https://cwe.mitre.org/data/definitions/605.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b104_hardcoded_bind_all_interfaces.html
+   Location: src/main.py:1003:36
+1002	    parser.add_argument(
+1003	        "--host", type=str, default="0.0.0.0",
+1004	        help="Dashboard host (default: 0.0.0.0)"
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b110_try_except_pass.html
+   Location: src/metrics.py:170:12
+169	                hours_since_trade = (datetime.now() - last_dt.replace(tzinfo=None)).total_seconds() / 3600
+170	            except Exception:
+171	                pass
+172	
+
+--------------------------------------------------
+>> Issue: [B112:try_except_continue] Try, Except, Continue detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.3/plugins/b112_try_except_continue.html
+   Location: src/technical/funding.py:196:12
+195	                    extreme[coin] = data
+196	            except Exception:
+197	                continue
+198	        return extreme
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 21084
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 10
+		Medium: 12
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 2
+		Medium: 11
+		High: 9
+Files skipped (0):

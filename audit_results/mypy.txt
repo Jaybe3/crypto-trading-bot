@@ -1,0 +1,17 @@
+src/sentiment/fear_greed.py:6: error: Library stubs not installed for "requests"  [import-untyped]
+src/sentiment/fear_greed.py:6: note: Hint: "python3 -m pip install types-requests"
+src/sentiment/fear_greed.py:6: note: (or run "mypy --install-types" to install all missing stub packages)
+src/sentiment/fear_greed.py:6: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+src/sentiment/news_feed.py:8: error: Library stubs not installed for "requests"  [import-untyped]
+src/sentiment/social_sentiment.py:8: error: Library stubs not installed for "requests"  [import-untyped]
+src/technical/candle_fetcher.py:6: error: Library stubs not installed for "requests"  [import-untyped]
+src/technical/funding.py:6: error: Library stubs not installed for "requests"  [import-untyped]
+src/technical/orderbook.py:8: error: Library stubs not installed for "requests"  [import-untyped]
+src/llm_interface.py:14: error: Library stubs not installed for "requests"  [import-untyped]
+src/llm_interface.py:15: error: Library stubs not installed for "requests.exceptions"  [import-untyped]
+src/market_data.py:12: error: Library stubs not installed for "requests"  [import-untyped]
+src/market_data.py:13: error: Library stubs not installed for "requests.exceptions"  [import-untyped]
+scripts/generate_report.py: error: Source file found twice under different module names: "generate_report" and "scripts.generate_report"
+scripts/generate_report.py: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#mapping-file-paths-to-modules for more info
+scripts/generate_report.py: note: Common resolutions include: a) adding `__init__.py` somewhere, b) using `--explicit-package-bases` or adjusting MYPYPATH
+Found 11 errors in 9 files (errors prevented further checking)

@@ -1,0 +1,18 @@
+=== ContextManager ===
+(none found)
+
+=== TechnicalManager ===
+(none found)
+
+=== to_prompt ===
+src/sentiment/context_manager.py:58:    def to_prompt(self) -> str:
+src/sentiment/context_manager.py:119:    def to_prompt(self) -> str:
+src/sentiment/context_manager.py:160:        print(market.to_prompt())
+src/technical/manager.py:120:    def to_prompt(self) -> str:
+src/technical/manager.py:176:        print(snapshot.to_prompt())
+
+=== Phase 3 in main.py ===
+(none found)
+
+=== Phase 3 in strategist.py ===
+(none found)

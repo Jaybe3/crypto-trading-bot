@@ -1,0 +1,2886 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /mnt/c/documents/crypto-trading-bot
+configfile: pytest.ini
+plugins: cov-7.0.0, anyio-4.12.1
+collecting ... collected 908 items
+
+tests/deprecated/test_dashboard.py::TestDashboardData::test_get_account_state PASSED [  0%]
+tests/deprecated/test_dashboard.py::TestDashboardData::test_get_market_data_empty PASSED [  0%]
+tests/deprecated/test_dashboard.py::TestDashboardData::test_get_open_trades_empty PASSED [  0%]
+tests/deprecated/test_dashboard.py::TestDashboardData::test_get_closed_trades_empty PASSED [  0%]
+tests/deprecated/test_dashboard.py::TestDashboardRoutes::test_index_route PASSED [  0%]
+tests/deprecated/test_dashboard.py::TestDashboardRoutes::test_index_contains_market_data_section PASSED [  0%]
+tests/deprecated/test_dashboard.py::TestDashboardRoutes::test_index_contains_account_state_section PASSED [  0%]
+tests/deprecated/test_dashboard.py::TestDashboardRoutes::test_index_contains_open_trades_section PASSED [  0%]
+tests/deprecated/test_dashboard.py::TestDashboardRoutes::test_index_contains_closed_trades_section PASSED [  0%]
+tests/deprecated/test_dashboard.py::TestDashboardRoutes::test_api_status_route PASSED [  1%]
+tests/deprecated/test_dashboard.py::TestDashboardRoutes::test_api_status_contains_required_fields PASSED [  1%]
+tests/deprecated/test_dashboard.py::TestDashboardRoutes::test_api_status_account_balance PASSED [  1%]
+tests/deprecated/test_dashboard.py::test_dashboard_import PASSED         [  1%]
+tests/deprecated/test_learning_system.py::TestLearningDataclass::test_learning_creation PASSED [  1%]
+tests/deprecated/test_learning_system.py::TestLearningDataclass::test_learning_to_dict PASSED [  1%]
+tests/deprecated/test_learning_system.py::TestLearningDataclass::test_learning_to_text PASSED [  1%]
+tests/deprecated/test_learning_system.py::TestLearningSystemInit::test_init_with_db PASSED [  1%]
+tests/deprecated/test_learning_system.py::TestLearningSystemInit::test_init_without_llm PASSED [  1%]
+tests/deprecated/test_learning_system.py::TestGetClosedTrade::test_get_existing_trade PASSED [  2%]
+tests/deprecated/test_learning_system.py::TestGetClosedTrade::test_get_nonexistent_trade PASSED [  2%]
+tests/deprecated/test_learning_system.py::TestBuildAnalysisPrompt::test_build_prompt_contains_trade_info PASSED [  2%]
+tests/deprecated/test_learning_system.py::TestBuildAnalysisPrompt::test_build_prompt_contains_json_format PASSED [  2%]
+tests/deprecated/test_learning_system.py::TestAnalyzeTrade::test_analyze_without_llm_returns_none PASSED [  2%]
+tests/deprecated/test_learning_system.py::TestAnalyzeTrade::test_analyze_nonexistent_trade_returns_none PASSED [  2%]
+tests/deprecated/test_learning_system.py::TestAnalyzeTrade::test_analyze_with_mocked_llm PASSED [  2%]
+tests/deprecated/test_learning_system.py::TestAnalyzeTrade::test_analyze_stores_in_database PASSED [  2%]
+tests/deprecated/test_learning_system.py::TestAnalyzeTrade::test_analyze_already_analyzed_returns_existing PASSED [  2%]
+tests/deprecated/test_learning_system.py::TestGetLearnings::test_get_learnings_for_decision ERROR [  3%]
+tests/deprecated/test_learning_system.py::TestGetLearnings::test_get_learnings_by_coin ERROR [  3%]
+tests/deprecated/test_learning_system.py::TestGetLearnings::test_get_all_learnings ERROR [  3%]
+tests/deprecated/test_learning_system.py::TestGetLearnings::test_get_learning_for_trade ERROR [  3%]
+tests/deprecated/test_learning_system.py::TestGetLearnings::test_get_unanalyzed_trades ERROR [  3%]
+tests/deprecated/test_learning_system.py::TestLearningSummary::test_get_learning_summary ERROR [  3%]
+tests/deprecated/test_learning_system.py::TestGetLearningsAsText::test_get_learnings_as_text ERROR [  3%]
+tests/deprecated/test_learning_system.py::test_learning_system_import PASSED [  3%]
+tests/deprecated/test_market_data.py::TestMarketDataFetcher::test_default_coins PASSED [  3%]
+tests/deprecated/test_market_data.py::TestMarketDataFetcher::test_custom_coins PASSED [  4%]
+tests/deprecated/test_market_data.py::TestMarketDataFetcher::test_add_coin PASSED [  4%]
+tests/deprecated/test_market_data.py::TestMarketDataFetcher::test_add_coin_duplicate PASSED [  4%]
+tests/deprecated/test_market_data.py::TestMarketDataFetcher::test_remove_coin PASSED [  4%]
+tests/deprecated/test_market_data.py::TestMarketDataFetcher::test_update_interval_default PASSED [  4%]
+tests/deprecated/test_market_data.py::TestMarketDataFetcher::test_update_interval_custom PASSED [  4%]
+tests/deprecated/test_market_data.py::TestMarketDataFetcher::test_get_current_prices_empty PASSED [  4%]
+tests/deprecated/test_market_data.py::TestMarketDataFetcher::test_get_price_not_found PASSED [  4%]
+tests/deprecated/test_market_data.py::TestMarketDataFetcher::test_fetch_prices_mocked PASSED [  4%]
+tests/deprecated/test_market_data.py::TestMarketDataFetcher::test_update_database_mocked PASSED [  5%]
+tests/deprecated/test_market_data.py::TestGetVerificationUrl::test_single_coin PASSED [  5%]
+tests/deprecated/test_market_data.py::TestGetVerificationUrl::test_multiple_coins PASSED [  5%]
+tests/deprecated/test_market_data.py::TestGetVerificationUrl::test_default_coin PASSED [  5%]
+tests/deprecated/test_market_data.py::TestRealAPIIntegration::test_fetch_real_bitcoin_price PASSED [  5%]
+tests/deprecated/test_market_data.py::TestRealAPIIntegration::test_fetch_and_store_real_data PASSED [  5%]
+tests/deprecated/test_market_data.py::test_market_data_import PASSED     [  5%]
+tests/deprecated/test_risk_manager.py::TestRiskManagerConstants::test_max_trade_percent FAILED [  5%]
+tests/deprecated/test_risk_manager.py::TestRiskManagerConstants::test_max_exposure_percent FAILED [  5%]
+tests/deprecated/test_risk_manager.py::TestRiskManagerConstants::test_min_balance FAILED [  6%]
+tests/deprecated/test_risk_manager.py::TestRiskManagerConstants::test_stop_loss_percent PASSED [  6%]
+tests/deprecated/test_risk_manager.py::TestRiskManagerConstants::test_take_profit_usd PASSED [  6%]
+tests/deprecated/test_risk_manager.py::TestRiskManager::test_get_risk_parameters FAILED [  6%]
+tests/deprecated/test_risk_manager.py::TestRiskManager::test_get_account_state PASSED [  6%]
+tests/deprecated/test_risk_manager.py::TestRiskManager::test_max_trade_size_fresh_account FAILED [  6%]
+tests/deprecated/test_risk_manager.py::TestRiskManager::test_available_for_trading_fresh_account FAILED [  6%]
+tests/deprecated/test_risk_manager.py::TestTradeValidation::test_valid_trade FAILED [  6%]
+tests/deprecated/test_risk_manager.py::TestTradeValidation::test_trade_exceeds_max_percent FAILED [  6%]
+tests/deprecated/test_risk_manager.py::TestTradeValidation::test_trade_at_exact_limit PASSED [  7%]
+tests/deprecated/test_risk_manager.py::TestTradeValidation::test_small_trade_valid PASSED [  7%]
+tests/deprecated/test_risk_manager.py::TestTradeValidation::test_huge_trade_rejected PASSED [  7%]
+tests/deprecated/test_risk_manager.py::TestTradeValidation::test_validation_result_structure PASSED [  7%]
+tests/deprecated/test_risk_manager.py::TestStopLossCalculation::test_stop_loss_calculation PASSED [  7%]
+tests/deprecated/test_risk_manager.py::TestStopLossCalculation::test_stop_loss_bitcoin_price PASSED [  7%]
+tests/deprecated/test_risk_manager.py::TestStopLossCalculation::test_check_stop_loss_not_triggered PASSED [  7%]
+tests/deprecated/test_risk_manager.py::TestStopLossCalculation::test_check_stop_loss_triggered PASSED [  7%]
+tests/deprecated/test_risk_manager.py::TestStopLossCalculation::test_check_stop_loss_triggered_below PASSED [  7%]
+tests/deprecated/test_risk_manager.py::TestTakeProfitCalculation::test_take_profit_calculation PASSED [  8%]
+tests/deprecated/test_risk_manager.py::TestTakeProfitCalculation::test_take_profit_larger_position FAILED [  8%]
+tests/deprecated/test_risk_manager.py::TestTakeProfitCalculation::test_check_take_profit_not_reached PASSED [  8%]
+tests/deprecated/test_risk_manager.py::TestTakeProfitCalculation::test_check_take_profit_reached PASSED [  8%]
+tests/deprecated/test_risk_manager.py::TestTakeProfitCalculation::test_check_take_profit_exceeded PASSED [  8%]
+tests/deprecated/test_risk_manager.py::TestShouldExitTrade::test_no_exit_in_range PASSED [  8%]
+tests/deprecated/test_risk_manager.py::TestShouldExitTrade::test_exit_on_stop_loss PASSED [  8%]
+tests/deprecated/test_risk_manager.py::TestShouldExitTrade::test_exit_on_take_profit PASSED [  8%]
+tests/deprecated/test_risk_manager.py::TestShouldExitTrade::test_result_contains_pnl PASSED [  8%]
+tests/deprecated/test_risk_manager.py::TestRiskSummary::test_risk_summary_structure PASSED [  9%]
+tests/deprecated/test_risk_manager.py::TestRiskSummary::test_risk_summary_values FAILED [  9%]
+tests/deprecated/test_risk_manager.py::TestActivityLogging::test_log_passed_risk_check PASSED [  9%]
+tests/deprecated/test_risk_manager.py::TestActivityLogging::test_log_failed_risk_check PASSED [  9%]
+tests/deprecated/test_risk_manager.py::test_risk_manager_import PASSED   [  9%]
+tests/deprecated/test_trading_engine.py::TestTradingEngineInit::test_init_default PASSED [  9%]
+tests/deprecated/test_trading_engine.py::TestTradingEngineInit::test_init_with_risk_manager PASSED [  9%]
+tests/deprecated/test_trading_engine.py::TestExecuteBuy::test_execute_buy_success FAILED [  9%]
+tests/deprecated/test_trading_engine.py::TestExecuteBuy::test_execute_buy_creates_open_trade FAILED [  9%]
+tests/deprecated/test_trading_engine.py::TestExecuteBuy::test_execute_buy_updates_account FAILED [ 10%]
+tests/deprecated/test_trading_engine.py::TestExecuteBuy::test_execute_buy_calculates_stop_loss FAILED [ 10%]
+tests/deprecated/test_trading_engine.py::TestExecuteBuy::test_execute_buy_calculates_take_profit FAILED [ 10%]
+tests/deprecated/test_trading_engine.py::TestExecuteBuy::test_execute_buy_no_market_data_fails PASSED [ 10%]
+tests/deprecated/test_trading_engine.py::TestExecuteBuy::test_execute_buy_exceeds_limit_fails FAILED [ 10%]
+tests/deprecated/test_trading_engine.py::TestExecuteBuy::test_execute_buy_logs_activity FAILED [ 10%]
+tests/deprecated/test_trading_engine.py::TestCloseTrade::test_close_trade_success ERROR [ 10%]
+tests/deprecated/test_trading_engine.py::TestCloseTrade::test_close_trade_removes_from_open ERROR [ 10%]
+tests/deprecated/test_trading_engine.py::TestCloseTrade::test_close_trade_adds_to_closed ERROR [ 10%]
+tests/deprecated/test_trading_engine.py::TestCloseTrade::test_close_trade_calculates_pnl ERROR [ 11%]
+tests/deprecated/test_trading_engine.py::TestCloseTrade::test_close_trade_updates_account ERROR [ 11%]
+tests/deprecated/test_trading_engine.py::TestCloseTrade::test_close_nonexistent_trade_fails ERROR [ 11%]
+tests/deprecated/test_trading_engine.py::TestUpdatePositions::test_update_positions_updates_price ERROR [ 11%]
+tests/deprecated/test_trading_engine.py::TestUpdatePositions::test_update_positions_calculates_unrealized_pnl ERROR [ 11%]
+tests/deprecated/test_trading_engine.py::TestUpdatePositions::test_update_positions_triggers_stop_loss ERROR [ 11%]
+tests/deprecated/test_trading_engine.py::TestUpdatePositions::test_update_positions_triggers_take_profit ERROR [ 11%]
+tests/deprecated/test_trading_engine.py::TestUpdatePositions::test_update_positions_no_trigger_in_range ERROR [ 11%]
+tests/deprecated/test_trading_engine.py::TestGetCurrentPrice::test_get_price_exists PASSED [ 11%]
+tests/deprecated/test_trading_engine.py::TestGetCurrentPrice::test_get_price_not_exists PASSED [ 12%]
+tests/deprecated/test_trading_engine.py::TestTradeResult::test_trade_result_success PASSED [ 12%]
+tests/deprecated/test_trading_engine.py::TestTradeResult::test_trade_result_failure PASSED [ 12%]
+tests/deprecated/test_trading_engine.py::test_trading_engine_import PASSED [ 12%]
+tests/test_adaptation.py::TestAdaptationEngine::test_adaptation_record_logged_to_db PASSED [ 12%]
+tests/test_adaptation.py::TestAdaptationEngine::test_blacklist_coin_insight PASSED [ 12%]
+tests/test_adaptation.py::TestAdaptationEngine::test_coin_extraction_from_title PASSED [ 12%]
+tests/test_adaptation.py::TestAdaptationEngine::test_cooldown_prevents_duplicate PASSED [ 12%]
+tests/test_adaptation.py::TestAdaptationEngine::test_favor_coin_insight PASSED [ 12%]
+tests/test_adaptation.py::TestAdaptationEngine::test_insufficient_trades_skipped PASSED [ 12%]
+tests/test_adaptation.py::TestAdaptationEngine::test_low_confidence_skipped PASSED [ 13%]
+tests/test_adaptation.py::TestAdaptationEngine::test_multiple_insights_processed PASSED [ 13%]
+tests/test_adaptation.py::TestAdaptationEngine::test_no_suggested_action_skipped PASSED [ 13%]
+tests/test_adaptation.py::TestAdaptationEngine::test_regime_rule_creation PASSED [ 13%]
+tests/test_adaptation.py::TestAdaptationEngine::test_stats_tracking PASSED [ 13%]
+tests/test_adaptation.py::TestAdaptationEngine::test_time_rule_creation PASSED [ 13%]
+tests/test_adaptation.py::TestAdaptationEngine::test_win_rate_threshold_for_blacklist PASSED [ 13%]
+tests/test_adaptation.py::TestAdaptationEngine::test_win_rate_threshold_for_favor PASSED [ 13%]
+tests/test_adaptation.py::TestAdaptationRecord::test_from_dict PASSED    [ 13%]
+tests/test_adaptation.py::TestAdaptationRecord::test_str_representation PASSED [ 14%]
+tests/test_adaptation.py::TestAdaptationRecord::test_to_dict PASSED      [ 14%]
+tests/test_analysis.py::TestTradingMetrics::test_calculate_metrics_basic PASSED [ 14%]
+tests/test_analysis.py::TestTradingMetrics::test_calculate_win_rate PASSED [ 14%]
+tests/test_analysis.py::TestTradingMetrics::test_calculate_total_pnl PASSED [ 14%]
+tests/test_analysis.py::TestTradingMetrics::test_calculate_profit_factor PASSED [ 14%]
+tests/test_analysis.py::TestTradingMetrics::test_calculate_avg_win_loss PASSED [ 14%]
+tests/test_analysis.py::TestTradingMetrics::test_calculate_largest_win_loss PASSED [ 14%]
+tests/test_analysis.py::TestTradingMetrics::test_empty_trades PASSED     [ 14%]
+tests/test_analysis.py::TestSharpeRatio::test_sharpe_positive_returns PASSED [ 15%]
+tests/test_analysis.py::TestSharpeRatio::test_sharpe_negative_returns PASSED [ 15%]
+tests/test_analysis.py::TestSharpeRatio::test_sharpe_mixed_returns PASSED [ 15%]
+tests/test_analysis.py::TestSharpeRatio::test_sharpe_zero_std PASSED     [ 15%]
+tests/test_analysis.py::TestSharpeRatio::test_sharpe_empty_returns PASSED [ 15%]
+tests/test_analysis.py::TestMaxDrawdown::test_drawdown_no_losses PASSED  [ 15%]
+tests/test_analysis.py::TestMaxDrawdown::test_drawdown_simple PASSED     [ 15%]
+tests/test_analysis.py::TestMaxDrawdown::test_drawdown_multiple_dips PASSED [ 15%]
+tests/test_analysis.py::TestMaxDrawdown::test_drawdown_empty PASSED      [ 15%]
+tests/test_analysis.py::TestProfitFactor::test_profit_factor_profitable PASSED [ 16%]
+tests/test_analysis.py::TestProfitFactor::test_profit_factor_losing PASSED [ 16%]
+tests/test_analysis.py::TestProfitFactor::test_profit_factor_no_losses PASSED [ 16%]
+tests/test_analysis.py::TestProfitFactor::test_profit_factor_no_profits PASSED [ 16%]
+tests/test_analysis.py::TestEquityCurve::test_build_equity_curve PASSED  [ 16%]
+tests/test_analysis.py::TestPerformanceBreakdown::test_analyze_by_coin PASSED [ 16%]
+tests/test_analysis.py::TestPerformanceBreakdown::test_analyze_by_pattern PASSED [ 16%]
+tests/test_analysis.py::TestPerformanceBreakdown::test_analyze_by_hour PASSED [ 16%]
+tests/test_analysis.py::TestPerformanceBreakdown::test_compare_periods PASSED [ 16%]
+tests/test_analysis.py::TestPerformanceBreakdown::test_get_best_worst_coins PASSED [ 17%]
+tests/test_analysis.py::TestPerformanceBreakdown::test_calculate_consistency PASSED [ 17%]
+tests/test_analysis.py::TestLearningAnalysis::test_analyze_coin_score_accuracy_no_data PASSED [ 17%]
+tests/test_analysis.py::TestLearningAnalysis::test_analyze_adaptation_effectiveness_no_data PASSED [ 17%]
+tests/test_analysis.py::TestLearningAnalysis::test_analyze_pattern_confidence_no_data PASSED [ 17%]
+tests/test_analysis.py::TestLearningAnalysis::test_analyze_knowledge_growth PASSED [ 17%]
+tests/test_analysis.py::TestLearningAnalysis::test_calculate_learning_score PASSED [ 17%]
+tests/test_analysis.py::TestAnalysisIntegration::test_full_metrics_calculation PASSED [ 17%]
+tests/test_analysis.py::TestAnalysisIntegration::test_metrics_to_dict PASSED [ 17%]
+tests/test_analysis.py::TestAnalysisIntegration::test_all_breakdowns_consistent PASSED [ 18%]
+tests/test_atr.py::TestATRData::test_volatility_level_extreme PASSED     [ 18%]
+tests/test_atr.py::TestATRData::test_volatility_level_high PASSED        [ 18%]
+tests/test_atr.py::TestATRData::test_volatility_level_moderate PASSED    [ 18%]
+tests/test_atr.py::TestATRData::test_volatility_level_low PASSED         [ 18%]
+tests/test_atr.py::TestATRData::test_suggested_stop_loss PASSED          [ 18%]
+tests/test_atr.py::TestATRData::test_suggested_stop_price_long PASSED    [ 18%]
+tests/test_atr.py::TestATRData::test_suggested_stop_price_short PASSED   [ 18%]
+tests/test_atr.py::TestATRCalculator::test_init_default_period PASSED    [ 18%]
+tests/test_atr.py::TestATRCalculator::test_init_custom_period PASSED     [ 19%]
+tests/test_atr.py::TestATRCalculator::test_true_range_normal_candle PASSED [ 19%]
+tests/test_atr.py::TestATRCalculator::test_true_range_gap_up PASSED      [ 19%]
+tests/test_atr.py::TestATRCalculator::test_true_range_gap_down PASSED    [ 19%]
+tests/test_atr.py::TestATRCalculator::test_calculate_from_candles PASSED [ 19%]
+tests/test_atr.py::TestATRCalculator::test_calculate_uses_fetcher PASSED [ 19%]
+tests/test_atr.py::TestATRCalculator::test_calculate_atr_percentage PASSED [ 19%]
+tests/test_atr.py::TestATRCalculator::test_calculate_insufficient_candles PASSED [ 19%]
+tests/test_atr.py::TestATRCalculator::test_get_position_size_modifier_high_vol PASSED [ 19%]
+tests/test_atr.py::TestATRCalculator::test_get_dynamic_stops_long PASSED [ 20%]
+tests/test_atr.py::TestATRCalculator::test_get_dynamic_stops_short PASSED [ 20%]
+tests/test_btc_correlation.py::TestBTCCorrelation::test_move_type_btc_correlated PASSED [ 20%]
+tests/test_btc_correlation.py::TestBTCCorrelation::test_move_type_coin_specific PASSED [ 20%]
+tests/test_btc_correlation.py::TestBTCCorrelation::test_move_type_normal PASSED [ 20%]
+tests/test_btc_correlation.py::TestBTCCorrelation::test_correlation_strength_very_strong PASSED [ 20%]
+tests/test_btc_correlation.py::TestBTCCorrelation::test_correlation_strength_strong PASSED [ 20%]
+tests/test_btc_correlation.py::TestBTCCorrelation::test_correlation_strength_moderate PASSED [ 20%]
+tests/test_btc_correlation.py::TestBTCCorrelation::test_correlation_strength_weak PASSED [ 20%]
+tests/test_btc_correlation.py::TestBTCCorrelation::test_correlation_strength_none PASSED [ 21%]
+tests/test_btc_correlation.py::TestBTCCorrelationTracker::test_calculate_change_positive PASSED [ 21%]
+tests/test_btc_correlation.py::TestBTCCorrelationTracker::test_calculate_change_negative PASSED [ 21%]
+tests/test_btc_correlation.py::TestBTCCorrelationTracker::test_calculate_change_insufficient_data PASSED [ 21%]
+tests/test_btc_correlation.py::TestBTCCorrelationTracker::test_pearson_correlation_perfect_positive PASSED [ 21%]
+tests/test_btc_correlation.py::TestBTCCorrelationTracker::test_pearson_correlation_perfect_negative PASSED [ 21%]
+tests/test_btc_correlation.py::TestBTCCorrelationTracker::test_pearson_correlation_no_correlation PASSED [ 21%]
+tests/test_btc_correlation.py::TestBTCCorrelationTracker::test_is_btc_driven_move_true PASSED [ 21%]
+tests/test_btc_correlation.py::TestBTCCorrelationTracker::test_is_btc_driven_move_btc_too_small PASSED [ 21%]
+tests/test_btc_correlation.py::TestBTCCorrelationTracker::test_is_btc_driven_move_opposite_direction PASSED [ 22%]
+tests/test_btc_correlation.py::TestBTCCorrelationTracker::test_is_btc_driven_move_low_correlation PASSED [ 22%]
+tests/test_btc_correlation.py::TestBTCCorrelationTracker::test_get_correlation_uses_fetcher PASSED [ 22%]
+tests/test_btc_correlation.py::TestBTCCorrelationTracker::test_get_all_correlations PASSED [ 22%]
+tests/test_btc_correlation.py::TestBTCCorrelationTracker::test_is_btc_driven_move_method PASSED [ 22%]
+tests/test_candle_fetcher.py::TestCandle::test_is_bullish PASSED         [ 22%]
+tests/test_candle_fetcher.py::TestCandle::test_body_size PASSED          [ 22%]
+tests/test_candle_fetcher.py::TestCandle::test_wick_ratio PASSED         [ 22%]
+tests/test_candle_fetcher.py::TestCandle::test_wick_ratio_doji PASSED    [ 22%]
+tests/test_candle_fetcher.py::TestCandle::test_wick_ratio_zero_range PASSED [ 23%]
+tests/test_candle_fetcher.py::TestCandleData::test_closes PASSED         [ 23%]
+tests/test_candle_fetcher.py::TestCandleData::test_volumes PASSED        [ 23%]
+tests/test_candle_fetcher.py::TestCandleData::test_highs_lows PASSED     [ 23%]
+tests/test_candle_fetcher.py::TestCandleFetcher::test_init_default PASSED [ 23%]
+tests/test_candle_fetcher.py::TestCandleFetcher::test_init_custom_cache PASSED [ 23%]
+tests/test_candle_fetcher.py::TestCandleFetcher::test_get_symbol_known PASSED [ 23%]
+tests/test_candle_fetcher.py::TestCandleFetcher::test_get_symbol_unknown PASSED [ 23%]
+tests/test_candle_fetcher.py::TestCandleFetcher::test_get_candles_success PASSED [ 23%]
+tests/test_candle_fetcher.py::TestCandleFetcher::test_get_candles_uses_cache PASSED [ 24%]
+tests/test_candle_fetcher.py::TestCandleFetcher::test_get_candles_cache_expired PASSED [ 24%]
+tests/test_candle_fetcher.py::TestCandleFetcher::test_get_candles_api_error PASSED [ 24%]
+tests/test_candle_fetcher.py::TestCandleFetcher::test_invalid_interval PASSED [ 24%]
+tests/test_candle_fetcher.py::TestCandleFetcher::test_get_latest_candle PASSED [ 24%]
+tests/test_candle_fetcher.py::TestCandleFetcher::test_different_intervals_cached_separately PASSED [ 24%]
+tests/test_coin_scorer.py::TestCoinStatus::test_status_values PASSED     [ 24%]
+tests/test_coin_scorer.py::TestCoinAdaptation::test_adaptation_creation PASSED [ 24%]
+tests/test_coin_scorer.py::TestCoinAdaptation::test_adaptation_to_dict PASSED [ 24%]
+tests/test_coin_scorer.py::TestPositionModifiers::test_modifier_values PASSED [ 25%]
+tests/test_coin_scorer.py::TestCoinScorer::test_unknown_coin_status PASSED [ 25%]
+tests/test_coin_scorer.py::TestCoinScorer::test_unknown_coin_modifier PASSED [ 25%]
+tests/test_coin_scorer.py::TestCoinScorer::test_few_trades_unknown PASSED [ 25%]
+tests/test_coin_scorer.py::TestCoinScorer::test_blacklist_threshold PASSED [ 25%]
+tests/test_coin_scorer.py::TestCoinScorer::test_blacklist_requires_negative_pnl PASSED [ 25%]
+tests/test_coin_scorer.py::TestCoinScorer::test_blacklist_requires_min_trades PASSED [ 25%]
+tests/test_coin_scorer.py::TestCoinScorer::test_reduced_threshold PASSED [ 25%]
+tests/test_coin_scorer.py::TestCoinScorer::test_favored_threshold PASSED [ 25%]
+tests/test_coin_scorer.py::TestCoinScorer::test_favored_requires_positive_pnl SKIPPED [ 25%]
+tests/test_coin_scorer.py::TestCoinScorer::test_normal_status PASSED     [ 26%]
+tests/test_coin_scorer.py::TestCoinScorer::test_recovery_from_reduced PASSED [ 26%]
+tests/test_coin_scorer.py::TestCoinScorer::test_drop_from_favored PASSED [ 26%]
+tests/test_coin_scorer.py::TestCoinScorer::test_adaptation_returned_on_threshold PASSED [ 26%]
+tests/test_coin_scorer.py::TestCoinScorer::test_no_adaptation_when_unchanged PASSED [ 26%]
+tests/test_coin_scorer.py::TestCoinScorer::test_force_blacklist PASSED   [ 26%]
+tests/test_coin_scorer.py::TestCoinScorer::test_force_unblacklist PASSED [ 26%]
+tests/test_coin_scorer.py::TestCoinScorer::test_get_all_statuses PASSED  [ 26%]
+tests/test_coin_scorer.py::TestCoinScorer::test_get_status_summary PASSED [ 26%]
+tests/test_coin_scorer.py::TestCoinScorerIntegration::test_adaptation_persistence PASSED [ 27%]
+tests/test_coin_scorer.py::TestCoinScorerIntegration::test_scorer_loads_existing_statuses PASSED [ 27%]
+tests/test_coin_scorer.py::TestCoinScorerIntegration::test_full_lifecycle PASSED [ 27%]
+tests/test_context_manager.py::TestMarketContext::test_fear_greed_value_with_data PASSED [ 27%]
+tests/test_context_manager.py::TestMarketContext::test_fear_greed_value_without_data PASSED [ 27%]
+tests/test_context_manager.py::TestMarketContext::test_is_extreme_fear PASSED [ 27%]
+tests/test_context_manager.py::TestMarketContext::test_is_extreme_greed PASSED [ 27%]
+tests/test_context_manager.py::TestMarketContext::test_has_breaking_news PASSED [ 27%]
+tests/test_context_manager.py::TestMarketContext::test_no_breaking_news PASSED [ 27%]
+tests/test_context_manager.py::TestMarketContext::test_btc_trend_bullish PASSED [ 28%]
+tests/test_context_manager.py::TestMarketContext::test_btc_trend_bearish PASSED [ 28%]
+tests/test_context_manager.py::TestMarketContext::test_btc_trend_neutral PASSED [ 28%]
+tests/test_context_manager.py::TestMarketContext::test_to_prompt PASSED  [ 28%]
+tests/test_context_manager.py::TestCoinContext::test_is_btc_driven_true PASSED [ 28%]
+tests/test_context_manager.py::TestCoinContext::test_is_btc_driven_false PASSED [ 28%]
+tests/test_context_manager.py::TestCoinContext::test_is_trending PASSED  [ 28%]
+tests/test_context_manager.py::TestCoinContext::test_not_trending PASSED [ 28%]
+tests/test_context_manager.py::TestCoinContext::test_has_negative_news PASSED [ 28%]
+tests/test_context_manager.py::TestCoinContext::test_has_positive_news PASSED [ 29%]
+tests/test_context_manager.py::TestCoinContext::test_to_prompt PASSED    [ 29%]
+tests/test_context_manager.py::TestContextManager::test_init_creates_defaults PASSED [ 29%]
+tests/test_context_manager.py::TestContextManager::test_get_context PASSED [ 29%]
+tests/test_context_manager.py::TestContextManager::test_get_coin_context PASSED [ 29%]
+tests/test_context_manager.py::TestContextManager::test_should_avoid_trading_extreme_fear PASSED [ 29%]
+tests/test_context_manager.py::TestContextManager::test_should_avoid_trading_extreme_greed PASSED [ 29%]
+tests/test_context_manager.py::TestContextManager::test_should_avoid_trading_breaking_negative_news PASSED [ 29%]
+tests/test_context_manager.py::TestContextManager::test_should_not_avoid_trading_normal PASSED [ 29%]
+tests/test_context_manager.py::TestContextManager::test_get_all_coin_contexts PASSED [ 30%]
+tests/test_context_manager.py::TestContextManager::test_graceful_degradation_fear_greed_fails PASSED [ 30%]
+tests/test_context_manager.py::TestContextManager::test_graceful_degradation_news_fails PASSED [ 30%]
+tests/test_context_manager.py::TestContextManager::test_graceful_degradation_social_fails PASSED [ 30%]
+tests/test_dashboard_v2.py::TestStatusEndpoints::test_get_status PASSED  [ 30%]
+tests/test_dashboard_v2.py::TestStatusEndpoints::test_get_conditions PASSED [ 30%]
+tests/test_dashboard_v2.py::TestStatusEndpoints::test_get_positions PASSED [ 30%]
+tests/test_dashboard_v2.py::TestStatusEndpoints::test_get_prices PASSED  [ 30%]
+tests/test_dashboard_v2.py::TestKnowledgeEndpoints::test_get_coins PASSED [ 30%]
+tests/test_dashboard_v2.py::TestKnowledgeEndpoints::test_get_coin_detail PASSED [ 31%]
+tests/test_dashboard_v2.py::TestKnowledgeEndpoints::test_get_coin_not_found PASSED [ 31%]
+tests/test_dashboard_v2.py::TestKnowledgeEndpoints::test_get_patterns PASSED [ 31%]
+tests/test_dashboard_v2.py::TestKnowledgeEndpoints::test_get_rules PASSED [ 31%]
+tests/test_dashboard_v2.py::TestKnowledgeEndpoints::test_get_blacklist PASSED [ 31%]
+tests/test_dashboard_v2.py::TestAdaptationsEndpoints::test_get_adaptations PASSED [ 31%]
+tests/test_dashboard_v2.py::TestAdaptationsEndpoints::test_get_adaptations_with_limit PASSED [ 31%]
+tests/test_dashboard_v2.py::TestAdaptationsEndpoints::test_get_effectiveness_summary PASSED [ 31%]
+tests/test_dashboard_v2.py::TestProfitabilityEndpoints::test_get_snapshot PASSED [ 31%]
+tests/test_dashboard_v2.py::TestProfitabilityEndpoints::test_get_snapshot_with_timeframe PASSED [ 32%]
+tests/test_dashboard_v2.py::TestProfitabilityEndpoints::test_get_performance_by_dimension PASSED [ 32%]
+tests/test_dashboard_v2.py::TestProfitabilityEndpoints::test_get_invalid_dimension PASSED [ 32%]
+tests/test_dashboard_v2.py::TestProfitabilityEndpoints::test_get_equity_curve PASSED [ 32%]
+tests/test_dashboard_v2.py::TestProfitabilityEndpoints::test_get_improvement PASSED [ 32%]
+tests/test_dashboard_v2.py::TestOverrideEndpoints::test_blacklist_coin PASSED [ 32%]
+tests/test_dashboard_v2.py::TestOverrideEndpoints::test_unblacklist_coin PASSED [ 32%]
+tests/test_dashboard_v2.py::TestOverrideEndpoints::test_disable_pattern PASSED [ 32%]
+tests/test_dashboard_v2.py::TestOverrideEndpoints::test_enable_pattern PASSED [ 32%]
+tests/test_dashboard_v2.py::TestOverrideEndpoints::test_deactivate_rule PASSED [ 33%]
+tests/test_dashboard_v2.py::TestOverrideEndpoints::test_pause_trading PASSED [ 33%]
+tests/test_dashboard_v2.py::TestOverrideEndpoints::test_resume_trading PASSED [ 33%]
+tests/test_dashboard_v2.py::TestOverrideEndpoints::test_rollback_adaptation PASSED [ 33%]
+tests/test_dashboard_v2.py::TestNotesEndpoints::test_add_note PASSED     [ 33%]
+tests/test_dashboard_v2.py::TestNotesEndpoints::test_get_notes PASSED    [ 33%]
+tests/test_dashboard_v2.py::TestHealthEndpoints::test_health_check PASSED [ 33%]
+tests/test_dashboard_v2.py::TestHealthEndpoints::test_loop_stats PASSED  [ 33%]
+tests/test_dashboard_v2.py::TestHelperMethods::test_format_adaptation_with_timestamp PASSED [ 33%]
+tests/test_dashboard_v2.py::TestHelperMethods::test_format_adaptation_dict_passthrough PASSED [ 34%]
+tests/test_dashboard_v2.py::TestHelperMethods::test_get_feed_data PASSED [ 34%]
+tests/test_dashboard_v2.py::TestHelperMethods::test_get_health PASSED    [ 34%]
+tests/test_dashboard_v2.py::TestPageRoutes::test_index_route_exists PASSED [ 34%]
+tests/test_dashboard_v2.py::TestPageRoutes::test_knowledge_page_route_exists PASSED [ 34%]
+tests/test_dashboard_v2.py::TestPageRoutes::test_adaptations_page_route_exists PASSED [ 34%]
+tests/test_dashboard_v2.py::TestPageRoutes::test_profitability_page_route_exists PASSED [ 34%]
+tests/test_dashboard_v2.py::TestPageRoutes::test_overrides_page_route_exists PASSED [ 34%]
+tests/test_dashboard_v2.py::TestPydanticModels::test_blacklist_request_defaults PASSED [ 34%]
+tests/test_dashboard_v2.py::TestPydanticModels::test_blacklist_request_custom_reason PASSED [ 35%]
+tests/test_dashboard_v2.py::TestPydanticModels::test_unblacklist_request PASSED [ 35%]
+tests/test_dashboard_v2.py::TestPydanticModels::test_pattern_toggle_request PASSED [ 35%]
+tests/test_dashboard_v2.py::TestPydanticModels::test_rule_toggle_request PASSED [ 35%]
+tests/test_dashboard_v2.py::TestPydanticModels::test_rollback_request PASSED [ 35%]
+tests/test_dashboard_v2.py::TestPydanticModels::test_note_request PASSED [ 35%]
+tests/test_database.py::TestDatabase::test_database_creation PASSED      [ 35%]
+tests/test_database.py::TestDatabase::test_tables_exist PASSED           [ 35%]
+tests/test_database.py::TestDatabase::test_account_state_initialized PASSED [ 35%]
+tests/test_database.py::TestDatabase::test_update_account_state PASSED   [ 36%]
+tests/test_database.py::TestDatabase::test_log_activity PASSED           [ 36%]
+tests/test_database.py::TestDatabase::test_get_recent_activity PASSED    [ 36%]
+tests/test_database.py::TestDatabase::test_indexes_created PASSED        [ 36%]
+tests/test_database.py::test_database_import PASSED                      [ 36%]
+tests/test_effectiveness.py::TestEffectivenessRating::test_effective_rating PASSED [ 36%]
+tests/test_effectiveness.py::TestEffectivenessRating::test_harmful_no_rollback_insufficient_trades PASSED [ 36%]
+tests/test_effectiveness.py::TestEffectivenessRating::test_harmful_rating PASSED [ 36%]
+tests/test_effectiveness.py::TestEffectivenessRating::test_harmful_triggers_rollback PASSED [ 36%]
+tests/test_effectiveness.py::TestEffectivenessRating::test_highly_effective_rating PASSED [ 37%]
+tests/test_effectiveness.py::TestEffectivenessRating::test_ineffective_rating PASSED [ 37%]
+tests/test_effectiveness.py::TestEffectivenessRating::test_neutral_rating PASSED [ 37%]
+tests/test_effectiveness.py::TestPostMetricsCapture::test_capture_post_metrics_filters_by_time PASSED [ 37%]
+tests/test_effectiveness.py::TestRollbackFunctionality::test_rollback_blacklist PASSED [ 37%]
+tests/test_effectiveness.py::TestRollbackFunctionality::test_rollback_time_rule PASSED [ 37%]
+tests/test_effectiveness.py::TestRollbackFunctionality::test_suggest_rollback PASSED [ 37%]
+tests/test_effectiveness.py::TestEffectivenessSummary::test_empty_summary PASSED [ 37%]
+tests/test_effectiveness.py::TestEffectivenessSummary::test_summary_counts PASSED [ 37%]
+tests/test_effectiveness.py::TestHealthCheck::test_health_check_degraded PASSED [ 37%]
+tests/test_effectiveness.py::TestHealthCheck::test_health_check_healthy PASSED [ 38%]
+tests/test_effectiveness.py::TestEffectivenessResultSerialization::test_to_dict PASSED [ 38%]
+tests/test_execution_path.py::TestExecutionPath::test_condition_triggers_trade_above PASSED [ 38%]
+tests/test_execution_path.py::TestExecutionPath::test_condition_triggers_trade_below PASSED [ 38%]
+tests/test_execution_path.py::TestExecutionPath::test_condition_does_not_trigger_when_not_met PASSED [ 38%]
+tests/test_execution_path.py::TestExecutionPath::test_stop_loss_exit PASSED [ 38%]
+tests/test_execution_path.py::TestExecutionPath::test_take_profit_exit PASSED [ 38%]
+tests/test_fear_greed.py::TestFearGreedData::test_extreme_fear_boundary PASSED [ 38%]
+tests/test_fear_greed.py::TestFearGreedData::test_extreme_greed_boundary PASSED [ 38%]
+tests/test_fear_greed.py::TestFearGreedData::test_neutral_values PASSED  [ 39%]
+tests/test_fear_greed.py::TestFearGreedFetcher::test_init_default_ttl PASSED [ 39%]
+tests/test_fear_greed.py::TestFearGreedFetcher::test_init_custom_ttl PASSED [ 39%]
+tests/test_fear_greed.py::TestFearGreedFetcher::test_get_current_success PASSED [ 39%]
+tests/test_fear_greed.py::TestFearGreedFetcher::test_get_current_uses_cache PASSED [ 39%]
+tests/test_fear_greed.py::TestFearGreedFetcher::test_get_current_cache_expired PASSED [ 39%]
+tests/test_fear_greed.py::TestFearGreedFetcher::test_get_current_api_failure_returns_cached PASSED [ 39%]
+tests/test_fear_greed.py::TestFearGreedFetcher::test_get_current_api_failure_no_cache PASSED [ 39%]
+tests/test_fear_greed.py::TestFearGreedFetcher::test_get_historical PASSED [ 39%]
+tests/test_funding.py::TestFundingData::test_is_extreme_long_boundary PASSED [ 40%]
+tests/test_funding.py::TestFundingData::test_is_extreme_short_boundary PASSED [ 40%]
+tests/test_funding.py::TestFundingData::test_bias_crowded_long PASSED    [ 40%]
+tests/test_funding.py::TestFundingData::test_bias_crowded_short PASSED   [ 40%]
+tests/test_funding.py::TestFundingData::test_bias_slight_long PASSED     [ 40%]
+tests/test_funding.py::TestFundingData::test_bias_slight_short PASSED    [ 40%]
+tests/test_funding.py::TestFundingData::test_bias_neutral PASSED         [ 40%]
+tests/test_funding.py::TestFundingData::test_contrarian_signal_extreme_long PASSED [ 40%]
+tests/test_funding.py::TestFundingData::test_contrarian_signal_extreme_short PASSED [ 40%]
+tests/test_funding.py::TestFundingData::test_contrarian_signal_neutral PASSED [ 41%]
+tests/test_funding.py::TestFundingRateFetcher::test_init_default_cache PASSED [ 41%]
+tests/test_funding.py::TestFundingRateFetcher::test_init_custom_cache PASSED [ 41%]
+tests/test_funding.py::TestFundingRateFetcher::test_get_symbol_known PASSED [ 41%]
+tests/test_funding.py::TestFundingRateFetcher::test_get_symbol_unknown PASSED [ 41%]
+tests/test_funding.py::TestFundingRateFetcher::test_get_current_success PASSED [ 41%]
+tests/test_funding.py::TestFundingRateFetcher::test_get_current_uses_cache PASSED [ 41%]
+tests/test_funding.py::TestFundingRateFetcher::test_get_current_cache_expired PASSED [ 41%]
+tests/test_funding.py::TestFundingRateFetcher::test_get_current_api_error_returns_cached PASSED [ 41%]
+tests/test_funding.py::TestFundingRateFetcher::test_get_current_api_error_no_cache PASSED [ 42%]
+tests/test_funding.py::TestFundingRateFetcher::test_should_avoid_direction_long PASSED [ 42%]
+tests/test_funding.py::TestFundingRateFetcher::test_should_avoid_direction_short PASSED [ 42%]
+tests/test_funding.py::TestFundingRateFetcher::test_should_avoid_direction_neutral PASSED [ 42%]
+tests/test_funding.py::TestFundingRateFetcher::test_annualized_calculation PASSED [ 42%]
+tests/test_handoff.py::TestHandoff::test_callback_wiring PASSED          [ 42%]
+tests/test_handoff.py::TestHandoff::test_condition_format_compatibility PASSED [ 42%]
+tests/test_handoff.py::TestHandoff::test_trigger_condition_field PASSED  [ 42%]
+tests/test_handoff.py::TestHandoff::test_full_handoff_flow PASSED        [ 42%]
+tests/test_handoff.py::TestHandoff::test_multiple_conditions PASSED      [ 43%]
+tests/test_handoff.py::TestHandoff::test_condition_replacement PASSED    [ 43%]
+tests/test_handoff.py::TestHandoff::test_expired_conditions_filtered PASSED [ 43%]
+tests/test_imports.py::test_import_modules PASSED                        [ 43%]
+tests/test_integration.py::TestComponentHealth::test_adaptation_engine_health PASSED [ 43%]
+tests/test_integration.py::TestComponentHealth::test_adaptation_engine_health_degraded PASSED [ 43%]
+tests/test_integration.py::TestRuntimeStatePersistence::test_clear_state PASSED [ 43%]
+tests/test_integration.py::TestRuntimeStatePersistence::test_overwrite_state PASSED [ 43%]
+tests/test_integration.py::TestRuntimeStatePersistence::test_save_and_restore_state PASSED [ 43%]
+tests/test_integration.py::TestLearningLoopIntegration::test_adaptation_logged_to_database PASSED [ 44%]
+tests/test_integration.py::TestLearningLoopIntegration::test_blacklisted_coin_excluded_from_good_coins PASSED [ 44%]
+tests/test_integration.py::TestLearningLoopIntegration::test_cooldown_prevents_duplicate_adaptations PASSED [ 44%]
+tests/test_integration.py::TestLearningLoopIntegration::test_insight_to_blacklist_flow PASSED [ 44%]
+tests/test_integration.py::TestLearningLoopIntegration::test_time_rule_creation_flow PASSED [ 44%]
+tests/test_integration.py::TestSystemHealthAggregation::test_health_aggregation_failed PASSED [ 44%]
+tests/test_integration.py::TestSystemHealthAggregation::test_health_aggregation_logic PASSED [ 44%]
+tests/test_integration.py::TestKnowledgeBrainPersistence::test_coin_scores_persist PASSED [ 44%]
+tests/test_integration.py::TestKnowledgeBrainPersistence::test_patterns_persist PASSED [ 44%]
+tests/test_integration.py::TestKnowledgeBrainPersistence::test_rules_persist PASSED [ 45%]
+tests/test_journal.py::TestMarketContext::test_creation PASSED           [ 45%]
+tests/test_journal.py::TestMarketContext::test_defaults PASSED           [ 45%]
+tests/test_journal.py::TestMarketContext::test_to_dict PASSED            [ 45%]
+tests/test_journal.py::TestMarketContext::test_from_dict PASSED          [ 45%]
+tests/test_journal.py::TestJournalEntry::test_creation PASSED            [ 45%]
+tests/test_journal.py::TestJournalEntry::test_to_dict PASSED             [ 45%]
+tests/test_journal.py::TestJournalEntry::test_from_dict PASSED           [ 45%]
+tests/test_journal.py::TestJournalEntry::test_is_winner PASSED           [ 45%]
+tests/test_journal.py::TestJournalEntry::test_is_loser PASSED            [ 46%]
+tests/test_journal.py::TestJournalDatabase::test_create_and_insert PASSED [ 46%]
+tests/test_journal.py::TestJournalDatabase::test_update PASSED           [ 46%]
+tests/test_journal.py::TestJournalDatabase::test_query PASSED            [ 46%]
+tests/test_journal.py::TestJournalDatabase::test_count PASSED            [ 46%]
+tests/test_journal.py::TestTradeJournal::test_init PASSED                [ 46%]
+tests/test_journal.py::TestTradeJournal::test_record_entry PASSED        [ 46%]
+tests/test_journal.py::TestTradeJournal::test_record_entry_with_market_context PASSED [ 46%]
+tests/test_journal.py::TestTradeJournal::test_record_exit PASSED         [ 46%]
+tests/test_journal.py::TestTradeJournal::test_timing_context PASSED      [ 47%]
+tests/test_journal.py::TestJournalQueries::test_get_by_coin PASSED       [ 47%]
+tests/test_journal.py::TestJournalQueries::test_get_by_strategy PASSED   [ 47%]
+tests/test_journal.py::TestJournalQueries::test_get_by_exit_reason PASSED [ 47%]
+tests/test_journal.py::TestJournalQueries::test_get_winners PASSED       [ 47%]
+tests/test_journal.py::TestJournalQueries::test_get_losers PASSED        [ 47%]
+tests/test_journal.py::TestJournalStatistics::test_get_stats PASSED      [ 47%]
+tests/test_journal.py::TestJournalStatistics::test_get_stats_filtered_by_coin PASSED [ 47%]
+tests/test_journal.py::TestJournalStatistics::test_get_performance_by_coin PASSED [ 47%]
+tests/test_journal.py::TestAsyncWriteQueue::test_queue_operations PASSED [ 48%]
+tests/test_journal.py::TestMissedProfitCalculation::test_missed_profit_long_price_went_up PASSED [ 48%]
+tests/test_journal.py::TestMissedProfitCalculation::test_missed_profit_long_price_went_down PASSED [ 48%]
+tests/test_journal.py::TestMissedProfitCalculation::test_missed_profit_short_price_went_down PASSED [ 48%]
+tests/test_journal.py::TestMissedProfitCalculation::test_missed_profit_short_price_went_up PASSED [ 48%]
+tests/test_knowledge.py::TestCoinScore::test_create_coin_score PASSED    [ 48%]
+tests/test_knowledge.py::TestCoinScore::test_coin_score_to_dict PASSED   [ 48%]
+tests/test_knowledge.py::TestCoinScore::test_coin_score_from_dict PASSED [ 48%]
+tests/test_knowledge.py::TestCoinScore::test_recalculate_stats PASSED    [ 48%]
+tests/test_knowledge.py::TestTradingPattern::test_create_pattern PASSED  [ 49%]
+tests/test_knowledge.py::TestTradingPattern::test_pattern_win_rate_property PASSED [ 49%]
+tests/test_knowledge.py::TestTradingPattern::test_pattern_win_rate_zero_uses PASSED [ 49%]
+tests/test_knowledge.py::TestTradingPattern::test_pattern_to_dict PASSED [ 49%]
+tests/test_knowledge.py::TestTradingPattern::test_pattern_from_dict PASSED [ 49%]
+tests/test_knowledge.py::TestRegimeRule::test_create_rule PASSED         [ 49%]
+tests/test_knowledge.py::TestRegimeRule::test_invalid_action_raises PASSED [ 49%]
+tests/test_knowledge.py::TestRegimeRule::test_rule_check_condition_lt PASSED [ 49%]
+tests/test_knowledge.py::TestRegimeRule::test_rule_check_condition_gt PASSED [ 49%]
+tests/test_knowledge.py::TestRegimeRule::test_rule_check_condition_eq PASSED [ 50%]
+tests/test_knowledge.py::TestRegimeRule::test_rule_to_dict PASSED        [ 50%]
+tests/test_knowledge.py::TestRegimeRule::test_rule_from_dict PASSED      [ 50%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_initialization PASSED  [ 50%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_update_coin_score_first_trade PASSED [ 50%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_update_coin_score_multiple_trades PASSED [ 50%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_get_good_coins PASSED  [ 50%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_get_bad_coins PASSED   [ 50%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_blacklist_coin PASSED  [ 50%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_unblacklist_coin PASSED [ 50%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_blacklisted_excluded_from_good_coins PASSED [ 51%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_add_pattern PASSED     [ 51%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_update_pattern_stats PASSED [ 51%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_deactivate_pattern PASSED [ 51%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_get_winning_patterns PASSED [ 51%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_add_rule PASSED        [ 51%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_check_rules PASSED     [ 51%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_deactivate_rule PASSED [ 51%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_get_knowledge_context PASSED [ 51%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_get_coin_summary PASSED [ 52%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_get_coin_summary_not_found PASSED [ 52%]
+tests/test_knowledge.py::TestKnowledgeBrain::test_get_stats_summary PASSED [ 52%]
+tests/test_knowledge.py::TestKnowledgeBrainPersistence::test_persistence_across_restart PASSED [ 52%]
+tests/test_knowledge_integration.py::TestKnowledgeToPrompt::test_coin_summaries_in_knowledge PASSED [ 52%]
+tests/test_knowledge_integration.py::TestKnowledgeToPrompt::test_good_coins_in_context PASSED [ 52%]
+tests/test_knowledge_integration.py::TestKnowledgeToPrompt::test_blacklisted_coins_in_avoid PASSED [ 52%]
+tests/test_knowledge_integration.py::TestKnowledgeToPrompt::test_prompt_includes_coin_performance PASSED [ 52%]
+tests/test_knowledge_integration.py::TestKnowledgeToPrompt::test_prompt_includes_regime_rules PASSED [ 52%]
+tests/test_knowledge_integration.py::TestRegimeRuleEnforcement::test_no_trade_rule_skips_generation PASSED [ 53%]
+tests/test_knowledge_integration.py::TestRegimeRuleEnforcement::test_reduce_size_rule_halves_positions PASSED [ 53%]
+tests/test_knowledge_integration.py::TestCombinedPositionModifiers::test_blacklisted_coin_returns_zero PASSED [ 53%]
+tests/test_knowledge_integration.py::TestCombinedPositionModifiers::test_favored_coin_gets_boost PASSED [ 53%]
+tests/test_knowledge_integration.py::TestCombinedPositionModifiers::test_reduced_coin_gets_penalty PASSED [ 53%]
+tests/test_knowledge_integration.py::TestCombinedPositionModifiers::test_combined_modifiers_multiply PASSED [ 53%]
+tests/test_knowledge_integration.py::TestCombinedPositionModifiers::test_enforces_min_position_size PASSED [ 53%]
+tests/test_knowledge_integration.py::TestCombinedPositionModifiers::test_enforces_max_position_size PASSED [ 53%]
+tests/test_knowledge_integration.py::TestValidationWithKnowledge::test_blacklisted_coin_rejected PASSED [ 53%]
+tests/test_knowledge_integration.py::TestMarketStateForRules::test_btc_trend_detection PASSED [ 54%]
+tests/test_knowledge_integration.py::TestMarketStateForRules::test_time_context_included PASSED [ 54%]
+tests/test_knowledge_integration.py::TestFullIntegrationFlow::test_full_knowledge_flow PASSED [ 54%]
+tests/test_knowledge_integration.py::TestFullIntegrationFlow::test_pattern_context_flows_to_prompt PASSED [ 54%]
+tests/test_learning_validation.py::TestCoinScoreUpdates::test_winning_trade_increases_score PASSED [ 54%]
+tests/test_learning_validation.py::TestCoinScoreUpdates::test_losing_trade_decreases_score PASSED [ 54%]
+tests/test_learning_validation.py::TestCoinScoreUpdates::test_score_reflects_win_rate PASSED [ 54%]
+tests/test_learning_validation.py::TestCoinScoreUpdates::test_big_win_has_larger_impact PASSED [ 54%]
+tests/test_learning_validation.py::TestCoinScoreUpdates::test_streak_updates_trend PASSED [ 54%]
+tests/test_learning_validation.py::TestPatternConfidenceUpdates::test_pattern_confidence_increases_on_win PASSED [ 55%]
+tests/test_learning_validation.py::TestPatternConfidenceUpdates::test_pattern_confidence_decreases_on_loss PASSED [ 55%]
+tests/test_learning_validation.py::TestPatternConfidenceUpdates::test_pattern_usage_tracked PASSED [ 55%]
+tests/test_learning_validation.py::TestPatternConfidenceUpdates::test_failing_pattern_loses_confidence PASSED [ 55%]
+tests/test_learning_validation.py::TestAdaptationTriggers::test_poor_performer_identified PASSED [ 55%]
+tests/test_learning_validation.py::TestAdaptationTriggers::test_good_performer_identified PASSED [ 55%]
+tests/test_learning_validation.py::TestAdaptationTriggers::test_adaptation_engine_processes_insight PASSED [ 55%]
+tests/test_learning_validation.py::TestAdaptationTriggers::test_time_based_pattern_detection PASSED [ 55%]
+tests/test_learning_validation.py::TestStrategistKnowledgeUsage::test_blacklist_in_context PASSED [ 55%]
+tests/test_learning_validation.py::TestStrategistKnowledgeUsage::test_good_coins_in_context PASSED [ 56%]
+tests/test_learning_validation.py::TestStrategistKnowledgeUsage::test_patterns_in_context PASSED [ 56%]
+tests/test_learning_validation.py::TestStrategistKnowledgeUsage::test_rules_in_context PASSED [ 56%]
+tests/test_learning_validation.py::TestEndToEndLearningLoop::test_trade_updates_knowledge PASSED [ 56%]
+tests/test_learning_validation.py::TestEndToEndLearningLoop::test_multiple_coins_tracked_independently PASSED [ 56%]
+tests/test_learning_validation.py::TestEndToEndLearningLoop::test_pattern_and_coin_both_update PASSED [ 56%]
+tests/test_learning_validation.py::TestEndToEndLearningLoop::test_learning_accumulates_over_time PASSED [ 56%]
+tests/test_learning_validation.py::TestLearningMetrics::test_win_rate_calculation PASSED [ 56%]
+tests/test_learning_validation.py::TestLearningMetrics::test_total_pnl_tracking PASSED [ 56%]
+tests/test_learning_validation.py::TestLearningMetrics::test_trade_count_tracking PASSED [ 57%]
+tests/test_llm_interface.py::TestLLMInterface::test_default_configuration PASSED [ 57%]
+tests/test_llm_interface.py::TestLLMInterface::test_custom_configuration PASSED [ 57%]
+tests/test_llm_interface.py::TestLLMInterface::test_get_model_info PASSED [ 57%]
+tests/test_llm_interface.py::TestLLMInterface::test_query_mocked PASSED  [ 57%]
+tests/test_llm_interface.py::TestLLMInterface::test_query_json_mocked PASSED [ 57%]
+tests/test_llm_interface.py::TestLLMInterface::test_query_json_with_markdown PASSED [ 57%]
+tests/test_llm_interface.py::TestLLMInterface::test_get_trading_decision_mocked PASSED [ 57%]
+tests/test_llm_interface.py::TestLLMInterface::test_get_trading_decision_fallback PASSED [ 57%]
+tests/test_llm_interface.py::TestLLMInterface::test_analyze_trade_mocked PASSED [ 58%]
+tests/test_llm_interface.py::TestLLMInterface::test_connection_error_handling PASSED [ 58%]
+tests/test_llm_interface.py::TestLLMInterface::test_activity_logging PASSED [ 58%]
+tests/test_llm_interface.py::TestRealLLMIntegration::test_real_llm_query PASSED [ 58%]
+tests/test_llm_interface.py::TestRealLLMIntegration::test_real_llm_connection_test PASSED [ 58%]
+tests/test_llm_interface.py::test_llm_interface_import PASSED            [ 58%]
+tests/test_market_feed.py::TestDataClasses::test_price_tick_creation PASSED [ 58%]
+tests/test_market_feed.py::TestDataClasses::test_trade_event_creation PASSED [ 58%]
+tests/test_market_feed.py::TestDataClasses::test_coin_config_creation PASSED [ 58%]
+tests/test_market_feed.py::TestMarketFeedInitialization::test_init_with_coins_list PASSED [ 59%]
+tests/test_market_feed.py::TestMarketFeedInitialization::test_init_with_lowercase_coins PASSED [ 59%]
+tests/test_market_feed.py::TestMarketFeedInitialization::test_init_unknown_coin_gets_default PASSED [ 59%]
+tests/test_market_feed.py::TestMarketFeedInitialization::test_symbol_mapping PASSED [ 59%]
+tests/test_market_feed.py::TestMarketFeedInitialization::test_initial_status PASSED [ 59%]
+tests/test_market_feed.py::TestStreamUrlBuilding::test_get_ws_url_bybit PASSED [ 59%]
+tests/test_market_feed.py::TestStreamUrlBuilding::test_get_ws_url_binance PASSED [ 59%]
+tests/test_market_feed.py::TestStreamUrlBuilding::test_exchange_config PASSED [ 59%]
+tests/test_market_feed.py::TestMessageHandling::test_handle_binance_trade PASSED [ 59%]
+tests/test_market_feed.py::TestMessageHandling::test_handle_bybit_trade PASSED [ 60%]
+tests/test_market_feed.py::TestMessageHandling::test_ignore_unknown_symbol PASSED [ 60%]
+tests/test_market_feed.py::TestCallbacks::test_subscribe_price PASSED    [ 60%]
+tests/test_market_feed.py::TestCallbacks::test_subscribe_trades PASSED   [ 60%]
+tests/test_market_feed.py::TestCallbacks::test_subscribe_status PASSED   [ 60%]
+tests/test_market_feed.py::TestCallbacks::test_multiple_callbacks PASSED [ 60%]
+tests/test_market_feed.py::TestCallbacks::test_callback_error_doesnt_break_feed PASSED [ 60%]
+tests/test_market_feed.py::TestPriceCache::test_get_price PASSED         [ 60%]
+tests/test_market_feed.py::TestPriceCache::test_get_price_not_found PASSED [ 60%]
+tests/test_market_feed.py::TestPriceCache::test_get_price_case_insensitive PASSED [ 61%]
+tests/test_market_feed.py::TestPriceCache::test_get_all_prices PASSED    [ 61%]
+tests/test_market_feed.py::TestStatus::test_get_status PASSED            [ 61%]
+tests/test_market_feed.py::TestStatus::test_status_emit PASSED           [ 61%]
+tests/test_market_feed.py::TestIntegration::test_real_connection SKIPPED [ 61%]
+tests/test_news_feed.py::TestNewsItem::test_is_bullish PASSED            [ 61%]
+tests/test_news_feed.py::TestNewsItem::test_is_bearish PASSED            [ 61%]
+tests/test_news_feed.py::TestNewsItem::test_is_neutral PASSED            [ 61%]
+tests/test_news_feed.py::TestNewsItem::test_sentiment_label_bullish PASSED [ 61%]
+tests/test_news_feed.py::TestNewsItem::test_sentiment_label_bearish PASSED [ 62%]
+tests/test_news_feed.py::TestNewsItem::test_sentiment_label_neutral PASSED [ 62%]
+tests/test_news_feed.py::TestNewsFeed::test_breaking_news PASSED         [ 62%]
+tests/test_news_feed.py::TestNewsFeed::test_bullish_count PASSED         [ 62%]
+tests/test_news_feed.py::TestNewsFeed::test_overall_sentiment PASSED     [ 62%]
+tests/test_news_feed.py::TestNewsFeed::test_overall_sentiment_empty PASSED [ 62%]
+tests/test_news_feed.py::TestNewsFeed::test_for_coin PASSED              [ 62%]
+tests/test_news_feed.py::TestNewsFeedFetcher::test_init_defaults PASSED  [ 62%]
+tests/test_news_feed.py::TestNewsFeedFetcher::test_init_with_token PASSED [ 62%]
+tests/test_news_feed.py::TestNewsFeedFetcher::test_calculate_sentiment_positive PASSED [ 62%]
+tests/test_news_feed.py::TestNewsFeedFetcher::test_calculate_sentiment_negative PASSED [ 63%]
+tests/test_news_feed.py::TestNewsFeedFetcher::test_calculate_sentiment_zero_votes PASSED [ 63%]
+tests/test_news_feed.py::TestNewsFeedFetcher::test_calculate_sentiment_equal_votes PASSED [ 63%]
+tests/test_news_feed.py::TestNewsFeedFetcher::test_get_news_success PASSED [ 63%]
+tests/test_news_feed.py::TestNewsFeedFetcher::test_get_news_uses_cache PASSED [ 63%]
+tests/test_news_feed.py::TestNewsFeedFetcher::test_get_news_api_error_returns_cache PASSED [ 63%]
+tests/test_news_feed.py::TestNewsFeedFetcher::test_get_news_api_error_no_cache PASSED [ 63%]
+tests/test_news_feed.py::TestNewsFeedFetcher::test_build_params_no_token PASSED [ 63%]
+tests/test_news_feed.py::TestNewsFeedFetcher::test_build_params_with_token PASSED [ 63%]
+tests/test_news_feed.py::TestNewsFeedFetcher::test_build_params_with_currencies PASSED [ 64%]
+tests/test_news_feed.py::TestNewsFeedFetcher::test_parse_response_breaking_news PASSED [ 64%]
+tests/test_orderbook.py::TestPriceWall::test_is_bid_wall PASSED          [ 64%]
+tests/test_orderbook.py::TestPriceWall::test_is_ask_wall PASSED          [ 64%]
+tests/test_orderbook.py::TestOrderBookDepth::test_bias_strong_bid PASSED [ 64%]
+tests/test_orderbook.py::TestOrderBookDepth::test_bias_strong_ask PASSED [ 64%]
+tests/test_orderbook.py::TestOrderBookDepth::test_bias_balanced PASSED   [ 64%]
+tests/test_orderbook.py::TestOrderBookDepth::test_is_bullish PASSED      [ 64%]
+tests/test_orderbook.py::TestOrderBookDepth::test_is_bearish PASSED      [ 64%]
+tests/test_orderbook.py::TestOrderBookDepth::test_has_bid_walls PASSED   [ 65%]
+tests/test_orderbook.py::TestOrderBookDepth::test_has_ask_walls PASSED   [ 65%]
+tests/test_orderbook.py::TestOrderBookDepth::test_nearest_bid_wall PASSED [ 65%]
+tests/test_orderbook.py::TestOrderBookDepth::test_nearest_bid_wall_none PASSED [ 65%]
+tests/test_orderbook.py::TestOrderBookDepth::test_nearest_ask_wall PASSED [ 65%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_init_defaults PASSED [ 65%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_init_custom PASSED  [ 65%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_calculate_imbalance_positive PASSED [ 65%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_calculate_imbalance_negative PASSED [ 65%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_calculate_imbalance_zero PASSED [ 66%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_calculate_imbalance_balanced PASSED [ 66%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_detect_walls_finds_large_orders PASSED [ 66%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_detect_walls_empty_orders PASSED [ 66%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_detect_walls_no_walls PASSED [ 66%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_get_spread PASSED   [ 66%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_get_spread_zero PASSED [ 66%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_analyze_success PASSED [ 66%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_analyze_uses_cache PASSED [ 66%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_analyze_api_error_returns_cache PASSED [ 67%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_analyze_api_error_no_cache PASSED [ 67%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_parse_response_with_walls PASSED [ 67%]
+tests/test_orderbook.py::TestOrderBookAnalyzer::test_empty_depth PASSED  [ 67%]
+tests/test_pattern_library.py::TestPatternMatch::test_pattern_match_creation PASSED [ 67%]
+tests/test_pattern_library.py::TestPatternMatch::test_full_match PASSED  [ 67%]
+tests/test_pattern_library.py::TestPatternSuggestion::test_suggestion_creation PASSED [ 67%]
+tests/test_pattern_library.py::TestPatternLibrary::test_seed_patterns_added PASSED [ 67%]
+tests/test_pattern_library.py::TestPatternLibrary::test_seed_patterns_not_duplicated PASSED [ 67%]
+tests/test_pattern_library.py::TestPatternLibrary::test_get_pattern PASSED [ 68%]
+tests/test_pattern_library.py::TestPatternLibrary::test_get_pattern_not_found PASSED [ 68%]
+tests/test_pattern_library.py::TestPatternLibrary::test_get_active_patterns PASSED [ 68%]
+tests/test_pattern_library.py::TestPatternLibrary::test_get_high_confidence_patterns PASSED [ 68%]
+tests/test_pattern_library.py::TestPatternLibrary::test_create_pattern PASSED [ 68%]
+tests/test_pattern_library.py::TestPatternLibrary::test_create_pattern_unique_ids PASSED [ 68%]
+tests/test_pattern_library.py::TestPatternLibrary::test_create_pattern_from_winning_trade PASSED [ 68%]
+tests/test_pattern_library.py::TestPatternLibrary::test_create_pattern_from_losing_trade_returns_none PASSED [ 68%]
+tests/test_pattern_library.py::TestPatternLibrary::test_match_conditions_full_match PASSED [ 68%]
+tests/test_pattern_library.py::TestPatternLibrary::test_match_conditions_partial_match PASSED [ 69%]
+tests/test_pattern_library.py::TestPatternLibrary::test_match_conditions_no_match PASSED [ 69%]
+tests/test_pattern_library.py::TestPatternLibrary::test_match_with_operator_conditions PASSED [ 69%]
+tests/test_pattern_library.py::TestPatternLibrary::test_find_similar_patterns PASSED [ 69%]
+tests/test_pattern_library.py::TestPatternLibrary::test_calculate_confidence_not_enough_data PASSED [ 69%]
+tests/test_pattern_library.py::TestPatternLibrary::test_calculate_confidence_winning_pattern PASSED [ 69%]
+tests/test_pattern_library.py::TestPatternLibrary::test_calculate_confidence_losing_pattern PASSED [ 69%]
+tests/test_pattern_library.py::TestPatternLibrary::test_record_pattern_outcome PASSED [ 69%]
+tests/test_pattern_library.py::TestPatternLibrary::test_auto_deactivate_low_confidence PASSED [ 69%]
+tests/test_pattern_library.py::TestPatternLibrary::test_get_pattern_context PASSED [ 70%]
+tests/test_pattern_library.py::TestPatternLibrary::test_get_suggested_patterns PASSED [ 70%]
+tests/test_pattern_library.py::TestPatternLibrary::test_get_position_modifier PASSED [ 70%]
+tests/test_pattern_library.py::TestPatternLibrary::test_get_stats_summary PASSED [ 70%]
+tests/test_pattern_library.py::TestPatternLibrary::test_deactivate_pattern PASSED [ 70%]
+tests/test_pattern_library.py::TestPatternLibrary::test_reactivate_pattern PASSED [ 70%]
+tests/test_pattern_library.py::TestPatternLibraryIntegration::test_full_pattern_lifecycle PASSED [ 70%]
+tests/test_pattern_library.py::TestPatternLibraryIntegration::test_pattern_persistence PASSED [ 70%]
+tests/test_profitability.py::TestMetricCalculations::test_all_losers PASSED [ 70%]
+tests/test_profitability.py::TestMetricCalculations::test_all_winners PASSED [ 71%]
+tests/test_profitability.py::TestMetricCalculations::test_empty_trades PASSED [ 71%]
+tests/test_profitability.py::TestMetricCalculations::test_expectancy_calculation PASSED [ 71%]
+tests/test_profitability.py::TestMetricCalculations::test_mixed_trades PASSED [ 71%]
+tests/test_profitability.py::TestMetricCalculations::test_return_percentage PASSED [ 71%]
+tests/test_profitability.py::TestMetricCalculations::test_win_rate_calculation PASSED [ 71%]
+tests/test_profitability.py::TestDrawdownCalculation::test_no_drawdown PASSED [ 71%]
+tests/test_profitability.py::TestDrawdownCalculation::test_recovery_drawdown PASSED [ 71%]
+tests/test_profitability.py::TestDrawdownCalculation::test_single_loss_drawdown PASSED [ 71%]
+tests/test_profitability.py::TestSnapshotPersistence::test_get_historical_snapshots PASSED [ 72%]
+tests/test_profitability.py::TestSnapshotPersistence::test_snapshot_to_dict_from_dict PASSED [ 72%]
+tests/test_profitability.py::TestSnapshotPersistence::test_take_snapshot PASSED [ 72%]
+tests/test_profitability.py::TestDimensionAnalysis::test_by_coin PASSED  [ 72%]
+tests/test_profitability.py::TestDimensionAnalysis::test_by_day_of_week PASSED [ 72%]
+tests/test_profitability.py::TestDimensionAnalysis::test_by_hour PASSED  [ 72%]
+tests/test_profitability.py::TestDimensionAnalysis::test_contribution_percentage PASSED [ 72%]
+tests/test_profitability.py::TestEquityCurve::test_equity_curve_balance_progression PASSED [ 72%]
+tests/test_profitability.py::TestEquityCurve::test_equity_curve_shape PASSED [ 72%]
+tests/test_profitability.py::TestImprovementMetrics::test_improvement_metrics_structure PASSED [ 73%]
+tests/test_profitability.py::TestSnapshotScheduler::test_first_check_takes_hourly PASSED [ 73%]
+tests/test_profitability.py::TestSnapshotScheduler::test_second_check_no_snapshot PASSED [ 73%]
+tests/test_profitability.py::TestHealthCheck::test_health_check_degraded_without_snapshots PASSED [ 73%]
+tests/test_profitability.py::TestHealthCheck::test_health_check_structure PASSED [ 73%]
+tests/test_quick_update.py::TestTradeResultDataclass::test_basic_creation PASSED [ 73%]
+tests/test_quick_update.py::TestTradeResultDataclass::test_return_pct_long PASSED [ 73%]
+tests/test_quick_update.py::TestTradeResultDataclass::test_return_pct_short PASSED [ 73%]
+tests/test_quick_update.py::TestTradeResultDataclass::test_duration_seconds PASSED [ 73%]
+tests/test_quick_update.py::TestQuickUpdateResult::test_str_winning_trade PASSED [ 74%]
+tests/test_quick_update.py::TestQuickUpdateResult::test_str_losing_trade_with_adaptation PASSED [ 74%]
+tests/test_quick_update.py::TestQuickUpdateProcessing::test_winning_trade_updates_score PASSED [ 74%]
+tests/test_quick_update.py::TestQuickUpdateProcessing::test_losing_trade_updates_score PASSED [ 74%]
+tests/test_quick_update.py::TestQuickUpdateProcessing::test_blacklist_triggered PASSED [ 74%]
+tests/test_quick_update.py::TestQuickUpdateProcessing::test_processing_time_tracked PASSED [ 74%]
+tests/test_quick_update.py::TestQuickUpdateProcessing::test_stats_updated PASSED [ 74%]
+tests/test_quick_update.py::TestPatternUpdates::test_pattern_confidence_updated PASSED [ 74%]
+tests/test_quick_update.py::TestPatternUpdates::test_no_pattern_update_without_pattern_id PASSED [ 74%]
+tests/test_quick_update.py::TestPerformance::test_single_update_fast PASSED [ 75%]
+tests/test_quick_update.py::TestPerformance::test_bulk_updates_fast PASSED [ 75%]
+tests/test_quick_update.py::TestSniperIntegration::test_sniper_calls_quick_update PASSED [ 75%]
+tests/test_reflection.py::TestInsightDataclass::test_insight_from_dict PASSED [ 75%]
+tests/test_reflection.py::TestInsightDataclass::test_insight_to_dict PASSED [ 75%]
+tests/test_reflection.py::TestInsightDataclass::test_insight_str PASSED  [ 75%]
+tests/test_reflection.py::TestCoinAnalysis::test_analyze_by_coin PASSED  [ 75%]
+tests/test_reflection.py::TestTimeAnalysis::test_analyze_by_time PASSED  [ 75%]
+tests/test_reflection.py::TestRegimeAnalysis::test_analyze_by_regime PASSED [ 75%]
+tests/test_reflection.py::TestExitAnalysis::test_analyze_exits PASSED    [ 75%]
+tests/test_reflection.py::TestLLMInsightGeneration::test_generate_insights PASSED [ 76%]
+tests/test_reflection.py::TestLLMInsightGeneration::test_parse_llm_response PASSED [ 76%]
+tests/test_reflection.py::TestLLMInsightGeneration::test_parse_llm_response_with_markdown PASSED [ 76%]
+tests/test_reflection.py::TestTriggerConditions::test_should_reflect_time_trigger PASSED [ 76%]
+tests/test_reflection.py::TestTriggerConditions::test_should_reflect_trade_trigger PASSED [ 76%]
+tests/test_reflection.py::TestTriggerConditions::test_should_not_reflect_early PASSED [ 76%]
+tests/test_reflection.py::TestTriggerConditions::test_initial_reflection_needs_min_trades PASSED [ 76%]
+tests/test_reflection.py::TestFullReflection::test_full_reflect PASSED   [ 76%]
+tests/test_reflection.py::TestFullReflection::test_reflect_updates_state PASSED [ 76%]
+tests/test_reflection.py::TestFullReflection::test_reflect_empty_journal PASSED [ 77%]
+tests/test_reflection.py::TestDatabaseIntegration::test_reflection_logged_to_db PASSED [ 77%]
+tests/test_reflection.py::TestOnTradeClose::test_on_trade_close_increments_counter PASSED [ 77%]
+tests/test_rsi.py::TestRSIData::test_is_overbought_boundary PASSED       [ 77%]
+tests/test_rsi.py::TestRSIData::test_is_oversold_boundary PASSED         [ 77%]
+tests/test_rsi.py::TestRSIData::test_condition_oversold PASSED           [ 77%]
+tests/test_rsi.py::TestRSIData::test_condition_overbought PASSED         [ 77%]
+tests/test_rsi.py::TestRSIData::test_condition_neutral PASSED            [ 77%]
+tests/test_rsi.py::TestRSICalculator::test_init_default_period PASSED    [ 77%]
+tests/test_rsi.py::TestRSICalculator::test_init_custom_period PASSED     [ 78%]
+tests/test_rsi.py::TestRSICalculator::test_calculate_from_closes_all_gains PASSED [ 78%]
+tests/test_rsi.py::TestRSICalculator::test_calculate_from_closes_all_losses PASSED [ 78%]
+tests/test_rsi.py::TestRSICalculator::test_calculate_from_closes_neutral PASSED [ 78%]
+tests/test_rsi.py::TestRSICalculator::test_calculate_from_closes_insufficient_data PASSED [ 78%]
+tests/test_rsi.py::TestRSICalculator::test_calculate_uses_fetcher PASSED [ 78%]
+tests/test_rsi.py::TestRSICalculator::test_calculate_insufficient_candles PASSED [ 78%]
+tests/test_rsi.py::TestRSICalculator::test_get_multi_timeframe PASSED    [ 78%]
+tests/test_rsi.py::TestRSICalculator::test_wilder_smoothing_accuracy PASSED [ 78%]
+tests/test_rule_creation.py::TestTradingRule::test_rule_creation PASSED  [ 79%]
+tests/test_rule_creation.py::TestTradingRule::test_success_rate_zero_trades PASSED [ 79%]
+tests/test_rule_creation.py::TestTradingRule::test_success_rate_calculation PASSED [ 79%]
+tests/test_rule_creation.py::TestTradingRule::test_total_trades PASSED   [ 79%]
+tests/test_rule_creation.py::TestTradingRule::test_to_dict PASSED        [ 79%]
+tests/test_rule_creation.py::TestTradingRule::test_to_text PASSED        [ 79%]
+tests/test_rule_creation.py::TestRuleManager::test_init_default PASSED   [ 79%]
+tests/test_rule_creation.py::TestRuleManager::test_skip_low_confidence_learning PASSED [ 79%]
+tests/test_rule_creation.py::TestRuleManager::test_skip_without_llm PASSED [ 79%]
+tests/test_rule_creation.py::TestRuleManager::test_get_active_rules_empty PASSED [ 80%]
+tests/test_rule_creation.py::TestRuleManager::test_get_testing_rules_empty PASSED [ 80%]
+tests/test_rule_creation.py::TestRuleManager::test_get_all_rules_empty PASSED [ 80%]
+tests/test_rule_creation.py::TestRuleRecordOutcome::test_record_success PASSED [ 80%]
+tests/test_rule_creation.py::TestRuleRecordOutcome::test_record_failure PASSED [ 80%]
+tests/test_rule_creation.py::TestRuleRecordOutcome::test_record_multiple_outcomes PASSED [ 80%]
+tests/test_rule_creation.py::TestRuleEvaluation::test_no_evaluation_below_threshold PASSED [ 80%]
+tests/test_rule_creation.py::TestRuleEvaluation::test_promote_to_active PASSED [ 80%]
+tests/test_rule_creation.py::TestRuleEvaluation::test_reject_rule PASSED [ 80%]
+tests/test_rule_creation.py::TestRuleEvaluation::test_continue_testing_in_middle PASSED [ 81%]
+tests/test_rule_creation.py::TestRuleSummary::test_empty_summary PASSED  [ 81%]
+tests/test_rule_creation.py::TestRuleSummary::test_summary_with_rules PASSED [ 81%]
+tests/test_rule_creation.py::TestConfigurableThresholds::test_default_thresholds PASSED [ 81%]
+tests/test_rule_creation.py::test_rule_manager_import PASSED             [ 81%]
+tests/test_sniper.py::TestTradeCondition::test_creation PASSED           [ 81%]
+tests/test_sniper.py::TestTradeCondition::test_is_expired PASSED         [ 81%]
+tests/test_sniper.py::TestTradeCondition::test_serialization PASSED      [ 81%]
+tests/test_sniper.py::TestSniperInitialization::test_init_defaults PASSED [ 81%]
+tests/test_sniper.py::TestSniperInitialization::test_init_custom_balance PASSED [ 82%]
+tests/test_sniper.py::TestSniperInitialization::test_init_status PASSED  [ 82%]
+tests/test_sniper.py::TestConditionManagement::test_set_conditions PASSED [ 82%]
+tests/test_sniper.py::TestConditionManagement::test_set_conditions_filters_expired PASSED [ 82%]
+tests/test_sniper.py::TestConditionManagement::test_add_condition PASSED [ 82%]
+tests/test_sniper.py::TestConditionManagement::test_add_expired_condition_rejected PASSED [ 82%]
+tests/test_sniper.py::TestConditionManagement::test_clear_conditions PASSED [ 82%]
+tests/test_sniper.py::TestEntryTriggering::test_trigger_above PASSED     [ 82%]
+tests/test_sniper.py::TestEntryTriggering::test_trigger_below PASSED     [ 82%]
+tests/test_sniper.py::TestEntryTriggering::test_position_created_correctly PASSED [ 83%]
+tests/test_sniper.py::TestExitLogic::test_stop_loss_long PASSED          [ 83%]
+tests/test_sniper.py::TestExitLogic::test_take_profit_long PASSED        [ 83%]
+tests/test_sniper.py::TestExitLogic::test_stop_loss_short PASSED         [ 83%]
+tests/test_sniper.py::TestExitLogic::test_take_profit_short PASSED       [ 83%]
+tests/test_sniper.py::TestPnLCalculation::test_pnl_long_profit PASSED    [ 83%]
+tests/test_sniper.py::TestPnLCalculation::test_pnl_long_loss PASSED      [ 83%]
+tests/test_sniper.py::TestPnLCalculation::test_pnl_short_profit PASSED   [ 83%]
+tests/test_sniper.py::TestRiskLimits::test_max_positions_limit PASSED    [ 83%]
+tests/test_sniper.py::TestRiskLimits::test_max_per_coin_limit PASSED     [ 84%]
+tests/test_sniper.py::TestRiskLimits::test_exposure_limit PASSED         [ 84%]
+tests/test_sniper.py::TestPerformance::test_tick_processing_speed PASSED [ 84%]
+tests/test_sniper.py::TestStatePersistence::test_save_and_load_state PASSED [ 84%]
+tests/test_sniper.py::TestCallbacks::test_entry_callback PASSED          [ 84%]
+tests/test_sniper.py::TestCallbacks::test_exit_callback PASSED           [ 84%]
+tests/test_social_sentiment.py::TestSocialMetrics::test_is_trending PASSED [ 84%]
+tests/test_social_sentiment.py::TestSocialMetrics::test_is_not_trending PASSED [ 84%]
+tests/test_social_sentiment.py::TestSocialMetrics::test_is_bullish_sentiment PASSED [ 84%]
+tests/test_social_sentiment.py::TestSocialMetrics::test_is_bearish_sentiment PASSED [ 85%]
+tests/test_social_sentiment.py::TestSocialMetrics::test_is_neutral_sentiment PASSED [ 85%]
+tests/test_social_sentiment.py::TestSocialMetrics::test_sentiment_label_bullish PASSED [ 85%]
+tests/test_social_sentiment.py::TestSocialMetrics::test_sentiment_label_bearish PASSED [ 85%]
+tests/test_social_sentiment.py::TestSocialMetrics::test_sentiment_label_neutral PASSED [ 85%]
+tests/test_social_sentiment.py::TestSocialMetrics::test_has_social_spike PASSED [ 85%]
+tests/test_social_sentiment.py::TestSocialMetrics::test_no_social_spike PASSED [ 85%]
+tests/test_social_sentiment.py::TestSocialMetrics::test_has_social_spike_no_history PASSED [ 85%]
+tests/test_social_sentiment.py::TestSocialMetrics::test_volume_multiplier PASSED [ 85%]
+tests/test_social_sentiment.py::TestSocialMetrics::test_volume_multiplier_no_history PASSED [ 86%]
+tests/test_social_sentiment.py::TestSocialSentimentFetcher::test_init_defaults PASSED [ 86%]
+tests/test_social_sentiment.py::TestSocialSentimentFetcher::test_init_with_key PASSED [ 86%]
+tests/test_social_sentiment.py::TestSocialSentimentFetcher::test_get_metrics_success PASSED [ 86%]
+tests/test_social_sentiment.py::TestSocialSentimentFetcher::test_get_metrics_uses_cache PASSED [ 86%]
+tests/test_social_sentiment.py::TestSocialSentimentFetcher::test_get_metrics_api_error_returns_cache PASSED [ 86%]
+tests/test_social_sentiment.py::TestSocialSentimentFetcher::test_get_metrics_api_error_no_cache PASSED [ 86%]
+tests/test_social_sentiment.py::TestSocialSentimentFetcher::test_get_all_metrics PASSED [ 86%]
+tests/test_social_sentiment.py::TestSocialSentimentFetcher::test_detect_social_spike PASSED [ 86%]
+tests/test_social_sentiment.py::TestSocialSentimentFetcher::test_get_trending_coins PASSED [ 87%]
+tests/test_social_sentiment.py::TestSocialSentimentFetcher::test_update_historical_volume PASSED [ 87%]
+tests/test_social_sentiment.py::TestSocialSentimentFetcher::test_get_average_volume PASSED [ 87%]
+tests/test_social_sentiment.py::TestSocialSentimentFetcher::test_get_average_volume_no_history PASSED [ 87%]
+tests/test_social_sentiment.py::TestSocialSentimentFetcher::test_parse_response_list_format PASSED [ 87%]
+tests/test_strategist.py::TestTradeCondition::test_create_condition PASSED [ 87%]
+tests/test_strategist.py::TestTradeCondition::test_is_expired PASSED     [ 87%]
+tests/test_strategist.py::TestTradeCondition::test_is_triggered_above PASSED [ 87%]
+tests/test_strategist.py::TestTradeCondition::test_is_triggered_below PASSED [ 87%]
+tests/test_strategist.py::TestTradeCondition::test_calculate_stop_loss_long PASSED [ 87%]
+tests/test_strategist.py::TestTradeCondition::test_calculate_take_profit_long PASSED [ 88%]
+tests/test_strategist.py::TestTradeCondition::test_to_dict PASSED        [ 88%]
+tests/test_strategist.py::TestTradeCondition::test_from_dict PASSED      [ 88%]
+tests/test_strategist.py::TestTradeCondition::test_str_representation PASSED [ 88%]
+tests/test_strategist.py::TestStrategist::test_strategist_initialization PASSED [ 88%]
+tests/test_strategist.py::TestStrategist::test_subscribe_conditions PASSED [ 88%]
+tests/test_strategist.py::TestStrategist::test_generate_conditions PASSED [ 88%]
+tests/test_strategist.py::TestStrategist::test_generate_no_conditions PASSED [ 88%]
+tests/test_strategist.py::TestStrategist::test_generate_conditions_llm_error PASSED [ 88%]
+tests/test_strategist.py::TestStrategist::test_generate_conditions_invalid_json PASSED [ 89%]
+tests/test_strategist.py::TestStrategist::test_validate_condition_position_size PASSED [ 89%]
+tests/test_strategist.py::TestStrategist::test_validate_condition_trigger_price PASSED [ 89%]
+tests/test_strategist.py::TestStrategist::test_build_context PASSED      [ 89%]
+tests/test_strategist.py::TestStrategist::test_parse_response_with_code_block PASSED [ 89%]
+tests/test_strategist.py::TestStrategist::test_get_stats PASSED          [ 89%]
+tests/test_strategist.py::TestStrategist::test_remove_expired_conditions PASSED [ 89%]
+tests/test_strategist.py::TestStrategist::test_callback_notification PASSED [ 89%]
+tests/test_support_resistance.py::TestPriceLevel::test_price_in_zone_true PASSED [ 89%]
+tests/test_support_resistance.py::TestPriceLevel::test_price_in_zone_false PASSED [ 90%]
+tests/test_support_resistance.py::TestSRLevels::test_support_distance_pct PASSED [ 90%]
+tests/test_support_resistance.py::TestSRLevels::test_resistance_distance_pct PASSED [ 90%]
+tests/test_support_resistance.py::TestSRLevels::test_distance_pct_none_when_no_level PASSED [ 90%]
+tests/test_support_resistance.py::TestSRLevels::test_in_support_zone PASSED [ 90%]
+tests/test_support_resistance.py::TestSRLevels::test_in_resistance_zone PASSED [ 90%]
+tests/test_support_resistance.py::TestSRLevelDetector::test_init_defaults PASSED [ 90%]
+tests/test_support_resistance.py::TestSRLevelDetector::test_init_custom PASSED [ 90%]
+tests/test_support_resistance.py::TestSRLevelDetector::test_find_swing_high PASSED [ 90%]
+tests/test_support_resistance.py::TestSRLevelDetector::test_find_swing_low PASSED [ 91%]
+tests/test_support_resistance.py::TestSRLevelDetector::test_cluster_levels_single PASSED [ 91%]
+tests/test_support_resistance.py::TestSRLevelDetector::test_cluster_levels_multiple_same_zone PASSED [ 91%]
+tests/test_support_resistance.py::TestSRLevelDetector::test_cluster_levels_multiple_zones PASSED [ 91%]
+tests/test_support_resistance.py::TestSRLevelDetector::test_cluster_levels_empty PASSED [ 91%]
+tests/test_support_resistance.py::TestSRLevelDetector::test_detect_uses_fetcher PASSED [ 91%]
+tests/test_support_resistance.py::TestSRLevelDetector::test_detect_filters_support_below_price PASSED [ 91%]
+tests/test_support_resistance.py::TestSRLevelDetector::test_detect_filters_resistance_above_price PASSED [ 91%]
+tests/test_support_resistance.py::TestSRLevelDetector::test_detect_sorts_by_proximity PASSED [ 91%]
+tests/test_support_resistance.py::TestSRLevelDetector::test_insufficient_candles PASSED [ 92%]
+tests/test_technical_manager.py::TestTechnicalSnapshot::test_current_price_from_vwap PASSED [ 92%]
+tests/test_technical_manager.py::TestTechnicalSnapshot::test_current_price_from_sr_levels PASSED [ 92%]
+tests/test_technical_manager.py::TestTechnicalSnapshot::test_current_price_default PASSED [ 92%]
+tests/test_technical_manager.py::TestTechnicalSnapshot::test_is_oversold PASSED [ 92%]
+tests/test_technical_manager.py::TestTechnicalSnapshot::test_is_overbought PASSED [ 92%]
+tests/test_technical_manager.py::TestTechnicalSnapshot::test_at_support PASSED [ 92%]
+tests/test_technical_manager.py::TestTechnicalSnapshot::test_at_resistance PASSED [ 92%]
+tests/test_technical_manager.py::TestTechnicalSnapshot::test_funding_bias_extreme_long PASSED [ 92%]
+tests/test_technical_manager.py::TestTechnicalSnapshot::test_funding_bias_extreme_short PASSED [ 93%]
+tests/test_technical_manager.py::TestTechnicalSnapshot::test_funding_bias_neutral PASSED [ 93%]
+tests/test_technical_manager.py::TestTechnicalSnapshot::test_get_confluence_signals_long PASSED [ 93%]
+tests/test_technical_manager.py::TestTechnicalSnapshot::test_get_confluence_signals_short PASSED [ 93%]
+tests/test_technical_manager.py::TestTechnicalSnapshot::test_to_prompt PASSED [ 93%]
+tests/test_technical_manager.py::TestTechnicalManager::test_init_creates_defaults PASSED [ 93%]
+tests/test_technical_manager.py::TestTechnicalManager::test_get_technical_snapshot PASSED [ 93%]
+tests/test_technical_manager.py::TestTechnicalManager::test_get_trade_setup_quality_long_oversold PASSED [ 93%]
+tests/test_technical_manager.py::TestTechnicalManager::test_get_trade_setup_quality_long_overbought PASSED [ 93%]
+tests/test_technical_manager.py::TestTechnicalManager::test_get_trade_setup_quality_short_overbought PASSED [ 94%]
+tests/test_technical_manager.py::TestTechnicalManager::test_get_trade_setup_quality_neutral PASSED [ 94%]
+tests/test_technical_manager.py::TestTechnicalManager::test_get_trade_setup_quality_clamped PASSED [ 94%]
+tests/test_technical_manager.py::TestTechnicalManager::test_get_dynamic_stops_long PASSED [ 94%]
+tests/test_technical_manager.py::TestTechnicalManager::test_get_dynamic_stops_short PASSED [ 94%]
+tests/test_technical_manager.py::TestTechnicalManager::test_get_dynamic_stops_uses_sr_levels PASSED [ 94%]
+tests/test_technical_manager.py::TestTechnicalManager::test_get_position_size_high_quality PASSED [ 94%]
+tests/test_technical_manager.py::TestTechnicalManager::test_get_position_size_low_quality PASSED [ 94%]
+tests/test_technical_manager.py::TestTechnicalManager::test_get_position_size_high_volatility PASSED [ 94%]
+tests/test_technical_manager.py::TestTechnicalManager::test_graceful_degradation_rsi_fails PASSED [ 95%]
+tests/test_technical_manager.py::TestTechnicalManager::test_graceful_degradation_vwap_fails PASSED [ 95%]
+tests/test_technical_manager.py::TestTechnicalManager::test_graceful_degradation_all_fail PASSED [ 95%]
+tests/test_volume_profile.py::TestVolumeProfile::test_is_in_value_area_true PASSED [ 95%]
+tests/test_volume_profile.py::TestVolumeProfile::test_is_in_value_area_false PASSED [ 95%]
+tests/test_volume_profile.py::TestVolumeProfile::test_position_vs_poc_above PASSED [ 95%]
+tests/test_volume_profile.py::TestVolumeProfile::test_position_vs_poc_below PASSED [ 95%]
+tests/test_volume_profile.py::TestVolumeProfile::test_position_vs_poc_at PASSED [ 95%]
+tests/test_volume_profile.py::TestVolumeProfile::test_distance_to_poc_pct PASSED [ 95%]
+tests/test_volume_profile.py::TestVolumeProfile::test_value_area_width_pct PASSED [ 96%]
+tests/test_volume_profile.py::TestVolumeProfile::test_nearest_hvn PASSED [ 96%]
+tests/test_volume_profile.py::TestVolumeProfile::test_nearest_hvn_empty PASSED [ 96%]
+tests/test_volume_profile.py::TestVolumeProfile::test_nearest_lvn PASSED [ 96%]
+tests/test_volume_profile.py::TestVolumeProfileCalculator::test_init_defaults PASSED [ 96%]
+tests/test_volume_profile.py::TestVolumeProfileCalculator::test_init_custom PASSED [ 96%]
+tests/test_volume_profile.py::TestVolumeProfileCalculator::test_calculate_poc PASSED [ 96%]
+tests/test_volume_profile.py::TestVolumeProfileCalculator::test_calculate_poc_empty PASSED [ 96%]
+tests/test_volume_profile.py::TestVolumeProfileCalculator::test_calculate_value_area PASSED [ 96%]
+tests/test_volume_profile.py::TestVolumeProfileCalculator::test_find_hvn_levels PASSED [ 97%]
+tests/test_volume_profile.py::TestVolumeProfileCalculator::test_find_lvn_levels PASSED [ 97%]
+tests/test_volume_profile.py::TestVolumeProfileCalculator::test_build_volume_distribution PASSED [ 97%]
+tests/test_volume_profile.py::TestVolumeProfileCalculator::test_build_volume_distribution_empty PASSED [ 97%]
+tests/test_volume_profile.py::TestVolumeProfileCalculator::test_calculate_from_candles PASSED [ 97%]
+tests/test_volume_profile.py::TestVolumeProfileCalculator::test_calculate_uses_fetcher PASSED [ 97%]
+tests/test_volume_profile.py::TestVolumeProfileCalculator::test_calculate_empty_candles PASSED [ 97%]
+tests/test_volume_profile.py::TestVolumeProfileCalculator::test_get_candle_levels PASSED [ 97%]
+tests/test_volume_profile.py::TestVolumeProfileCalculator::test_empty_profile PASSED [ 97%]
+tests/test_vwap.py::TestVWAPData::test_is_above_vwap PASSED              [ 98%]
+tests/test_vwap.py::TestVWAPData::test_is_below_vwap PASSED              [ 98%]
+tests/test_vwap.py::TestVWAPData::test_position_extended_above PASSED    [ 98%]
+tests/test_vwap.py::TestVWAPData::test_position_extended_below PASSED    [ 98%]
+tests/test_vwap.py::TestVWAPData::test_position_above PASSED             [ 98%]
+tests/test_vwap.py::TestVWAPData::test_position_below PASSED             [ 98%]
+tests/test_vwap.py::TestVWAPData::test_mean_reversion_signal_short PASSED [ 98%]
+tests/test_vwap.py::TestVWAPData::test_mean_reversion_signal_long PASSED [ 98%]
+tests/test_vwap.py::TestVWAPData::test_mean_reversion_signal_none PASSED [ 98%]
+tests/test_vwap.py::TestVWAPCalculator::test_calculate_vwap_simple PASSED [ 99%]
+tests/test_vwap.py::TestVWAPCalculator::test_calculate_vwap_equal_volume PASSED [ 99%]
+tests/test_vwap.py::TestVWAPCalculator::test_calculate_vwap_no_volume PASSED [ 99%]
+tests/test_vwap.py::TestVWAPCalculator::test_calculate_vwap_empty_candles PASSED [ 99%]
+tests/test_vwap.py::TestVWAPCalculator::test_calculate_uses_fetcher PASSED [ 99%]
+tests/test_vwap.py::TestVWAPCalculator::test_calculate_deviation_positive PASSED [ 99%]
+tests/test_vwap.py::TestVWAPCalculator::test_calculate_deviation_negative PASSED [ 99%]
+tests/test_vwap.py::TestVWAPCalculator::test_filter_to_today PASSED      [ 99%]
+tests/test_vwap.py::TestVWAPCalculator::test_get_bands PASSED            [ 99%]
+tests/test_vwap.py::TestVWAPCalculator::test_empty_candle_data PASSED    [100%]
+
+==================================== ERRORS ====================================
+______ ERROR at setup of TestGetLearnings.test_get_learnings_for_decision ______
+
+self = <test_learning_system.TestGetLearnings object at 0x72aa69908950>
+
+    def setup_method(self):
+        """Create a temporary database with learnings."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.ls = LearningSystem(db=self.db, llm=None)
+    
+        # Add closed trades and learnings
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+            # Add closed trades
+            cursor.execute("""
+                INSERT INTO closed_trades (
+                    coin_name, entry_price, exit_price, size_usd,
+                    pnl_usd, pnl_pct, entry_reason, exit_reason,
+                    opened_at, closed_at, duration_seconds
+                ) VALUES
+                ('bitcoin', 95000, 95500, 20, 0.11, 0.53, 'test', 'tp', datetime('now'), datetime('now'), 100),
+                ('ethereum', 3300, 3250, 20, -0.30, -1.52, 'test', 'sl', datetime('now'), datetime('now'), 100)
+            """)
+    
+            # Add learnings
+            learning1 = json.dumps({
+                'what_happened': 'BTC rose',
+                'why_outcome': 'momentum',
+                'pattern': 'uptrend entry',
+                'lesson': 'Enter BTC during uptrends',
+                'confidence': 0.8
+            })
+            learning2 = json.dumps({
+                'what_happened': 'ETH fell',
+                'why_outcome': 'weak market',
+                'pattern': 'downtrend entry',
+                'lesson': 'Avoid ETH during weak markets',
+                'confidence': 0.6
+            })
+    
+>           cursor.execute("""
+                INSERT INTO learnings (trade_id, learning_text, pattern_type, confidence_level, created_at)
+                VALUES
+                (1, ?, 'uptrend entry', 0.8, datetime('now')),
+                (2, ?, 'downtrend entry', 0.6, datetime('now'))
+            """, (learning1, learning2))
+E           sqlite3.OperationalError: table learnings has no column named pattern_type
+
+tests/deprecated/test_learning_system.py:344: OperationalError
+________ ERROR at setup of TestGetLearnings.test_get_learnings_by_coin _________
+
+self = <test_learning_system.TestGetLearnings object at 0x72aa699081d0>
+
+    def setup_method(self):
+        """Create a temporary database with learnings."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.ls = LearningSystem(db=self.db, llm=None)
+    
+        # Add closed trades and learnings
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+            # Add closed trades
+            cursor.execute("""
+                INSERT INTO closed_trades (
+                    coin_name, entry_price, exit_price, size_usd,
+                    pnl_usd, pnl_pct, entry_reason, exit_reason,
+                    opened_at, closed_at, duration_seconds
+                ) VALUES
+                ('bitcoin', 95000, 95500, 20, 0.11, 0.53, 'test', 'tp', datetime('now'), datetime('now'), 100),
+                ('ethereum', 3300, 3250, 20, -0.30, -1.52, 'test', 'sl', datetime('now'), datetime('now'), 100)
+            """)
+    
+            # Add learnings
+            learning1 = json.dumps({
+                'what_happened': 'BTC rose',
+                'why_outcome': 'momentum',
+                'pattern': 'uptrend entry',
+                'lesson': 'Enter BTC during uptrends',
+                'confidence': 0.8
+            })
+            learning2 = json.dumps({
+                'what_happened': 'ETH fell',
+                'why_outcome': 'weak market',
+                'pattern': 'downtrend entry',
+                'lesson': 'Avoid ETH during weak markets',
+                'confidence': 0.6
+            })
+    
+>           cursor.execute("""
+                INSERT INTO learnings (trade_id, learning_text, pattern_type, confidence_level, created_at)
+                VALUES
+                (1, ?, 'uptrend entry', 0.8, datetime('now')),
+                (2, ?, 'downtrend entry', 0.6, datetime('now'))
+            """, (learning1, learning2))
+E           sqlite3.OperationalError: table learnings has no column named pattern_type
+
+tests/deprecated/test_learning_system.py:344: OperationalError
+__________ ERROR at setup of TestGetLearnings.test_get_all_learnings ___________
+
+self = <test_learning_system.TestGetLearnings object at 0x72aa6990a090>
+
+    def setup_method(self):
+        """Create a temporary database with learnings."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.ls = LearningSystem(db=self.db, llm=None)
+    
+        # Add closed trades and learnings
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+            # Add closed trades
+            cursor.execute("""
+                INSERT INTO closed_trades (
+                    coin_name, entry_price, exit_price, size_usd,
+                    pnl_usd, pnl_pct, entry_reason, exit_reason,
+                    opened_at, closed_at, duration_seconds
+                ) VALUES
+                ('bitcoin', 95000, 95500, 20, 0.11, 0.53, 'test', 'tp', datetime('now'), datetime('now'), 100),
+                ('ethereum', 3300, 3250, 20, -0.30, -1.52, 'test', 'sl', datetime('now'), datetime('now'), 100)
+            """)
+    
+            # Add learnings
+            learning1 = json.dumps({
+                'what_happened': 'BTC rose',
+                'why_outcome': 'momentum',
+                'pattern': 'uptrend entry',
+                'lesson': 'Enter BTC during uptrends',
+                'confidence': 0.8
+            })
+            learning2 = json.dumps({
+                'what_happened': 'ETH fell',
+                'why_outcome': 'weak market',
+                'pattern': 'downtrend entry',
+                'lesson': 'Avoid ETH during weak markets',
+                'confidence': 0.6
+            })
+    
+>           cursor.execute("""
+                INSERT INTO learnings (trade_id, learning_text, pattern_type, confidence_level, created_at)
+                VALUES
+                (1, ?, 'uptrend entry', 0.8, datetime('now')),
+                (2, ?, 'downtrend entry', 0.6, datetime('now'))
+            """, (learning1, learning2))
+E           sqlite3.OperationalError: table learnings has no column named pattern_type
+
+tests/deprecated/test_learning_system.py:344: OperationalError
+________ ERROR at setup of TestGetLearnings.test_get_learning_for_trade ________
+
+self = <test_learning_system.TestGetLearnings object at 0x72aa6990a390>
+
+    def setup_method(self):
+        """Create a temporary database with learnings."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.ls = LearningSystem(db=self.db, llm=None)
+    
+        # Add closed trades and learnings
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+            # Add closed trades
+            cursor.execute("""
+                INSERT INTO closed_trades (
+                    coin_name, entry_price, exit_price, size_usd,
+                    pnl_usd, pnl_pct, entry_reason, exit_reason,
+                    opened_at, closed_at, duration_seconds
+                ) VALUES
+                ('bitcoin', 95000, 95500, 20, 0.11, 0.53, 'test', 'tp', datetime('now'), datetime('now'), 100),
+                ('ethereum', 3300, 3250, 20, -0.30, -1.52, 'test', 'sl', datetime('now'), datetime('now'), 100)
+            """)
+    
+            # Add learnings
+            learning1 = json.dumps({
+                'what_happened': 'BTC rose',
+                'why_outcome': 'momentum',
+                'pattern': 'uptrend entry',
+                'lesson': 'Enter BTC during uptrends',
+                'confidence': 0.8
+            })
+            learning2 = json.dumps({
+                'what_happened': 'ETH fell',
+                'why_outcome': 'weak market',
+                'pattern': 'downtrend entry',
+                'lesson': 'Avoid ETH during weak markets',
+                'confidence': 0.6
+            })
+    
+>           cursor.execute("""
+                INSERT INTO learnings (trade_id, learning_text, pattern_type, confidence_level, created_at)
+                VALUES
+                (1, ?, 'uptrend entry', 0.8, datetime('now')),
+                (2, ?, 'downtrend entry', 0.6, datetime('now'))
+            """, (learning1, learning2))
+E           sqlite3.OperationalError: table learnings has no column named pattern_type
+
+tests/deprecated/test_learning_system.py:344: OperationalError
+________ ERROR at setup of TestGetLearnings.test_get_unanalyzed_trades _________
+
+self = <test_learning_system.TestGetLearnings object at 0x72aa6990a690>
+
+    def setup_method(self):
+        """Create a temporary database with learnings."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.ls = LearningSystem(db=self.db, llm=None)
+    
+        # Add closed trades and learnings
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+            # Add closed trades
+            cursor.execute("""
+                INSERT INTO closed_trades (
+                    coin_name, entry_price, exit_price, size_usd,
+                    pnl_usd, pnl_pct, entry_reason, exit_reason,
+                    opened_at, closed_at, duration_seconds
+                ) VALUES
+                ('bitcoin', 95000, 95500, 20, 0.11, 0.53, 'test', 'tp', datetime('now'), datetime('now'), 100),
+                ('ethereum', 3300, 3250, 20, -0.30, -1.52, 'test', 'sl', datetime('now'), datetime('now'), 100)
+            """)
+    
+            # Add learnings
+            learning1 = json.dumps({
+                'what_happened': 'BTC rose',
+                'why_outcome': 'momentum',
+                'pattern': 'uptrend entry',
+                'lesson': 'Enter BTC during uptrends',
+                'confidence': 0.8
+            })
+            learning2 = json.dumps({
+                'what_happened': 'ETH fell',
+                'why_outcome': 'weak market',
+                'pattern': 'downtrend entry',
+                'lesson': 'Avoid ETH during weak markets',
+                'confidence': 0.6
+            })
+    
+>           cursor.execute("""
+                INSERT INTO learnings (trade_id, learning_text, pattern_type, confidence_level, created_at)
+                VALUES
+                (1, ?, 'uptrend entry', 0.8, datetime('now')),
+                (2, ?, 'downtrend entry', 0.6, datetime('now'))
+            """, (learning1, learning2))
+E           sqlite3.OperationalError: table learnings has no column named pattern_type
+
+tests/deprecated/test_learning_system.py:344: OperationalError
+_______ ERROR at setup of TestLearningSummary.test_get_learning_summary ________
+
+self = <test_learning_system.TestLearningSummary object at 0x72aa6990ab40>
+
+    def setup_method(self):
+        """Create a temporary database with learnings."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.ls = LearningSystem(db=self.db, llm=None)
+    
+        # Add learnings directly
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+>           cursor.execute("""
+                INSERT INTO learnings (trade_id, learning_text, pattern_type, confidence_level, created_at)
+                VALUES
+                (1, '{"lesson": "test1"}', 'pattern1', 0.9, datetime('now')),
+                (2, '{"lesson": "test2"}', 'pattern2', 0.7, datetime('now')),
+                (3, '{"lesson": "test3"}', 'pattern3', 0.5, datetime('now'))
+            """)
+E           sqlite3.OperationalError: table learnings has no column named pattern_type
+
+tests/deprecated/test_learning_system.py:413: OperationalError
+_____ ERROR at setup of TestGetLearningsAsText.test_get_learnings_as_text ______
+
+self = <test_learning_system.TestGetLearningsAsText object at 0x72aa6990afc0>
+
+    def setup_method(self):
+        """Create a temporary database with learnings."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+    
+        # Add a learning
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            learning = json.dumps({
+                'what_happened': 'test',
+                'why_outcome': 'test',
+                'pattern': 'test',
+                'lesson': 'Important lesson here',
+                'confidence': 0.85
+            })
+>           cursor.execute("""
+                INSERT INTO learnings (trade_id, learning_text, pattern_type, confidence_level, created_at)
+                VALUES (1, ?, 'test', 0.85, datetime('now'))
+            """, (learning,))
+E           sqlite3.OperationalError: table learnings has no column named pattern_type
+
+tests/deprecated/test_learning_system.py:455: OperationalError
+__________ ERROR at setup of TestCloseTrade.test_close_trade_success ___________
+
+self = <test_trading_engine.TestCloseTrade object at 0x72aa6995fc20>
+
+    def setup_method(self):
+        """Create a temporary database with an open trade."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.engine = TradingEngine(db=self.db)
+    
+        # Add market data
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO market_data (coin, price_usd, change_24h, last_updated)
+                VALUES ('bitcoin', 95000.0, 2.5, datetime('now'))
+            """)
+            conn.commit()
+    
+        # Open a trade
+>       self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+
+tests/deprecated/test_trading_engine.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa687cbdd0>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+_____ ERROR at setup of TestCloseTrade.test_close_trade_removes_from_open ______
+
+self = <test_trading_engine.TestCloseTrade object at 0x72aa6995c590>
+
+    def setup_method(self):
+        """Create a temporary database with an open trade."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.engine = TradingEngine(db=self.db)
+    
+        # Add market data
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO market_data (coin, price_usd, change_24h, last_updated)
+                VALUES ('bitcoin', 95000.0, 2.5, datetime('now'))
+            """)
+            conn.commit()
+    
+        # Open a trade
+>       self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+
+tests/deprecated/test_trading_engine.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa682b60c0>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+_______ ERROR at setup of TestCloseTrade.test_close_trade_adds_to_closed _______
+
+self = <test_trading_engine.TestCloseTrade object at 0x72aa6995d910>
+
+    def setup_method(self):
+        """Create a temporary database with an open trade."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.engine = TradingEngine(db=self.db)
+    
+        # Add market data
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO market_data (coin, price_usd, change_24h, last_updated)
+                VALUES ('bitcoin', 95000.0, 2.5, datetime('now'))
+            """)
+            conn.commit()
+    
+        # Open a trade
+>       self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+
+tests/deprecated/test_trading_engine.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa682b55e0>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+_______ ERROR at setup of TestCloseTrade.test_close_trade_calculates_pnl _______
+
+self = <test_trading_engine.TestCloseTrade object at 0x72aa69785130>
+
+    def setup_method(self):
+        """Create a temporary database with an open trade."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.engine = TradingEngine(db=self.db)
+    
+        # Add market data
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO market_data (coin, price_usd, change_24h, last_updated)
+                VALUES ('bitcoin', 95000.0, 2.5, datetime('now'))
+            """)
+            conn.commit()
+    
+        # Open a trade
+>       self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+
+tests/deprecated/test_trading_engine.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa68426a80>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+______ ERROR at setup of TestCloseTrade.test_close_trade_updates_account _______
+
+self = <test_trading_engine.TestCloseTrade object at 0x72aa69784b60>
+
+    def setup_method(self):
+        """Create a temporary database with an open trade."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.engine = TradingEngine(db=self.db)
+    
+        # Add market data
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO market_data (coin, price_usd, change_24h, last_updated)
+                VALUES ('bitcoin', 95000.0, 2.5, datetime('now'))
+            """)
+            conn.commit()
+    
+        # Open a trade
+>       self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+
+tests/deprecated/test_trading_engine.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa682b4830>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+_____ ERROR at setup of TestCloseTrade.test_close_nonexistent_trade_fails ______
+
+self = <test_trading_engine.TestCloseTrade object at 0x72aa69784740>
+
+    def setup_method(self):
+        """Create a temporary database with an open trade."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.engine = TradingEngine(db=self.db)
+    
+        # Add market data
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO market_data (coin, price_usd, change_24h, last_updated)
+                VALUES ('bitcoin', 95000.0, 2.5, datetime('now'))
+            """)
+            conn.commit()
+    
+        # Open a trade
+>       self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+
+tests/deprecated/test_trading_engine.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa682b5400>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+__ ERROR at setup of TestUpdatePositions.test_update_positions_updates_price ___
+
+self = <test_trading_engine.TestUpdatePositions object at 0x72aa69785280>
+
+    def setup_method(self):
+        """Create a temporary database with an open trade."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.engine = TradingEngine(db=self.db)
+    
+        # Add market data
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO market_data (coin, price_usd, change_24h, last_updated)
+                VALUES ('bitcoin', 95000.0, 2.5, datetime('now'))
+            """)
+            conn.commit()
+    
+        # Open a trade
+>       self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+
+tests/deprecated/test_trading_engine.py:255: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa68425910>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+_ ERROR at setup of TestUpdatePositions.test_update_positions_calculates_unrealized_pnl _
+
+self = <test_trading_engine.TestUpdatePositions object at 0x72aa69785580>
+
+    def setup_method(self):
+        """Create a temporary database with an open trade."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.engine = TradingEngine(db=self.db)
+    
+        # Add market data
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO market_data (coin, price_usd, change_24h, last_updated)
+                VALUES ('bitcoin', 95000.0, 2.5, datetime('now'))
+            """)
+            conn.commit()
+    
+        # Open a trade
+>       self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+
+tests/deprecated/test_trading_engine.py:255: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa6819b740>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+_ ERROR at setup of TestUpdatePositions.test_update_positions_triggers_stop_loss _
+
+self = <test_trading_engine.TestUpdatePositions object at 0x72aa69785880>
+
+    def setup_method(self):
+        """Create a temporary database with an open trade."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.engine = TradingEngine(db=self.db)
+    
+        # Add market data
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO market_data (coin, price_usd, change_24h, last_updated)
+                VALUES ('bitcoin', 95000.0, 2.5, datetime('now'))
+            """)
+            conn.commit()
+    
+        # Open a trade
+>       self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+
+tests/deprecated/test_trading_engine.py:255: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa6819b650>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+_ ERROR at setup of TestUpdatePositions.test_update_positions_triggers_take_profit _
+
+self = <test_trading_engine.TestUpdatePositions object at 0x72aa69785b80>
+
+    def setup_method(self):
+        """Create a temporary database with an open trade."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.engine = TradingEngine(db=self.db)
+    
+        # Add market data
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO market_data (coin, price_usd, change_24h, last_updated)
+                VALUES ('bitcoin', 95000.0, 2.5, datetime('now'))
+            """)
+            conn.commit()
+    
+        # Open a trade
+>       self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+
+tests/deprecated/test_trading_engine.py:255: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa68199310>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+_ ERROR at setup of TestUpdatePositions.test_update_positions_no_trigger_in_range _
+
+self = <test_trading_engine.TestUpdatePositions object at 0x72aa69785e80>
+
+    def setup_method(self):
+        """Create a temporary database with an open trade."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.db_path = os.path.join(self.temp_dir, "test_trading_bot.db")
+        self.db = Database(db_path=self.db_path)
+        self.engine = TradingEngine(db=self.db)
+    
+        # Add market data
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT OR REPLACE INTO market_data (coin, price_usd, change_24h, last_updated)
+                VALUES ('bitcoin', 95000.0, 2.5, datetime('now'))
+            """)
+            conn.commit()
+    
+        # Open a trade
+>       self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+
+tests/deprecated/test_trading_engine.py:255: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa682b52e0>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+=================================== FAILURES ===================================
+_______________ TestRiskManagerConstants.test_max_trade_percent ________________
+
+self = <test_risk_manager.TestRiskManagerConstants object at 0x72aa6993a6c0>
+
+    def test_max_trade_percent(self):
+        """Max trade should be 2%."""
+>       assert MAX_TRADE_PERCENT == 0.02
+E       assert 0.1 == 0.02
+
+tests/deprecated/test_risk_manager.py:20: AssertionError
+______________ TestRiskManagerConstants.test_max_exposure_percent ______________
+
+self = <test_risk_manager.TestRiskManagerConstants object at 0x72aa6993a990>
+
+    def test_max_exposure_percent(self):
+        """Max exposure should be 10%."""
+>       assert MAX_EXPOSURE_PERCENT == 0.10
+E       assert 0.2 == 0.1
+
+tests/deprecated/test_risk_manager.py:24: AssertionError
+__________________ TestRiskManagerConstants.test_min_balance ___________________
+
+self = <test_risk_manager.TestRiskManagerConstants object at 0x72aa6993ac60>
+
+    def test_min_balance(self):
+        """Minimum balance should be $900."""
+>       assert MIN_BALANCE == 900.0
+E       assert 750.0 == 900.0
+
+tests/deprecated/test_risk_manager.py:28: AssertionError
+___________________ TestRiskManager.test_get_risk_parameters ___________________
+
+self = <test_risk_manager.TestRiskManager object at 0x72aa6993a660>
+
+    def test_get_risk_parameters(self):
+        """Test that risk parameters are returned correctly."""
+        params = self.rm.get_risk_parameters()
+>       assert params['max_trade_percent'] == 0.02
+E       assert 0.1 == 0.02
+
+tests/deprecated/test_risk_manager.py:58: AssertionError
+______________ TestRiskManager.test_max_trade_size_fresh_account _______________
+
+self = <test_risk_manager.TestRiskManager object at 0x72aa6993b350>
+
+    def test_max_trade_size_fresh_account(self):
+        """Test max trade size on fresh $1,000 account."""
+        # $1,000 * 2% = $20 max per trade
+        max_size = self.rm.calculate_max_trade_size()
+>       assert max_size == 20.0
+E       assert 100.0 == 20.0
+
+tests/deprecated/test_risk_manager.py:74: AssertionError
+___________ TestRiskManager.test_available_for_trading_fresh_account ___________
+
+self = <test_risk_manager.TestRiskManager object at 0x72aa6993b650>
+
+    def test_available_for_trading_fresh_account(self):
+        """Test available for trading on fresh account."""
+        # Above minimum: $1,000 - $900 = $100
+        # Max exposure: $1,000 * 10% = $100
+        # Available is min($100, $100) = $100
+        available = self.rm.get_available_for_trading()
+>       assert available == 100.0
+E       assert 200.0 == 100.0
+
+tests/deprecated/test_risk_manager.py:82: AssertionError
+_____________________ TestTradeValidation.test_valid_trade _____________________
+
+self = <test_risk_manager.TestTradeValidation object at 0x72aa6993bad0>
+
+    def test_valid_trade(self):
+        """Test that a valid $20 trade passes."""
+        result = self.rm.validate_trade("bitcoin", 20.0)
+        assert result.valid is True
+        assert result.reason == "Trade passes all risk checks"
+>       assert result.max_allowed_size == 20.0
+E       AssertionError: assert 100.0 == 20.0
+E        +  where 100.0 = TradeValidation(valid=True, reason='Trade passes all risk checks', max_allowed_size=100.0).max_allowed_size
+
+tests/deprecated/test_risk_manager.py:106: AssertionError
+______________ TestTradeValidation.test_trade_exceeds_max_percent ______________
+
+self = <test_risk_manager.TestTradeValidation object at 0x72aa6993bdd0>
+
+    def test_trade_exceeds_max_percent(self):
+        """Test that $25 trade is rejected (exceeds 2%)."""
+        result = self.rm.validate_trade("bitcoin", 25.0)
+>       assert result.valid is False
+E       AssertionError: assert True is False
+E        +  where True = TradeValidation(valid=True, reason='Trade passes all risk checks', max_allowed_size=100.0).valid
+
+tests/deprecated/test_risk_manager.py:111: AssertionError
+__________ TestTakeProfitCalculation.test_take_profit_larger_position __________
+
+self = <test_risk_manager.TestTakeProfitCalculation object at 0x72aa6993a960>
+
+    def test_take_profit_larger_position(self):
+        """Test take profit with different position size."""
+        # Entry at $100, size $10
+        # $1 profit on $10 = 10% gain needed
+        # Take profit = $100 * 1.10 = $110
+        take_profit = self.rm.calculate_take_profit(100.0, 10.0)
+>       assert take_profit == 110.0
+E       assert 110.00000000000001 == 110.0
+
+tests/deprecated/test_risk_manager.py:216: AssertionError
+___________________ TestRiskSummary.test_risk_summary_values ___________________
+
+self = <test_risk_manager.TestRiskSummary object at 0x72aa6995e450>
+
+    def test_risk_summary_values(self):
+        """Test risk summary has correct values for fresh account."""
+        summary = get_risk_summary(db=self.db)
+        assert summary['balance'] == 1000.0
+        assert summary['in_positions'] == 0.0
+        assert summary['exposure_percent'] == 0.0
+>       assert summary['available_for_trading'] == 100.0
+E       assert 200.0 == 100.0
+
+tests/deprecated/test_risk_manager.py:318: AssertionError
+___________________ TestExecuteBuy.test_execute_buy_success ____________________
+
+self = <test_trading_engine.TestExecuteBuy object at 0x72aa6995d6d0>
+
+    def test_execute_buy_success(self):
+        """Test successful buy execution."""
+>       result = self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/deprecated/test_trading_engine.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa687caa50>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+______________ TestExecuteBuy.test_execute_buy_creates_open_trade ______________
+
+self = <test_trading_engine.TestExecuteBuy object at 0x72aa6995fd10>
+
+    def test_execute_buy_creates_open_trade(self):
+        """Test that buy creates entry in open_trades."""
+>       result = self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/deprecated/test_trading_engine.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa682ba360>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+_______________ TestExecuteBuy.test_execute_buy_updates_account ________________
+
+self = <test_trading_engine.TestExecuteBuy object at 0x72aa69784050>
+
+    def test_execute_buy_updates_account(self):
+        """Test that buy updates account state."""
+        initial_state = self.db.get_account_state()
+        initial_available = initial_state['available_balance']
+    
+>       self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+
+tests/deprecated/test_trading_engine.py:88: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa699383e0>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+_____________ TestExecuteBuy.test_execute_buy_calculates_stop_loss _____________
+
+self = <test_trading_engine.TestExecuteBuy object at 0x72aa69784350>
+
+    def test_execute_buy_calculates_stop_loss(self):
+        """Test that stop loss is calculated correctly."""
+>       self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+
+tests/deprecated/test_trading_engine.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa682b6990>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+____________ TestExecuteBuy.test_execute_buy_calculates_take_profit ____________
+
+self = <test_trading_engine.TestExecuteBuy object at 0x72aa69784650>
+
+    def test_execute_buy_calculates_take_profit(self):
+        """Test that take profit is calculated correctly."""
+>       self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+
+tests/deprecated/test_trading_engine.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa682b5a90>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+_____________ TestExecuteBuy.test_execute_buy_exceeds_limit_fails ______________
+
+self = <test_trading_engine.TestExecuteBuy object at 0x72aa69784c50>
+
+    def test_execute_buy_exceeds_limit_fails(self):
+        """Test that buy fails if it exceeds risk limits."""
+>       result = self.engine.execute_buy('bitcoin', 50.0, 'Too large trade')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/deprecated/test_trading_engine.py:120: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa699095b0>
+coin = 'bitcoin', size_usd = 50.0, reason = 'Too large trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+________________ TestExecuteBuy.test_execute_buy_logs_activity _________________
+
+self = <test_trading_engine.TestExecuteBuy object at 0x72aa69784f50>
+
+    def test_execute_buy_logs_activity(self):
+        """Test that buy is logged to activity_log."""
+>       self.engine.execute_buy('bitcoin', 20.0, 'Test trade')
+
+tests/deprecated/test_trading_engine.py:127: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <src.trading_engine.TradingEngine object at 0x72aa682b9670>
+coin = 'bitcoin', size_usd = 20.0, reason = 'Test trade', rule_ids = None
+
+    def execute_buy(
+        self,
+        coin: str,
+        size_usd: float,
+        reason: str,
+        rule_ids: Optional[List[int]] = None
+    ) -> TradeResult:
+        """Execute a paper BUY order.
+    
+        Args:
+            coin: Cryptocurrency to buy (e.g., 'bitcoin').
+            size_usd: Size of trade in USD.
+            reason: Reason for entering the trade.
+            rule_ids: List of rule IDs that influenced this trade (for tracking).
+    
+        Returns:
+            TradeResult with success status, trade_id, and message.
+        """
+        logger.info(f"Attempting BUY: {coin} ${size_usd:.2f} - {reason}")
+    
+        # Step 1: Get current price from market_data (MUST exist)
+        current_price = self.get_current_price(coin)
+        if current_price is None:
+            message = f"No market data for {coin}. Cannot execute trade without real price."
+            logger.warning(message)
+            self.db.log_activity("trade_rejected", message)
+            return TradeResult(success=False, trade_id=None, message=message)
+    
+        # Step 2: Validate with RiskManager (REJECT if invalid, don't auto-reduce)
+        validation = self.risk_manager.validate_trade(coin, size_usd, "BUY")
+        if not validation.valid:
+            logger.warning(f"Trade rejected: {validation.reason}")
+            self.db.log_activity("trade_rejected", f"BUY {coin} ${size_usd:.2f}: {validation.reason}")
+            return TradeResult(success=False, trade_id=None, message=validation.reason)
+    
+        # Step 3: Calculate stop loss and take profit
+        stop_loss_price = self.risk_manager.calculate_stop_loss(current_price)
+        take_profit_price = self.risk_manager.calculate_take_profit(current_price, size_usd)
+    
+        # Step 4: Insert into open_trades
+        rule_ids_str = ','.join(str(r) for r in rule_ids) if rule_ids else None
+    
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+    
+>           cursor.execute("""
+                INSERT INTO open_trades (
+                    coin_name, entry_price, size_usd, current_price,
+                    unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                    take_profit_price, entry_reason, opened_at, rule_ids_used
+                ) VALUES (?, ?, ?, ?, 0, 0, ?, ?, ?, datetime('now'), ?)
+            """, (
+                coin, current_price, size_usd, current_price,
+                stop_loss_price, take_profit_price, reason, rule_ids_str
+            ))
+E           sqlite3.OperationalError: table open_trades has no column named rule_ids_used
+
+src/trading_engine.py:114: OperationalError
+=============================== warnings summary ===============================
+../../../../home/jblac/.local/lib/python3.12/site-packages/_pytest/config/__init__.py:1428
+  /home/jblac/.local/lib/python3.12/site-packages/_pytest/config/__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_default_fixture_loop_scope
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+../../../../home/jblac/.local/lib/python3.12/site-packages/_pytest/config/__init__.py:1428
+  /home/jblac/.local/lib/python3.12/site-packages/_pytest/config/__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+tests/deprecated/test_market_data.py:148
+  /mnt/c/documents/crypto-trading-bot/tests/deprecated/test_market_data.py:148: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.integration
+
+tests/deprecated/test_market_data.py:168
+  /mnt/c/documents/crypto-trading-bot/tests/deprecated/test_market_data.py:168: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.integration
+
+tests/test_llm_interface.py:200
+  /mnt/c/documents/crypto-trading-bot/tests/test_llm_interface.py:200: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.integration
+
+tests/test_llm_interface.py:215
+  /mnt/c/documents/crypto-trading-bot/tests/test_llm_interface.py:215: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.integration
+
+tests/test_market_feed.py:357
+  /mnt/c/documents/crypto-trading-bot/tests/test_market_feed.py:357: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.3-final-0 ________________
+
+Coverage JSON written to file audit_results/coverage.json
+=========================== short test summary info ============================
+FAILED tests/deprecated/test_risk_manager.py::TestRiskManagerConstants::test_max_trade_percent
+FAILED tests/deprecated/test_risk_manager.py::TestRiskManagerConstants::test_max_exposure_percent
+FAILED tests/deprecated/test_risk_manager.py::TestRiskManagerConstants::test_min_balance
+FAILED tests/deprecated/test_risk_manager.py::TestRiskManager::test_get_risk_parameters
+FAILED tests/deprecated/test_risk_manager.py::TestRiskManager::test_max_trade_size_fresh_account
+FAILED tests/deprecated/test_risk_manager.py::TestRiskManager::test_available_for_trading_fresh_account
+FAILED tests/deprecated/test_risk_manager.py::TestTradeValidation::test_valid_trade
+FAILED tests/deprecated/test_risk_manager.py::TestTradeValidation::test_trade_exceeds_max_percent
+FAILED tests/deprecated/test_risk_manager.py::TestTakeProfitCalculation::test_take_profit_larger_position
+FAILED tests/deprecated/test_risk_manager.py::TestRiskSummary::test_risk_summary_values
+FAILED tests/deprecated/test_trading_engine.py::TestExecuteBuy::test_execute_buy_success
+FAILED tests/deprecated/test_trading_engine.py::TestExecuteBuy::test_execute_buy_creates_open_trade
+FAILED tests/deprecated/test_trading_engine.py::TestExecuteBuy::test_execute_buy_updates_account
+FAILED tests/deprecated/test_trading_engine.py::TestExecuteBuy::test_execute_buy_calculates_stop_loss
+FAILED tests/deprecated/test_trading_engine.py::TestExecuteBuy::test_execute_buy_calculates_take_profit
+FAILED tests/deprecated/test_trading_engine.py::TestExecuteBuy::test_execute_buy_exceeds_limit_fails
+FAILED tests/deprecated/test_trading_engine.py::TestExecuteBuy::test_execute_buy_logs_activity
+ERROR tests/deprecated/test_learning_system.py::TestGetLearnings::test_get_learnings_for_decision
+ERROR tests/deprecated/test_learning_system.py::TestGetLearnings::test_get_learnings_by_coin
+ERROR tests/deprecated/test_learning_system.py::TestGetLearnings::test_get_all_learnings
+ERROR tests/deprecated/test_learning_system.py::TestGetLearnings::test_get_learning_for_trade
+ERROR tests/deprecated/test_learning_system.py::TestGetLearnings::test_get_unanalyzed_trades
+ERROR tests/deprecated/test_learning_system.py::TestLearningSummary::test_get_learning_summary
+ERROR tests/deprecated/test_learning_system.py::TestGetLearningsAsText::test_get_learnings_as_text
+ERROR tests/deprecated/test_trading_engine.py::TestCloseTrade::test_close_trade_success
+ERROR tests/deprecated/test_trading_engine.py::TestCloseTrade::test_close_trade_removes_from_open
+ERROR tests/deprecated/test_trading_engine.py::TestCloseTrade::test_close_trade_adds_to_closed
+ERROR tests/deprecated/test_trading_engine.py::TestCloseTrade::test_close_trade_calculates_pnl
+ERROR tests/deprecated/test_trading_engine.py::TestCloseTrade::test_close_trade_updates_account
+ERROR tests/deprecated/test_trading_engine.py::TestCloseTrade::test_close_nonexistent_trade_fails
+ERROR tests/deprecated/test_trading_engine.py::TestUpdatePositions::test_update_positions_updates_price
+ERROR tests/deprecated/test_trading_engine.py::TestUpdatePositions::test_update_positions_calculates_unrealized_pnl
+ERROR tests/deprecated/test_trading_engine.py::TestUpdatePositions::test_update_positions_triggers_stop_loss
+ERROR tests/deprecated/test_trading_engine.py::TestUpdatePositions::test_update_positions_triggers_take_profit
+ERROR tests/deprecated/test_trading_engine.py::TestUpdatePositions::test_update_positions_no_trigger_in_range
+= 17 failed, 871 passed, 2 skipped, 7 warnings, 18 errors in 67.82s (0:01:07) ==

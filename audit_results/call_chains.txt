@@ -1,0 +1,145 @@
+=== CHAIN 1: Main Loop ===
+226:                await self.strategist.start()
+388:            self.strategist.subscribe_conditions(self._on_new_conditions)
+530:            await self.strategist.stop()
+636:            result["strategist"] = self.strategist.get_stats()
+1041:                await system.strategist.start()
+174:    async def generate_conditions(self) -> List[TradeCondition]:
+210:            response = self.llm.query(prompt, system_prompt)
+
+=== CHAIN 2: Trade Execution ===
+289:        if self.sniper.load_state():
+290:            logger.info(f"Restored state: balance=${self.sniper.balance:.2f}, "
+291:                       f"positions={len(self.sniper.open_positions)}")
+384:        self.sniper.subscribe(self._on_execution)
+395:            self.sniper.on_price_tick(tick)
+429:        active_count = self.sniper.set_conditions(conditions)
+504:        sniper_status = self.sniper.get_status()
+544:            self.sniper.save_state()
+581:        return self.sniper.add_condition(condition)
+624:            result["sniper"] = self.sniper.get_status()
+644:        return self.sniper.get_positions()
+650:        return self.sniper.get_conditions()
+786:            sniper_status = self.sniper.get_status()
+846:            self.sniper.set_conditions([])
+421:        self.journal.record_entry(position, timestamp)
+547:        self.journal.record_exit(position, price, timestamp, reason, pnl)
+392:                self.db.insert(args)
+395:                self.db.update(entry_id, updates)
+468:        open_entries = self.db.query(where="status = 'open'")
+538:            self.db.insert(entry)
+575:            entry = self.db.get_by_position(position.id)
+608:            self.db.update(entry.id, updates)
+697:                self.db.update(entry_id, prices)
+744:            self.db.update(entry_id, prices)
+775:        return self.db.get(entry_id)
+782:        return self.db.get_by_position(position_id)
+804:        return self.db.query(where=where, params=params, limit=limit)
+808:        return self.db.query(
+816:        return self.db.query(
+824:        return self.db.query(
+832:        return self.db.query(
+840:        return self.db.query(
+848:        return self.db.query(
+857:        return self.db.query(
+866:        return self.db.query(
+874:        return self.db.query(
+919:        result = self.db.aggregate(
+977:        results = self.db.aggregate(
+1007:        results = self.db.aggregate(
+1037:        results = self.db.aggregate(
+1067:        results = self.db.aggregate(
+1113:        return self.db.count()
+
+=== CHAIN 3: Learning Loop ===
+src/main.py:198:        self.reflection_engine: Optional[ReflectionEngine] = None
+src/main.py:229:            if self.reflection_engine:
+src/main.py:231:                await self.reflection_engine.start()
+src/main.py:329:            self.reflection_engine = ReflectionEngine(
+src/main.py:337:            self.quick_update.set_reflection_engine(self.reflection_engine)
+src/main.py:533:        if self.reflection_engine:
+src/main.py:535:            await self.reflection_engine.stop()
+src/main.py:673:            ("reflection_engine", self.reflection_engine),
+src/main.py:717:        if self.reflection_engine:
+src/main.py:719:                self.reflection_engine.last_reflection_time.isoformat()
+src/main.py:720:                if self.reflection_engine.last_reflection_time
+src/main.py:723:            state["trades_since_reflection"] = self.reflection_engine.trades_since_reflection
+src/main.py:749:            if self.reflection_engine and state.get("last_reflection_time"):
+src/main.py:751:                    self.reflection_engine.last_reflection_time = datetime.fromisoformat(
+src/main.py:754:                    self.reflection_engine.trades_since_reflection = state.get(
+src/main.py:790:        if self.reflection_engine:
+src/main.py:791:            ref_stats = self.reflection_engine.get_stats()
+src/main.py:823:        if not self.reflection_engine:
+src/main.py:827:            result = await self.reflection_engine.reflect()
+114:        self.knowledge = knowledge
+395:            if self.knowledge and pattern_id != "unknown":
+396:                patterns = self.knowledge.get_active_patterns()
+src/reflection.py:117:        self.adaptation_engine = adaptation_engine
+src/reflection.py:128:        self.adaptations_applied: int = 0
+src/reflection.py:266:        if self.adaptation_engine and insights:
+src/reflection.py:267:            adaptations = self.adaptation_engine.apply_insights(insights)
+src/reflection.py:268:            self.adaptations_applied += len(adaptations)
+src/reflection.py:734:            "adaptations_applied": self.adaptations_applied,
+src/reflection.py:772:                "adaptations_applied": self.adaptations_applied,
+315:            for score in self.knowledge.get_all_coin_scores()[:10]:
+329:            for rule in self.knowledge.get_active_rules():
+337:            bad_coins = self.knowledge.get_bad_coins()
+340:                "good_coins": self.knowledge.get_good_coins(),
+341:                "avoid_coins": self.knowledge.get_blacklisted_coins() + bad_coins,
+342:                "blacklisted": self.knowledge.get_blacklisted_coins(),
+345:                "winning_patterns": [p.description for p in self.knowledge.get_winning_patterns()],
+346:                "blacklist_count": len(self.knowledge.get_blacklisted_coins()),
+421:        actions = self.knowledge.check_rules(market_state)
+573:        if knowledge.get("coin_summaries"):
+585:        if knowledge.get("active_rules"):
+607:        if knowledge.get("winning_patterns"):
+
+=== CHAIN 4: Coin Scoring ===
+22:    BLACKLISTED = "blacklisted"    # Do not trade
+23:    REDUCED = "reduced"            # Trade with reduced size (50%)
+25:    FAVORED = "favored"            # Can trade with increased size (150%)
+31:    CoinStatus.BLACKLISTED: 0.0,
+32:    CoinStatus.REDUCED: 0.5,
+34:    CoinStatus.FAVORED: 1.5,
+42:BLACKLIST_WIN_RATE = 0.30      # Below this + negative P&L = blacklist
+43:REDUCED_WIN_RATE = 0.45        # Below this = reduced size
+44:FAVORED_WIN_RATE = 0.60        # Above this + positive P&L = favored
+106:            return CoinStatus.BLACKLISTED
+111:        if score.win_rate < BLACKLIST_WIN_RATE and score.total_pnl < 0:
+112:            return CoinStatus.BLACKLISTED
+114:        if score.win_rate < REDUCED_WIN_RATE:
+115:            return CoinStatus.REDUCED
+117:        if score.win_rate >= FAVORED_WIN_RATE and score.total_pnl > 0:
+118:            return CoinStatus.FAVORED
+154:    def check_thresholds(self, coin: str) -> Optional[CoinAdaptation]:
+176:        # Check BLACKLIST threshold (most severe)
+177:        if (score.win_rate < BLACKLIST_WIN_RATE and
+181:            new_status = CoinStatus.BLACKLISTED
+182:            reason = (f"Win rate {score.win_rate:.0%} < {BLACKLIST_WIN_RATE:.0%} "
+186:        # Check REDUCED threshold (not blacklisted, but underperforming)
+187:        elif (score.win_rate < REDUCED_WIN_RATE and
+188:              current_status not in [CoinStatus.BLACKLISTED, CoinStatus.REDUCED]):
+190:            new_status = CoinStatus.REDUCED
+191:            reason = (f"Win rate {score.win_rate:.0%} < {REDUCED_WIN_RATE:.0%} "
+194:        # Check FAVORED threshold (performing well)
+195:        elif (score.win_rate >= FAVORED_WIN_RATE and
+197:              current_status not in [CoinStatus.BLACKLISTED, CoinStatus.FAVORED]):
+199:            new_status = CoinStatus.FAVORED
+200:            reason = (f"Win rate {score.win_rate:.0%} >= {FAVORED_WIN_RATE:.0%} "
+203:        # Check if coin recovered from REDUCED status
+205:              current_status == CoinStatus.REDUCED):
+210:        # Check if coin dropped from FAVORED status
+211:        elif (score.win_rate < FAVORED_WIN_RATE and
+212:              current_status == CoinStatus.FAVORED):
+215:            reason = f"Win rate dropped to {score.win_rate:.0%} (< {FAVORED_WIN_RATE:.0%})"
+271:            self._status_cache[coin] = CoinStatus.BLACKLISTED
+272:            return CoinStatus.BLACKLISTED
+296:        self._status_cache[coin] = CoinStatus.BLACKLISTED
+302:            new_status=CoinStatus.BLACKLISTED,
+308:        logger.info(f"MANUAL BLACKLIST: {coin} - {reason}")
+344:        logger.info(f"MANUAL UNBLACKLIST: {coin} -> {new_status.value}")
+195:        self.coin_scorer: Optional[CoinScorer] = None
+262:        self.coin_scorer = CoinScorer(self.knowledge, self.db)
+274:            coin_scorer=self.coin_scorer,
+311:                coin_scorer=self.coin_scorer,
+322:                coin_scorer=self.coin_scorer,

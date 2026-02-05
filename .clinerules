@@ -1,5 +1,17 @@
 # .clinerules - Crypto Trading Bot Development Rules
 
+## MANDATORY: Read Before Any Work
+Before starting ANY task, read docs/development/DEVELOPMENT-DISCIPLINE.md in full.
+Every task follows three rules:
+1. Verify before you act - never fix based on assumptions, read the code first
+2. Challenge before you deliver - ask "what could go wrong?" before calling it done
+3. Prove before you claim - "done" requires evidence (test output, diffs, grep results)
+
+Every prompt/task must have: CONTEXT, TASK, VERIFICATION (before+after), DONE MEANS, CONSTRAINTS.
+New issues found during work get documented in audit_results/NEW-ISSUES.md, not fixed inline.
+
+---
+
 ## CRITICAL: Read First Every Session
 
 This project is a self-learning crypto trading bot being built as a business. Quality over speed, always.

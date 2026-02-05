@@ -1,0 +1,1600 @@
+************* Module src.adaptation
+src/adaptation.py:419:0: C0301: Line too long (102/100) (line-too-long)
+src/adaptation.py:65:8: W0621: Redefining name 'db' from outer scope (line 600) (redefined-outer-name)
+src/adaptation.py:95:8: W0621: Redefining name 'adaptations' from outer scope (line 619) (redefined-outer-name)
+src/adaptation.py:97:12: W0621: Redefining name 'insight' from outer scope (line 609) (redefined-outer-name)
+src/adaptation.py:102:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/adaptation.py:107:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/adaptation.py:109:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/adaptation.py:113:29: W0621: Redefining name 'insight' from outer scope (line 609) (redefined-outer-name)
+src/adaptation.py:124:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/adaptation.py:137:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/adaptation.py:142:28: W0621: Redefining name 'insight' from outer scope (line 609) (redefined-outer-name)
+src/adaptation.py:153:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/adaptation.py:169:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/adaptation.py:174:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/adaptation.py:179:32: W0621: Redefining name 'insight' from outer scope (line 609) (redefined-outer-name)
+src/adaptation.py:251:34: W0621: Redefining name 'insight' from outer scope (line 609) (redefined-outer-name)
+src/adaptation.py:335:37: W0621: Redefining name 'insight' from outer scope (line 609) (redefined-outer-name)
+src/adaptation.py:388:34: W0621: Redefining name 'insight' from outer scope (line 609) (redefined-outer-name)
+src/adaptation.py:442:36: W0621: Redefining name 'insight' from outer scope (line 609) (redefined-outer-name)
+src/adaptation.py:478:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/adaptation.py:534:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/adaptation.py:535:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/adaptation.py:594:8: W0404: Reimport 'Database' (imported line 18) (reimported)
+src/adaptation.py:595:8: W0404: Reimport 'KnowledgeBrain' (imported line 19) (reimported)
+src/adaptation.py:596:8: W0404: Reimport 'CoinScorer' (imported line 17) (reimported)
+src/adaptation.py:597:8: W0404: Reimport 'PatternLibrary' (imported line 23) (reimported)
+src/adaptation.py:598:8: W0404: Reimport 'Insight' (imported line 22) (reimported)
+src/adaptation.py:14:0: W0611: Unused timedelta imported from datetime (unused-import)
+************* Module src.coin_config
+src/coin_config.py:146:4: W0621: Redefining name 'tier' from outer scope (line 189) (redefined-outer-name)
+src/coin_config.py:150:22: W0621: Redefining name 'tier' from outer scope (line 189) (redefined-outer-name)
+src/coin_config.py:186:4: C0103: Constant name "total" doesn't conform to UPPER_CASE naming style (invalid-name)
+************* Module src.coin_scorer
+src/coin_scorer.py:237:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/coin_scorer.py:238:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/coin_scorer.py:308:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/coin_scorer.py:344:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/coin_scorer.py:353:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/coin_scorer.py:354:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/coin_scorer.py:10:0: W0611: Unused asdict imported from dataclasses (unused-import)
+************* Module src.daily_summary
+src/daily_summary.py:21:0: C0413: Import "from src.database import Database" should be placed at the top of the module (wrong-import-position)
+src/daily_summary.py:40:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/daily_summary.py:58:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/daily_summary.py:89:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/daily_summary.py:280:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/daily_summary.py:16:0: W0611: Unused Optional imported from typing (unused-import)
+************* Module src.dashboard
+src/dashboard.py:19:0: C0413: Import "from src.database import Database" should be placed at the top of the module (wrong-import-position)
+src/dashboard.py:20:0: C0413: Import "from src.market_data import format_price" should be placed at the top of the module (wrong-import-position)
+src/dashboard.py:21:0: C0413: Import "from src.coin_config import get_tier" should be placed at the top of the module (wrong-import-position)
+src/dashboard.py:22:0: C0413: Import "from src.volatility import VolatilityCalculator" should be placed at the top of the module (wrong-import-position)
+src/dashboard.py:23:0: C0413: Import "from src.metrics import MetricsCollector" should be placed at the top of the module (wrong-import-position)
+src/dashboard.py:598:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/dashboard.py:625:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/dashboard.py:620:12: C0206: Consider iterating with .items() (consider-using-dict-items)
+src/dashboard.py:620:27: C0201: Consider iterating the dictionary directly instead of calling .keys() (consider-iterating-dictionary)
+src/dashboard.py:623:23: W0718: Catching too general exception Exception (broad-exception-caught)
+src/dashboard.py:626:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/dashboard.py:645:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/dashboard.py:663:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/dashboard.py:682:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/dashboard.py:714:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/dashboard.py:771:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/dashboard.py:772:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/dashboard.py:788:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/dashboard.py:789:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/dashboard.py:799:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/dashboard.py:800:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/dashboard.py:814:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/dashboard.py:815:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/dashboard.py:839:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/dashboard.py:840:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/dashboard.py:852:4: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/dashboard.py:20:0: W0611: Unused format_price imported from src.market_data (unused-import)
+************* Module src.dashboard_v2
+src/dashboard_v2.py:37:0: C0115: Missing class docstring (missing-class-docstring)
+src/dashboard_v2.py:42:0: C0115: Missing class docstring (missing-class-docstring)
+src/dashboard_v2.py:46:0: C0115: Missing class docstring (missing-class-docstring)
+src/dashboard_v2.py:50:0: C0115: Missing class docstring (missing-class-docstring)
+src/dashboard_v2.py:54:0: C0115: Missing class docstring (missing-class-docstring)
+src/dashboard_v2.py:58:0: C0115: Missing class docstring (missing-class-docstring)
+src/dashboard_v2.py:111:4: R0914: Too many local variables (37/15) (too-many-locals)
+src/dashboard_v2.py:243:27: W0718: Catching too general exception Exception (broad-exception-caught)
+src/dashboard_v2.py:244:24: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/dashboard_v2.py:419:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/dashboard_v2.py:422:16: W0707: Consider explicitly re-raising using 'raise HTTPException(500, str(e)) from e' (raise-missing-from)
+src/dashboard_v2.py:434:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/dashboard_v2.py:437:16: W0707: Consider explicitly re-raising using 'raise HTTPException(500, str(e)) from e' (raise-missing-from)
+src/dashboard_v2.py:447:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/dashboard_v2.py:450:16: W0707: Consider explicitly re-raising using 'raise HTTPException(500, str(e)) from e' (raise-missing-from)
+src/dashboard_v2.py:460:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/dashboard_v2.py:463:16: W0707: Consider explicitly re-raising using 'raise HTTPException(500, str(e)) from e' (raise-missing-from)
+src/dashboard_v2.py:473:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/dashboard_v2.py:476:16: W0707: Consider explicitly re-raising using 'raise HTTPException(500, str(e)) from e' (raise-missing-from)
+src/dashboard_v2.py:514:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/dashboard_v2.py:111:4: R0915: Too many statements (127/50) (too-many-statements)
+src/dashboard_v2.py:633:8: C0415: Import outside toplevel (uvicorn) (import-outside-toplevel)
+src/dashboard_v2.py:635:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/dashboard_v2.py:19:0: W0611: Unused Optional imported from typing (unused-import)
+************* Module src.database
+src/database.py:656:0: C0301: Line too long (103/100) (line-too-long)
+src/database.py:774:0: C0301: Line too long (113/100) (line-too-long)
+src/database.py:1207:0: C0301: Line too long (104/100) (line-too-long)
+src/database.py:1417:0: C0301: Line too long (136/100) (line-too-long)
+src/database.py:1:0: C0302: Too many lines in module (1742/1000) (too-many-lines)
+src/database.py:55:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/database.py:67:4: R0915: Too many statements (63/50) (too-many-statements)
+src/database.py:644:51: C0201: Consider iterating the dictionary directly instead of calling .keys() (consider-iterating-dictionary)
+src/database.py:696:4: R0913: Too many arguments (6/5) (too-many-arguments)
+src/database.py:696:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+src/database.py:752:8: C0415: Import outside toplevel (json) (import-outside-toplevel)
+src/database.py:777:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/database.py:785:8: C0415: Import outside toplevel (json) (import-outside-toplevel)
+src/database.py:812:8: C0415: Import outside toplevel (json) (import-outside-toplevel)
+src/database.py:840:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/database.py:857:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/database.py:874:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/database.py:886:8: C0415: Import outside toplevel (json) (import-outside-toplevel)
+src/database.py:1189:8: C0415: Import outside toplevel (json) (import-outside-toplevel)
+src/database.py:1217:8: C0415: Import outside toplevel (json) (import-outside-toplevel)
+src/database.py:1251:8: C0415: Import outside toplevel (json) (import-outside-toplevel)
+src/database.py:1271:4: R0913: Too many arguments (9/5) (too-many-arguments)
+src/database.py:1271:4: R0917: Too many positional arguments (9/5) (too-many-positional-arguments)
+src/database.py:1315:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/database.py:1328:8: C0415: Import outside toplevel (json) (import-outside-toplevel)
+src/database.py:1370:8: C0415: Import outside toplevel (json) (import-outside-toplevel)
+src/database.py:1421:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/database.py:1437:8: C0415: Import outside toplevel (json) (import-outside-toplevel)
+src/database.py:1469:8: C0415: Import outside toplevel (json) (import-outside-toplevel)
+src/database.py:1498:8: C0415: Import outside toplevel (json) (import-outside-toplevel)
+src/database.py:1508:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/database.py:1516:8: C0415: Import outside toplevel (json) (import-outside-toplevel)
+src/database.py:1582:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/database.py:1650:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/database.py:17:0: R0904: Too many public methods (47/20) (too-many-public-methods)
+************* Module src.effectiveness
+src/effectiveness.py:38:0: R0902: Too many instance attributes (12/7) (too-many-instance-attributes)
+src/effectiveness.py:80:0: R0902: Too many instance attributes (9/7) (too-many-instance-attributes)
+src/effectiveness.py:114:4: R0913: Too many arguments (6/5) (too-many-arguments)
+src/effectiveness.py:114:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+src/effectiveness.py:164:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:173:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:181:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:199:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:204:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:216:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:227:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:239:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:185:4: R0911: Too many return statements (7/6) (too-many-return-statements)
+src/effectiveness.py:311:4: R0913: Too many arguments (6/5) (too-many-arguments)
+src/effectiveness.py:311:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+src/effectiveness.py:311:4: R0914: Too many local variables (20/15) (too-many-locals)
+src/effectiveness.py:405:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/effectiveness.py:404:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:406:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:559:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:615:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/effectiveness.py:573:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:583:24: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:590:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:597:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:600:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:616:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/effectiveness.py:546:4: R0912: Too many branches (13/12) (too-many-branches)
+src/effectiveness.py:13:0: W0611: Unused timedelta imported from datetime (unused-import)
+************* Module src.journal
+src/journal.py:635:0: C0301: Line too long (108/100) (line-too-long)
+src/journal.py:872:0: C0301: Line too long (102/100) (line-too-long)
+src/journal.py:1:0: C0302: Too many lines in module (1113/1000) (too-many-lines)
+src/journal.py:52:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/journal.py:56:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/journal.py:59:57: E1101: Class 'MarketContext' has no '__dataclass_fields__' member (no-member)
+src/journal.py:63:0: R0902: Too many instance attributes (34/7) (too-many-instance-attributes)
+src/journal.py:148:23: E1101: Class 'JournalEntry' has no '__dataclass_fields__' member (no-member)
+src/journal.py:385:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/journal.py:386:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/journal.py:396:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/journal.py:397:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/journal.py:473:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/journal.py:540:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/journal.py:551:4: R0913: Too many arguments (6/5) (too-many-arguments)
+src/journal.py:551:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+src/journal.py:577:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/journal.py:611:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/journal.py:703:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/journal.py:699:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/journal.py:702:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/journal.py:704:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/journal.py:714:8: C0415: Import outside toplevel (time) (import-outside-toplevel)
+src/journal.py:746:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/journal.py:747:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/journal.py:404:0: R0904: Too many public methods (22/20) (too-many-public-methods)
+src/journal.py:13:0: W0611: Unused import json (unused-import)
+src/journal.py:22:0: W0611: Unused Callable imported from typing (unused-import)
+************* Module src.knowledge
+src/knowledge.py:48:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:137:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:157:8: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
+src/knowledge.py:215:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:230:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:251:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:305:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:316:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:333:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:345:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:359:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:368:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:370:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:412:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:428:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:436:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:447:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:462:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/knowledge.py:22:0: R0904: Too many public methods (25/20) (too-many-public-methods)
+************* Module src.learning_system
+src/learning_system.py:179:0: C0301: Line too long (101/100) (line-too-long)
+src/learning_system.py:619:0: C0301: Line too long (130/100) (line-too-long)
+src/learning_system.py:632:0: C0301: Line too long (106/100) (line-too-long)
+src/learning_system.py:31:0: R0902: Too many instance attributes (8/7) (too-many-instance-attributes)
+src/learning_system.py:93:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/learning_system.py:122:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/learning_system.py:200:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:214:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:220:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:230:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:234:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:245:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:252:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/learning_system.py:270:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:271:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:292:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/learning_system.py:332:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/learning_system.py:371:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/learning_system.py:410:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/learning_system.py:445:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/learning_system.py:464:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:480:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/learning_system.py:535:0: R0902: Too many instance attributes (10/7) (too-many-instance-attributes)
+src/learning_system.py:606:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:619:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:624:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:632:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:641:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/learning_system.py:660:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:720:40: W0613: Unused argument 'learning_id' (unused-argument)
+src/learning_system.py:752:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/learning_system.py:787:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/learning_system.py:825:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/learning_system.py:835:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:851:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/learning_system.py:895:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/learning_system.py:925:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/learning_system.py:16:0: W0611: Unused datetime imported from datetime (unused-import)
+************* Module src.llm_interface
+src/llm_interface.py:59:0: C0301: Line too long (108/100) (line-too-long)
+src/llm_interface.py:303:0: C0301: Line too long (114/100) (line-too-long)
+src/llm_interface.py:327:0: C0301: Line too long (112/100) (line-too-long)
+src/llm_interface.py:15:0: W0622: Redefining built-in 'ConnectionError' (redefined-builtin)
+src/llm_interface.py:85:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:110:12: W0621: Redefining name 'response' from outer scope (line 429) (redefined-outer-name)
+src/llm_interface.py:119:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:124:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:134:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:138:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:142:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:151:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:155:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:133:8: W0612: Unused variable 'e' (unused-variable)
+src/llm_interface.py:186:8: W0621: Redefining name 'response' from outer scope (line 429) (redefined-outer-name)
+src/llm_interface.py:184:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:206:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:210:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:211:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:224:8: W0621: Redefining name 'response' from outer scope (line 429) (redefined-outer-name)
+src/llm_interface.py:244:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:245:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:248:4: R0913: Too many arguments (6/5) (too-many-arguments)
+src/llm_interface.py:248:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+src/llm_interface.py:327:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:378:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:391:8: W0621: Redefining name 'response' from outer scope (line 429) (redefined-outer-name)
+src/llm_interface.py:394:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/llm_interface.py:11:0: W0611: Unused datetime imported from datetime (unused-import)
+************* Module src.main
+src/main.py:210:0: C0301: Line too long (119/100) (line-too-long)
+src/main.py:418:0: C0301: Line too long (101/100) (line-too-long)
+src/main.py:426:0: C0301: Line too long (102/100) (line-too-long)
+src/main.py:764:0: C0301: Line too long (102/100) (line-too-long)
+src/main.py:1:0: C0302: Too many lines in module (1061/1000) (too-many-lines)
+src/main.py:27:0: C0413: Import "from src.market_feed import MarketFeed, PriceTick" should be placed at the top of the module (wrong-import-position)
+src/main.py:28:0: C0413: Import "from src.sniper import Sniper" should be placed at the top of the module (wrong-import-position)
+src/main.py:29:0: C0413: Import "from src.journal import TradeJournal, MarketContext" should be placed at the top of the module (wrong-import-position)
+src/main.py:30:0: C0413: Import "from src.models.trade_condition import TradeCondition" should be placed at the top of the module (wrong-import-position)
+src/main.py:31:0: C0413: Import "from src.strategist import Strategist" should be placed at the top of the module (wrong-import-position)
+src/main.py:32:0: C0413: Import "from src.llm_interface import LLMInterface" should be placed at the top of the module (wrong-import-position)
+src/main.py:33:0: C0413: Import "from src.database import Database" should be placed at the top of the module (wrong-import-position)
+src/main.py:34:0: C0413: Import "from src.knowledge import KnowledgeBrain" should be placed at the top of the module (wrong-import-position)
+src/main.py:35:0: C0413: Import "from src.coin_scorer import CoinScorer" should be placed at the top of the module (wrong-import-position)
+src/main.py:36:0: C0413: Import "from src.quick_update import QuickUpdate" should be placed at the top of the module (wrong-import-position)
+src/main.py:37:0: C0413: Import "from src.pattern_library import PatternLibrary" should be placed at the top of the module (wrong-import-position)
+src/main.py:38:0: C0413: Import "from src.reflection import ReflectionEngine" should be placed at the top of the module (wrong-import-position)
+src/main.py:39:0: C0413: Import "from src.adaptation import AdaptationEngine" should be placed at the top of the module (wrong-import-position)
+src/main.py:40:0: C0413: Import "from src.profitability import ProfitabilityTracker, SnapshotScheduler, TimeFrame" should be placed at the top of the module (wrong-import-position)
+src/main.py:41:0: C0413: Import "from src.effectiveness import EffectivenessMonitor, EffectivenessRating" should be placed at the top of the module (wrong-import-position)
+src/main.py:42:0: C0413: Import "from src.dashboard_v2 import DashboardServer" should be placed at the top of the module (wrong-import-position)
+src/main.py:95:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:142:0: R0902: Too many instance attributes (26/7) (too-many-instance-attributes)
+src/main.py:161:4: R0913: Too many arguments (7/5) (too-many-arguments)
+src/main.py:161:4: R0917: Too many positional arguments (7/5) (too-many-positional-arguments)
+src/main.py:210:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:266:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:268:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:290:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:294:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:316:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:396:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/main.py:397:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:404:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:408:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:410:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:415:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:418:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:424:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:426:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:430:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:435:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:472:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:475:28: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:483:24: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:492:28: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:449:4: R0912: Too many branches (13/12) (too-many-branches)
+src/main.py:509:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:559:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:694:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/main.py:734:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/main.py:735:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:765:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/main.py:757:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:762:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:764:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:766:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:812:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/main.py:835:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/main.py:847:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:876:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/main.py:895:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/main.py:896:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:991:4: C0415: Import outside toplevel (argparse) (import-outside-toplevel)
+src/main.py:1030:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main.py:1036:18: W0212: Access to a protected member _connect_feed of a client class (protected-access)
+src/main.py:1048:8: W0212: Access to a protected member _running of a client class (protected-access)
+src/main.py:1051:14: W0212: Access to a protected member _main_loop of a client class (protected-access)
+src/main.py:29:0: W0611: Unused MarketContext imported from src.journal (unused-import)
+src/main.py:41:0: W0611: Unused EffectivenessRating imported from src.effectiveness (unused-import)
+************* Module src.main_legacy
+src/main_legacy.py:29:0: C0301: Line too long (101/100) (line-too-long)
+src/main_legacy.py:114:0: C0301: Line too long (113/100) (line-too-long)
+src/main_legacy.py:163:0: C0301: Line too long (105/100) (line-too-long)
+src/main_legacy.py:248:0: C0301: Line too long (120/100) (line-too-long)
+src/main_legacy.py:262:0: C0301: Line too long (108/100) (line-too-long)
+src/main_legacy.py:341:0: C0301: Line too long (106/100) (line-too-long)
+src/main_legacy.py:423:0: C0301: Line too long (104/100) (line-too-long)
+src/main_legacy.py:26:0: C0413: Import "from src.database import Database" should be placed at the top of the module (wrong-import-position)
+src/main_legacy.py:27:0: C0413: Import "from src.market_data import MarketDataFetcher, format_price" should be placed at the top of the module (wrong-import-position)
+src/main_legacy.py:28:0: C0413: Import "from src.trading_engine import TradingEngine" should be placed at the top of the module (wrong-import-position)
+src/main_legacy.py:29:0: C0413: Import "from src.learning_system import LearningSystem, RuleManager, get_learnings_as_text, get_rules_as_text" should be placed at the top of the module (wrong-import-position)
+src/main_legacy.py:30:0: C0413: Import "from src.llm_interface import LLMInterface" should be placed at the top of the module (wrong-import-position)
+src/main_legacy.py:31:0: C0413: Import "from src.risk_manager import RiskManager" should be placed at the top of the module (wrong-import-position)
+src/main_legacy.py:32:0: C0413: Import "from src.coin_config import get_coin_ids, get_tier, get_tier_config" should be placed at the top of the module (wrong-import-position)
+src/main_legacy.py:63:0: R0902: Too many instance attributes (12/7) (too-many-instance-attributes)
+src/main_legacy.py:146:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main_legacy.py:193:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/main_legacy.py:194:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main_legacy.py:234:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/main_legacy.py:220:21: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/main_legacy.py:229:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main_legacy.py:235:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main_legacy.py:250:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main_legacy.py:270:4: R0914: Too many local variables (16/15) (too-many-locals)
+src/main_legacy.py:280:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/main_legacy.py:270:36: W0613: Unused argument 'prices' (unused-argument)
+src/main_legacy.py:341:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main_legacy.py:360:24: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main_legacy.py:393:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main_legacy.py:330:4: R0912: Too many branches (13/12) (too-many-branches)
+src/main_legacy.py:438:23: W0613: Unused argument 'signum' (unused-argument)
+src/main_legacy.py:438:31: W0613: Unused argument 'frame' (unused-argument)
+src/main_legacy.py:450:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/main_legacy.py:27:0: W0611: Unused format_price imported from src.market_data (unused-import)
+src/main_legacy.py:32:0: W0611: Unused get_tier_config imported from src.coin_config (unused-import)
+************* Module src.market_data
+src/market_data.py:123:0: C0301: Line too long (119/100) (line-too-long)
+src/market_data.py:518:0: C0301: Line too long (117/100) (line-too-long)
+src/market_data.py:33:17: W0621: Redefining name 'price' from outer scope (line 542) (redefined-outer-name)
+src/market_data.py:52:4: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
+src/market_data.py:103:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:148:12: W0621: Redefining name 'data' from outer scope (line 541) (redefined-outer-name)
+src/market_data.py:152:16: W0621: Redefining name 'coin' from outer scope (line 541) (redefined-outer-name)
+src/market_data.py:142:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:151:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:153:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:165:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:182:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:191:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:220:16: W0621: Redefining name 'coin' from outer scope (line 541) (redefined-outer-name)
+src/market_data.py:220:22: W0621: Redefining name 'data' from outer scope (line 541) (redefined-outer-name)
+src/market_data.py:217:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/market_data.py:225:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:236:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:240:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:254:12: W0621: Redefining name 'prices' from outer scope (line 537) (redefined-outer-name)
+src/market_data.py:250:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/market_data.py:264:24: W0621: Redefining name 'coin' from outer scope (line 541) (redefined-outer-name)
+src/market_data.py:273:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/market_data.py:294:23: W0621: Redefining name 'coin' from outer scope (line 541) (redefined-outer-name)
+src/market_data.py:302:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:304:26: W0621: Redefining name 'coin' from outer scope (line 541) (redefined-outer-name)
+src/market_data.py:312:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:320:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:321:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:330:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:338:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:373:12: W0621: Redefining name 'data' from outer scope (line 541) (redefined-outer-name)
+src/market_data.py:368:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:387:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:407:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:416:21: W0621: Redefining name 'data' from outer scope (line 541) (redefined-outer-name)
+src/market_data.py:434:8: W0621: Redefining name 'prices' from outer scope (line 537) (redefined-outer-name)
+src/market_data.py:441:25: W0621: Redefining name 'data' from outer scope (line 541) (redefined-outer-name)
+src/market_data.py:438:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/market_data.py:449:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:466:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:472:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:485:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/market_data.py:484:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:486:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_data.py:496:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/market_data.py:555:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/market_data.py:9:0: W0611: Unused datetime imported from datetime (unused-import)
+************* Module src.market_feed
+src/market_feed.py:274:0: C0301: Line too long (108/100) (line-too-long)
+src/market_feed.py:284:0: C0301: Line too long (108/100) (line-too-long)
+src/market_feed.py:317:0: C0301: Line too long (116/100) (line-too-long)
+src/market_feed.py:345:0: C0301: Line too long (119/100) (line-too-long)
+src/market_feed.py:674:0: C0301: Line too long (107/100) (line-too-long)
+src/market_feed.py:22:4: W0707: Consider explicitly re-raising using 'except ImportError as exc' and 'raise ImportError('websockets library required. Install with: pip install websockets') from exc' (raise-missing-from)
+src/market_feed.py:67:0: R0902: Too many instance attributes (19/7) (too-many-instance-attributes)
+src/market_feed.py:127:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:131:26: E1101: Module 'websockets' has no 'WebSocketClientProtocol' member (no-member)
+src/market_feed.py:162:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:180:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+src/market_feed.py:299:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/market_feed.py:264:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:283:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:296:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:302:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:317:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:340:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:345:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:362:23: W0718: Catching too general exception Exception (broad-exception-caught)
+src/market_feed.py:361:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:363:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:408:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:448:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/market_feed.py:449:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:454:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/market_feed.py:455:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:516:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/market_feed.py:517:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:522:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/market_feed.py:523:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:555:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/market_feed.py:556:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:567:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:573:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:578:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:589:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/market_feed.py:590:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/market_feed.py:674:0: W0102: Dangerous default value [] as argument (dangerous-default-value)
+src/market_feed.py:13:0: W0611: Unused field imported from dataclasses (unused-import)
+src/market_feed.py:16:0: W0611: Unused Literal imported from typing (unused-import)
+************* Module src.metrics
+src/metrics.py:169:0: C0301: Line too long (106/100) (line-too-long)
+src/metrics.py:282:0: C0301: Line too long (108/100) (line-too-long)
+src/metrics.py:293:0: C0301: Line too long (118/100) (line-too-long)
+src/metrics.py:305:0: C0301: Line too long (114/100) (line-too-long)
+src/metrics.py:316:0: C0301: Line too long (140/100) (line-too-long)
+src/metrics.py:327:0: C0301: Line too long (133/100) (line-too-long)
+src/metrics.py:338:0: C0301: Line too long (104/100) (line-too-long)
+src/metrics.py:73:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/metrics.py:125:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/metrics.py:170:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/metrics.py:190:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/metrics.py:236:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/metrics.py:368:4: R0915: Too many statements (58/50) (too-many-statements)
+src/metrics.py:8:0: W0611: Unused timedelta imported from datetime (unused-import)
+src/metrics.py:9:0: W0611: Unused Optional imported from typing (unused-import)
+************* Module src.pattern_library
+src/pattern_library.py:140:0: C0301: Line too long (107/100) (line-too-long)
+src/pattern_library.py:178:0: C0301: Line too long (108/100) (line-too-long)
+src/pattern_library.py:291:0: C0301: Line too long (104/100) (line-too-long)
+src/pattern_library.py:297:0: C0301: Line too long (104/100) (line-too-long)
+src/pattern_library.py:381:0: C0301: Line too long (107/100) (line-too-long)
+src/pattern_library.py:455:0: C0301: Line too long (117/100) (line-too-long)
+src/pattern_library.py:474:0: C0301: Line too long (103/100) (line-too-long)
+src/pattern_library.py:596:0: C0301: Line too long (102/100) (line-too-long)
+src/pattern_library.py:614:0: C0301: Line too long (105/100) (line-too-long)
+src/pattern_library.py:140:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/pattern_library.py:153:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/pattern_library.py:211:4: R0913: Too many arguments (6/5) (too-many-arguments)
+src/pattern_library.py:211:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+src/pattern_library.py:244:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/pattern_library.py:217:8: W0613: Unused argument 'source_trade_id' (unused-argument)
+src/pattern_library.py:319:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/pattern_library.py:325:8: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
+src/pattern_library.py:336:8: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
+src/pattern_library.py:433:12: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
+src/pattern_library.py:420:4: R0911: Too many return statements (10/6) (too-many-return-statements)
+src/pattern_library.py:568:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/pattern_library.py:581:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/pattern_library.py:614:37: W0613: Unused argument 'coin' (unused-argument)
+src/pattern_library.py:670:8: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
+src/pattern_library.py:13:0: W0611: Unused field imported from dataclasses (unused-import)
+src/pattern_library.py:14:0: W0611: Unused datetime imported from datetime (unused-import)
+************* Module src.profitability
+src/profitability.py:97:0: C0301: Line too long (116/100) (line-too-long)
+src/profitability.py:98:0: C0301: Line too long (103/100) (line-too-long)
+src/profitability.py:283:0: C0301: Line too long (114/100) (line-too-long)
+src/profitability.py:286:0: C0301: Line too long (105/100) (line-too-long)
+src/profitability.py:312:0: C0301: Line too long (103/100) (line-too-long)
+src/profitability.py:753:0: C0301: Line too long (104/100) (line-too-long)
+src/profitability.py:759:0: C0301: Line too long (104/100) (line-too-long)
+src/profitability.py:228:34: W0511: TODO: Calculate from open positions (fixme)
+src/profitability.py:35:0: R0902: Too many instance attributes (20/7) (too-many-instance-attributes)
+src/profitability.py:189:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/profitability.py:251:4: R0914: Too many local variables (21/15) (too-many-locals)
+src/profitability.py:370:16: R1731: Consider using 'high_water_mark = max(high_water_mark, balance)' instead of unnecessary if block (consider-using-max-builtin)
+src/profitability.py:451:8: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
+src/profitability.py:484:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/profitability.py:539:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/profitability.py:547:4: R0914: Too many local variables (16/15) (too-many-locals)
+src/profitability.py:614:8: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
+src/profitability.py:630:12: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
+src/profitability.py:641:12: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
+src/profitability.py:612:4: R0911: Too many return statements (16/6) (too-many-return-statements)
+src/profitability.py:612:4: R0912: Too many branches (18/12) (too-many-branches)
+src/profitability.py:739:4: R0914: Too many local variables (16/15) (too-many-locals)
+src/profitability.py:758:8: W0612: Unused variable 'prev_hours' (unused-variable)
+src/profitability.py:825:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/profitability.py:853:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+src/profitability.py:13:0: W0611: Unused field imported from dataclasses (unused-import)
+************* Module src.quick_update
+src/quick_update.py:228:0: C0301: Line too long (129/100) (line-too-long)
+src/quick_update.py:24:0: R0902: Too many instance attributes (8/7) (too-many-instance-attributes)
+src/quick_update.py:45:8: W0621: Redefining name 'db' from outer scope (line 270) (redefined-outer-name)
+src/quick_update.py:91:8: W0621: Redefining name 'result' from outer scope (line 279) (redefined-outer-name)
+src/quick_update.py:106:8: W0621: Redefining name 'status' from outer scope (line 314) (redefined-outer-name)
+src/quick_update.py:141:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/quick_update.py:191:8: W0621: Redefining name 'pattern' from outer scope (line 320) (redefined-outer-name)
+src/quick_update.py:200:59: W0621: Redefining name 'result' from outer scope (line 279) (redefined-outer-name)
+src/quick_update.py:210:8: C0415: Import outside toplevel (json) (import-outside-toplevel)
+src/quick_update.py:265:8: W0404: Reimport 'Database' (imported line 17) (reimported)
+src/quick_update.py:267:8: W0404: Reimport 'CoinScorer' (imported line 16) (reimported)
+src/quick_update.py:268:8: W0404: Reimport 'PatternLibrary' (imported line 19) (reimported)
+src/quick_update.py:307:12: R1723: Unnecessary "else" after "break", remove the "else" and de-indent the code inside it (no-else-break)
+src/quick_update.py:344:8: W0404: Reimport 'time' (imported line 13) (reimported)
+src/quick_update.py:344:8: C0412: Imports from package time are not grouped (ungrouped-imports)
+src/quick_update.py:16:0: W0611: Unused CoinStatus imported from src.coin_scorer (unused-import)
+************* Module src.reflection
+src/reflection.py:193:0: C0301: Line too long (102/100) (line-too-long)
+src/reflection.py:635:0: C0301: Line too long (118/100) (line-too-long)
+src/reflection.py:636:0: C0301: Line too long (121/100) (line-too-long)
+src/reflection.py:637:0: C0301: Line too long (118/100) (line-too-long)
+src/reflection.py:638:0: C0301: Line too long (121/100) (line-too-long)
+src/reflection.py:660:0: C0301: Line too long (133/100) (line-too-long)
+src/reflection.py:661:0: C0301: Line too long (141/100) (line-too-long)
+src/reflection.py:662:0: C0301: Line too long (157/100) (line-too-long)
+src/reflection.py:667:0: C0301: Line too long (137/100) (line-too-long)
+src/reflection.py:668:0: C0301: Line too long (145/100) (line-too-long)
+src/reflection.py:669:0: C0301: Line too long (116/100) (line-too-long)
+src/reflection.py:735:0: C0301: Line too long (108/100) (line-too-long)
+src/reflection.py:759:0: C0301: Line too long (111/100) (line-too-long)
+src/reflection.py:767:0: C0301: Line too long (106/100) (line-too-long)
+src/reflection.py:72:0: R0902: Too many instance attributes (12/7) (too-many-instance-attributes)
+src/reflection.py:96:4: R0913: Too many arguments (6/5) (too-many-arguments)
+src/reflection.py:96:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+src/reflection.py:144:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/reflection.py:173:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/reflection.py:174:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/reflection.py:180:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/reflection.py:188:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/reflection.py:193:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/reflection.py:199:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/reflection.py:208:4: R0914: Too many local variables (26/15) (too-many-locals)
+src/reflection.py:270:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/reflection.py:272:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/reflection.py:305:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/reflection.py:307:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/reflection.py:418:4: R0914: Too many local variables (24/15) (too-many-locals)
+src/reflection.py:474:4: R0914: Too many local variables (19/15) (too-many-locals)
+src/reflection.py:553:4: R0913: Too many arguments (10/5) (too-many-arguments)
+src/reflection.py:553:4: R0917: Too many positional arguments (10/5) (too-many-positional-arguments)
+src/reflection.py:591:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/reflection.py:592:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/reflection.py:595:4: R0913: Too many arguments (10/5) (too-many-arguments)
+src/reflection.py:595:4: R0917: Too many positional arguments (10/5) (too-many-positional-arguments)
+src/reflection.py:595:4: R0914: Too many local variables (23/15) (too-many-locals)
+src/reflection.py:698:23: W0718: Catching too general exception Exception (broad-exception-caught)
+src/reflection.py:699:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/reflection.py:705:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/reflection.py:706:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/reflection.py:726:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/reflection.py:727:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/reflection.py:34:0: C0411: standard import "typing.TYPE_CHECKING" should be placed before first party imports "src.database.Database", "src.journal.JournalEntry", "src.knowledge.KnowledgeBrain", "src.llm_interface.LLMInterface", "src.models.reflection.CoinAnalysis"  (wrong-import-order)
+src/reflection.py:16:0: W0611: Unused timedelta imported from datetime (unused-import)
+src/reflection.py:782:4: W0611: Unused import sys (unused-import)
+************* Module src.risk_manager
+src/risk_manager.py:132:0: C0301: Line too long (117/100) (line-too-long)
+src/risk_manager.py:213:0: C0301: Line too long (117/100) (line-too-long)
+src/risk_manager.py:315:0: C0301: Line too long (113/100) (line-too-long)
+src/risk_manager.py:325:0: C0301: Line too long (113/100) (line-too-long)
+src/risk_manager.py:334:0: C0301: Line too long (142/100) (line-too-long)
+src/risk_manager.py:345:0: C0301: Line too long (157/100) (line-too-long)
+src/risk_manager.py:353:0: C0301: Line too long (108/100) (line-too-long)
+src/risk_manager.py:421:0: C0301: Line too long (109/100) (line-too-long)
+src/risk_manager.py:531:0: C0301: Line too long (107/100) (line-too-long)
+src/risk_manager.py:560:0: C0301: Line too long (158/100) (line-too-long)
+src/risk_manager.py:570:0: C0301: Line too long (130/100) (line-too-long)
+src/risk_manager.py:43:0: R0902: Too many instance attributes (8/7) (too-many-instance-attributes)
+src/risk_manager.py:72:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/risk_manager.py:73:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/risk_manager.py:74:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/risk_manager.py:75:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/risk_manager.py:76:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/risk_manager.py:77:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/risk_manager.py:133:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/risk_manager.py:104:17: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/risk_manager.py:123:20: C0415: Import outside toplevel (datetime.datetime, datetime.timezone) (import-outside-toplevel)
+src/risk_manager.py:132:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/risk_manager.py:134:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/risk_manager.py:151:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/risk_manager.py:143:17: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/risk_manager.py:150:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/risk_manager.py:152:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/risk_manager.py:167:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/risk_manager.py:157:17: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/risk_manager.py:166:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/risk_manager.py:168:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/risk_manager.py:213:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/risk_manager.py:524:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/risk_manager.py:626:8: W0612: Unused variable 'config' (unused-variable)
+src/risk_manager.py:722:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/risk_manager.py:723:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/risk_manager.py:750:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/risk_manager.py:751:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/risk_manager.py:780:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/risk_manager.py:769:8: W0612: Unused variable 'config' (unused-variable)
+src/risk_manager.py:43:0: R0904: Too many public methods (26/20) (too-many-public-methods)
+src/risk_manager.py:11:0: W0611: Unused Optional imported from typing (unused-import)
+************* Module src.sniper
+src/sniper.py:124:0: C0301: Line too long (105/100) (line-too-long)
+src/sniper.py:631:0: C0301: Line too long (102/100) (line-too-long)
+src/sniper.py:27:0: R0902: Too many instance attributes (13/7) (too-many-instance-attributes)
+src/sniper.py:61:0: R0902: Too many instance attributes (9/7) (too-many-instance-attributes)
+src/sniper.py:74:0: R0902: Too many instance attributes (14/7) (too-many-instance-attributes)
+src/sniper.py:109:4: R0913: Too many arguments (6/5) (too-many-arguments)
+src/sniper.py:109:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+src/sniper.py:173:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:187:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:191:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:194:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:297:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:332:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+src/sniper.py:349:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:355:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:364:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:371:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:434:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:444:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+src/sniper.py:454:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+src/sniper.py:488:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+src/sniper.py:495:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+src/sniper.py:551:12: C0415: Import outside toplevel (src.models.quick_update.TradeResult) (import-outside-toplevel)
+src/sniper.py:572:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:577:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:589:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:605:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:785:8: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+src/sniper.py:786:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:801:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:831:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/sniper.py:805:31: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+src/sniper.py:825:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:832:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:853:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/sniper.py:854:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sniper.py:14:0: W0611: Unused field imported from dataclasses (unused-import)
+************* Module src.strategist
+src/strategist.py:243:0: C0301: Line too long (101/100) (line-too-long)
+src/strategist.py:497:0: C0301: Line too long (147/100) (line-too-long)
+src/strategist.py:760:0: C0301: Line too long (103/100) (line-too-long)
+src/strategist.py:300:40: W0511: TODO: Get from Sniper (fixme)
+src/strategist.py:484:9: W0511: TODO: Calculate from trade journal when available (fixme)
+src/strategist.py:43:0: R0902: Too many instance attributes (17/7) (too-many-instance-attributes)
+src/strategist.py:57:4: R0913: Too many arguments (10/5) (too-many-arguments)
+src/strategist.py:57:4: R0917: Too many positional arguments (10/5) (too-many-positional-arguments)
+src/strategist.py:105:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:119:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:140:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:169:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/strategist.py:170:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:250:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/strategist.py:231:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:233:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:251:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:424:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:458:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:465:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:548:4: R0914: Too many local variables (21/15) (too-many-locals)
+src/strategist.py:680:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:685:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:687:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:692:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:693:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:707:12: C0415: Import outside toplevel (src.coin_scorer.CoinStatus) (import-outside-toplevel)
+src/strategist.py:710:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:718:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:725:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:732:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:740:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:745:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:750:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:756:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:762:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:696:4: R0911: Too many return statements (9/6) (too-many-return-statements)
+src/strategist.py:778:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:789:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/strategist.py:790:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/strategist.py:188:8: W0201: Attribute '_active_rule_actions' defined outside __init__ (attribute-defined-outside-init)
+src/strategist.py:859:4: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module src.trading_engine
+src/trading_engine.py:101:0: C0301: Line too long (102/100) (line-too-long)
+src/trading_engine.py:141:0: C0301: Line too long (106/100) (line-too-long)
+src/trading_engine.py:173:0: C0301: Line too long (115/100) (line-too-long)
+src/trading_engine.py:236:0: C0301: Line too long (112/100) (line-too-long)
+src/trading_engine.py:240:0: C0301: Line too long (115/100) (line-too-long)
+src/trading_engine.py:60:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/trading_engine.py:87:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/trading_engine.py:100:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/trading_engine.py:111:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/trading_engine.py:149:4: R0914: Too many local variables (21/15) (too-many-locals)
+src/trading_engine.py:159:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/trading_engine.py:173:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/trading_engine.py:190:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/trading_engine.py:230:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/trading_engine.py:245:4: R0914: Too many local variables (16/15) (too-many-locals)
+src/trading_engine.py:265:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/trading_engine.py:275:17: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/trading_engine.py:302:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/trading_engine.py:311:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/trading_engine.py:336:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/trading_engine.py:365:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+************* Module src.volatility
+src/volatility.py:75:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/volatility.py:103:27: W0621: Redefining name 'coin' from outer scope (line 460) (redefined-outer-name)
+src/volatility.py:113:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/volatility.py:133:16: W0621: Redefining name 'coin' from outer scope (line 460) (redefined-outer-name)
+src/volatility.py:131:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/volatility.py:142:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/volatility.py:146:14: W0621: Redefining name 'coin' from outer scope (line 460) (redefined-outer-name)
+src/volatility.py:157:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/volatility.py:168:32: W0621: Redefining name 'coin' from outer scope (line 460) (redefined-outer-name)
+src/volatility.py:170:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/volatility.py:178:35: W0621: Redefining name 'coin' from outer scope (line 460) (redefined-outer-name)
+src/volatility.py:223:41: W0621: Redefining name 'coin' from outer scope (line 460) (redefined-outer-name)
+src/volatility.py:269:8: W0621: Redefining name 'score' from outer scope (line 461) (redefined-outer-name)
+src/volatility.py:250:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/volatility.py:290:14: W0621: Redefining name 'coin' from outer scope (line 460) (redefined-outer-name)
+src/volatility.py:303:8: W0621: Redefining name 'tier' from outer scope (line 463) (redefined-outer-name)
+src/volatility.py:321:14: W0621: Redefining name 'coin' from outer scope (line 460) (redefined-outer-name)
+src/volatility.py:361:12: W0621: Redefining name 'deleted' from outer scope (line 467) (redefined-outer-name)
+src/volatility.py:355:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/volatility.py:365:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/volatility.py:381:12: W0621: Redefining name 'coin' from outer scope (line 460) (redefined-outer-name)
+src/volatility.py:375:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/volatility.py:402:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/volatility.py:430:25: W0621: Redefining name 'coin' from outer scope (line 460) (redefined-outer-name)
+src/volatility.py:432:4: W0621: Redefining name 'vc' from outer scope (line 449) (redefined-outer-name)
+src/volatility.py:436:28: W0621: Redefining name 'coin' from outer scope (line 460) (redefined-outer-name)
+src/volatility.py:438:4: W0621: Redefining name 'vc' from outer scope (line 449) (redefined-outer-name)
+src/volatility.py:439:4: W0621: Redefining name 'score' from outer scope (line 461) (redefined-outer-name)
+src/volatility.py:453:10: W1309: Using an f-string that does not have any interpolated variables (f-string-without-interpolation)
+src/volatility.py:459:10: W1309: Using an f-string that does not have any interpolated variables (f-string-without-interpolation)
+************* Module src.analysis.learning
+src/analysis/learning.py:105:0: C0301: Line too long (105/100) (line-too-long)
+src/analysis/learning.py:108:0: C0301: Line too long (105/100) (line-too-long)
+src/analysis/learning.py:111:0: C0301: Line too long (101/100) (line-too-long)
+src/analysis/learning.py:204:0: C0301: Line too long (114/100) (line-too-long)
+src/analysis/learning.py:205:0: C0301: Line too long (113/100) (line-too-long)
+src/analysis/learning.py:211:0: C0301: Line too long (103/100) (line-too-long)
+src/analysis/learning.py:299:0: C0301: Line too long (101/100) (line-too-long)
+src/analysis/learning.py:18:0: R0914: Too many local variables (18/15) (too-many-locals)
+src/analysis/learning.py:118:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/analysis/learning.py:39:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/analysis/learning.py:18:0: R0912: Too many branches (16/12) (too-many-branches)
+src/analysis/learning.py:18:0: R0915: Too many statements (56/50) (too-many-statements)
+src/analysis/learning.py:124:0: R0914: Too many local variables (19/15) (too-many-locals)
+src/analysis/learning.py:216:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/analysis/learning.py:150:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/analysis/learning.py:167:43: W0612: Unused variable 'conf' (unused-variable)
+src/analysis/learning.py:168:61: W0612: Unused variable 'applied_at' (unused-variable)
+src/analysis/learning.py:222:0: R0914: Too many local variables (17/15) (too-many-locals)
+src/analysis/learning.py:301:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/analysis/learning.py:243:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/analysis/learning.py:423:11: W0718: Catching too general exception Exception (broad-exception-caught)
+src/analysis/learning.py:336:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+src/analysis/learning.py:501:0: C0206: Consider iterating with .items() (consider-using-dict-items)
+src/analysis/learning.py:429:0: R0912: Too many branches (18/12) (too-many-branches)
+src/analysis/learning.py:13:0: W0611: Unused Dict imported from typing (unused-import)
+src/analysis/learning.py:13:0: W0611: Unused List imported from typing (unused-import)
+src/analysis/learning.py:13:0: W0611: Unused Optional imported from typing (unused-import)
+src/analysis/learning.py:13:0: W0611: Unused Any imported from typing (unused-import)
+************* Module src.analysis.metrics
+src/analysis/metrics.py:17:0: R0902: Too many instance attributes (23/7) (too-many-instance-attributes)
+src/analysis/metrics.py:101:0: R0914: Too many local variables (17/15) (too-many-locals)
+src/analysis/metrics.py:141:12: R1731: Consider using 'metrics.largest_win = max(metrics.largest_win, pnl)' instead of unnecessary if block (consider-using-max-builtin)
+src/analysis/metrics.py:146:12: R1730: Consider using 'metrics.largest_loss = min(metrics.largest_loss, pnl)' instead of unnecessary if block (consider-using-min-builtin)
+src/analysis/metrics.py:101:0: R0912: Too many branches (21/12) (too-many-branches)
+src/analysis/metrics.py:101:0: R0915: Too many statements (64/50) (too-many-statements)
+src/analysis/metrics.py:298:8: R1731: Consider using 'peak = max(peak, equity)' instead of unnecessary if block (consider-using-max-builtin)
+src/analysis/metrics.py:342:4: C0415: Import outside toplevel (collections.defaultdict) (import-outside-toplevel)
+src/analysis/metrics.py:11:0: W0611: Unused field imported from dataclasses (unused-import)
+************* Module src.analysis.performance
+src/analysis/performance.py:79:0: C0301: Line too long (105/100) (line-too-long)
+src/analysis/performance.py:143:0: C0301: Line too long (105/100) (line-too-long)
+src/analysis/performance.py:12:0: W0611: Unused timedelta imported from datetime (unused-import)
+src/analysis/performance.py:13:0: W0611: Unused Tuple imported from typing (unused-import)
+src/analysis/performance.py:15:0: W0611: Unused build_equity_curve imported from src.analysis.metrics (unused-import)
+************* Module src.models.adaptation
+src/models/adaptation.py:27:0: R0902: Too many instance attributes (14/7) (too-many-instance-attributes)
+************* Module src.models.knowledge
+src/models/knowledge.py:196:0: C0325: Unnecessary parens after 'not' keyword (superfluous-parens)
+src/models/knowledge.py:198:0: C0325: Unnecessary parens after 'not' keyword (superfluous-parens)
+src/models/knowledge.py:200:0: C0325: Unnecessary parens after 'not' keyword (superfluous-parens)
+src/models/knowledge.py:202:0: C0325: Unnecessary parens after 'not' keyword (superfluous-parens)
+src/models/knowledge.py:204:0: C0325: Unnecessary parens after 'not' keyword (superfluous-parens)
+src/models/knowledge.py:206:0: C0325: Unnecessary parens after 'not' keyword (superfluous-parens)
+src/models/knowledge.py:10:0: R0902: Too many instance attributes (13/7) (too-many-instance-attributes)
+src/models/knowledge.py:56:0: R0902: Too many instance attributes (12/7) (too-many-instance-attributes)
+src/models/knowledge.py:127:0: R0902: Too many instance attributes (8/7) (too-many-instance-attributes)
+src/models/knowledge.py:196:16: R1705: Unnecessary "elif" after "return", remove the leading "el" from "elif" (no-else-return)
+src/models/knowledge.py:175:4: R0911: Too many return statements (8/6) (too-many-return-statements)
+src/models/knowledge.py:3:0: W0611: Unused field imported from dataclasses (unused-import)
+************* Module src.models.quick_update
+src/models/quick_update.py:12:0: R0902: Too many instance attributes (16/7) (too-many-instance-attributes)
+src/models/quick_update.py:52:12: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+src/models/quick_update.py:60:0: R0902: Too many instance attributes (15/7) (too-many-instance-attributes)
+src/models/quick_update.py:7:0: W0611: Unused field imported from dataclasses (unused-import)
+************* Module src.models.reflection
+src/models/reflection.py:16:0: R0902: Too many instance attributes (12/7) (too-many-instance-attributes)
+src/models/reflection.py:32:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/models/reflection.py:50:0: R0902: Too many instance attributes (9/7) (too-many-instance-attributes)
+src/models/reflection.py:63:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/models/reflection.py:78:0: R0902: Too many instance attributes (11/7) (too-many-instance-attributes)
+src/models/reflection.py:98:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/models/reflection.py:115:0: R0902: Too many instance attributes (11/7) (too-many-instance-attributes)
+src/models/reflection.py:135:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/models/reflection.py:152:0: R0902: Too many instance attributes (10/7) (too-many-instance-attributes)
+src/models/reflection.py:170:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/models/reflection.py:197:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/models/reflection.py:209:4: C0116: Missing function or method docstring (missing-function-docstring)
+src/models/reflection.py:226:0: R0902: Too many instance attributes (18/7) (too-many-instance-attributes)
+src/models/reflection.py:258:4: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module src.models.trade_condition
+src/models/trade_condition.py:10:0: R0902: Too many instance attributes (13/7) (too-many-instance-attributes)
+src/models/trade_condition.py:80:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+src/models/trade_condition.py:91:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+src/models/trade_condition.py:102:8: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+************* Module src.sentiment.btc_correlation
+src/sentiment/btc_correlation.py:152:23: W0718: Catching too general exception Exception (broad-exception-caught)
+src/sentiment/btc_correlation.py:153:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sentiment/btc_correlation.py:206:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/sentiment/btc_correlation.py:5:0: W0611: Unused Optional imported from typing (unused-import)
+************* Module src.sentiment.context_manager
+src/sentiment/context_manager.py:125:0: C0301: Line too long (102/100) (line-too-long)
+src/sentiment/context_manager.py:131:0: C0301: Line too long (113/100) (line-too-long)
+src/sentiment/context_manager.py:270:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/sentiment/context_manager.py:271:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sentiment/context_manager.py:282:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/sentiment/context_manager.py:283:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sentiment/context_manager.py:290:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/sentiment/context_manager.py:291:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sentiment/context_manager.py:301:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/sentiment/context_manager.py:302:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sentiment/context_manager.py:309:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/sentiment/context_manager.py:310:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sentiment/context_manager.py:317:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/sentiment/context_manager.py:318:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sentiment/context_manager.py:5:0: W0611: Unused Any imported from typing (unused-import)
+src/sentiment/context_manager.py:9:0: W0611: Unused NewsFeed imported from news_feed (unused-import)
+************* Module src.sentiment.fear_greed
+src/sentiment/fear_greed.py:77:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/sentiment/fear_greed.py:78:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sentiment/fear_greed.py:80:20: C0415: Import outside toplevel (time) (import-outside-toplevel)
+src/sentiment/fear_greed.py:117:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/sentiment/fear_greed.py:118:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sentiment/fear_greed.py:150:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+************* Module src.sentiment.news_feed
+src/sentiment/news_feed.py:151:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/sentiment/news_feed.py:216:4: R0914: Too many local variables (17/15) (too-many-locals)
+src/sentiment/news_feed.py:259:19: W0718: Catching too general exception Exception (broad-exception-caught)
+src/sentiment/news_feed.py:260:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+************* Module src.sentiment.social_sentiment
+src/sentiment/social_sentiment.py:14:0: R0902: Too many instance attributes (8/7) (too-many-instance-attributes)
+src/sentiment/social_sentiment.py:136:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+************* Module src.technical.atr
+src/technical/atr.py:45:0: C0301: Line too long (105/100) (line-too-long)
+src/technical/atr.py:109:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/atr.py:215:4: R0913: Too many arguments (6/5) (too-many-arguments)
+src/technical/atr.py:215:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
+************* Module src.technical.candle_fetcher
+src/technical/candle_fetcher.py:163:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/candle_fetcher.py:178:16: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/candle_fetcher.py:205:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/candle_fetcher.py:209:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/candle_fetcher.py:212:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/candle_fetcher.py:233:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+************* Module src.technical.funding
+src/technical/funding.py:153:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/technical/funding.py:149:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/funding.py:154:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/funding.py:127:12: W0612: Unused variable 'history' (unused-variable)
+src/technical/funding.py:180:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/technical/funding.py:181:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/funding.py:191:20: C0201: Consider iterating the dictionary directly instead of calling .keys() (consider-iterating-dictionary)
+src/technical/funding.py:196:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module src.technical.manager
+src/technical/manager.py:142:0: C0301: Line too long (105/100) (line-too-long)
+src/technical/manager.py:145:0: C0301: Line too long (111/100) (line-too-long)
+src/technical/manager.py:20:0: R0902: Too many instance attributes (9/7) (too-many-instance-attributes)
+src/technical/manager.py:79:4: R0912: Too many branches (14/12) (too-many-branches)
+src/technical/manager.py:158:0: R0902: Too many instance attributes (8/7) (too-many-instance-attributes)
+src/technical/manager.py:182:4: R0913: Too many arguments (9/5) (too-many-arguments)
+src/technical/manager.py:182:4: R0917: Too many positional arguments (9/5) (too-many-positional-arguments)
+src/technical/manager.py:235:4: R0912: Too many branches (16/12) (too-many-branches)
+src/technical/manager.py:348:19: R1716: Simplify chained comparison between the operands (chained-comparison)
+src/technical/manager.py:357:19: R1716: Simplify chained comparison between the operands (chained-comparison)
+src/technical/manager.py:367:19: R1716: Simplify chained comparison between the operands (chained-comparison)
+src/technical/manager.py:376:19: R1716: Simplify chained comparison between the operands (chained-comparison)
+src/technical/manager.py:420:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/technical/manager.py:421:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/manager.py:428:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/technical/manager.py:429:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/manager.py:436:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/technical/manager.py:437:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/manager.py:444:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/technical/manager.py:445:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/manager.py:452:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/technical/manager.py:453:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/manager.py:460:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/technical/manager.py:461:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/manager.py:468:15: W0718: Catching too general exception Exception (broad-exception-caught)
+src/technical/manager.py:469:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/manager.py:5:0: W0611: Unused Dict imported from typing (unused-import)
+************* Module src.technical.orderbook
+src/technical/orderbook.py:33:0: R0902: Too many instance attributes (11/7) (too-many-instance-attributes)
+src/technical/orderbook.py:164:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+src/technical/orderbook.py:237:4: R0914: Too many local variables (17/15) (too-many-locals)
+************* Module src.technical.rsi
+src/technical/rsi.py:89:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+************* Module src.technical.support_resistance
+src/technical/support_resistance.py:6:0: W0611: Unused defaultdict imported from collections (unused-import)
+************* Module src.technical.volume_profile
+src/technical/volume_profile.py:22:0: R0902: Too many instance attributes (9/7) (too-many-instance-attributes)
+************* Module analyze_learning
+scripts/analyze_learning.py:81:0: C0301: Line too long (102/100) (line-too-long)
+scripts/analyze_learning.py:140:0: C0301: Line too long (103/100) (line-too-long)
+scripts/analyze_learning.py:148:0: C0301: Line too long (106/100) (line-too-long)
+scripts/analyze_learning.py:196:0: C0301: Line too long (110/100) (line-too-long)
+scripts/analyze_learning.py:197:0: C0301: Line too long (109/100) (line-too-long)
+scripts/analyze_learning.py:353:0: C0301: Line too long (115/100) (line-too-long)
+scripts/analyze_learning.py:393:0: C0301: Line too long (120/100) (line-too-long)
+scripts/analyze_learning.py:26:0: C0413: Import "from src.database import Database" should be placed at the top of the module (wrong-import-position)
+scripts/analyze_learning.py:29:0: R0914: Too many local variables (16/15) (too-many-locals)
+scripts/analyze_learning.py:86:11: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts/analyze_learning.py:40:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+scripts/analyze_learning.py:29:40: W0613: Unused argument 'days' (unused-argument)
+scripts/analyze_learning.py:92:0: R0914: Too many local variables (16/15) (too-many-locals)
+scripts/analyze_learning.py:151:11: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts/analyze_learning.py:103:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+scripts/analyze_learning.py:92:43: W0613: Unused argument 'days' (unused-argument)
+scripts/analyze_learning.py:157:0: R0914: Too many local variables (22/15) (too-many-locals)
+scripts/analyze_learning.py:222:11: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts/analyze_learning.py:169:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+scripts/analyze_learning.py:157:51: W0613: Unused argument 'days' (unused-argument)
+scripts/analyze_learning.py:188:61: W0612: Unused variable 'applied_at' (unused-variable)
+scripts/analyze_learning.py:307:11: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts/analyze_learning.py:241:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+scripts/analyze_learning.py:313:0: R0915: Too many statements (65/50) (too-many-statements)
+scripts/analyze_learning.py:411:0: C0116: Missing function or method docstring (missing-function-docstring)
+scripts/analyze_learning.py:444:8: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module analyze_performance
+scripts/analyze_performance.py:70:0: C0301: Line too long (109/100) (line-too-long)
+scripts/analyze_performance.py:72:0: C0301: Line too long (121/100) (line-too-long)
+scripts/analyze_performance.py:76:0: C0301: Line too long (110/100) (line-too-long)
+scripts/analyze_performance.py:78:0: C0301: Line too long (118/100) (line-too-long)
+scripts/analyze_performance.py:82:0: C0301: Line too long (101/100) (line-too-long)
+scripts/analyze_performance.py:84:0: C0301: Line too long (109/100) (line-too-long)
+scripts/analyze_performance.py:88:0: C0301: Line too long (113/100) (line-too-long)
+scripts/analyze_performance.py:90:0: C0301: Line too long (121/100) (line-too-long)
+scripts/analyze_performance.py:95:0: C0301: Line too long (104/100) (line-too-long)
+scripts/analyze_performance.py:97:0: C0301: Line too long (112/100) (line-too-long)
+scripts/analyze_performance.py:103:0: C0301: Line too long (103/100) (line-too-long)
+scripts/analyze_performance.py:105:0: C0301: Line too long (104/100) (line-too-long)
+scripts/analyze_performance.py:241:0: C0301: Line too long (106/100) (line-too-long)
+scripts/analyze_performance.py:21:0: C0413: Import "from src.database import Database" should be placed at the top of the module (wrong-import-position)
+scripts/analyze_performance.py:22:0: C0413: Import "from src.analysis.metrics import calculate_metrics" should be placed at the top of the module (wrong-import-position)
+scripts/analyze_performance.py:23:0: C0413: Import "from src.analysis.performance import analyze_by_hour, analyze_by_coin, analyze_by_pattern, compare_periods, get_best_worst_hours, get_best_worst_coins, calculate_consistency" should be placed at the top of the module (wrong-import-position)
+scripts/analyze_performance.py:32:0: C0413: Import "from src.analysis.learning import analyze_coin_score_accuracy, analyze_adaptation_effectiveness, analyze_pattern_confidence_accuracy, analyze_knowledge_growth, calculate_learning_score" should be placed at the top of the module (wrong-import-position)
+scripts/analyze_performance.py:41:0: C0413: Import "from scripts.generate_report import load_trades, generate_summary_report, generate_learning_report, generate_improvement_report, generate_detailed_report" should be placed at the top of the module (wrong-import-position)
+scripts/analyze_performance.py:48:0: C0413: Import "from scripts.export_trades import export_trades_csv, export_full_dataset" should be placed at the top of the module (wrong-import-position)
+scripts/analyze_performance.py:60:0: R0912: Too many branches (15/12) (too-many-branches)
+scripts/analyze_performance.py:60:63: W0613: Unused argument 'learning_score' (unused-argument)
+scripts/analyze_performance.py:133:0: C0116: Missing function or method docstring (missing-function-docstring)
+scripts/analyze_performance.py:133:0: R0914: Too many local variables (23/15) (too-many-locals)
+scripts/analyze_performance.py:195:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/analyze_performance.py:200:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/analyze_performance.py:205:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/analyze_performance.py:133:0: R0915: Too many statements (95/50) (too-many-statements)
+scripts/analyze_performance.py:169:4: W0612: Unused variable 'by_hour' (unused-variable)
+scripts/analyze_performance.py:170:4: W0612: Unused variable 'by_coin' (unused-variable)
+scripts/analyze_performance.py:171:4: W0612: Unused variable 'by_pattern' (unused-variable)
+scripts/analyze_performance.py:184:4: W0612: Unused variable 'consistency' (unused-variable)
+scripts/analyze_performance.py:15:0: W0611: Unused datetime imported from datetime (unused-import)
+scripts/analyze_performance.py:15:0: W0611: Unused timedelta imported from datetime (unused-import)
+scripts/analyze_performance.py:23:0: W0611: Unused get_best_worst_hours imported from src.analysis.performance (unused-import)
+scripts/analyze_performance.py:23:0: W0611: Unused get_best_worst_coins imported from src.analysis.performance (unused-import)
+************* Module autonomous_monitor
+scripts/autonomous_monitor.py:11:0: C0301: Line too long (118/100) (line-too-long)
+scripts/autonomous_monitor.py:330:0: C0301: Line too long (123/100) (line-too-long)
+scripts/autonomous_monitor.py:423:0: C0301: Line too long (111/100) (line-too-long)
+scripts/autonomous_monitor.py:783:0: C0301: Line too long (106/100) (line-too-long)
+scripts/autonomous_monitor.py:25:0: C0413: Import "from src.database import Database" should be placed at the top of the module (wrong-import-position)
+scripts/autonomous_monitor.py:26:0: C0413: Import "from src.llm_interface import LLMInterface" should be placed at the top of the module (wrong-import-position)
+scripts/autonomous_monitor.py:27:0: C0413: Import "from src.coin_config import get_tier" should be placed at the top of the module (wrong-import-position)
+scripts/autonomous_monitor.py:130:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+scripts/autonomous_monitor.py:142:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+scripts/autonomous_monitor.py:176:4: R0914: Too many local variables (25/15) (too-many-locals)
+scripts/autonomous_monitor.py:178:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+scripts/autonomous_monitor.py:282:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+scripts/autonomous_monitor.py:333:4: R0914: Too many local variables (22/15) (too-many-locals)
+scripts/autonomous_monitor.py:335:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+scripts/autonomous_monitor.py:429:8: C0206: Consider iterating with .items() (consider-using-dict-items)
+scripts/autonomous_monitor.py:333:4: R0912: Too many branches (14/12) (too-many-branches)
+scripts/autonomous_monitor.py:447:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+scripts/autonomous_monitor.py:507:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+scripts/autonomous_monitor.py:573:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+scripts/autonomous_monitor.py:700:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+scripts/autonomous_monitor.py:713:8: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+scripts/autonomous_monitor.py:726:13: W0212: Access to a protected member _get_connection of a client class (protected-access)
+scripts/autonomous_monitor.py:737:20: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+scripts/autonomous_monitor.py:19:0: W0611: Unused timedelta imported from datetime (unused-import)
+scripts/autonomous_monitor.py:20:0: W0611: Unused Optional imported from typing (unused-import)
+************* Module daily_checkpoint
+scripts/daily_checkpoint.py:78:0: C0301: Line too long (102/100) (line-too-long)
+scripts/daily_checkpoint.py:127:0: R0914: Too many local variables (18/15) (too-many-locals)
+scripts/daily_checkpoint.py:218:8: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/daily_checkpoint.py:224:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module export_trades
+scripts/export_trades.py:22:0: C0413: Import "from src.database import Database" should be placed at the top of the module (wrong-import-position)
+scripts/export_trades.py:39:9: W0212: Access to a protected member _get_connection of a client class (protected-access)
+scripts/export_trades.py:69:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/export_trades.py:92:9: W0212: Access to a protected member _get_connection of a client class (protected-access)
+scripts/export_trades.py:141:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/export_trades.py:147:0: R0914: Too many local variables (21/15) (too-many-locals)
+scripts/export_trades.py:171:9: W0212: Access to a protected member _get_connection of a client class (protected-access)
+scripts/export_trades.py:184:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/export_trades.py:196:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/export_trades.py:208:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/export_trades.py:223:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/export_trades.py:235:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/export_trades.py:250:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/export_trades.py:272:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/export_trades.py:278:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module generate_report
+scripts/generate_report.py:151:0: C0301: Line too long (104/100) (line-too-long)
+scripts/generate_report.py:166:0: C0301: Line too long (113/100) (line-too-long)
+scripts/generate_report.py:193:0: C0301: Line too long (110/100) (line-too-long)
+scripts/generate_report.py:269:0: C0301: Line too long (112/100) (line-too-long)
+scripts/generate_report.py:271:0: C0301: Line too long (102/100) (line-too-long)
+scripts/generate_report.py:273:0: C0301: Line too long (102/100) (line-too-long)
+scripts/generate_report.py:275:0: C0301: Line too long (119/100) (line-too-long)
+scripts/generate_report.py:277:0: C0301: Line too long (109/100) (line-too-long)
+scripts/generate_report.py:318:0: C0301: Line too long (102/100) (line-too-long)
+scripts/generate_report.py:323:0: C0301: Line too long (111/100) (line-too-long)
+scripts/generate_report.py:339:0: C0301: Line too long (103/100) (line-too-long)
+scripts/generate_report.py:344:0: C0301: Line too long (112/100) (line-too-long)
+scripts/generate_report.py:21:0: C0413: Import "from src.database import Database" should be placed at the top of the module (wrong-import-position)
+scripts/generate_report.py:22:0: C0413: Import "from src.analysis.metrics import calculate_metrics" should be placed at the top of the module (wrong-import-position)
+scripts/generate_report.py:23:0: C0413: Import "from src.analysis.performance import analyze_by_hour, analyze_by_coin, analyze_by_pattern, compare_periods, get_best_worst_hours, get_best_worst_coins, calculate_consistency" should be placed at the top of the module (wrong-import-position)
+scripts/generate_report.py:32:0: C0413: Import "from src.analysis.learning import analyze_coin_score_accuracy, analyze_adaptation_effectiveness, analyze_pattern_confidence_accuracy, analyze_knowledge_growth, calculate_learning_score" should be placed at the top of the module (wrong-import-position)
+scripts/generate_report.py:45:9: W0212: Access to a protected member _get_connection of a client class (protected-access)
+scripts/generate_report.py:80:0: R0914: Too many local variables (16/15) (too-many-locals)
+scripts/generate_report.py:307:0: R0914: Too many local variables (19/15) (too-many-locals)
+scripts/generate_report.py:334:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/generate_report.py:355:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/generate_report.py:368:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/generate_report.py:307:29: W0613: Unused argument 'db' (unused-argument)
+scripts/generate_report.py:307:74: W0613: Unused argument 'days' (unused-argument)
+scripts/generate_report.py:374:0: C0116: Missing function or method docstring (missing-function-docstring)
+scripts/generate_report.py:407:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/generate_report.py:410:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/generate_report.py:413:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+scripts/generate_report.py:439:13: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+************* Module validate_learning
+scripts/validate_learning.py:128:0: C0301: Line too long (116/100) (line-too-long)
+scripts/validate_learning.py:402:0: C0301: Line too long (104/100) (line-too-long)
+scripts/validate_learning.py:39:4: C0116: Missing function or method docstring (missing-function-docstring)
+scripts/validate_learning.py:30:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+scripts/validate_learning.py:368:19: W0613: Unused argument 'verbose' (unused-argument)
+scripts/validate_learning.py:422:0: C0116: Missing function or method docstring (missing-function-docstring)
+scripts/validate_learning.py:18:0: W0611: Unused timedelta imported from datetime (unused-import)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.technical.candle_fetcher:[100:130]
+==src.technical.funding:[72:102]
+    SYMBOL_MAP = {
+        "BTC": "BTCUSDT",
+        "ETH": "ETHUSDT",
+        "SOL": "SOLUSDT",
+        "XRP": "XRPUSDT",
+        "BNB": "BNBUSDT",
+        "ADA": "ADAUSDT",
+        "DOGE": "DOGEUSDT",
+        "AVAX": "AVAXUSDT",
+        "DOT": "DOTUSDT",
+        "LINK": "LINKUSDT",
+        "MATIC": "MATICUSDT",
+        "UNI": "UNIUSDT",
+        "ATOM": "ATOMUSDT",
+        "LTC": "LTCUSDT",
+        "ETC": "ETCUSDT",
+        "PEPE": "PEPEUSDT",
+        "FLOKI": "FLOKIUSDT",
+        "BONK": "BONKUSDT",
+        "WIF": "WIFUSDT",
+        "SHIB": "SHIBUSDT",
+    }
+
+    def __init__(self, cache_seconds: int = 60):
+        """Initialize fetcher with cache duration.
+
+        Args:
+            cache_seconds: How long to cache candle data (default 60s)
+        """
+        self.cache_duration = timedelta(seconds=cache_seconds) (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.dashboard:[644:665]
+==src.trading_engine:[310:338]
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT id, coin_name, entry_price, size_usd, current_price,
+                       unrealized_pnl, unrealized_pnl_pct, stop_loss_price,
+                       take_profit_price, entry_reason, opened_at
+                FROM open_trades
+                ORDER BY opened_at DESC
+            """)
+
+            columns = ['id', 'coin_name', 'entry_price', 'size_usd', 'current_price',
+                      'unrealized_pnl', 'unrealized_pnl_pct', 'stop_loss_price',
+                      'take_profit_price', 'entry_reason', 'opened_at']
+
+            return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+    def get_trade_by_id(self, trade_id: int) -> Optional[Dict[str, Any]]:
+        """Get a specific open trade by ID.
+
+        Args:
+            trade_id: The trade ID to look up.
+
+        Returns:
+            Trade dictionary or None if not found.
+        """
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(""" (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.dashboard:[662:681]
+==src.trading_engine:[364:387]
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT id, coin_name, entry_price, exit_price, size_usd,
+                       pnl_usd, pnl_pct, entry_reason, exit_reason,
+                       opened_at, closed_at, duration_seconds
+                FROM closed_trades
+                ORDER BY closed_at DESC
+                LIMIT ?
+            """, (limit,))
+
+            columns = ['id', 'coin_name', 'entry_price', 'exit_price', 'size_usd',
+                      'pnl_usd', 'pnl_pct', 'entry_reason', 'exit_reason',
+                      'opened_at', 'closed_at', 'duration_seconds']
+
+            return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+    def get_learnings(self, limit: int = 10) -> List[Dict[str, Any]]:
+        """Get recent learnings for display.""" (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.reflection:[678:690]
+==src.strategist:[646:658]
+        try:
+            # Clean response - handle markdown code blocks
+            clean = response.strip()
+            if clean.startswith("```json"):
+                clean = clean[7:]
+            if clean.startswith("```"):
+                clean = clean[3:]
+            if clean.endswith("```"):
+                clean = clean[:-3]
+
+            data = json.loads(clean.strip())
+ (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.adaptation:[586:604]
+==src.quick_update:[257:274]
+    print("=" * 60)
+
+    # Create temp database
+    fd, path = tempfile.mkstemp(suffix=".db")
+    os.close(fd)
+
+    try:
+        from src.database import Database
+        from src.knowledge import KnowledgeBrain
+        from src.coin_scorer import CoinScorer
+        from src.pattern_library import PatternLibrary
+        from src.models.reflection import Insight
+
+        db = Database(path)
+        brain = KnowledgeBrain(db)
+        scorer = CoinScorer(brain, db)
+        patterns = PatternLibrary(brain)
+ (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.adaptation:[570:585]
+==src.reflection:[775:789]
+            }
+        }
+
+
+# Allow running directly for testing
+if __name__ == "__main__":
+    import sys
+
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+
+    print("=" * 60) (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.market_data:[272:289]
+==src.trading_engine:[59:86]
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT price_usd FROM market_data WHERE coin = ?",
+                (coin,)
+            )
+            row = cursor.fetchone()
+            return row[0] if row else None
+
+    def fetch_and_store(self) -> Dict[str, Dict[str, float]]:
+        """Fetch prices from API and store in database.
+
+        Convenience method that combines fetch_prices() and update_database().
+
+        Returns:
+            The fetched price data.
+        """ (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.reflection:[150:158]
+==src.strategist:[143:151]
+        self._running = False
+        if self._task:
+            self._task.cancel()
+            try:
+                await self._task
+            except asyncio.CancelledError:
+                pass
+            self._task = None (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.reflection:[774:788]
+==src.strategist:[844:858]
+                "is_running": self._running,
+            }
+        }
+
+
+# Allow running directly for testing
+if __name__ == "__main__":
+    import sys
+
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+ (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==export_trades:[19:45]
+==generate_report:[18:50]
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from src.database import Database
+
+
+def export_trades_csv(db: Database, output_path: str, days: int = 7) -> int:
+    """
+    Export trades to CSV format.
+
+    Args:
+        db: Database instance.
+        output_path: Path for output CSV file.
+        days: Number of days to export.
+
+    Returns:
+        Number of trades exported.
+    """
+    cutoff = (datetime.now() - timedelta(days=days)).isoformat()
+
+    with db._get_connection() as conn:
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT
+                trade_id, coin, direction, entry_price, exit_price,
+                position_size_usd, pnl_usd, pnl_pct, entry_time, exit_time, (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.adaptation:[571:585]
+==src.quick_update:[242:256]
+        }
+
+
+# Allow running directly for testing
+if __name__ == "__main__":
+    import tempfile
+    import os
+
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+
+    print("=" * 60) (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.dashboard:[662:669]
+==src.learning_system:[92:99]
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT id, coin_name, entry_price, exit_price, size_usd,
+                       pnl_usd, pnl_pct, entry_reason, exit_reason,
+                       opened_at, closed_at, duration_seconds
+                FROM closed_trades (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==autonomous_monitor:[553:582]
+==src.metrics:[153:199]
+                SELECT MAX(last_updated) FROM market_data
+            """)
+            last_price = cursor.fetchone()[0]
+
+        # Get account state
+        state = self.db.get_account_state()
+        balance = state.get('balance', 0)
+        in_positions = state.get('in_positions', 0)
+        exposure_pct = (in_positions / balance * 100) if balance > 0 else 0
+
+        # Calculate hours since last trade
+        hours_since_trade = None
+        if last_trade:
+            try:
+                last_dt = datetime.fromisoformat(last_trade.replace('Z', '+00:00'))
+                hours_since_trade = (datetime.now() - last_dt.replace(tzinfo=None)).total_seconds() / 3600
+            except Exception:
+                pass
+
+        return {
+            'trades_today': trades_today,
+            'trades_24h': trades_24h,
+            'trades_per_hour': round(trades_24h / 24, 2) if trades_24h else 0,
+            'open_positions': open_positions,
+            'exposure_pct': round(exposure_pct, 1),
+            'last_trade_time': last_trade,
+            'hours_since_trade': round(hours_since_trade, 1) if hours_since_trade else None,
+            'last_price_update': last_price
+        }
+
+    def get_learning_metrics(self) -> Dict[str, Any]:
+        """Calculate learning system metrics.
+
+        Returns:
+            Dict with learning stats (learnings count, rules, success rate)
+        """
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+
+            # Total learnings
+            cursor.execute("SELECT COUNT(*) FROM learnings")
+            total_learnings = cursor.fetchone()[0]
+
+            # Learnings today
+            cursor.execute("""
+                SELECT COUNT(*) FROM learnings (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.analysis.metrics:[345:355]
+==src.analysis.performance:[317:328]
+    for trade in trades:
+        ts = trade.get("exit_time") or trade.get("timestamp")
+        pnl = trade.get("pnl_usd") or trade.get("pnl") or 0
+
+        if ts:
+            if isinstance(ts, str):
+                try:
+                    ts = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                except ValueError:
+                    continue (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.daily_summary:[18:30]
+==src.dashboard:[16:32]
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from src.database import Database
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+ (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.database:[38:49]
+==src.journal:[172:182]
+        if db_path is None:
+            project_root = Path(__file__).parent.parent
+            self.db_path = project_root / "data" / "trading_bot.db"
+        else:
+            self.db_path = Path(db_path)
+
+        # Ensure directory exists
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # Initialize table (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.database:[62:73]
+==src.journal:[186:195]
+        conn = sqlite3.connect(str(self.db_path))
+        conn.row_factory = sqlite3.Row
+        return conn
+
+    def create_tables(self) -> None:
+        """Create all required tables if they don't exist."""
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+
+            # 1. open_trades table
+            cursor.execute(""" (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.database:[230:237]
+==src.journal:[209:215]
+                    market_regime TEXT,
+                    volatility REAL,
+                    funding_rate REAL,
+                    cvd REAL,
+                    btc_trend TEXT,
+                    btc_price REAL, (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.database:[173:183]
+==src.volatility:[77:85]
+                CREATE TABLE IF NOT EXISTS price_history (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    coin TEXT NOT NULL,
+                    price_usd REAL NOT NULL,
+                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
+
+            # 9. coin_cooldowns table (for TASK-020 persistent cooldowns)
+            cursor.execute(""" (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.journal:[921:927]
+==src.metrics:[79:85]
+                SUM(CASE WHEN pnl_usd > 0 THEN 1 ELSE 0 END) as wins,
+                SUM(CASE WHEN pnl_usd <= 0 THEN 1 ELSE 0 END) as losses,
+                SUM(pnl_usd) as total_pnl,
+                AVG(pnl_usd) as avg_pnl,
+                MAX(pnl_usd) as best_trade,
+                MIN(pnl_usd) as worst_trade, (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.learning_system:[22:30]
+==src.trading_engine:[16:24]
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+
+@dataclass (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.analysis.metrics:[349:355]
+==src.analysis.performance:[31:37]
+        if ts:
+            if isinstance(ts, str):
+                try:
+                    ts = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                except ValueError:
+                    continue (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.daily_summary:[39:44]
+==src.dashboard:[662:667]
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT id, coin_name, entry_price, exit_price, size_usd,
+                       pnl_usd, pnl_pct, entry_reason, exit_reason, (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.dashboard:[644:649]
+==src.trading_engine:[335:340]
+        with self.db._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT id, coin_name, entry_price, size_usd, current_price,
+                       unrealized_pnl, unrealized_pnl_pct, stop_loss_price, (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.database:[218:224]
+==src.journal:[201:206]
+                    coin TEXT NOT NULL,
+                    direction TEXT NOT NULL,
+                    position_size_usd REAL NOT NULL,
+                    stop_loss_price REAL,
+                    take_profit_price REAL,
+ (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.market_feed:[652:658]
+==src.reflection:[760:766]
+            status = "degraded"
+        else:
+            status = "healthy"
+
+        return {
+            "status": status, (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.analysis.metrics:[157:162]
+==src.analysis.performance:[31:36]
+        if ts:
+            if isinstance(ts, str):
+                try:
+                    ts = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                except ValueError: (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==src.analysis.metrics:[156:162]
+==src.analysis.performance:[95:101]
+        ts = trade.get("exit_time") or trade.get("timestamp")
+        if ts:
+            if isinstance(ts, str):
+                try:
+                    ts = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                except ValueError: (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==daily_checkpoint:[16:28]
+==validate_learning:[19:29]
+try:
+    import requests
+except ImportError:
+    print("ERROR: requests library required. Install with: pip install requests")
+    sys.exit(1)
+
+
+DASHBOARD_URL = "http://localhost:8080"
+
+
+def fetch_api(endpoint: str) -> dict:
+    """Fetch data from dashboard API.""" (duplicate-code)
+scripts/validate_learning.py:1:0: R0801: Similar lines in 2 files
+==daily_checkpoint:[28:33]
+==validate_learning:[49:54]
+    try:
+        response = requests.get(f"{DASHBOARD_URL}{endpoint}", timeout=10)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e: (duplicate-code)
+
+------------------------------------------------------------------
+Your code has been rated at 8.91/10 (previous run: 8.91/10, +0.00)
+

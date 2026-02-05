@@ -1,0 +1,85 @@
+=== PROJECT_ROOT ===
+(no usage found)
+
+=== DATA_DIR ===
+(no usage found)
+
+=== LOGS_DIR ===
+(no usage found)
+
+=== DEFAULT_EXCHANGE ===
+src/main.py:47:        TRADEABLE_COINS, DEFAULT_EXCHANGE, INITIAL_BALANCE,
+src/main.py:54:    DEFAULT_EXCHANGE = "bybit"
+src/main.py:162:                 exchange: str = DEFAULT_EXCHANGE,
+
+=== TRADEABLE_COINS ===
+src/main.py:47:        TRADEABLE_COINS, DEFAULT_EXCHANGE, INITIAL_BALANCE,
+src/main.py:53:    TRADEABLE_COINS = ["BTC", "ETH", "SOL"]
+src/main.py:173:            coins: List of coins to monitor (default: TRADEABLE_COINS)
+src/main.py:180:        self.coins = coins or TRADEABLE_COINS
+
+=== COIN_TIERS ===
+(no usage found)
+
+=== MAX_POSITIONS ===
+src/sniper.py:102:    MAX_POSITIONS = 5           # Maximum concurrent positions
+src/sniper.py:348:        if len(self.open_positions) >= self.MAX_POSITIONS:
+src/sniper.py:349:            logger.warning(f"Max positions ({self.MAX_POSITIONS}) reached, skipping entry")
+
+=== MAX_POSITION_PER_COIN ===
+(no usage found)
+
+=== MAX_EXPOSURE_PCT ===
+src/sniper.py:104:    MAX_EXPOSURE_PCT = 0.10     # Maximum % of balance at risk
+src/sniper.py:361:        max_exposure = self.balance * self.MAX_EXPOSURE_PCT
+src/sniper.py:700:        max_exposure = self.balance * self.MAX_EXPOSURE_PCT
+
+=== DEFAULT_STOP_LOSS_PCT ===
+(no usage found)
+
+=== DEFAULT_TAKE_PROFIT_PCT ===
+(no usage found)
+
+=== DEFAULT_POSITION_SIZE_USD ===
+(no usage found)
+
+=== INITIAL_BALANCE ===
+src/main.py:47:        TRADEABLE_COINS, DEFAULT_EXCHANGE, INITIAL_BALANCE,
+src/main.py:55:    INITIAL_BALANCE = 10000.0
+src/main.py:164:                 initial_balance: float = INITIAL_BALANCE,
+
+=== STALE_DATA_THRESHOLD ===
+src/main.py:48:        STALE_DATA_THRESHOLD, STATUS_LOG_INTERVAL, SNIPER_STATE_PATH,
+src/main.py:56:    STALE_DATA_THRESHOLD = 5
+src/main.py:78:    def __init__(self, stale_threshold: float = STALE_DATA_THRESHOLD):
+
+=== STATUS_LOG_INTERVAL ===
+src/main.py:48:        STALE_DATA_THRESHOLD, STATUS_LOG_INTERVAL, SNIPER_STATE_PATH,
+src/main.py:57:    STATUS_LOG_INTERVAL = 60
+src/main.py:464:            if now - self._last_status_log >= STATUS_LOG_INTERVAL:
+
+=== STRATEGIST_ENABLED ===
+src/main.py:49:        STRATEGIST_INTERVAL, STRATEGIST_ENABLED
+src/main.py:60:    STRATEGIST_ENABLED = True
+src/main.py:304:        if STRATEGIST_ENABLED:
+
+=== STRATEGIST_INTERVAL ===
+src/main.py:49:        STRATEGIST_INTERVAL, STRATEGIST_ENABLED
+src/main.py:59:    STRATEGIST_INTERVAL = 180  # 3 minutes
+src/main.py:314:                interval_seconds=STRATEGIST_INTERVAL,
+src/main.py:316:            logger.info(f"Strategist ready (interval={STRATEGIST_INTERVAL}s)")
+
+=== STRATEGIST_MAX_CONDITIONS ===
+(no usage found)
+
+=== STRATEGIST_CONDITION_TTL ===
+(no usage found)
+
+=== DATABASE_PATH ===
+(no usage found)
+
+=== SNIPER_STATE_PATH ===
+src/main.py:48:        STALE_DATA_THRESHOLD, STATUS_LOG_INTERVAL, SNIPER_STATE_PATH,
+src/main.py:58:    SNIPER_STATE_PATH = "data/sniper_state.json"
+src/main.py:184:        self._state_path = state_path or SNIPER_STATE_PATH
+

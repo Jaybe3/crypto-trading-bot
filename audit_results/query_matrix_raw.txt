@@ -1,0 +1,513 @@
+src/adaptation.py|70|knowledge: KnowledgeBrain to update.
+src/coin_scorer.py|3|This module implements the "Quick Update" tier of reflection:
+src/coin_scorer.py|4|- Updates coin scores after each trade close
+src/coin_scorer.py|73|Called after every trade close to update scores and check thresholds.
+src/coin_scorer.py|143|# Update score in brain
+src/coin_scorer.py|144|self.brain.update_coin_score(coin, {"won": won, "pnl": pnl})
+src/coin_scorer.py|217|# Update cache and return adaptation if changed
+src/daily_summary.py|19|sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+src/daily_summary.py|43|SELECT id, coin_name, entry_price, exit_price, size_usd,
+src/daily_summary.py|61|SELECT l.id, l.trade_id, l.learning_text, l.confidence_level,
+src/daily_summary.py|94|SELECT id, rule_text, status, success_count, failure_count
+src/daily_summary.py|103|SELECT description, details, created_at
+src/dashboard.py|17|sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+src/dashboard.py|338|Last update: {{ last_update }}
+src/dashboard.py|601|SELECT coin, price_usd, change_24h, last_updated
+src/dashboard.py|612|'last_updated': row[3],
+src/dashboard.py|614|'vol_score': 50  # Default, will be updated below
+src/dashboard.py|648|SELECT id, coin_name, entry_price, size_usd, current_price,
+src/dashboard.py|666|SELECT id, coin_name, entry_price, exit_price, size_usd,
+src/dashboard.py|685|SELECT l.id, l.trade_id, l.learning_text, l.confidence_level,
+src/dashboard.py|717|SELECT id, rule_text, status, success_count, failure_count, created_at
+src/dashboard.py|768|'last_update': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+src/dashboard_v2.py|236|"""SSE endpoint for real-time updates."""
+src/database.py|49|# Create tables on initialization
+src/database.py|74|CREATE TABLE IF NOT EXISTS open_trades (
+src/database.py|91|CREATE TABLE IF NOT EXISTS closed_trades (
+src/database.py|109|CREATE TABLE IF NOT EXISTS learnings (
+src/database.py|124|CREATE TABLE IF NOT EXISTS trading_rules (
+src/database.py|139|CREATE TABLE IF NOT EXISTS activity_log (
+src/database.py|150|CREATE TABLE IF NOT EXISTS account_state (
+src/database.py|158|last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+src/database.py|164|CREATE TABLE IF NOT EXISTS market_data (
+src/database.py|168|last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+src/database.py|174|CREATE TABLE IF NOT EXISTS price_history (
+src/database.py|184|CREATE TABLE IF NOT EXISTS coin_cooldowns (
+src/database.py|192|CREATE TABLE IF NOT EXISTS monitoring_alerts (
+src/database.py|209|CREATE TABLE IF NOT EXISTS trade_journal (
+src/database.py|261|updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+src/database.py|313|CREATE TABLE IF NOT EXISTS active_conditions (
+src/database.py|382|CREATE TABLE IF NOT EXISTS coin_scores (
+src/database.py|395|last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+src/database.py|401|CREATE TABLE IF NOT EXISTS trading_patterns (
+src/database.py|419|CREATE TABLE IF NOT EXISTS regime_rules (
+src/database.py|433|CREATE TABLE IF NOT EXISTS coin_adaptations (
+src/database.py|447|CREATE TABLE IF NOT EXISTS reflections (
+src/database.py|461|CREATE TABLE IF NOT EXISTS adaptations (
+src/database.py|481|CREATE TABLE IF NOT EXISTS runtime_state (
+src/database.py|485|updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+src/database.py|491|CREATE TABLE IF NOT EXISTS profit_snapshots (
+src/database.py|528|CREATE TABLE IF NOT EXISTS equity_points (
+src/database.py|609|cursor.execute("SELECT COUNT(*) FROM account_state")
+src/database.py|614|INSERT INTO account_state
+src/database.py|629|cursor.execute("SELECT * FROM account_state ORDER BY id DESC LIMIT 1")
+src/database.py|635|def update_account_state(self, **kwargs) -> None:
+src/database.py|636|"""Update account state with provided values.
+src/database.py|639|**kwargs: Fields to update (balance, available_balance, etc.)
+src/database.py|650|UPDATE account_state
+src/database.py|651|SET {set_clause}, last_updated = CURRENT_TIMESTAMP
+src/database.py|652|WHERE id = (SELECT MAX(id) FROM account_state)
+src/database.py|665|The ID of the inserted log entry.
+src/database.py|670|INSERT INTO activity_log (activity_type, description, details)
+src/database.py|688|SELECT * FROM activity_log
+src/database.py|714|The ID of the inserted reflection.
+src/database.py|719|INSERT INTO reflections
+src/database.py|738|SELECT * FROM reflections
+src/database.py|756|INSERT OR REPLACE INTO active_conditions
+src/database.py|789|SELECT * FROM active_conditions
+src/database.py|816|SELECT * FROM active_conditions WHERE id = ?
+src/database.py|835|UPDATE active_conditions
+src/database.py|842|def delete_expired_conditions(self) -> int:
+src/database.py|843|"""Delete all expired conditions.
+src/database.py|846|Number of conditions deleted.
+src/database.py|851|DELETE FROM active_conditions
+src/database.py|854|deleted = cursor.rowcount
+src/database.py|856|if deleted > 0:
+src/database.py|857|logger.info(f"Deleted {deleted} expired conditions")
+src/database.py|858|return deleted
+src/database.py|864|Number of conditions deleted.
+src/database.py|869|DELETE FROM active_conditions
+src/database.py|872|deleted = cursor.rowcount
+src/database.py|874|logger.debug(f"Cleared {deleted} untriggered conditions")
+src/database.py|875|return deleted
+src/database.py|890|SELECT * FROM active_conditions
+src/database.py|908|"""Save or update a coin score.
+src/database.py|916|INSERT OR REPLACE INTO coin_scores
+src/database.py|918|avg_winner, avg_loser, is_blacklisted, blacklist_reason, trend, last_updated)
+src/database.py|933|score_data["last_updated"],
+src/database.py|948|cursor.execute("SELECT * FROM coin_scores WHERE coin = ?", (coin,))
+src/database.py|960|cursor.execute("SELECT * FROM coin_scores ORDER BY total_pnl DESC")
+src/database.py|971|cursor.execute("SELECT coin FROM coin_scores WHERE is_blacklisted = TRUE")
+src/database.py|974|def update_coin_blacklist(self, coin: str, is_blacklisted: bool, reason: str = "") -> None:
+src/database.py|975|"""Update blacklist status for a coin.
+src/database.py|985|UPDATE coin_scores
+src/database.py|986|SET is_blacklisted = ?, blacklist_reason = ?, last_updated = CURRENT_TIMESTAMP
+src/database.py|994|"""Save or update a trading pattern.
+src/database.py|1002|INSERT OR REPLACE INTO trading_patterns
+src/database.py|1034|cursor.execute("SELECT * FROM trading_patterns WHERE pattern_id = ?", (pattern_id,))
+src/database.py|1047|SELECT * FROM trading_patterns
+src/database.py|1053|def update_pattern_stats(self, pattern_id: str, won: bool, pnl: float) -> None:
+src/database.py|1054|"""Update pattern statistics after a trade.
+src/database.py|1064|UPDATE trading_patterns
+src/database.py|1083|UPDATE trading_patterns
+src/database.py|1092|"""Save or update a regime rule.
+src/database.py|1100|INSERT OR REPLACE INTO regime_rules
+src/database.py|1127|cursor.execute("SELECT * FROM regime_rules WHERE rule_id = ?", (rule_id,))
+src/database.py|1140|SELECT * FROM regime_rules
+src/database.py|1146|def update_rule_stats(self, rule_id: str, estimated_save: float = 0.0) -> None:
+src/database.py|1147|"""Update rule statistics after it triggered.
+src/database.py|1156|UPDATE regime_rules
+src/database.py|1172|UPDATE regime_rules
+src/database.py|1187|ID of the inserted record.
+src/database.py|1193|INSERT INTO coin_adaptations
+src/database.py|1222|SELECT * FROM coin_adaptations
+src/database.py|1229|SELECT * FROM coin_adaptations
+src/database.py|1255|SELECT * FROM coin_adaptations
+src/database.py|1295|The ID of the inserted adaptation.
+src/database.py|1300|INSERT INTO adaptations
+src/database.py|1332|SELECT * FROM adaptations
+src/database.py|1374|SELECT * FROM adaptations
+src/database.py|1391|def update_adaptation_effectiveness(
+src/database.py|1398|"""Update adaptation with effectiveness measurement.
+src/database.py|1409|UPDATE adaptations
+src/database.py|1421|logger.debug(f"Updated effectiveness for adaptation {adaptation_id}: {effectiveness}")
+src/database.py|1441|SELECT * FROM adaptations
+src/database.py|1473|SELECT * FROM adaptations
+src/database.py|1504|INSERT OR REPLACE INTO runtime_state (key, value, updated_at)
+src/database.py|1519|cursor.execute("SELECT key, value FROM runtime_state")
+src/database.py|1537|cursor.execute("DELETE FROM runtime_state")
+src/database.py|1550|The ID of the inserted snapshot.
+src/database.py|1555|INSERT INTO profit_snapshots
+src/database.py|1623|SELECT * FROM profit_snapshots
+src/database.py|1630|def delete_old_snapshots(self, timeframe: str, cutoff: datetime) -> int:
+src/database.py|1631|"""Delete snapshots older than cutoff.
+src/database.py|1634|timeframe: Timeframe to delete from.
+src/database.py|1635|cutoff: Delete snapshots before this time.
+src/database.py|1638|Number of snapshots deleted.
+src/database.py|1643|DELETE FROM profit_snapshots
+src/database.py|1647|deleted = cursor.rowcount
+src/database.py|1649|if deleted > 0:
+src/database.py|1650|logger.debug(f"Deleted {deleted} old {timeframe} snapshots")
+src/database.py|1651|return deleted
+src/database.py|1662|The ID of the inserted point.
+src/database.py|1667|INSERT INTO equity_points
+src/database.py|1711|SELECT * FROM equity_points
+src/database.py|1730|SELECT * FROM equity_points
+src/effectiveness.py|398|self.db.update_adaptation_effectiveness(
+src/journal.py|125|updated_at: datetime = field(default_factory=datetime.now)
+src/journal.py|131|for key in ['entry_time', 'exit_time', 'created_at', 'updated_at']:
+src/journal.py|140|for key in ['entry_time', 'exit_time', 'created_at', 'updated_at']:
+src/journal.py|196|CREATE TABLE IF NOT EXISTS trade_journal (
+src/journal.py|230|updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+src/journal.py|235|def insert(self, entry: JournalEntry) -> None:
+src/journal.py|236|"""Insert a new journal entry."""
+src/journal.py|244|f"INSERT OR REPLACE INTO trade_journal ({columns}) VALUES ({placeholders})",
+src/journal.py|249|def update(self, entry_id: str, updates: dict) -> None:
+src/journal.py|250|"""Update an existing entry."""
+src/journal.py|251|updates['updated_at'] = datetime.now().isoformat()
+src/journal.py|252|set_clause = ', '.join(f"{k} = ?" for k in updates.keys())
+src/journal.py|257|f"UPDATE trade_journal SET {set_clause} WHERE id = ?",
+src/journal.py|258|list(updates.values()) + [entry_id]
+src/journal.py|266|cursor.execute("SELECT * FROM trade_journal WHERE id = ?", (entry_id,))
+src/journal.py|277|"SELECT * FROM trade_journal WHERE position_id = ?",
+src/journal.py|294|f"SELECT * FROM trade_journal WHERE {where} ORDER BY {order_by} LIMIT ?",
+src/journal.py|304|f"SELECT COUNT(*) FROM trade_journal WHERE {where}",
+src/journal.py|310|select: str,
+src/journal.py|315|query = f"SELECT {select} FROM trade_journal WHERE {where}"
+src/journal.py|369|def enqueue_insert(self, entry: JournalEntry) -> None:
+src/journal.py|370|"""Queue an insert operation."""
+src/journal.py|371|self.queue.put(('insert', entry))
+src/journal.py|373|def enqueue_update(self, entry_id: str, updates: dict) -> None:
+src/journal.py|374|"""Queue an update operation."""
+src/journal.py|375|self.queue.put(('update', (entry_id, updates)))
+src/journal.py|391|if operation == 'insert':
+src/journal.py|392|self.db.insert(args)
+src/journal.py|393|elif operation == 'update':
+src/journal.py|394|entry_id, updates = args
+src/journal.py|395|self.db.update(entry_id, updates)
+src/journal.py|536|self._write_queue.enqueue_insert(entry)
+src/journal.py|538|self.db.insert(entry)
+src/journal.py|586|# Update entry
+src/journal.py|587|updates = {
+src/journal.py|597|# Apply updates to entry object
+src/journal.py|598|for key, value in updates.items():
+src/journal.py|606|self._write_queue.enqueue_update(entry.id, updates)
+src/journal.py|608|self.db.update(entry.id, updates)
+src/journal.py|693|# Update database
+src/journal.py|695|self._write_queue.enqueue_update(entry_id, prices)
+src/journal.py|697|self.db.update(entry_id, prices)
+src/journal.py|744|self.db.update(entry_id, prices)
+src/journal.py|920|select="""
+src/journal.py|978|select="""
+src/journal.py|1008|select="""
+src/journal.py|1038|select="""
+src/journal.py|1068|select="""
+src/knowledge.py|27|The Reflection Engine writes to update knowledge based on trade outcomes.
+src/knowledge.py|32|>>> brain.update_coin_score("SOL", {"won": True, "pnl": 5.0})
+src/knowledge.py|93|def update_coin_score(self, coin: str, trade_result: Dict[str, Any]) -> CoinScore:
+src/knowledge.py|94|"""Update coin score with a new trade result.
+src/knowledge.py|101|Updated CoinScore.
+src/knowledge.py|115|# Update running average for winners
+src/knowledge.py|122|# Update running average for losers
+src/knowledge.py|129|score.last_updated = datetime.now()
+src/knowledge.py|131|# Update trend based on recent performance
+src/knowledge.py|137|logger.debug(f"Updated {coin} score: {score.total_trades} trades, "
+src/knowledge.py|212|score.last_updated = datetime.now()
+src/knowledge.py|227|score.last_updated = datetime.now()
+src/knowledge.py|248|score.last_updated = datetime.now()
+src/knowledge.py|307|def update_pattern_stats(self, pattern_id: str, won: bool, pnl: float) -> None:
+src/knowledge.py|308|"""Update pattern statistics after a trade.
+src/knowledge.py|316|logger.warning(f"Pattern {pattern_id} not found for stats update")
+src/knowledge.py|328|# Update confidence based on performance
+src/knowledge.py|333|logger.debug(f"Updated pattern {pattern_id}: {pattern.times_used} uses, "
+src/knowledge.py|414|def update_rule_stats(
+src/knowledge.py|420|"""Update rule statistics after evaluation.
+src/knowledge.py|428|logger.warning(f"Rule {rule_id} not found for stats update")
+src/knowledge.py|435|self.db.update_rule_stats(rule_id, saved_pnl)
+src/learning_system.py|96|SELECT id, coin_name, entry_price, exit_price, size_usd,
+src/learning_system.py|125|SELECT price_usd, change_24h, last_updated
+src/learning_system.py|135|'last_updated': row[2]
+src/learning_system.py|255|INSERT INTO learnings (
+src/learning_system.py|295|SELECT id, trade_id, learning_text, confidence_level, created_at
+src/learning_system.py|335|SELECT id, trade_id, learning_text, confidence_level, created_at
+src/learning_system.py|374|SELECT l.id, l.trade_id, l.learning_text, l.confidence_level, l.created_at
+src/learning_system.py|413|SELECT id, trade_id, learning_text, confidence_level, created_at
+src/learning_system.py|448|SELECT c.id
+src/learning_system.py|484|cursor.execute("SELECT COUNT(*) FROM learnings")
+src/learning_system.py|488|cursor.execute("SELECT AVG(confidence_level) FROM learnings")
+src/learning_system.py|492|cursor.execute("SELECT COUNT(*) FROM learnings WHERE confidence_level >= 0.7")
+src/learning_system.py|644|INSERT INTO trading_rules (
+src/learning_system.py|755|SELECT id, rule_text, rule_type, status,
+src/learning_system.py|790|SELECT id, rule_text, rule_type, status,
+src/learning_system.py|828|UPDATE trading_rules
+src/learning_system.py|854|SELECT status, success_count, failure_count
+src/learning_system.py|880|# Update status
+src/learning_system.py|882|UPDATE trading_rules
+src/learning_system.py|930|SELECT status, COUNT(*)
+src/learning_system.py|941|SELECT AVG(CAST(success_count AS FLOAT) /
+src/llm_interface.py|275|You MUST NOT select any coin from this list.
+src/llm_interface.py|277|Selecting a forbidden coin will cause your trade to be REJECTED.
+src/llm_interface.py|321|REMEMBER: You MUST NOT select any coin from the FORBIDDEN list above.
+src/main.py|25|sys.path.insert(0, str(Path(__file__).parent.parent))
+src/main.py|36|from src.quick_update import QuickUpdate
+src/main.py|196|self.quick_update: Optional[QuickUpdate] = None
+src/main.py|271|# Initialize QuickUpdate (TASK-130: post-trade knowledge updates)
+src/main.py|272|logger.info("Initializing QuickUpdate...")
+src/main.py|273|self.quick_update = QuickUpdate(
+src/main.py|279|# Initialize Sniper (with quick_update for TASK-130)
+src/main.py|285|quick_update=self.quick_update,
+src/main.py|336|# Wire reflection engine to quick update
+src/main.py|337|self.quick_update.set_reflection_engine(self.reflection_engine)
+src/main_legacy.py|24|sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+src/main_legacy.py|68|2. Update open positions (check stop loss / take profit)
+src/main_legacy.py|166|# Step 2: Update positions (may close trades)
+src/main_legacy.py|167|closed_trades = self._update_positions()
+src/main_legacy.py|202|stats = self.market_data.update_all_prices()
+src/main_legacy.py|204|if stats['updated'] == 0:
+src/main_legacy.py|205|logger.warning("No coins updated")
+src/main_legacy.py|223|SELECT coin, change_24h FROM market_data
+src/main_legacy.py|229|logger.info(f"Updated {len(prices)} coins | Top movers: {mover_str}")
+src/main_legacy.py|238|def _update_positions(self) -> List[Dict[str, Any]]:
+src/main_legacy.py|239|"""Update open positions and check stop loss / take profit."""
+src/main_legacy.py|240|closed = self.trading_engine.update_positions()
+src/main_legacy.py|283|SELECT coin, price_usd, change_24h
+src/main_legacy.py|285|WHERE last_updated > datetime('now', '-5 minutes')
+src/market_data.py|29|DEFAULT_UPDATE_INTERVAL = 30  # seconds
+src/market_data.py|71|update_interval: Seconds between updates.
+src/market_data.py|88|update_interval: int = DEFAULT_UPDATE_INTERVAL,
+src/market_data.py|95|update_interval: Seconds between updates (default: 30).
+src/market_data.py|100|self.update_interval = update_interval
+src/market_data.py|199|def update_database(self, price_data: Optional[Dict[str, Dict[str, float]]] = None) -> int:
+src/market_data.py|206|Number of coins updated.
+src/market_data.py|215|updated_count = 0
+src/market_data.py|228|# Insert or replace (upsert)
+src/market_data.py|230|INSERT OR REPLACE INTO market_data
+src/market_data.py|231|(coin, price_usd, change_24h, last_updated)
+src/market_data.py|235|updated_count += 1
+src/market_data.py|236|logger.debug(f"Updated {coin}: {format_price(price_usd)} ({change_24h:+.2f}%)")
+src/market_data.py|240|logger.info(f"Updated {updated_count} coins in database")
+src/market_data.py|241|return updated_count
+src/market_data.py|248|Example: {'bitcoin': {'price_usd': 94235.50, 'change_24h': 2.35, 'last_updated': '...'}}
+src/market_data.py|252|cursor.execute("SELECT coin, price_usd, change_24h, last_updated FROM market_data")
+src/market_data.py|259|'last_updated': row[3]
+src/market_data.py|276|"SELECT price_usd FROM market_data WHERE coin = ?",
+src/market_data.py|285|Convenience method that combines fetch_prices() and update_database().
+src/market_data.py|291|self.update_database(price_data)
+src/market_data.py|315|"""Run continuous price updates.
+src/market_data.py|318|max_iterations: Maximum number of updates (None for infinite).
+src/market_data.py|320|logger.info(f"Starting continuous updates every {self.update_interval} seconds")
+src/market_data.py|330|logger.info(f"Update {iteration}/{max_iterations} complete")
+src/market_data.py|332|time.sleep(self.update_interval)
+src/market_data.py|338|logger.error(f"Fetch failed: {e}, retrying in {self.update_interval}s")
+src/market_data.py|339|time.sleep(self.update_interval)
+src/market_data.py|426|def update_all_prices(self) -> Dict[str, Any]:
+src/market_data.py|427|"""Update all coin prices in database with volume filtering.
+src/market_data.py|432|Dict with stats: {updated, skipped_low_volume, failed}
+src/market_data.py|436|stats = {"updated": 0, "skipped_low_volume": 0, "skipped_coins": []}
+src/market_data.py|457|INSERT OR REPLACE INTO market_data
+src/market_data.py|458|(coin, price_usd, change_24h, last_updated)
+src/market_data.py|462|stats["updated"] += 1
+src/market_data.py|467|f"Updated {stats['updated']} coins, "
+src/market_data.py|498|# Get coins updated in the last 5 minutes
+src/market_data.py|500|SELECT coin FROM market_data
+src/market_data.py|501|WHERE last_updated > datetime('now', '-5 minutes')
+src/market_data.py|550|print(f"  {coin}: {format_price(data['price_usd'])} (updated: {data['last_updated']})")
+src/market_feed.py|4|Provides real-time price updates via WebSocket, replacing 30-second polling.
+src/market_feed.py|29|"""Real-time price update."""
+src/market_feed.py|33|volume_24h: float   # 24h volume (updated periodically)
+src/market_feed.py|34|change_24h: float   # 24h % change (updated periodically)
+src/market_feed.py|76|- Sub-second price updates
+src/market_feed.py|145|# 24h data cache (updated less frequently)
+src/market_feed.py|434|# Update price cache
+src/market_feed.py|458|"""Handle Bybit ticker update."""
+src/market_feed.py|571|"""Subscribe to price updates."""
+src/market_feed.py|698|print(f"\nTest complete: {count['trades']} price updates received")
+src/metrics.py|78|SELECT
+src/metrics.py|130|SELECT COUNT(*) FROM closed_trades
+src/metrics.py|137|SELECT COUNT(*) FROM closed_trades
+src/metrics.py|143|cursor.execute("SELECT COUNT(*) FROM open_trades")
+src/metrics.py|148|SELECT MAX(closed_at) FROM closed_trades
+src/metrics.py|152|# Last price update
+src/metrics.py|154|SELECT MAX(last_updated) FROM market_data
+src/metrics.py|181|'last_price_update': last_price
+src/metrics.py|194|cursor.execute("SELECT COUNT(*) FROM learnings")
+src/metrics.py|199|SELECT COUNT(*) FROM learnings
+src/metrics.py|206|SELECT status, COUNT(*) FROM trading_rules
+src/metrics.py|213|SELECT AVG(
+src/metrics.py|241|SELECT COUNT(*) FROM activity_log
+src/metrics.py|249|SELECT
+src/metrics.py|250|(julianday('now') - julianday(MAX(last_updated))) * 24 * 60
+src/pattern_library.py|7|- Update pattern confidence based on outcomes
+src/pattern_library.py|490|# Pattern Updates
+src/pattern_library.py|501|self.brain.update_pattern_stats(pattern_id, won, pnl)
+src/pattern_library.py|503|# Update confidence
+src/pattern_library.py|504|new_confidence = self.update_confidence(pattern_id)
+src/pattern_library.py|512|def update_confidence(self, pattern_id: str) -> float:
+src/pattern_library.py|513|"""Recalculate and update confidence for a pattern.
+src/pattern_library.py|519|Updated confidence score.
+src/pattern_library.py|527|# Update in brain (need to save full pattern)
+src/pattern_library.py|529|self.brain.add_pattern(pattern)  # This does INSERT OR REPLACE
+src/profitability.py|481|# Update last snapshot time
+src/profitability.py|526|Number of snapshots deleted
+src/profitability.py|528|total_deleted = 0
+src/profitability.py|535|deleted = self.db.delete_old_snapshots(timeframe.value, cutoff)
+src/profitability.py|536|total_deleted += deleted
+src/profitability.py|538|if total_deleted > 0:
+src/profitability.py|539|logger.info(f"Cleaned up {total_deleted} old snapshots")
+src/profitability.py|541|return total_deleted
+src/quick_update.py|2|Quick Update - Instant post-trade knowledge updates.
+src/quick_update.py|4|TASK-130: Updates coin scores and pattern confidence immediately
+src/quick_update.py|8|- Quick Update (this): After every trade, instant math
+src/quick_update.py|18|from src.models.quick_update import QuickUpdateResult, TradeResult
+src/quick_update.py|24|class QuickUpdate:
+src/quick_update.py|25|"""Instant post-trade updates - no LLM, pure math.
+src/quick_update.py|27|Called immediately after every trade closes to update:
+src/quick_update.py|35|>>> quick = QuickUpdate(coin_scorer, pattern_library, db)
+src/quick_update.py|48|"""Initialize QuickUpdate.
+src/quick_update.py|52|pattern_library: Optional PatternLibrary for pattern confidence updates.
+src/quick_update.py|62|self.updates_processed = 0
+src/quick_update.py|64|self.patterns_updated = 0
+src/quick_update.py|67|logger.info("QuickUpdate initialized")
+src/quick_update.py|77|def process_trade_close(self, trade_result: TradeResult) -> QuickUpdateResult:
+src/quick_update.py|78|"""Process a completed trade and update all knowledge.
+src/quick_update.py|86|QuickUpdateResult with any adaptations triggered.
+src/quick_update.py|91|result = QuickUpdateResult(
+src/quick_update.py|98|# 1. Update coin score
+src/quick_update.py|99|coin_adaptation = self._update_coin_score(trade_result)
+src/quick_update.py|105|# Get updated coin status
+src/quick_update.py|109|# Get updated coin stats
+src/quick_update.py|116|# 2. Update pattern confidence (if pattern was used)
+src/quick_update.py|118|pattern_update = self._update_pattern_confidence(trade_result)
+src/quick_update.py|119|result.pattern_updated = True
+src/quick_update.py|121|self.patterns_updated += 1
+src/quick_update.py|123|if pattern_update and pattern_update.get("deactivated"):
+src/quick_update.py|127|if pattern_update and "new_confidence" in pattern_update:
+src/quick_update.py|128|result.new_pattern_confidence = pattern_update["new_confidence"]
+src/quick_update.py|131|self._log_quick_update(trade_result, result)
+src/quick_update.py|137|self.updates_processed += 1
+src/quick_update.py|141|logger.log(log_level, f"Quick update: {result}")
+src/quick_update.py|149|def _update_coin_score(self, trade_result: TradeResult):
+src/quick_update.py|150|"""Update coin score and check thresholds.
+src/quick_update.py|171|def _update_pattern_confidence(self, trade_result: TradeResult) -> Optional[dict]:
+src/quick_update.py|172|"""Update pattern confidence if a pattern was used.
+src/quick_update.py|178|Dict with update info, or None if no pattern library.
+src/quick_update.py|190|# Get updated pattern
+src/quick_update.py|200|def _log_quick_update(self, trade_result: TradeResult, result: QuickUpdateResult) -> None:
+src/quick_update.py|201|"""Log the quick update for audit trail.
+src/quick_update.py|205|result: The update result.
+src/quick_update.py|227|activity_type="quick_update",
+src/quick_update.py|233|"""Get QuickUpdate statistics.
+src/quick_update.py|239|"updates_processed": self.updates_processed,
+src/quick_update.py|241|"patterns_updated": self.patterns_updated,
+src/quick_update.py|257|print("QuickUpdate Test")
+src/quick_update.py|275|quick = QuickUpdate(scorer, patterns, db)
+src/quick_update.py|322|description="Test pattern for quick update",
+src/quick_update.py|359|print(f"  100 updates in {elapsed*1000:.1f}ms ({elapsed*10:.2f}ms per update)")
+src/quick_update.py|368|print("All QuickUpdate Tests PASSED!")
+src/reflection.py|178|"""Called by QuickUpdate to track trade count."""
+src/reflection.py|296|# Update state
+src/risk_manager.py|108|DELETE FROM coin_cooldowns
+src/risk_manager.py|115|SELECT coin_name, expires_at FROM coin_cooldowns
+src/risk_manager.py|146|INSERT OR REPLACE INTO coin_cooldowns (coin_name, expires_at)
+src/risk_manager.py|160|DELETE FROM coin_cooldowns
+src/risk_manager.py|163|deleted = cursor.rowcount
+src/risk_manager.py|165|if deleted > 0:
+src/risk_manager.py|166|logger.info(f"Cleaned up {deleted} expired cooldowns from database")
+src/risk_manager.py|526|cursor.execute("SELECT coin_name FROM open_trades")
+src/sniper.py|44|current_price: float = 0.0                      # Updated on each tick
+src/sniper.py|45|unrealized_pnl: float = 0.0                     # Updated on each tick
+src/sniper.py|115|quick_update=None,
+src/sniper.py|124|coin_scorer: Optional CoinScorer for tracking coin performance (deprecated, use quick_update)
+src/sniper.py|125|quick_update: Optional QuickUpdate for post-trade knowledge updates
+src/sniper.py|131|self.coin_scorer = coin_scorer  # Deprecated: use quick_update instead
+src/sniper.py|132|self.quick_update = quick_update  # TASK-130: for post-trade updates
+src/sniper.py|158|Called by Strategist to update the active condition set.
+src/sniper.py|414|# Update balance (reserve funds)
+src/sniper.py|476|# Update current price and unrealized PnL
+src/sniper.py|537|# Update balance (return funds + PnL)
+src/sniper.py|540|# Update total PnL
+src/sniper.py|549|# TASK-130: Quick update for post-trade knowledge updates
+src/sniper.py|550|if self.quick_update:
+src/sniper.py|551|from src.models.quick_update import TradeResult
+src/sniper.py|569|update_result = self.quick_update.process_trade_close(trade_result)
+src/sniper.py|571|if update_result.coin_adaptation:
+src/sniper.py|573|f"ADAPTATION: {position.coin} -> {update_result.coin_adaptation} "
+src/sniper.py|574|f"({update_result.coin_adaptation_reason})"
+src/sniper.py|576|if update_result.pattern_deactivated:
+src/sniper.py|577|logger.info(f"PATTERN DEACTIVATED: {update_result.pattern_id}")
+src/sniper.py|579|# Fallback: Update coin score directly (deprecated, for backward compatibility)
+src/strategist.py|185|self.db.delete_expired_conditions()
+src/strategist.py|226|# Update active conditions
+src/trading_engine.py|63|"SELECT price_usd FROM market_data WHERE coin = ?",
+src/trading_engine.py|108|# Step 4: Insert into open_trades
+src/trading_engine.py|115|INSERT INTO open_trades (
+src/trading_engine.py|127|# Step 5: Update account_state
+src/trading_engine.py|129|UPDATE account_state SET
+src/trading_engine.py|193|# Insert into closed_trades (including rule_ids_used)
+src/trading_engine.py|195|INSERT INTO closed_trades (
+src/trading_engine.py|206|# Delete from open_trades
+src/trading_engine.py|207|cursor.execute("DELETE FROM open_trades WHERE id = ?", (trade_id,))
+src/trading_engine.py|209|# Update account_state
+src/trading_engine.py|212|UPDATE account_state SET
+src/trading_engine.py|245|def update_positions(self) -> List[Dict[str, Any]]:
+src/trading_engine.py|246|"""Update all open positions with current prices.
+src/trading_engine.py|265|logger.warning(f"No market data for {coin}, skipping position update")
+src/trading_engine.py|268|# Update current price and unrealized P&L
+src/trading_engine.py|278|UPDATE open_trades SET
+src/trading_engine.py|302|logger.info(f"Position update complete. Closed {len(closed_trades)} trades.")
+src/trading_engine.py|314|SELECT id, coin_name, entry_price, size_usd, current_price,
+src/trading_engine.py|339|SELECT id, coin_name, entry_price, size_usd, current_price,
+src/trading_engine.py|368|SELECT id, coin_name, entry_price, exit_price, size_usd,
+src/volatility.py|78|CREATE TABLE IF NOT EXISTS price_history (
+src/volatility.py|116|INSERT INTO price_history (coin, price_usd)
+src/volatility.py|136|INSERT INTO price_history (coin, price_usd)
+src/volatility.py|160|SELECT price_usd, timestamp
+src/volatility.py|173|"SELECT COUNT(*) FROM price_history WHERE coin = ?",
+src/volatility.py|253|"SELECT change_24h FROM market_data WHERE coin = ?",
+src/volatility.py|353|Number of records deleted.
+src/volatility.py|358|DELETE FROM price_history
+src/volatility.py|361|deleted = cursor.rowcount
+src/volatility.py|364|if deleted > 0:
+src/volatility.py|365|logger.info(f"Cleaned up {deleted} old price history records")
+src/volatility.py|367|return deleted
+src/volatility.py|377|cursor.execute("SELECT DISTINCT coin FROM market_data")
+src/volatility.py|406|cursor.execute("SELECT COUNT(*) FROM price_history")
+src/volatility.py|410|cursor.execute("SELECT COUNT(DISTINCT coin) FROM price_history")
+src/volatility.py|414|cursor.execute("SELECT MIN(timestamp) FROM price_history")
+src/volatility.py|467|deleted = vc.cleanup_old_history(days=7)
+src/volatility.py|468|print(f"\nCleaned up {deleted} old records")
+src/analysis/learning.py|44|SELECT coin, score, total_trades, win_rate, total_pnl
+src/analysis/learning.py|155|SELECT adaptation_id, action, target, confidence, effectiveness_rating,
+src/analysis/learning.py|247|SELECT pattern_id, name, confidence, usage_count, win_rate, total_pnl, is_active
+src/analysis/learning.py|340|cursor.execute("SELECT COUNT(*) FROM trading_patterns")
+src/analysis/learning.py|344|SELECT COUNT(*) FROM trading_patterns
+src/analysis/learning.py|350|SELECT COUNT(*) FROM trading_patterns
+src/analysis/learning.py|356|cursor.execute("SELECT COUNT(*) FROM regime_rules")
+src/analysis/learning.py|360|SELECT COUNT(*) FROM regime_rules
+src/analysis/learning.py|366|cursor.execute("SELECT COUNT(*) FROM coin_scores")
+src/analysis/learning.py|370|SELECT COUNT(*) FROM coin_scores
+src/analysis/learning.py|377|SELECT COUNT(*) FROM insights
+src/analysis/learning.py|383|SELECT COUNT(*) FROM adaptations
+src/analysis/learning.py|398|SELECT COUNT(*) FROM insights
+src/analysis/learning.py|404|SELECT COUNT(*) FROM adaptations
+src/analysis/learning.py|410|SELECT COUNT(*) FROM trading_patterns
+src/models/knowledge.py|27|last_updated: Optional[datetime] = None
+src/models/knowledge.py|31|if self.last_updated is None:
+src/models/knowledge.py|32|self.last_updated = datetime.now()
+src/models/knowledge.py|37|if isinstance(data["last_updated"], datetime):
+src/models/knowledge.py|38|data["last_updated"] = data["last_updated"].isoformat()
+src/models/knowledge.py|44|if data.get("last_updated") and isinstance(data["last_updated"], str):
+src/models/knowledge.py|45|data["last_updated"] = datetime.fromisoformat(data["last_updated"])
+src/models/knowledge.py|49|"""Recalculate derived statistics after trade updates."""
+src/models/quick_update.py|2|Quick Update data models.
+src/models/quick_update.py|4|TASK-130: Data classes for post-trade quick updates.
+src/models/quick_update.py|13|"""Outcome of a completed trade, passed to QuickUpdate.
+src/models/quick_update.py|15|Contains all information needed to update coin scores and pattern confidence.
+src/models/quick_update.py|60|class QuickUpdateResult:
+src/models/quick_update.py|61|"""Result of a quick update, including any adaptations triggered.
+src/models/quick_update.py|63|Returned by QuickUpdate.process_trade_close() to inform caller
+src/models/quick_update.py|72|# What was updated
+src/models/quick_update.py|73|coin_score_updated: bool = True
+src/models/quick_update.py|74|pattern_updated: bool = False
+src/models/quick_update.py|82|# New coin status after update
+src/models/quick_update.py|87|# Pattern stats after update (if applicable)
+src/sentiment/fear_greed.py|51|cache_ttl_minutes: Cache duration (default 60 min, index updates daily)
+src/sentiment/news_feed.py|144|# Update cache
+src/sentiment/social_sentiment.py|127|# Update cache
+src/sentiment/social_sentiment.py|131|self._update_historical_volume(coin_upper, metrics.social_volume)
+src/sentiment/social_sentiment.py|225|def _update_historical_volume(self, coin: str, volume: int) -> None:
+src/sentiment/social_sentiment.py|226|"""Update historical volume tracking."""
+src/technical/candle_fetcher.py|48|last_updated: datetime = field(default_factory=datetime.now)
+src/technical/candle_fetcher.py|154|if datetime.now() - cached.last_updated < self.cache_duration:
+src/technical/candle_fetcher.py|201|last_updated=datetime.now()
+src/technical/orderbook.py|158|# Update cache

@@ -1,0 +1,22 @@
+=== CONFIG VALUES ===
+14:PROJECT_ROOT = Path(__file__).parent.parent
+15:DATA_DIR = PROJECT_ROOT / "data"
+16:LOGS_DIR = PROJECT_ROOT / "logs"
+26:DEFAULT_EXCHANGE = os.getenv("TRADING_EXCHANGE", "bybit")
+32:TRADEABLE_COINS = [
+42:COIN_TIERS = {
+52:MAX_POSITIONS = 5
+53:MAX_POSITION_PER_COIN = 1
+54:MAX_EXPOSURE_PCT = 0.10  # 10% of balance
+56:DEFAULT_STOP_LOSS_PCT = 0.02    # 2%
+57:DEFAULT_TAKE_PROFIT_PCT = 0.015  # 1.5%
+58:DEFAULT_POSITION_SIZE_USD = 100.0
+64:INITIAL_BALANCE = 10000.0
+70:STALE_DATA_THRESHOLD = 5  # seconds without tick = unhealthy
+71:STATUS_LOG_INTERVAL = 60  # seconds between status logs
+77:STRATEGIST_ENABLED = True  # Set to False to disable LLM condition generation
+78:STRATEGIST_INTERVAL = 180  # Seconds between condition generation (3 minutes)
+79:STRATEGIST_MAX_CONDITIONS = 3  # Max conditions per generation cycle
+80:STRATEGIST_CONDITION_TTL = 300  # Seconds until conditions expire (5 minutes)
+86:DATABASE_PATH = str(DATA_DIR / "trading_bot.db")
+87:SNIPER_STATE_PATH = str(DATA_DIR / "sniper_state.json")
