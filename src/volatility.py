@@ -450,13 +450,13 @@ if __name__ == "__main__":
 
     # Show database stats
     stats = vc.get_database_stats()
-    print(f"\nPrice History Stats:")
+    print("\nPrice History Stats:")
     print(f"  Total records: {stats['total_records']}")
     print(f"  Unique coins: {stats['unique_coins']}")
     print(f"  Estimated size: {stats['estimated_size_kb']:.1f} KB")
 
     # Show volatility for sample coins
-    print(f"\nVolatility Scores (cached for 5 min):")
+    print("\nVolatility Scores (cached for 5 min):")
     for coin in ['bitcoin', 'ethereum', 'pepe']:
         score = vc.calculate_volatility_score(coin)
         mult = vc.get_volatility_multiplier(score)

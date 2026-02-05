@@ -91,7 +91,7 @@ A task is NOT complete until ALL checked:
 
 ### LLM Integration
 - Ollama runs on Windows host at `172.27.144.1:11434`
-- Model: `qwen2.5-coder:7b`
+- Model: `qwen2.5:14b`
 - Bot defaults to HOLD if LLM unavailable
 - All LLM responses logged to `activity_log`
 

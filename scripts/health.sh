@@ -6,30 +6,25 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 LOG_DIR="$PROJECT_DIR/logs"
 CONFIG_FILE="$PROJECT_DIR/config/supervisor.conf"
+PID_FILE="/tmp/cryptobot-supervisord.pid"
 
 # Check supervisor is running
-if [ ! -f "$LOG_DIR/supervisord.pid" ]; then
+if [ ! -f "$PID_FILE" ]; then
     echo "CRITICAL: Supervisor not running"
     exit 2
 fi
 
-PID=$(cat "$LOG_DIR/supervisord.pid")
+PID=$(cat "$PID_FILE")
 if ! ps -p "$PID" > /dev/null 2>&1; then
     echo "CRITICAL: Supervisor not running (stale PID)"
     exit 2
 fi
 
-# Check individual processes
+# Check trading_bot process
 TRADING_STATUS=$(supervisorctl -c "$CONFIG_FILE" status trading_bot 2>/dev/null | awk '{print $2}')
-DASHBOARD_STATUS=$(supervisorctl -c "$CONFIG_FILE" status dashboard 2>/dev/null | awk '{print $2}')
 
 if [ "$TRADING_STATUS" != "RUNNING" ]; then
     echo "WARNING: Trading bot status: $TRADING_STATUS"
-    exit 1
-fi
-
-if [ "$DASHBOARD_STATUS" != "RUNNING" ]; then
-    echo "WARNING: Dashboard status: $DASHBOARD_STATUS"
     exit 1
 fi
 

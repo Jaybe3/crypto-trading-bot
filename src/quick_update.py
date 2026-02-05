@@ -17,6 +17,7 @@ from src.coin_scorer import CoinScorer, CoinStatus
 from src.database import Database
 from src.models.quick_update import QuickUpdateResult, TradeResult
 from src.pattern_library import PatternLibrary
+from src.reflection import ReflectionEngine
 
 logger = logging.getLogger(__name__)
 
@@ -341,7 +342,6 @@ if __name__ == "__main__":
 
         # Test 4: Performance test
         print("\n[TEST 4] Performance test (100 trades)...")
-        import time
         start = time.perf_counter()
         for i in range(100):
             quick.process_trade_close(TradeResult(

@@ -23,7 +23,7 @@ python3 -m pytest tests/ -q --tb=no 2>&1 | tail -5
 echo ""
 echo "=== SYMBOL_MAP DUPLICATION CHECK ==="
 echo -n "  SYMBOL_MAP definitions (should be 1 after fix): "
-grep -rn "SYMBOL_MAP\s*=" src/ 2>/dev/null | wc -l
+grep -rn "SYMBOL_MAP\s*=" src/ config/ 2>/dev/null | wc -l
 
 echo ""
 echo "=== DOC DRIFT CHECK ==="

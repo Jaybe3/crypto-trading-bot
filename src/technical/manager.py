@@ -440,7 +440,7 @@ class TechnicalManager:
     def _get_funding(self, coin: str) -> Optional[FundingData]:
         """Get funding rate with error handling."""
         try:
-            return self.funding.get_funding_rate(coin)
+            return self.funding.get_current(coin)
         except Exception as e:
             logger.warning(f"Failed to get funding for {coin}: {e}")
             return None
