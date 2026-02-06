@@ -329,7 +329,7 @@ class DashboardServer:
             if not self.system.knowledge:
                 raise HTTPException(500, "Knowledge Brain not initialized")
 
-            return self.system.knowledge.get_context_for_strategist()
+            return self.system.knowledge.get_knowledge_context()
 
         # =====================================================================
         # Adaptations API
