@@ -42,7 +42,7 @@ def analyze_coin_score_accuracy(db: Database, min_trades: int = 5) -> dict:
 
             # Get coin scores with trade data
             cursor.execute("""
-                SELECT coin, score, total_trades, win_rate, total_pnl
+                SELECT coin, total_trades, win_rate, total_pnl
                 FROM coin_scores
                 WHERE total_trades >= ?
             """, (min_trades,))
@@ -60,9 +60,10 @@ def analyze_coin_score_accuracy(db: Database, min_trades: int = 5) -> dict:
             low_score_wins = []
             low_score_pnl = []
 
-            for coin, score, trades, win_rate, pnl in coins:
+            for coin, trades, win_rate, pnl in coins:
                 results["coins_with_enough_data"] += 1
-                score = score or 50
+                # Compute score from win_rate (0-1 -> 0-100)
+                score = int((win_rate or 0) * 100)
 
                 coin_data = {
                     "coin": coin,
