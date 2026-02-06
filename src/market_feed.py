@@ -437,6 +437,8 @@ class MarketFeed:
         quantity = float(trade.get('v', 0))
         side = trade.get('S', '')
         timestamp = int(trade.get('T', 0))
+        if timestamp < 1000000000000:  # Invalid timestamp (before ~2001 in ms)
+            timestamp = int(time.time() * 1000)
 
         # is_buyer_maker = True means the maker was a buyer (so taker sold)
         is_buyer_maker = side == 'Sell'
@@ -509,6 +511,8 @@ class MarketFeed:
         price = float(data.get('p', 0))
         quantity = float(data.get('q', 0))
         timestamp = int(data.get('T', 0))
+        if timestamp < 1000000000000:  # Invalid timestamp (before ~2001 in ms)
+            timestamp = int(time.time() * 1000)
         is_buyer_maker = data.get('m', False)
 
         trade = TradeEvent(
