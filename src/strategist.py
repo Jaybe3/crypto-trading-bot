@@ -215,7 +215,8 @@ class Strategist:
         system_prompt = self._get_system_prompt()
 
         try:
-            response = self.llm.query(prompt, system_prompt)
+            # Run sync LLM call in thread pool to avoid blocking event loop
+            response = await asyncio.to_thread(self.llm.query, prompt, system_prompt)
 
             if response is None:
                 logger.error("LLM returned None response")

@@ -4,6 +4,7 @@ This module connects to a local LLM (qwen2.5:14b) running via Ollama
 to make trading decisions and analyze trades.
 """
 
+import asyncio
 import json
 import logging
 import os
@@ -243,6 +244,36 @@ class LLMInterface:
             logger.warning(f"Failed to parse LLM response as JSON: {e}")
             logger.debug(f"Raw response: {response}")
             return None
+
+    async def async_query(self, prompt: str, system_prompt: Optional[str] = None) -> Optional[str]:
+        """Non-blocking version of query() for use in async contexts.
+
+        Runs the synchronous query() in a thread pool to avoid blocking
+        the event loop.
+
+        Args:
+            prompt: The user prompt to send.
+            system_prompt: Optional system prompt for context.
+
+        Returns:
+            LLM response text, or None if request failed.
+        """
+        return await asyncio.to_thread(self.query, prompt, system_prompt)
+
+    async def async_query_json(self, prompt: str, system_prompt: Optional[str] = None) -> Optional[Dict]:
+        """Non-blocking version of query_json() for use in async contexts.
+
+        Runs the synchronous query_json() in a thread pool to avoid blocking
+        the event loop.
+
+        Args:
+            prompt: The user prompt (should ask for JSON response).
+            system_prompt: Optional system prompt.
+
+        Returns:
+            Parsed JSON dict, or None if parsing failed.
+        """
+        return await asyncio.to_thread(self.query_json, prompt, system_prompt)
 
     def get_trading_decision(
         self,
