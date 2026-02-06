@@ -1,6 +1,6 @@
 # Crypto Trading Bot - Task Index
 
-**Last Updated:** February 4, 2026
+**Last Updated:** February 5, 2026
 
 ---
 
@@ -26,7 +26,7 @@ Changes made:
 | Completed Tasks | 59 |
 | Active Tasks | 0 |
 | Backlog Tasks | 0 (Phase 3 Complete) |
-| Open Bugs | 0 |
+| Open Bugs | 2 (BUG-006, BUG-016/017) |
 
 ---
 
@@ -159,7 +159,16 @@ See [completed/phase-1-foundation/](./completed/phase-1-foundation/)
 
 | Bug | Status | Description |
 |-----|--------|-------------|
-| *None open* | | |
+| BUG-001 | Fixed | Dashboard /api/knowledge/context HTTP 500 |
+| BUG-002 | Fixed | learning.py queries non-existent "score" column |
+| BUG-003 | Fixed | learning.py queries wrong columns from trading_patterns |
+| BUG-004 | Fixed | learning.py filters by non-existent "applied_at" column |
+| BUG-005 | Fixed | Corrupted timestamps from missing WebSocket 'T' key |
+| BUG-006 | Open | Learning pipeline verification (pending clean data) |
+| BUG-007/008 | Fixed | Deprecated orphaned Phase 1 modules |
+| BUG-009/010/011 | Fixed | Knowledge API method name mismatches |
+| BUG-012-015 | Fixed | Documentation inaccuracies |
+| BUG-016/017 | Open | Data cleanup (low priority) |
 
 ---
 

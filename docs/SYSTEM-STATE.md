@@ -85,7 +85,8 @@ The Strategist sends to qwen2.5:14b:
 - Winning patterns with confidence
 - Account state
 
-**NOT INCLUDED (Phase 3):** RSI, VWAP, ATR, Fear & Greed, funding rates, order book
+**WIRED BUT INACTIVE (Phase 3):** RSI, VWAP, ATR, Fear & Greed, funding rates, order book
+(Components are wired into Strategist but not yet producing data that influences decisions)
 
 ---
 
@@ -109,10 +110,11 @@ Strategist (reads knowledge for next decision)
 
 ---
 
-## Phase 3: Intelligence Layer (Built, Not Integrated)
+## Phase 3: Intelligence Layer (Wired, Not Active)
 
-**Status:** Components complete (14/14 tasks), awaiting Strategist integration
-**Note:** Phase 2 is complete. These components are ready but NOT YET feeding data to the LLM.
+**Status:** Components complete (14/14 tasks), wired into main.py but not yet active
+**Note:** TechnicalManager and ContextManager are passed to Strategist. Components await
+activation to feed data to the LLM for enhanced decision-making.
 
 ### Phase 3A: Sentiment Layer
 | Component | File | Purpose | Status |
