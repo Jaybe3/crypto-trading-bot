@@ -394,7 +394,7 @@ def analyze_knowledge_growth(db: Database, days: int = 7) -> dict:
 
             cursor.execute("""
                 SELECT COUNT(*) FROM adaptations
-                WHERE applied_at >= ?
+                WHERE timestamp >= ?
             """, (cutoff,))
             results["total_adaptations"] = cursor.fetchone()[0] or 0
 
@@ -415,7 +415,7 @@ def analyze_knowledge_growth(db: Database, days: int = 7) -> dict:
 
                 cursor.execute("""
                     SELECT COUNT(*) FROM adaptations
-                    WHERE applied_at >= ? AND applied_at < ?
+                    WHERE timestamp >= ? AND timestamp < ?
                 """, (day_start, day_end))
                 day_adaptations = cursor.fetchone()[0] or 0
 
