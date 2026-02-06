@@ -255,9 +255,9 @@ def analyze_pattern_confidence_accuracy(db: Database, min_usage: int = 3) -> dic
             cursor = conn.cursor()
 
             cursor.execute("""
-                SELECT pattern_id, name, confidence, usage_count, win_rate, total_pnl, is_active
+                SELECT pattern_id, description, confidence, times_used, wins, losses, total_pnl, is_active
                 FROM trading_patterns
-                WHERE usage_count >= ?
+                WHERE times_used >= ?
             """, (min_usage,))
 
             patterns = cursor.fetchall()
@@ -266,15 +266,17 @@ def analyze_pattern_confidence_accuracy(db: Database, min_usage: int = 3) -> dic
             high_conf_wins = []
             low_conf_wins = []
 
-            for pattern_id, name, conf, usage, win_rate, pnl, active in patterns:
+            for pattern_id, description, conf, usage, wins, losses, pnl, active in patterns:
                 results["patterns_with_data"] += 1
                 conf = conf or 0.5
+                # Calculate win_rate from wins and losses
+                win_rate = wins / usage if usage > 0 else 0
 
                 pattern_data = {
                     "pattern_id": pattern_id,
-                    "name": name,
+                    "name": description,
                     "confidence": conf,
-                    "win_rate": win_rate or 0,
+                    "win_rate": win_rate,
                     "usage": usage,
                     "pnl": pnl or 0,
                     "is_active": active,
