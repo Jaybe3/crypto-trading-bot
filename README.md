@@ -199,4 +199,3 @@ This is a paper trading bot for educational purposes only.
 
 ## License
 
-Private repository - All rights reserved.
