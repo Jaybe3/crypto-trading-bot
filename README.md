@@ -74,7 +74,7 @@ For Claude Code: Start with [.clinerules](.clinerules)
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/crypto-trading-bot.git
+git clone https://github.com/Jaybe3/crypto-trading-bot.git
 cd crypto-trading-bot
 
 # Run the install script
